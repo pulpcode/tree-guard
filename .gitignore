@@ -23,6 +23,7 @@ dist/
 wheelhouse/
 
 # 真实业务数据、模型交互记录和内网产物不得进入通用 Core 仓库。
+tree-schema/
 data/real/
 data/internal/
 traces/

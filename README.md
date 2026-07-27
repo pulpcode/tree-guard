@@ -4,7 +4,7 @@ TreeGuard 是面向大型信息树的语义编译与变更治理助手。
 
 它将建设人员提交的自然语言需求和领域专家的思考，编译为结构化变更意图；在整棵信息树中检索可能复用或冲突的语义；经过人机协作审查后，生成可验证、可审计、可回放的声明式 Schema Patch。
 
-> 当前阶段：设计基线已冻结，尚未开始实现。第一阶段目标是一个完全离线、文件驱动、无生产写权限的 Shadow MVP。
+> 当前阶段：设计基线已冻结，TreeSnapshot v1 合同、递归 File Adapter、Schema 哈希和聚合诊断 CLI 已实现。第一阶段目标仍是一个完全离线、文件驱动、无生产写权限的 Shadow MVP。
 
 ## 为什么做 TreeGuard
 
@@ -66,6 +66,38 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - [安全边界与评测](docs/security-and-evaluation.md)
 - [六周实施路线](docs/roadmap.md)
 - [决策记录与待核实事项](docs/decision-log.md)
+- [实际源格式分析](docs/source-format-findings.md)
+
+## 当前实现
+
+当前代码只覆盖第一周的合同层，不包含 Web、数据库、LLM、检索或 Patch 发布：
+
+- `contracts/tree-snapshot.v1.schema.json`：Canonical Tree JSON Schema；
+- `src/treeguard/adapter.py`：直接导出和 API 响应的递归适配器；
+- `src/treeguard/hashing.py`：排除 VALUE 和审计字段的稳定 Schema 哈希；
+- `src/treeguard/cli.py`：不输出名称、ID、路径和 VALUE 的聚合式 Conformance CLI；
+- `tests/fixtures/fictional/`：完全虚构的递归复合属性样例；
+- `tests/`：标准库单元测试，无运行时第三方依赖。
+
+运行测试：
+
+```bash
+PYTHONPATH=src python3 -B -m unittest discover -s tests -v
+```
+
+验证纯 JSON 树导出：
+
+```bash
+PYTHONPATH=src python3 -B -m treeguard /path/to/tree.json
+```
+
+默认拒绝“curl 命令行 + JSON 响应”的混合文本。只有明确处理接口说明材料时才可以启用：
+
+```bash
+PYTHONPATH=src python3 -B -m treeguard /path/to/transcript.txt --allow-curl-transcript
+```
+
+真实格式样本目录 `tree-schema/` 已加入 `.gitignore`，不得提交。
 
 ## 当前运行约束
 

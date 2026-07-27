@@ -12,6 +12,8 @@
 - `PROPERTY` 声明待采集或抽取字段、数据类型和基数；
 - `VALUE` 承载具体文档或业务实例中的运行时数据。
 
+上述三类是领域概念。当前实际导出 JSON 的拓扑节点只观察到 `concept/property`；实例 VALUE 以内嵌 `value` 对象挂在属性旁边，而不是 `node_type=value` 的拓扑节点。TreeGuard 的治理快照默认只导入 Schema，VALUE 不进入索引、Prompt、Trace 或 Schema 哈希。
+
 信息树既是“树形数据模板”，也是不同软件之间的 Schema Contract。现有 Spring Boot + MongoDB 信息树仓库负责主题信息树的存储、管理和版本控制，下游软件从仓库获取树并生成或消费结构化数据。
 
 典型下游是定制邮件：邮件模板由自然文本和绑定到具体 `node_id` 的输入组件组成。填写后生成树形 JSON，并在系统中流转。

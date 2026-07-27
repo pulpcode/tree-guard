@@ -1,0 +1,172 @@
+{
+  "metadata": {
+    "id": "record-fictional-001",
+    "map_id": "tree-fictional-museum",
+    "map_type": "fictional",
+    "map_name": "Imaginary Museum Catalog",
+    "version": "V1",
+    "category_id": "category-fictional",
+    "concurrent_version": 7,
+    "approve_status": "DRAFT",
+    "creator": "fictional-user",
+    "create_time": "2030-01-01 09:00:00",
+    "last_modifier": "fictional-user",
+    "last_modify_time": "2030-01-01 10:00:00"
+  },
+  "map_topology": {
+    "ROOT_DEMO": {
+      "metadata": {
+        "node_id": "node-001",
+        "node_type": "concept",
+        "node_name": "Museum",
+        "node_label": "ROOT_DEMO",
+        "node_label_route": "ROOT_DEMO",
+        "node_order": 1,
+        "creator": "fictional-user",
+        "create_time": "2030-01-01 09:00:00",
+        "last_modifier": "fictional-user",
+        "last_modify_time": "2030-01-01 10:00:00"
+      },
+      "subnodes": {
+        "CATALOG": {
+          "metadata": {
+            "node_id": "node-002",
+            "parent_node_id": "node-001",
+            "node_type": "concept",
+            "node_name": "Catalog",
+            "node_label": "CATALOG",
+            "node_label_route": "ROOT_DEMO/-/CATALOG",
+            "node_order": 1,
+            "remark": "Entirely fictional fixture",
+            "extension": {},
+            "creator": "fictional-user",
+            "create_time": "2030-01-01 09:00:00",
+            "last_modifier": "fictional-user",
+            "last_modify_time": "2030-01-01 10:00:00"
+          },
+          "subnodes": {
+            "TITLE": {
+              "metadata": {
+                "node_id": "node-003",
+                "parent_node_id": "node-002",
+                "node_type": "property",
+                "node_name": "Display title",
+                "node_label": "TITLE",
+                "node_label_route": "ROOT_DEMO/-/CATALOG/-/TITLE",
+                "node_order": 1,
+                "value_type": "string",
+                "is_list": false,
+                "value_placeholder": "A fictional title",
+                "value_constraints": {"raw_constraints": {}},
+                "extension": {},
+                "remark": "",
+                "creator": "fictional-user",
+                "create_time": "2030-01-01 09:00:00",
+                "last_modifier": "fictional-user",
+                "last_modify_time": "2030-01-01 10:00:00"
+              },
+              "value": {
+                "metadata": {
+                  "node_id": "node-003",
+                  "value_id": "value-fictional-001",
+                  "value_type": "string",
+                  "is_list": false
+                },
+                "simple_value": "Fictional exhibit"
+              }
+            },
+            "TAGS": {
+              "metadata": {
+                "node_id": "node-004",
+                "parent_node_id": "node-002",
+                "node_type": "property",
+                "node_name": "Tags",
+                "node_label": "TAGS",
+                "node_label_route": "ROOT_DEMO/-/CATALOG/-/TAGS",
+                "node_order": 2,
+                "value_type": "string",
+                "is_list": true,
+                "value_placeholder": "",
+                "value_constraints": {"raw_constraints": {}},
+                "extension": {},
+                "remark": ""
+              }
+            },
+            "ITEM_PROFILE": {
+              "metadata": {
+                "node_id": "node-005",
+                "parent_node_id": "node-002",
+                "node_type": "property",
+                "node_name": "Item profile",
+                "node_label": "ITEM_PROFILE",
+                "node_label_route": "ROOT_DEMO/-/CATALOG/-/ITEM_PROFILE",
+                "node_order": 3,
+                "value_type": "class",
+                "is_list": false,
+                "value_placeholder": "",
+                "value_constraints": {"raw_constraints": {}},
+                "extension": {"fixture_marker": true},
+                "remark": "Recursive fictional compound property"
+              },
+              "subnodes": {
+                "DIMENSIONS": {
+                  "metadata": {
+                    "node_id": "node-006",
+                    "parent_node_id": "node-005",
+                    "node_type": "property",
+                    "node_name": "Dimensions",
+                    "node_label": "DIMENSIONS",
+                    "node_label_route": "ROOT_DEMO/-/CATALOG/-/ITEM_PROFILE/-/DIMENSIONS",
+                    "node_order": 1,
+                    "value_type": "class",
+                    "is_list": false,
+                    "value_placeholder": "",
+                    "value_constraints": {"raw_constraints": {}},
+                    "extension": {},
+                    "remark": "Nested compound property"
+                  },
+                  "subnodes": {
+                    "WIDTH": {
+                      "metadata": {
+                        "node_id": "node-007",
+                        "parent_node_id": "node-006",
+                        "node_type": "property",
+                        "node_name": "Width",
+                        "node_label": "WIDTH",
+                        "node_label_route": "ROOT_DEMO/-/CATALOG/-/ITEM_PROFILE/-/DIMENSIONS/-/WIDTH",
+                        "node_order": 1,
+                        "value_type": "float",
+                        "is_list": false,
+                        "value_placeholder": "0.0",
+                        "value_constraints": {"raw_constraints": {}},
+                        "extension": {},
+                        "remark": ""
+                      }
+                    },
+                    "HEIGHT": {
+                      "metadata": {
+                        "node_id": "node-008",
+                        "parent_node_id": "node-006",
+                        "node_type": "property",
+                        "node_name": "Height",
+                        "node_label": "HEIGHT",
+                        "node_label_route": "ROOT_DEMO/-/CATALOG/-/ITEM_PROFILE/-/DIMENSIONS/-/HEIGHT",
+                        "node_order": 2,
+                        "value_type": "float",
+                        "is_list": false,
+                        "value_placeholder": "0.0",
+                        "value_constraints": {"raw_constraints": {}},
+                        "extension": {},
+                        "remark": ""
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

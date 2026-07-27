@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/tree-snapshot.v1.schema.json",
+  "title": "TreeGuard Canonical Tree Snapshot v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_format",
+    "tree_id",
+    "tree_version",
+    "source_revision",
+    "version_record_id",
+    "root_node_ids",
+    "nodes",
+    "snapshot_hash",
+    "source_metadata_extra"
+  ],
+  "properties": {
+    "schema_version": {"const": "tree-snapshot.v1"},
+    "source_format": {"type": "string", "minLength": 1},
+    "tree_id": {"type": "string", "minLength": 1},
+    "tree_version": {"type": "string", "minLength": 1},
+    "source_revision": {"type": ["integer", "null"]},
+    "version_record_id": {"type": ["string", "null"]},
+    "root_node_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/node"}
+    },
+    "snapshot_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_metadata_extra": {"type": "object"}
+  },
+  "$defs": {
+    "valueContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value_type", "cardinality", "constraints", "placeholder"],
+      "properties": {
+        "value_type": {"type": "string", "minLength": 1},
+        "cardinality": {"enum": ["SINGLE", "MULTIPLE"]},
+        "constraints": {"type": "object"},
+        "placeholder": {"type": ["string", "null"]}
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "parent_node_id",
+        "child_node_ids",
+        "kind",
+        "source_node_type",
+        "label",
+        "name",
+        "path_labels",
+        "source_route",
+        "order",
+        "value_contract",
+        "remark",
+        "extension",
+        "metadata_extra",
+        "has_instance_value",
+        "node_hash"
+      ],
+      "properties": {
+        "node_id": {"type": "string", "minLength": 1},
+        "parent_node_id": {"type": ["string", "null"]},
+        "child_node_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "kind": {"enum": ["CONCEPT", "PROPERTY", "UNSUPPORTED"]},
+        "source_node_type": {"type": "string"},
+        "label": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "path_labels": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "source_route": {"type": ["string", "null"]},
+        "order": {"type": ["integer", "null"]},
+        "value_contract": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/valueContract"}
+          ]
+        },
+        "remark": {"type": ["string", "null"]},
+        "extension": {"type": "object"},
+        "metadata_extra": {"type": "object"},
+        "has_instance_value": {"type": "boolean"},
+        "node_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/tree-diff.v1.schema.json",
+  "title": "TreeGuard Snapshot Diff v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "algorithm_version",
+    "scope",
+    "base",
+    "target",
+    "node_deltas",
+    "warnings",
+    "summary",
+    "diff_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "tree-diff.v1"},
+    "algorithm_version": {"const": "treeguard.snapshot-diff.v1"},
+    "scope": {"enum": ["SAVE_REVISION", "BUSINESS_VERSION"]},
+    "base": {"$ref": "#/$defs/snapshotRef"},
+    "target": {"$ref": "#/$defs/snapshotRef"},
+    "node_deltas": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/nodeDelta"}
+    },
+    "warnings": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/comparisonIssue"}
+    },
+    "summary": {"$ref": "#/$defs/summary"},
+    "diff_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "snapshotRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshot_schema_version",
+        "source_map_type",
+        "tree_id",
+        "tree_version",
+        "source_revision",
+        "version_record_id",
+        "snapshot_hash"
+      ],
+      "properties": {
+        "snapshot_schema_version": {"const": "tree-snapshot.v1"},
+        "source_map_type": {"type": "string", "minLength": 1},
+        "tree_id": {"type": "string", "minLength": 1},
+        "tree_version": {"type": "string", "minLength": 1},
+        "source_revision": {"type": "integer"},
+        "version_record_id": {"type": "string", "minLength": 1},
+        "snapshot_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "nodeRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_hash", "parent_node_id", "kind"],
+      "properties": {
+        "node_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "parent_node_id": {"type": ["string", "null"]},
+        "kind": {"enum": ["CONCEPT", "PROPERTY", "UNSUPPORTED"]}
+      }
+    },
+    "fieldDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field_path", "before", "after", "category"],
+      "properties": {
+        "field_path": {"type": "string", "minLength": 1},
+        "before": {},
+        "after": {},
+        "category": {
+          "enum": ["STRUCTURAL", "SEMANTIC", "INFORMATIONAL", "UNCLASSIFIED"]
+        }
+      }
+    },
+    "nodeDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "status",
+        "before_ref",
+        "after_ref",
+        "change_types",
+        "field_deltas"
+      ],
+      "properties": {
+        "node_id": {"type": "string", "minLength": 1},
+        "status": {"enum": ["ADDED", "REMOVED", "MODIFIED"]},
+        "before_ref": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/nodeRef"}
+          ]
+        },
+        "after_ref": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/nodeRef"}
+          ]
+        },
+        "change_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "NODE_ADDED",
+              "NODE_REMOVED",
+              "NODE_MOVED",
+              "NODE_LABEL_CHANGED",
+              "NODE_NAME_CHANGED",
+              "NODE_KIND_CHANGED",
+              "SOURCE_TYPE_TOKEN_CHANGED",
+              "VALUE_CONTRACT_ADDED",
+              "VALUE_CONTRACT_REMOVED",
+              "VALUE_TYPE_CHANGED",
+              "CARDINALITY_CHANGED",
+              "CONSTRAINTS_CHANGED",
+              "PLACEHOLDER_CHANGED",
+              "REMARK_CHANGED",
+              "EXTENSION_CHANGED_UNCLASSIFIED",
+              "METADATA_CHANGED_UNCLASSIFIED",
+              "ORDER_OBSERVED_CHANGED"
+            ]
+          }
+        },
+        "field_deltas": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/fieldDelta"}
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "ADDED"}}},
+          "then": {
+            "properties": {
+              "before_ref": {"type": "null"},
+              "after_ref": {"$ref": "#/$defs/nodeRef"},
+              "change_types": {"const": ["NODE_ADDED"]},
+              "field_deltas": {"maxItems": 0}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"status": {"const": "REMOVED"}}},
+          "then": {
+            "properties": {
+              "before_ref": {"$ref": "#/$defs/nodeRef"},
+              "after_ref": {"type": "null"},
+              "change_types": {"const": ["NODE_REMOVED"]},
+              "field_deltas": {"maxItems": 0}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"status": {"const": "MODIFIED"}}},
+          "then": {
+            "properties": {
+              "before_ref": {"$ref": "#/$defs/nodeRef"},
+              "after_ref": {"$ref": "#/$defs/nodeRef"},
+              "change_types": {
+                "not": {"contains": {"enum": ["NODE_ADDED", "NODE_REMOVED"]}}
+              },
+              "field_deltas": {"minItems": 1}
+            }
+          }
+        }
+      ]
+    },
+    "comparisonIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": {"type": "string", "minLength": 1},
+        "message": {"type": "string", "minLength": 1}
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_delta_count",
+        "added_count",
+        "removed_count",
+        "modified_count",
+        "change_type_counts"
+      ],
+      "properties": {
+        "node_delta_count": {"type": "integer", "minimum": 0},
+        "added_count": {"type": "integer", "minimum": 0},
+        "removed_count": {"type": "integer", "minimum": 0},
+        "modified_count": {"type": "integer", "minimum": 0},
+        "change_type_counts": {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "NODE_ADDED",
+              "NODE_REMOVED",
+              "NODE_MOVED",
+              "NODE_LABEL_CHANGED",
+              "NODE_NAME_CHANGED",
+              "NODE_KIND_CHANGED",
+              "SOURCE_TYPE_TOKEN_CHANGED",
+              "VALUE_CONTRACT_ADDED",
+              "VALUE_CONTRACT_REMOVED",
+              "VALUE_TYPE_CHANGED",
+              "CARDINALITY_CHANGED",
+              "CONSTRAINTS_CHANGED",
+              "PLACEHOLDER_CHANGED",
+              "REMARK_CHANGED",
+              "EXTENSION_CHANGED_UNCLASSIFIED",
+              "METADATA_CHANGED_UNCLASSIFIED",
+              "ORDER_OBSERVED_CHANGED"
+            ]
+          },
+          "additionalProperties": {"type": "integer", "minimum": 1}
+        }
+      }
+    }
+  }
+}

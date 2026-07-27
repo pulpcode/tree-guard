@@ -95,9 +95,12 @@ MVP 不引入 Elasticsearch、图数据库、Kafka 或多微服务编排。
 
 ```text
 schema_version
+source_map_type
+is_resource_map
 tree_id
 tree_version
-exported_at
+version_record_id
+source_revision
 snapshot_hash
 nodes[]
 ```
@@ -117,11 +120,17 @@ node_hash
 
 真实系统的额外字段由内网 Adapter 显式映射。未知关键字段必须 fail-closed。
 
-### 4.2 `ChangeIntent`
+`is_resource_map` 由 `source_map_type` 计算，只描述来源事实，不是 Patch 授权。正式 Patch 编译必须重新检查 source type、结构合同、版本记录、revision 和 snapshot hash。
+
+### 4.2 `TreeDiff`
+
+以 `node_id` 比较两个 CanonicalTree 快照，区分同一业务版本的保存修订和跨业务版本比较。Diff 使用确定性代码，忽略 VALUE、审计字段和派生路径，不从名称或 route 猜测节点对应关系。
+
+### 4.3 `ChangeIntent`
 
 包含原始需求、主体、角色、场景、生命周期、属性归属、类型、基数、拟挂载位置、事实、假设和证据缺口。
 
-### 4.3 `SemanticOverlay`
+### 4.4 `SemanticOverlay`
 
 至少包含：
 
@@ -150,11 +159,11 @@ STALE
 
 只有 `EXPERT_APPROVED` 的补充语义可以进入在线判断。基础节点修改后，如果 `base_node_hash` 不再匹配，Overlay 自动变为 `STALE`。
 
-### 4.4 `DeliberationRecord`
+### 4.5 `DeliberationRecord`
 
 包含专家原文、事实、假设、风险、未决问题、证据、修订历史和审批状态。
 
-### 4.5 `SchemaPatch`
+### 4.6 `SchemaPatch`
 
 至少包含：
 
@@ -173,7 +182,7 @@ status
 
 MVP Patch 是声明式文件，不包含数据库连接和执行代码。
 
-### 4.6 `UsageManifest`
+### 4.7 `UsageManifest`
 
 至少包含：
 
@@ -191,7 +200,7 @@ manifest_hash
 
 邮件系统保持引用关系的事实来源。TreeGuard 周期性导入 Manifest，建立只读反向索引。
 
-### 4.7 `WorkflowTrace`
+### 4.8 `WorkflowTrace`
 
 至少记录：
 

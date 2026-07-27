@@ -168,27 +168,54 @@ AI 建议先生成并隐藏，人工独立决定后再揭示。冻结集不得�
 
 本地 `tree-schema/` 仅用于只读格式验证，已整体加入 `.gitignore`。仓库测试只能使用完全虚构的 fixtures。
 
+### D-027：版本身份分为业务版本和保存修订
+
+- `tree_id <- map_id`，跨业务版本稳定；
+- `tree_version <- version`，表示业务版本；
+- `version_record_id <- id`，对应 `map_id + version` 的版本记录；
+- `source_revision <- concurrent_version`，表示业务版本内递增的保存修订。
+
+历史快照使用 `tree_id + tree_version + source_revision` 定位。Patch 前置条件还必须携带 `version_record_id + snapshot_hash`，不能解析业务版本字符串猜测先后。
+
+### D-028：resource/instance 与 VALUE 存在性解耦
+
+`map_type=resource` 和 `map_type=instance` 使用相同的树结构，resource 也可能携带 VALUE。CanonicalTree 显式保留 `source_map_type`，只记录 `has_value_envelope`，不能通过 VALUE 是否存在推断树类型。instance 可以做只读 Schema 投影，但不得进入治理 Patch。
+
+### D-029：跨修订节点匹配只使用 node_id
+
+已确认改名和更换父节点不会改变 `node_id`；用户所称的“改类型”也保持 node_id，但它是否同时覆盖 `node_type` 与 `value_type` 仍待核实。`node_label` 同级唯一但可修改，`node_label_route` 完全派生。因此 Diff 只能使用 `node_id` 匹配；label、route 和计算路径不得作为身份。
+
+### D-030：复合属性允许递归，但子节点类型受限
+
+`value_type=class` 可以递归包含 class，没有已知业务最大深度，实际通常少于 10 层。复合属性的直接子节点只能是 PROPERTY。实现中的 128 层限制是技术安全上限，不是业务规则。
+
+### D-031：历史 Diff 使用确定性字段比较
+
+历史 Diff 不交给 LLM。它按稳定 `node_id` 识别新增、删除、移动、改名、类型、基数和其他字段变化，并排除 VALUE、审计字段及派生 route/path/child 列表，避免祖先移动或改名造成整棵后代误报。
+
+通用查看允许反向比较并给出 `SOURCE_REVISION_DECREASED` 警告；历史分簇、样本构建和 Gold 流水线必须把该警告作为硬门，不能把逆向 Diff 学成真实演进操作。完整 TreeDiff 含字段前后值，只能留在内网，跨网只允许聚合码和计数。
+
 ## 6. 仍需内网核实的事实
 
 以下问题不能由外网假设替代：
 
-1. 节点更换父节点后，`node_id` 是否一定保持不变；
-2. 历史版本能否稳定导出完整快照，而不是只导出当前树；
-3. 节点类型、基数和顺序字段的真实 DTO；
-4. 是否存在节点 ID 被重建或复制的历史情况；
-5. 邮件模板中的节点引用是否全部为稳定 `node_id`；
-6. Usage Manifest 能否包含模板版本、状态和最后更新时间；
-7. 当前 Qwen 的接口协议、最大上下文、并发、超时和结构化输出能力；
-8. 首个试点消防子树的具体范围；
-9. 30 条冻结案例需要多少专家工时；
-10. 内网允许使用的 Python、向量库、MongoDB 和前端依赖版本；
-11. 内网离线依赖扫描和许可证审批流程；
-12. Trace 的权限、加密和保留期限。
-13. `demo1/demo2` 是同一草稿填写 VALUE 前后的快照，还是两个应视为历史版本的快照；
-14. `map_id`、版本记录 `id`、业务 `version` 和 `concurrent_version` 的正式定义；
-15. 是否存在 Schema-only 接口或排除 VALUE 的查询参数；
-16. `node_label` 的唯一范围和可修改性，以及 `node_label_route` 是否完全派生；
-17. 复合属性递归的合法父子组合和最大深度。
+1. 历史版本能否稳定导出完整快照，而不是只导出当前树；
+2. 节点新增或修改校验 DTO，以及完整节点类型、值类型、基数和顺序规则；
+3. `is_list` 切换后 node_id 是否稳定，以及已有 VALUE 的迁移语义；
+4. `class + is_list=true` 能否在另一复合属性中继续嵌套；
+5. “改类型保持 node_id”是否同时覆盖 `node_type` 和 `value_type`；
+6. 是否存在节点 ID 被重建或复制的历史情况；
+7. 修改 label 时，动态键和全部派生 route 是否由系统同步更新；
+8. `concurrent_version` 是否对只改 VALUE、备注或审计字段的保存也递增；
+9. 是否存在 Schema-only 接口或排除 VALUE 的查询参数；
+10. 邮件模板中的节点引用是否全部为稳定 `node_id`；
+11. Usage Manifest 能否包含模板版本、状态和最后更新时间；
+12. 当前 Qwen 的接口协议、最大上下文、并发、超时和结构化输出能力；
+13. 首个试点消防子树的具体范围；
+14. 30 条冻结案例需要多少专家工时；
+15. 内网允许使用的 Python、向量库、MongoDB 和前端依赖版本；
+16. 内网离线依赖扫描和许可证审批流程；
+17. Trace 的权限、加密和保留期限。
 
 
 ## 7. 暂缓事项

@@ -4,7 +4,7 @@ TreeGuard 是面向大型信息树的语义编译与变更治理助手。
 
 它将建设人员提交的自然语言需求和领域专家的思考，编译为结构化变更意图；在整棵信息树中检索可能复用或冲突的语义；经过人机协作审查后，生成可验证、可审计、可回放的声明式 Schema Patch。
 
-> 当前阶段：设计基线已冻结，TreeSnapshot v1 合同、递归 File Adapter、Schema 哈希和聚合诊断 CLI 已实现。第一阶段目标仍是一个完全离线、文件驱动、无生产写权限的 Shadow MVP。
+> 当前阶段：设计基线已冻结，TreeSnapshot/TreeDiff v1 合同、递归 File Adapter、Schema 哈希、修订级字段 Diff 和聚合诊断 CLI 已实现。第一阶段目标仍是一个完全离线、文件驱动、无生产写权限的 Shadow MVP。
 
 ## 为什么做 TreeGuard
 
@@ -70,11 +70,13 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 
 ## 当前实现
 
-当前代码只覆盖第一周的合同层，不包含 Web、数据库、LLM、检索或 Patch 发布：
+当前代码只覆盖合同和确定性历史 Diff，不包含 Web、数据库、LLM、检索或 Patch 发布：
 
 - `contracts/tree-snapshot.v1.schema.json`：Canonical Tree JSON Schema；
+- `contracts/tree-diff.v1.schema.json`：字段级 Snapshot Diff JSON Schema；
 - `src/treeguard/adapter.py`：直接导出和 API 响应的递归适配器；
 - `src/treeguard/hashing.py`：排除 VALUE 和审计字段的稳定 Schema 哈希；
+- `src/treeguard/diff.py`：只按稳定 `node_id` 匹配的保存修订/业务版本 Diff；
 - `src/treeguard/cli.py`：不输出名称、ID、路径和 VALUE 的聚合式 Conformance CLI；
 - `tests/fixtures/fictional/`：完全虚构的递归复合属性样例；
 - `tests/`：标准库单元测试，无运行时第三方依赖。

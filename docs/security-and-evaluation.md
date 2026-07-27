@@ -79,6 +79,10 @@ SBOM 只是可核验材料，不等于安全结论。
 - 对低熵业务字段生成的确定性哈希；
 - 全树一致的假名映射。
 
+完整 `TreeSnapshot` 和 `TreeDiff` 都属于内网敏感制品。TreeDiff 的字段变化需要服务内网专家审查，因此 `before/after` 可能包含真实名称、label、remark、extension 或尚未分类的 metadata。它不得直接作为跨网诊断输出，也不得仅靠删除 VALUE 后就视为可外传。
+
+跨网协作只允许输出固定错误码和聚合结果，例如变更类型计数、ERROR/WARNING 数量和分桶指标；不得输出 node delta、字段前后值、节点引用、snapshot/diff hash。若未来 CLI 增加完整 Diff 输出，必须明确标为内网命令，并与聚合 Conformance 报告分离。
+
 低熵节点名称可能被字典反推。即使哈希看似不可读，也不能默认视为安全脱敏。一次性随机案例编号不得外传内部映射表。
 
 ## 5. 数据访问等级

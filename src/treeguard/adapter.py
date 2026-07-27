@@ -33,7 +33,13 @@ OBSERVED_VALUE_TYPES = {
     "string",
     "time_code",
 }
-MAPPED_TREE_METADATA = {"id", "map_id", "version", "concurrent_version"}
+MAPPED_TREE_METADATA = {
+    "concurrent_version",
+    "id",
+    "map_id",
+    "map_type",
+    "version",
+}
 MAPPED_NODE_METADATA = {
     "extension",
     "is_list",
@@ -71,7 +77,7 @@ class _NodeDraft:
     remark: str | None = None
     extension: JsonObject = field(default_factory=dict)
     metadata_extra: JsonObject = field(default_factory=dict)
-    has_instance_value: bool = False
+    has_value_envelope: bool = False
 
 
 def load_tree_export(
@@ -140,15 +146,34 @@ def adapt_tree_document(
     collector = IssueCollector()
     tree_id = _required_string(metadata, "map_id", "tree.metadata", collector)
     tree_version = _required_string(metadata, "version", "tree.metadata", collector)
-    version_record_id = _optional_string(metadata.get("id"))
+    version_record_id = _required_string(metadata, "id", "tree.metadata", collector)
+    source_map_type = _required_string(
+        metadata,
+        "map_type",
+        "tree.metadata",
+        collector,
+    ).lower()
+    normalized_map_type = source_map_type
+    if normalized_map_type == "instance":
+        collector.warning(
+            "INSTANCE_TREE_SCHEMA_PROJECTION",
+            "tree.metadata",
+            "instance input cannot be used for governance Patch generation",
+        )
+    elif normalized_map_type and normalized_map_type != "resource":
+        collector.warning(
+            "UNSUPPORTED_MAP_TYPE",
+            "tree.metadata",
+            "unknown map_type cannot be used for governance Patch generation",
+        )
     source_revision = metadata.get("concurrent_version")
-    if source_revision is not None and not _is_integer(source_revision):
+    if not _is_integer(source_revision):
         collector.error(
             "INVALID_SOURCE_REVISION",
             "tree.metadata",
-            "concurrent_version must be an integer when present",
+            "concurrent_version must be an integer",
         )
-        source_revision = None
+        source_revision = 0
 
     if len(topology) != 1:
         collector.error(
@@ -344,8 +369,8 @@ def adapt_tree_document(
             extension = {}
         extension = freeze_json(extension)
 
-        has_instance_value = "value" in wrapper and wrapper.get("value") is not None
-        if has_instance_value:
+        has_value_envelope = "value" in wrapper and wrapper.get("value") is not None
+        if has_value_envelope:
             value_count += 1
             _validate_value_envelope(wrapper.get("value"), node_metadata, location, collector)
 
@@ -370,7 +395,7 @@ def adapt_tree_document(
             remark=remark,
             extension=extension,
             metadata_extra=metadata_extra,
-            has_instance_value=has_instance_value,
+            has_value_envelope=has_value_envelope,
         )
         drafts.append(draft)
 
@@ -383,10 +408,10 @@ def adapt_tree_document(
         if subnodes and kind == "PROPERTY":
             value_type = value_contract.value_type if value_contract is not None else None
             if value_type != "class":
-                collector.warning(
+                collector.error(
                     "NON_CLASS_PROPERTY_HAS_CHILDREN",
                     location,
-                    "only class properties were observed with schema children",
+                    "only class properties may contain schema children",
                 )
 
         child_drafts: list[_NodeDraft] = []
@@ -401,10 +426,10 @@ def adapt_tree_document(
             if child is not None:
                 child_drafts.append(child)
                 if kind == "PROPERTY" and child.kind != "PROPERTY":
-                    collector.warning(
+                    collector.error(
                         "PROPERTY_HAS_NON_PROPERTY_CHILD",
                         location,
-                        "class property children were observed only as properties",
+                        "class property children must be property nodes",
                     )
             if node_limit_reached:
                 break
@@ -414,6 +439,13 @@ def adapt_tree_document(
                 "DUPLICATE_SIBLING_ORDER",
                 location,
                 "two or more children share node_order",
+            )
+        child_labels = [child.label for child in child_drafts if child.label]
+        if len(child_labels) != len(set(child_labels)):
+            collector.error(
+                "DUPLICATE_SIBLING_LABEL",
+                location,
+                "node_label must be unique among siblings",
             )
         child_drafts.sort(
             key=lambda child: (
@@ -486,7 +518,7 @@ def adapt_tree_document(
                 remark=draft.remark,
                 extension=draft.extension,
                 metadata_extra=draft.metadata_extra,
-                has_instance_value=draft.has_instance_value,
+                has_value_envelope=draft.has_value_envelope,
                 node_hash=node_hash,
             )
         )
@@ -513,6 +545,7 @@ def adapt_tree_document(
     tree = CanonicalTree(
         schema_version="tree-snapshot.v1",
         source_format=source_format,
+        source_map_type=source_map_type,
         tree_id=tree_id,
         tree_version=tree_version,
         source_revision=source_revision,

@@ -65,7 +65,7 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(direct.tree.snapshot_hash, envelope.tree.snapshot_hash)
         self.assertEqual(envelope.source_format, "tree-api-response.v1")
 
-    def test_instance_value_is_not_retained_in_canonical_snapshot(self) -> None:
+    def test_value_envelope_payload_is_not_retained_in_canonical_snapshot(self) -> None:
         result = load_tree_export(FIXTURE_PATH)
         assert result.tree is not None
         encoded = json.dumps(result.tree.to_dict(), ensure_ascii=False, sort_keys=True)
@@ -73,7 +73,68 @@ class AdapterTests(unittest.TestCase):
         self.assertNotIn("simple_value", encoded)
         self.assertNotIn("Fictional exhibit", encoded)
         by_id = {node.node_id: node for node in result.tree.nodes}
-        self.assertTrue(by_id["node-003"].has_instance_value)
+        self.assertTrue(by_id["node-003"].has_value_envelope)
+
+    def test_map_type_is_explicit_and_does_not_change_schema_hash(self) -> None:
+        resource = load_fixture()
+        instance = copy.deepcopy(resource)
+        instance["metadata"]["map_type"] = "instance"
+
+        resource_result = adapt_tree_document(resource)
+        instance_result = adapt_tree_document(instance)
+
+        self.assertTrue(resource_result.is_valid)
+        self.assertTrue(instance_result.is_valid)
+        assert resource_result.tree is not None
+        assert instance_result.tree is not None
+        self.assertTrue(resource_result.tree.is_resource_map)
+        self.assertFalse(instance_result.tree.is_resource_map)
+        self.assertEqual(
+            resource_result.tree.snapshot_hash,
+            instance_result.tree.snapshot_hash,
+        )
+        self.assertIn(
+            "INSTANCE_TREE_SCHEMA_PROJECTION",
+            {issue.code for issue in instance_result.issues},
+        )
+
+    def test_missing_concurrent_version_is_a_hard_error(self) -> None:
+        document = load_fixture()
+        del document["metadata"]["concurrent_version"]
+
+        result = adapt_tree_document(document)
+
+        self.assertFalse(result.is_valid)
+        self.assertIn("INVALID_SOURCE_REVISION", {issue.code for issue in result.issues})
+
+    def test_only_class_properties_may_have_property_children(self) -> None:
+        non_class_parent = load_fixture()
+        find_source_node(non_class_parent, "node-005")["metadata"]["value_type"] = "string"
+        invalid_parent_result = adapt_tree_document(non_class_parent)
+
+        non_property_child = load_fixture()
+        find_source_node(non_property_child, "node-006")["metadata"]["node_type"] = "concept"
+        invalid_child_result = adapt_tree_document(non_property_child)
+
+        self.assertFalse(invalid_parent_result.is_valid)
+        self.assertIn(
+            "NON_CLASS_PROPERTY_HAS_CHILDREN",
+            {issue.code for issue in invalid_parent_result.issues},
+        )
+        self.assertFalse(invalid_child_result.is_valid)
+        self.assertIn(
+            "PROPERTY_HAS_NON_PROPERTY_CHILD",
+            {issue.code for issue in invalid_child_result.issues},
+        )
+
+    def test_node_label_must_be_unique_among_siblings(self) -> None:
+        document = load_fixture()
+        find_source_node(document, "node-004")["metadata"]["node_label"] = "TITLE"
+
+        result = adapt_tree_document(document)
+
+        self.assertFalse(result.is_valid)
+        self.assertIn("DUPLICATE_SIBLING_LABEL", {issue.code for issue in result.issues})
 
     def test_audit_and_value_changes_do_not_change_schema_hash(self) -> None:
         before = load_fixture()

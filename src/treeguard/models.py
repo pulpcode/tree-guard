@@ -76,7 +76,7 @@ class CanonicalNode:
     remark: str | None
     extension: JsonObject
     metadata_extra: JsonObject
-    has_instance_value: bool
+    has_value_envelope: bool
     node_hash: str
 
     def __post_init__(self) -> None:
@@ -101,7 +101,7 @@ class CanonicalNode:
             "remark": self.remark,
             "extension": thaw_json(self.extension),
             "metadata_extra": thaw_json(self.metadata_extra),
-            "has_instance_value": self.has_instance_value,
+            "has_value_envelope": self.has_value_envelope,
             "node_hash": self.node_hash,
         }
 
@@ -110,10 +110,11 @@ class CanonicalNode:
 class CanonicalTree:
     schema_version: str
     source_format: str
+    source_map_type: str
     tree_id: str
     tree_version: str
-    source_revision: int | None
-    version_record_id: str | None
+    source_revision: int
+    version_record_id: str
     root_node_ids: tuple[str, ...]
     nodes: tuple[CanonicalNode, ...]
     snapshot_hash: str
@@ -126,10 +127,18 @@ class CanonicalTree:
             freeze_json(self.source_metadata_extra),
         )
 
+    @property
+    def is_resource_map(self) -> bool:
+        """Report the factual source kind; Patch eligibility has additional gates."""
+
+        return self.source_map_type.lower() == "resource"
+
     def to_dict(self) -> dict[str, Any]:
         return {
             "schema_version": self.schema_version,
             "source_format": self.source_format,
+            "source_map_type": self.source_map_type,
+            "is_resource_map": self.is_resource_map,
             "tree_id": self.tree_id,
             "tree_version": self.tree_version,
             "source_revision": self.source_revision,
@@ -168,6 +177,9 @@ class ImportResult:
             "report_version": "treeguard-conformance.v1",
             "valid": self.is_valid,
             "source_format": self.source_format,
+            "is_resource_map": (
+                self.tree.is_resource_map if self.tree is not None else False
+            ),
             "node_count": self.observed_node_count,
             "value_envelope_count": self.observed_value_count,
             "root_count": len(self.tree.root_node_ids) if self.tree is not None else None,

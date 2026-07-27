@@ -76,9 +76,12 @@ VALUE 不是 `node_type=value` 的拓扑节点，而是 PROPERTY 旁边的可选
 
 - 只校验 VALUE 外层绑定元数据；
 - 只记录 `has_value_envelope`；
+- `has_value_envelope=true` 只证明当前导出中观察到 VALUE 外层；`false` 表示未观察到，不能证明业务数据中不存在值；
 - 不把实例载荷保存进 CanonicalTree；
 - 不把 VALUE 放进 Schema 哈希、检索、Prompt 或 Trace；
 - VALUE 缺失不影响 Schema 导入。
+
+已确认：`is_list` 在单值与列表之间切换时 `node_id` 不变；当前没有 VALUE 迁移设计，前端在属性已经挂 VALUE 后禁止修改属性类型。TreeGuard 不能把前端限制当成后端不变量，因此涉及类型、基数或属性删除的历史证据仍需单独安全门。对子属性还要把上层 `class` 属性的复合 VALUE 外层作为作用域证据，不能只检查子属性自己是否挂有 `value`。
 
 ## 4. API 映射
 
@@ -179,18 +182,28 @@ Patch 前置条件至少携带 `source_map_type + tree_id + tree_version + versi
 
 因此这两个样本能验证“保存修订 Diff”和 VALUE 排除边界，但在 `node_order` 规则确认前，不能把这两条顺序变化当作语义 Gold。
 
+确定性 HistoryReview 的聚合结果是：
+
+- 修订间隔为 `GAPPED`，只能解释端点净变化；
+- 结构审查候选 0；
+- 纯顺序信息观察 1，覆盖 2 个节点；
+- `knowledge_status=EVIDENCE_ONLY`，且明确声明不能还原历史操作。
+
+这个样本可以验证纯顺序变化不会被包装成语义案例，但不能验证语义分簇质量，也不能形成 Gold。
+
 ## 8. 仍需确认
 
-1. `is_list` 在 `false/true` 间切换后，`node_id` 是否保持不变，以及已有 VALUE 如何迁移；
-2. `class + is_list=true` 是否可以在另一个 class/class-list 内继续嵌套；
-3. “改类型后 node_id 不变”是否同时覆盖 `node_type` 与 `value_type`；
-4. `node_order` 是否必填、同级唯一、连续，以及插入节点时是否重排兄弟节点；
-5. 修改 `node_label` 时，系统是否同步修改动态容器键、当前 route 和所有后代 route；
-6. `concurrent_version` 是否对只改 VALUE、备注或审计字段的保存也递增；
-7. 是否有 Schema-only 接口或 `exclude_values` 参数；
-8. 读取复合 VALUE 时，是否以内层 `node_id` 作为最终绑定依据。
+1. “属性类型”前端限制具体覆盖 `node_type`、`value_type`、`is_list` 中的哪些字段，以及后端是否执行同样校验；
+2. 后端是否有不暴露 VALUE 内容、只返回某节点或其历史实例“是否曾有值”的权威查询；
+3. `class + is_list=true` 是否可以在另一个 class/class-list 内继续嵌套；
+4. “改类型后 node_id 不变”是否同时覆盖 `node_type` 与 `value_type`；
+5. `node_order` 是否必填、同级唯一、连续，以及插入节点时是否重排兄弟节点；
+6. 修改 `node_label` 时，系统是否同步修改动态容器键、当前 route 和所有后代 route；
+7. `concurrent_version` 是否对只改 VALUE、备注或审计字段的保存也递增；
+8. 是否有 Schema-only 接口或 `exclude_values` 参数；
+9. 读取复合 VALUE 时，是否以内层 `node_id` 作为最终绑定依据。
 
-进入历史 Diff 前还需要：
+进入内网扩大历史样本分析前，最好补充：
 
 - 版本列表或版本元数据接口；
 - 按 `map_id + version` 获取 Schema-only 全树的接口或参数；

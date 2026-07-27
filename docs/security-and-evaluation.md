@@ -79,9 +79,11 @@ SBOM 只是可核验材料，不等于安全结论。
 - 对低熵业务字段生成的确定性哈希；
 - 全树一致的假名映射。
 
-完整 `TreeSnapshot` 和 `TreeDiff` 都属于内网敏感制品。TreeDiff 的字段变化需要服务内网专家审查，因此 `before/after` 可能包含真实名称、label、remark、extension 或尚未分类的 metadata。它不得直接作为跨网诊断输出，也不得仅靠删除 VALUE 后就视为可外传。
+完整 `TreeSnapshot`、`TreeDiff` 和 `HistoryReview` 都属于内网敏感制品。TreeDiff 的字段变化需要服务内网专家审查，因此 `before/after` 可能包含真实名称、label、remark、extension 或尚未分类的 metadata；HistoryReview 还包含节点引用、VALUE 外层观察信号和来源哈希。它们不得直接作为跨网诊断输出，也不得仅靠删除 VALUE 后就视为可外传。
 
-跨网协作只允许输出固定错误码和聚合结果，例如变更类型计数、ERROR/WARNING 数量和分桶指标；不得输出 node delta、字段前后值、节点引用、snapshot/diff hash。若未来 CLI 增加完整 Diff 输出，必须明确标为内网命令，并与聚合 Conformance 报告分离。
+跨网协作只允许输出固定错误码和聚合结果，例如变更类型计数、ERROR/WARNING 数量、HistoryReview 风险/门禁计数和分桶指标；不得输出 node delta、字段前后值、节点引用、snapshot/diff/run hash。若未来 CLI 增加完整 Diff 或 HistoryReview 输出，必须明确标为内网命令，并与聚合报告分离。
+
+当前 `snapshot/diff/case/run hash` 都是无密钥的确定性摘要，只用于一致性、关联和回放校验，不是数字签名或来源认证。可信流程必须通过 `verify_history_run_against_snapshots` 从受控快照重新计算 HistoryReview 并逐字段比对；若未来接收跨进程或跨系统制品，还需要访问控制及独立的签名/MAC 机制，不能因为“哈希能对上”就信任内容。
 
 低熵节点名称可能被字典反推。即使哈希看似不可读，也不能默认视为安全脱敏。一次性随机案例编号不得外传内部映射表。
 
@@ -197,7 +199,7 @@ DETERMINISTIC_STRESS
 - 提出待审查案例；
 - 构建专家重新裁决的候选池。
 
-历史版本不能直接作为 Gold，因为它只说明过去怎样操作，不能证明操作正确。
+历史版本不能直接作为 Gold，因为端点 Diff 只说明已观察快照之间的净变化；存在修订缺口时连中间操作都不能还原，更不能证明变化正确。
 
 ### 7.2 AI 合成数据
 
@@ -239,7 +241,7 @@ DETERMINISTIC_STRESS
 - `NEED_EVIDENCE`；
 - ambiguity/challenge 集。
 
-一次发布可能修改不同子树，因此必须先基于 `node_id`、共同祖先和结构关系拆成原子变更簇，再由专家确认每一簇是否构成独立案例。
+一次发布可能修改不同子树。确定性代码先基于变化节点之间的直接父子关系形成结构候选簇，并避免用根节点或移动节点桥接不同语义域；专家随后合并或拆分候选，确认哪些变化才构成独立案例。修订存在缺口时只能审查端点净变化，不能声称还原了中间操作。
 
 ## 9. 评测指标
 

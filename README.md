@@ -4,7 +4,7 @@ TreeGuard 是面向大型信息树的语义编译与变更治理助手。
 
 它将建设人员提交的自然语言需求和领域专家的思考，编译为结构化变更意图；在整棵信息树中检索可能复用或冲突的语义；经过人机协作审查后，生成可验证、可审计、可回放的声明式 Schema Patch。
 
-> 当前阶段：设计基线已冻结，TreeSnapshot/TreeDiff v1 合同、递归 File Adapter、Schema 哈希、修订级字段 Diff 和聚合诊断 CLI 已实现。第一阶段目标仍是一个完全离线、文件驱动、无生产写权限的 Shadow MVP。
+> 当前阶段：设计基线已冻结，TreeSnapshot/TreeDiff/HistoryReview v1 合同、递归 File Adapter、Schema 哈希、修订级字段 Diff、历史结构候选簇和聚合诊断已实现。第一阶段目标仍是一个完全离线、文件驱动、无生产写权限的 Shadow MVP。
 
 ## 为什么做 TreeGuard
 
@@ -54,7 +54,7 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 2. **专家拥有最终语义权**：AI 可以建议、追问或拒答，只有 `APPROVED` 的语义结论才能进入 Patch。
 3. **复用语义不等于复用物理节点**：严格区分直接使用已有节点、基于语义合同新增物理节点和增加场景字段。
 4. **确定性代码掌管安全门**：版本检查、节点 ID 校验、结构校验、Dry Run 和权限控制不交给 LLM。
-5. **历史是证据，不是 Gold**：历史 Diff 只能说明曾经发生什么，必须经过专家重新裁决才能进入冻结评测集。
+5. **历史是证据，不是 Gold**：历史端点 Diff 只能说明两个已观察快照之间的净变化；有修订缺口时连中间操作都不可还原。结构候选簇必须经过专家重新裁决才能进入冻结评测集。
 6. **允许拒答**：选择性高精度优先于强制覆盖所有案例。
 7. **真实数据不出内网**：外网只建设通用 Core、契约、虚构数据和测试工具。
 8. **所有结论可追踪**：树版本、Overlay、索引、Prompt、模型、候选、人工审批和 Patch 均进入版本化 Trace。
@@ -70,13 +70,15 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 
 ## 当前实现
 
-当前代码只覆盖合同和确定性历史 Diff，不包含 Web、数据库、LLM、检索或 Patch 发布：
+当前代码只覆盖合同、确定性历史 Diff 和证据型历史审查，不包含 Web、数据库、LLM、检索或 Patch 发布：
 
 - `contracts/tree-snapshot.v1.schema.json`：Canonical Tree JSON Schema；
 - `contracts/tree-diff.v1.schema.json`：字段级 Snapshot Diff JSON Schema；
+- `contracts/history-review.v1.schema.json`：历史结构候选簇、安全门和信息观察 JSON Schema；
 - `src/treeguard/adapter.py`：直接导出和 API 响应的递归适配器；
 - `src/treeguard/hashing.py`：排除 VALUE 和审计字段的稳定 Schema 哈希；
 - `src/treeguard/diff.py`：只按稳定 `node_id` 匹配的保存修订/业务版本 Diff；
+- `src/treeguard/history.py`：同一业务版本内、只读、确定性的历史证据分簇、VALUE 风险门禁与可信快照重放校验；
 - `src/treeguard/cli.py`：不输出名称、ID、路径和 VALUE 的聚合式 Conformance CLI；
 - `tests/fixtures/fictional/`：完全虚构的递归复合属性样例；
 - `tests/`：标准库单元测试，无运行时第三方依赖。

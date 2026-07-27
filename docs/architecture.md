@@ -126,11 +126,36 @@ node_hash
 
 以 `node_id` 比较两个 CanonicalTree 快照，区分同一业务版本的保存修订和跨业务版本比较。Diff 使用确定性代码，忽略 VALUE、审计字段和派生路径，不从名称或 route 猜测节点对应关系。
 
-### 4.3 `ChangeIntent`
+### 4.3 `HistoryReview`
+
+对同一业务版本内的正向 `resource` 保存修订做确定性证据整理，包含：
+
+```text
+knowledge_status
+source_diff_hash
+scope
+base
+target
+revision_gap
+interval_completeness
+reconstructs_historical_operations
+review_cases[]
+informational_observations[]
+summary
+run_hash
+```
+
+一般变化只按已变化节点之间的直接父子关系形成 `STRUCTURAL_CANDIDATE`；移动节点不桥接旧、新父域，纯顺序变化只进入信息观察。风险等级和可执行门禁分轴表示：`HIGH_RISK` 不必然等于 `BLOCKED`，`UNKNOWN` 表示仍缺权威事实。修订缺口把候选门禁提升到至少 `UNKNOWN`，但不会把已有的 `BLOCKED` 降级。VALUE 门禁同时记录节点直接外层和上层 `class` 复合外层的观察证据。任何候选都只是 `EVIDENCE_ONLY`，不能直接当作历史意图或 Gold。
+
+完整 HistoryReview 含节点引用，只能留在内网。跨网只能使用不含 ID、路径和哈希的固定码聚合报告。
+
+JSON Schema、运行时不变量和无密钥哈希只验证制品内部自洽，不能证明每个节点变化确实来自某个 TreeDiff。跨进程读取完整制品时必须调用可信快照重放校验，重新执行 `mine_history_pair` 并逐字段比对；不能只校验 `run_hash`。
+
+### 4.4 `ChangeIntent`
 
 包含原始需求、主体、角色、场景、生命周期、属性归属、类型、基数、拟挂载位置、事实、假设和证据缺口。
 
-### 4.4 `SemanticOverlay`
+### 4.5 `SemanticOverlay`
 
 至少包含：
 
@@ -159,11 +184,11 @@ STALE
 
 只有 `EXPERT_APPROVED` 的补充语义可以进入在线判断。基础节点修改后，如果 `base_node_hash` 不再匹配，Overlay 自动变为 `STALE`。
 
-### 4.5 `DeliberationRecord`
+### 4.6 `DeliberationRecord`
 
 包含专家原文、事实、假设、风险、未决问题、证据、修订历史和审批状态。
 
-### 4.6 `SchemaPatch`
+### 4.7 `SchemaPatch`
 
 至少包含：
 
@@ -182,7 +207,7 @@ status
 
 MVP Patch 是声明式文件，不包含数据库连接和执行代码。
 
-### 4.7 `UsageManifest`
+### 4.8 `UsageManifest`
 
 至少包含：
 
@@ -200,7 +225,7 @@ manifest_hash
 
 邮件系统保持引用关系的事实来源。TreeGuard 周期性导入 Manifest，建立只读反向索引。
 
-### 4.8 `WorkflowTrace`
+### 4.9 `WorkflowTrace`
 
 至少记录：
 
@@ -377,4 +402,4 @@ Patch 只允许：
 阶段 4：受控发布
 
 - 只有经过充分 Shadow 验证和安全评审后才考虑；
-- 删除、移动、合并和改类型仍需要单独迁移机制。
+- 删除、移动、合并、改类型和改基数仍需要单独迁移机制。

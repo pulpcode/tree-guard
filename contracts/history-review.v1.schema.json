@@ -1,0 +1,745 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/history-review.v1.schema.json",
+  "title": "TreeGuard History Review Run v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "algorithm_version",
+    "policy_version",
+    "knowledge_status",
+    "source_diff_hash",
+    "scope",
+    "base",
+    "target",
+    "revision_gap",
+    "interval_completeness",
+    "reconstructs_historical_operations",
+    "review_cases",
+    "informational_observations",
+    "summary",
+    "run_hash"
+  ],
+  "oneOf": [
+    {
+      "properties": {
+        "revision_gap": {"const": 1},
+        "interval_completeness": {"const": "ADJACENT"}
+      }
+    },
+    {
+      "properties": {
+        "revision_gap": {"type": "integer", "minimum": 2},
+        "interval_completeness": {"const": "GAPPED"}
+      }
+    }
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {"revision_gap": {"type": "integer", "minimum": 2}},
+        "required": ["revision_gap"]
+      },
+      "then": {
+        "properties": {
+          "review_cases": {
+            "items": {
+              "properties": {
+                "gate_status": {"enum": ["UNKNOWN", "BLOCKED"]},
+                "reason_codes": {
+                  "contains": {
+                    "const": "INTERMEDIATE_REVISIONS_UNOBSERVED"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "review_cases": {
+            "items": {
+              "properties": {
+                "reason_codes": {
+                  "not": {
+                    "contains": {
+                      "const": "INTERMEDIATE_REVISIONS_UNOBSERVED"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "properties": {
+    "schema_version": {"const": "history-review.v1"},
+    "algorithm_version": {"const": "treeguard.history-mining.v1"},
+    "policy_version": {"const": "treeguard.history-review-policy.v1"},
+    "knowledge_status": {"const": "EVIDENCE_ONLY"},
+    "source_diff_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "scope": {"const": "SAVE_REVISION"},
+    "base": {"$ref": "#/$defs/snapshotRef"},
+    "target": {"$ref": "#/$defs/snapshotRef"},
+    "revision_gap": {"type": "integer", "minimum": 1},
+    "interval_completeness": {"enum": ["ADJACENT", "GAPPED"]},
+    "reconstructs_historical_operations": {"const": false},
+    "review_cases": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/reviewCase"}
+    },
+    "informational_observations": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/informationalObservation"}
+    },
+    "summary": {"$ref": "#/$defs/summary"},
+    "run_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "snapshotRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshot_schema_version",
+        "source_map_type",
+        "tree_id",
+        "tree_version",
+        "source_revision",
+        "version_record_id",
+        "snapshot_hash"
+      ],
+      "properties": {
+        "snapshot_schema_version": {"const": "tree-snapshot.v1"},
+        "source_map_type": {"const": "resource"},
+        "tree_id": {"type": "string", "minLength": 1},
+        "tree_version": {"type": "string", "minLength": 1},
+        "source_revision": {"type": "integer"},
+        "version_record_id": {"type": "string", "minLength": 1},
+        "snapshot_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "baseValueObserved": {
+      "anyOf": [
+        {
+          "properties": {
+            "base_direct_value_envelope_observed": {"const": true}
+          },
+          "required": ["base_direct_value_envelope_observed"]
+        },
+        {
+          "properties": {
+            "base_ancestor_value_envelope_observed": {"const": true}
+          },
+          "required": ["base_ancestor_value_envelope_observed"]
+        }
+      ]
+    },
+    "baseValueNotObserved": {
+      "properties": {
+        "base_direct_value_envelope_observed": {"const": false},
+        "base_ancestor_value_envelope_observed": {"const": false}
+      },
+      "required": [
+        "base_direct_value_envelope_observed",
+        "base_ancestor_value_envelope_observed"
+      ]
+    },
+    "shapeBreakingEvidence": {
+      "anyOf": [
+        {
+          "properties": {
+            "change_types": {
+              "contains": {
+                "enum": [
+                  "VALUE_TYPE_CHANGED",
+                  "CARDINALITY_CHANGED",
+                  "VALUE_CONTRACT_REMOVED"
+                ]
+              }
+            }
+          },
+          "required": ["change_types"]
+        },
+        {
+          "properties": {
+            "change_types": {"contains": {"const": "NODE_KIND_CHANGED"}},
+            "base_node_kind": {"const": "PROPERTY"}
+          },
+          "required": ["change_types", "base_node_kind"]
+        },
+        {
+          "properties": {
+            "change_types": {"contains": {"const": "NODE_REMOVED"}},
+            "base_node_kind": {"const": "PROPERTY"}
+          },
+          "required": ["change_types", "base_node_kind"]
+        }
+      ]
+    },
+    "reviewCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {"gate_status": {"const": "REVIEWABLE"}},
+            "required": ["gate_status"]
+          },
+          "then": {
+            "properties": {"reason_codes": {"maxItems": 0}}
+          }
+        },
+        {
+          "if": {
+            "properties": {"gate_status": {"const": "UNKNOWN"}},
+            "required": ["gate_status"]
+          },
+          "then": {
+            "properties": {
+              "reason_codes": {
+                "minItems": 1,
+                "not": {"contains": {"const": "VALUE_MIGRATION_UNSUPPORTED"}}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"gate_status": {"const": "BLOCKED"}},
+            "required": ["gate_status"]
+          },
+          "then": {
+            "properties": {
+              "reason_codes": {
+                "contains": {"const": "VALUE_MIGRATION_UNSUPPORTED"}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "reason_codes": {
+                "contains": {"const": "VALUE_MIGRATION_UNSUPPORTED"}
+              }
+            },
+            "required": ["reason_codes"]
+          },
+          "then": {
+            "properties": {
+              "gate_status": {"const": "BLOCKED"},
+              "node_evidence": {
+                "contains": {
+                  "allOf": [
+                    {"$ref": "#/$defs/shapeBreakingEvidence"},
+                    {"$ref": "#/$defs/baseValueObserved"}
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "node_evidence": {
+                "contains": {
+                  "properties": {
+                    "change_types": {
+                      "contains": {
+                        "enum": [
+                          "NODE_REMOVED",
+                          "NODE_MOVED",
+                          "NODE_KIND_CHANGED",
+                          "VALUE_CONTRACT_ADDED",
+                          "VALUE_CONTRACT_REMOVED",
+                          "VALUE_TYPE_CHANGED",
+                          "CARDINALITY_CHANGED",
+                          "CONSTRAINTS_CHANGED"
+                        ]
+                      }
+                    }
+                  },
+                  "required": ["change_types"]
+                }
+              }
+            },
+            "required": ["node_evidence"]
+          },
+          "then": {
+            "properties": {"risk_level": {"const": "HIGH_RISK"}}
+          },
+          "else": {
+            "properties": {"risk_level": {"const": "REVIEW_REQUIRED"}}
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "node_evidence": {
+                "contains": {
+                  "allOf": [
+                    {"$ref": "#/$defs/shapeBreakingEvidence"},
+                    {"$ref": "#/$defs/baseValueObserved"}
+                  ]
+                }
+              }
+            },
+            "required": ["node_evidence"]
+          },
+          "then": {
+            "properties": {
+              "gate_status": {"const": "BLOCKED"},
+              "reason_codes": {
+                "contains": {"const": "VALUE_MIGRATION_UNSUPPORTED"}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "node_evidence": {
+                "contains": {
+                  "allOf": [
+                    {"$ref": "#/$defs/shapeBreakingEvidence"},
+                    {"$ref": "#/$defs/baseValueNotObserved"}
+                  ]
+                }
+              }
+            },
+            "required": ["node_evidence"]
+          },
+          "then": {
+            "properties": {
+              "gate_status": {"enum": ["UNKNOWN", "BLOCKED"]},
+              "reason_codes": {
+                "contains": {"const": "VALUE_ABSENCE_UNPROVEN"}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "node_evidence": {
+                "contains": {
+                  "properties": {
+                    "change_types": {
+                      "contains": {"const": "CONSTRAINTS_CHANGED"}
+                    }
+                  },
+                  "required": ["change_types"]
+                }
+              }
+            },
+            "required": ["node_evidence"]
+          },
+          "then": {
+            "properties": {
+              "gate_status": {"enum": ["UNKNOWN", "BLOCKED"]},
+              "reason_codes": {
+                "contains": {"const": "CONSTRAINT_SEMANTICS_UNCLASSIFIED"}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "node_evidence": {
+                "contains": {
+                  "allOf": [
+                    {
+                      "properties": {
+                        "change_types": {
+                          "contains": {"const": "CONSTRAINTS_CHANGED"}
+                        }
+                      },
+                      "required": ["change_types"]
+                    },
+                    {"$ref": "#/$defs/baseValueObserved"}
+                  ]
+                }
+              }
+            },
+            "required": ["node_evidence"]
+          },
+          "then": {
+            "properties": {
+              "reason_codes": {
+                "contains": {"const": "VALUE_REVALIDATION_REQUIRED"}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "node_evidence": {
+                "contains": {
+                  "properties": {
+                    "change_types": {
+                      "contains": {
+                        "enum": [
+                          "EXTENSION_CHANGED_UNCLASSIFIED",
+                          "METADATA_CHANGED_UNCLASSIFIED"
+                        ]
+                      }
+                    }
+                  },
+                  "required": ["change_types"]
+                }
+              }
+            },
+            "required": ["node_evidence"]
+          },
+          "then": {
+            "properties": {
+              "gate_status": {"enum": ["UNKNOWN", "BLOCKED"]},
+              "reason_codes": {
+                "contains": {"const": "UNCLASSIFIED_CHANGE_PRESENT"}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "node_evidence": {
+                "contains": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "base_node_kind": {"const": "UNSUPPORTED"}
+                      },
+                      "required": ["base_node_kind"]
+                    },
+                    {
+                      "properties": {
+                        "target_node_kind": {"const": "UNSUPPORTED"}
+                      },
+                      "required": ["target_node_kind"]
+                    }
+                  ]
+                }
+              }
+            },
+            "required": ["node_evidence"]
+          },
+          "then": {
+            "properties": {
+              "gate_status": {"enum": ["UNKNOWN", "BLOCKED"]},
+              "reason_codes": {
+                "contains": {"const": "UNSUPPORTED_NODE_KIND_PRESENT"}
+              }
+            }
+          }
+        }
+      ],
+      "required": [
+        "case_id",
+        "cluster_status",
+        "knowledge_status",
+        "context_node_ids",
+        "risk_level",
+        "gate_status",
+        "reason_codes",
+        "node_evidence"
+      ],
+      "properties": {
+        "case_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "cluster_status": {"const": "STRUCTURAL_CANDIDATE"},
+        "knowledge_status": {"const": "EVIDENCE_ONLY"},
+        "context_node_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "risk_level": {"enum": ["REVIEW_REQUIRED", "HIGH_RISK"]},
+        "gate_status": {"enum": ["REVIEWABLE", "UNKNOWN", "BLOCKED"]},
+        "reason_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/reasonCode"}
+        },
+        "node_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/nodeEvidence"}
+        }
+      }
+    },
+    "nodeEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "change_types",
+        "base_node_kind",
+        "target_node_kind",
+        "base_direct_value_envelope_observed",
+        "base_ancestor_value_envelope_observed",
+        "target_direct_value_envelope_observed",
+        "target_ancestor_value_envelope_observed"
+      ],
+      "properties": {
+        "node_id": {"type": "string", "minLength": 1},
+        "change_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/changeType"}
+        },
+        "base_node_kind": {
+          "type": ["string", "null"],
+          "enum": ["CONCEPT", "PROPERTY", "UNSUPPORTED", null]
+        },
+        "target_node_kind": {
+          "type": ["string", "null"],
+          "enum": ["CONCEPT", "PROPERTY", "UNSUPPORTED", null]
+        },
+        "base_direct_value_envelope_observed": {"type": "boolean"},
+        "base_ancestor_value_envelope_observed": {"type": "boolean"},
+        "target_direct_value_envelope_observed": {"type": "boolean"},
+        "target_ancestor_value_envelope_observed": {"type": "boolean"}
+      }
+    },
+    "informationalObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {"basis": {"const": "SIBLING_ORDER_CONTEXT"}},
+            "required": ["basis"]
+          },
+          "then": {
+            "properties": {
+              "node_ids": {"minItems": 2},
+              "context_node_ids": {"minItems": 1, "maxItems": 1},
+              "change_types": {"const": ["ORDER_OBSERVED_CHANGED"]}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"basis": {"const": "SINGLE_NODE_INFORMATIONAL"}},
+            "required": ["basis"]
+          },
+          "then": {
+            "properties": {"node_ids": {"minItems": 1, "maxItems": 1}}
+          }
+        }
+      ],
+      "required": [
+        "observation_id",
+        "basis",
+        "node_ids",
+        "context_node_ids",
+        "change_types"
+      ],
+      "properties": {
+        "observation_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "basis": {
+          "enum": [
+            "SINGLE_NODE_INFORMATIONAL",
+            "SIBLING_ORDER_CONTEXT"
+          ]
+        },
+        "node_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "context_node_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "change_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "ORDER_OBSERVED_CHANGED",
+              "SOURCE_TYPE_TOKEN_CHANGED"
+            ]
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_node_delta_count",
+        "review_case_count",
+        "candidate_node_count",
+        "informational_observation_count",
+        "informational_only_node_count",
+        "suppressed_informational_change_count",
+        "risk_level_counts",
+        "gate_status_counts",
+        "reason_code_counts",
+        "candidate_change_type_counts"
+      ],
+      "properties": {
+        "source_node_delta_count": {"type": "integer", "minimum": 0},
+        "review_case_count": {"type": "integer", "minimum": 0},
+        "candidate_node_count": {"type": "integer", "minimum": 0},
+        "informational_observation_count": {"type": "integer", "minimum": 0},
+        "informational_only_node_count": {"type": "integer", "minimum": 0},
+        "suppressed_informational_change_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "risk_level_counts": {"$ref": "#/$defs/riskLevelCounts"},
+        "gate_status_counts": {"$ref": "#/$defs/gateStatusCounts"},
+        "reason_code_counts": {"$ref": "#/$defs/reasonCodeCounts"},
+        "candidate_change_type_counts": {
+          "$ref": "#/$defs/candidateChangeTypeCounts"
+        }
+      }
+    },
+    "riskLevelCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "propertyNames": {
+        "enum": ["REVIEW_REQUIRED", "HIGH_RISK"]
+      },
+      "properties": {
+        "REVIEW_REQUIRED": {"type": "integer", "minimum": 1},
+        "HIGH_RISK": {"type": "integer", "minimum": 1}
+      }
+    },
+    "gateStatusCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "propertyNames": {
+        "enum": ["REVIEWABLE", "UNKNOWN", "BLOCKED"]
+      },
+      "properties": {
+        "REVIEWABLE": {"type": "integer", "minimum": 1},
+        "UNKNOWN": {"type": "integer", "minimum": 1},
+        "BLOCKED": {"type": "integer", "minimum": 1}
+      }
+    },
+    "reasonCodeCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "propertyNames": {
+        "enum": [
+          "INTERMEDIATE_REVISIONS_UNOBSERVED",
+          "VALUE_MIGRATION_UNSUPPORTED",
+          "VALUE_ABSENCE_UNPROVEN",
+          "CONSTRAINT_SEMANTICS_UNCLASSIFIED",
+          "VALUE_REVALIDATION_REQUIRED",
+          "UNCLASSIFIED_CHANGE_PRESENT",
+          "UNSUPPORTED_NODE_KIND_PRESENT"
+        ]
+      },
+      "properties": {
+        "INTERMEDIATE_REVISIONS_UNOBSERVED": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "VALUE_MIGRATION_UNSUPPORTED": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "VALUE_ABSENCE_UNPROVEN": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "CONSTRAINT_SEMANTICS_UNCLASSIFIED": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "VALUE_REVALIDATION_REQUIRED": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "UNCLASSIFIED_CHANGE_PRESENT": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "UNSUPPORTED_NODE_KIND_PRESENT": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "candidateChangeTypeCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "propertyNames": {"$ref": "#/$defs/changeType"},
+      "properties": {
+        "NODE_ADDED": {"type": "integer", "minimum": 1},
+        "NODE_REMOVED": {"type": "integer", "minimum": 1},
+        "NODE_MOVED": {"type": "integer", "minimum": 1},
+        "NODE_LABEL_CHANGED": {"type": "integer", "minimum": 1},
+        "NODE_NAME_CHANGED": {"type": "integer", "minimum": 1},
+        "NODE_KIND_CHANGED": {"type": "integer", "minimum": 1},
+        "SOURCE_TYPE_TOKEN_CHANGED": {"type": "integer", "minimum": 1},
+        "VALUE_CONTRACT_ADDED": {"type": "integer", "minimum": 1},
+        "VALUE_CONTRACT_REMOVED": {"type": "integer", "minimum": 1},
+        "VALUE_TYPE_CHANGED": {"type": "integer", "minimum": 1},
+        "CARDINALITY_CHANGED": {"type": "integer", "minimum": 1},
+        "CONSTRAINTS_CHANGED": {"type": "integer", "minimum": 1},
+        "PLACEHOLDER_CHANGED": {"type": "integer", "minimum": 1},
+        "REMARK_CHANGED": {"type": "integer", "minimum": 1},
+        "EXTENSION_CHANGED_UNCLASSIFIED": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "METADATA_CHANGED_UNCLASSIFIED": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "ORDER_OBSERVED_CHANGED": {"type": "integer", "minimum": 1}
+      }
+    },
+    "changeType": {
+      "enum": [
+        "NODE_ADDED",
+        "NODE_REMOVED",
+        "NODE_MOVED",
+        "NODE_LABEL_CHANGED",
+        "NODE_NAME_CHANGED",
+        "NODE_KIND_CHANGED",
+        "SOURCE_TYPE_TOKEN_CHANGED",
+        "VALUE_CONTRACT_ADDED",
+        "VALUE_CONTRACT_REMOVED",
+        "VALUE_TYPE_CHANGED",
+        "CARDINALITY_CHANGED",
+        "CONSTRAINTS_CHANGED",
+        "PLACEHOLDER_CHANGED",
+        "REMARK_CHANGED",
+        "EXTENSION_CHANGED_UNCLASSIFIED",
+        "METADATA_CHANGED_UNCLASSIFIED",
+        "ORDER_OBSERVED_CHANGED"
+      ]
+    },
+    "reasonCode": {
+      "enum": [
+        "INTERMEDIATE_REVISIONS_UNOBSERVED",
+        "VALUE_MIGRATION_UNSUPPORTED",
+        "VALUE_ABSENCE_UNPROVEN",
+        "CONSTRAINT_SEMANTICS_UNCLASSIFIED",
+        "VALUE_REVALIDATION_REQUIRED",
+        "UNCLASSIFIED_CHANGE_PRESENT",
+        "UNSUPPORTED_NODE_KIND_PRESENT"
+      ]
+    }
+  }
+}

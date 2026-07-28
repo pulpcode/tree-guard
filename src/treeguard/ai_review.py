@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import stat
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -78,6 +79,14 @@ _CONTROL_CHARACTER = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")
 _SURROGATE_CHARACTER = re.compile(r"[\ud800-\udfff]")
 _MAX_LIST_ITEMS = 20
 _MAX_TEXT_CHARS = 1_000
+_MAX_ENV_FILE_BYTES = 16_384
+_LOCAL_ENV_KEYS = {
+    "BAILIAN_API_KEY",
+    "DASHSCOPE_API_KEY",
+    "TREEGUARD_LLM_BASE_URL",
+    "TREEGUARD_LLM_MODEL",
+}
+_ENV_KEY = re.compile(r"^[A-Z][A-Z0-9_]*$")
 
 
 class AIReviewValidationError(ValueError):
@@ -368,12 +377,46 @@ class BailianConfig:
             )
 
     @classmethod
-    def from_env(cls) -> "BailianConfig":
-        api_key = os.getenv("BAILIAN_API_KEY") or os.getenv("DASHSCOPE_API_KEY") or ""
+    def from_env(
+        cls,
+        *,
+        api_key_override: str | None = None,
+    ) -> "BailianConfig":
+        local_env: dict[str, str] | None = None
+
+        def setting(*names: str) -> str | None:
+            nonlocal local_env
+            process_values = [
+                os.environ[name] for name in names if name in os.environ
+            ]
+            if process_values:
+                return next(
+                    (value for value in process_values if value),
+                    "",
+                )
+            if local_env is None:
+                local_env = _load_private_local_env()
+            file_values = [
+                local_env[name] for name in names if name in local_env
+            ]
+            if file_values:
+                return next(
+                    (value for value in file_values if value),
+                    "",
+                )
+            return None
+
+        api_key = (
+            api_key_override
+            if api_key_override is not None
+            else (
+                setting("BAILIAN_API_KEY", "DASHSCOPE_API_KEY") or ""
+            )
+        )
         return cls(
             api_key=api_key,
-            base_url=os.getenv("TREEGUARD_LLM_BASE_URL", DEFAULT_BASE_URL),
-            model=os.getenv("TREEGUARD_LLM_MODEL", DEFAULT_MODEL),
+            base_url=setting("TREEGUARD_LLM_BASE_URL") or DEFAULT_BASE_URL,
+            model=setting("TREEGUARD_LLM_MODEL") or DEFAULT_MODEL,
         )
 
 
@@ -562,6 +605,102 @@ class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
         new_url: str,
     ) -> None:
         return None
+
+
+def _load_private_local_env(path: str = ".env") -> dict[str, str]:
+    """Load a small private development .env without mutating os.environ."""
+
+    descriptor = -1
+    try:
+        descriptor = os.open(
+            path,
+            os.O_RDONLY
+            | getattr(os, "O_NOFOLLOW", 0)
+            | getattr(os, "O_NONBLOCK", 0),
+        )
+    except FileNotFoundError:
+        return {}
+    except OSError:
+        raise BailianProviderError(
+            "BAILIAN_ENV_FILE_UNSAFE",
+            "local .env must be a private regular file",
+        ) from None
+    try:
+        try:
+            file_stat = os.fstat(descriptor)
+            if (
+                not stat.S_ISREG(file_stat.st_mode)
+                or file_stat.st_size > _MAX_ENV_FILE_BYTES
+                or file_stat.st_mode & 0o077
+                or (
+                    hasattr(os, "getuid")
+                    and file_stat.st_uid != os.getuid()
+                )
+            ):
+                raise BailianProviderError(
+                    "BAILIAN_ENV_FILE_UNSAFE",
+                    "local .env must be a private bounded regular file",
+                )
+            with os.fdopen(descriptor, "rb") as handle:
+                descriptor = -1
+                raw = handle.read(_MAX_ENV_FILE_BYTES + 1)
+        except BailianProviderError:
+            raise
+        except OSError:
+            raise BailianProviderError(
+                "BAILIAN_ENV_FILE_UNSAFE",
+                "local .env could not be read safely",
+            ) from None
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
+    if len(raw) > _MAX_ENV_FILE_BYTES:
+        raise BailianProviderError(
+            "BAILIAN_ENV_FILE_UNSAFE",
+            "local .env exceeds the configured size limit",
+        )
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError:
+        raise BailianProviderError(
+            "BAILIAN_ENV_FILE_INVALID",
+            "local .env must be UTF-8 text",
+        ) from None
+
+    values: dict[str, str] = {}
+    for raw_line in text.splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if "=" not in line:
+            raise BailianProviderError(
+                "BAILIAN_ENV_FILE_INVALID",
+                "local .env contains a malformed assignment",
+            )
+        key, value = (part.strip() for part in line.split("=", 1))
+        if (
+            _ENV_KEY.fullmatch(key) is None
+            or key not in _LOCAL_ENV_KEYS
+            or key in values
+        ):
+            raise BailianProviderError(
+                "BAILIAN_ENV_FILE_INVALID",
+                "local .env contains an unsupported or duplicate key",
+            )
+        if value[:1] in {"'", '"'} or value[-1:] in {"'", '"'}:
+            if len(value) < 2 or value[0] != value[-1]:
+                raise BailianProviderError(
+                    "BAILIAN_ENV_FILE_INVALID",
+                    "local .env contains an unterminated quoted value",
+                )
+            value = value[1:-1]
+        if any(ord(character) < 32 or ord(character) == 127 for character in value):
+            raise BailianProviderError(
+                "BAILIAN_ENV_FILE_INVALID",
+                "local .env contains unsafe control characters",
+            )
+        values[key] = value
+    return values
 
 
 def _is_official_bailian_host(hostname: str) -> bool:

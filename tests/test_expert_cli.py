@@ -16,6 +16,8 @@ from treeguard import adapt_tree_document
 from treeguard.ai_review import (
     AIReviewDraft,
     BailianProviderError,
+    DEFAULT_BASE_URL,
+    DEFAULT_MODEL,
 )
 from treeguard.business_review import mine_business_version_pair
 from treeguard.evidence import build_business_review_evidence_pack
@@ -160,7 +162,16 @@ def _write_action(
 
 def _run(arguments: list[str]) -> tuple[int, dict]:
     stdout = io.StringIO()
-    with redirect_stdout(stdout):
+    with (
+        patch.dict(
+            os.environ,
+            {
+                "TREEGUARD_LLM_BASE_URL": DEFAULT_BASE_URL,
+                "TREEGUARD_LLM_MODEL": DEFAULT_MODEL,
+            },
+        ),
+        redirect_stdout(stdout),
+    ):
         exit_code = main(arguments)
     return exit_code, json.loads(stdout.getvalue())
 

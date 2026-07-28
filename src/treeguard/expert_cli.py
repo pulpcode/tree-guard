@@ -20,8 +20,6 @@ from treeguard.ai_review import (
     AIReviewValidationError,
     BailianConfig,
     BailianProviderError,
-    DEFAULT_BASE_URL,
-    DEFAULT_MODEL,
 )
 from treeguard.business_review import (
     BusinessVersionReviewError,
@@ -109,6 +107,8 @@ _MODEL_PREFLIGHT_ERROR_CODES = {
     "BAILIAN_API_KEY_MISSING",
     "BAILIAN_ATTEMPTS_INVALID",
     "BAILIAN_BASE_URL_INVALID",
+    "BAILIAN_ENV_FILE_INVALID",
+    "BAILIAN_ENV_FILE_UNSAFE",
     "BAILIAN_MODEL_INVALID",
     "BAILIAN_TIMEOUT_INVALID",
     "EXPERT_SYNTHESIS_CONTEXT_BUDGET_EXCEEDED",
@@ -664,10 +664,8 @@ def _apply_thought(
 
 
 def _approval_preparation_config() -> BailianConfig:
-    return BailianConfig(
-        api_key="treeguard-approval-preparation-token",
-        base_url=os.getenv("TREEGUARD_LLM_BASE_URL", DEFAULT_BASE_URL),
-        model=os.getenv("TREEGUARD_LLM_MODEL", DEFAULT_MODEL),
+    return BailianConfig.from_env(
+        api_key_override="treeguard-approval-preparation-token",
     )
 
 

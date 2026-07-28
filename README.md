@@ -6,6 +6,10 @@ TreeGuard 是面向大型信息树的语义编译与变更治理助手。
 
 > 当前阶段：TreeSnapshot/TreeDiff/HistoryReview v1、跨业务版本审查、白名单 LLM EvidencePack、受约束 AI 初审，以及可回放的 AI 辅助专家审查账本已实现。主运行目标仍是一个文件驱动、无生产写权限的内网 Shadow MVP；外部百炼只用于完全虚构或经明确审批的脱敏样本。
 
+2026-07-28 已使用完全虚构版本对完成百炼 AI 初审、专家思考 AI 整理和无网络回放
+冒烟；该结果只证明工程协议链路可运行，不代表消防领域质量或内网量化模型效果已经
+通过验证。
+
 ## 为什么做 TreeGuard
 
 现有信息树通常包含 2,000 个以上节点。随着长期迭代，手工建设和维护会产生以下问题：
@@ -131,11 +135,13 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-ai-review \
   /path/to/target-version.json
 ```
 
-外部百炼开发冒烟必须使用虚构或已获批脱敏的数据，并显式确认：
+外部百炼开发冒烟必须使用虚构或已获批脱敏的数据，并显式确认。本地开发可复制
+仓库中的私有配置模板：
 
 ```bash
-export BAILIAN_API_KEY='replace-with-a-rotated-key'
-export TREEGUARD_LLM_MODEL='qwen3.6-35b-a3b'
+cp .env.example .env
+chmod 600 .env
+# 在 .env 的 BAILIAN_API_KEY= 后填入轮换后的 Key
 UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-ai-review \
   /path/to/fictional-base.json \
   /path/to/fictional-target.json \
@@ -145,7 +151,9 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-ai-review \
 
 默认使用北京区 OpenAI 兼容端点。其他地域或业务空间通过
 `TREEGUARD_LLM_BASE_URL` 显式配置，且只接受阿里云官方 HTTPS 域名。
-密钥只从环境变量读取，不得写入源码、`.env`、测试、Trace 或 Git。
+进程环境变量优先于当前工作目录的 `.env`。本地 `.env` 必须是 `0600` 普通文件，
+不得是符号链接，并已被 Git 忽略；生产环境仍应使用进程环境或密钥管理服务。密钥
+不得写入源码、`.env.example`、测试、Trace、日志或 Git。
 完整 EvidencePack 和 AI 草稿仍属于敏感内部制品；除非显式指定
 `--internal-output`，CLI 只输出固定状态和聚合计数。内部输出以 `0600` 新建并拒绝
 覆盖已有目标。

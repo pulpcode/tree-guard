@@ -25,6 +25,17 @@ from treeguard.evidence import (
     build_business_review_evidence_pack,
 )
 
+_MODEL_PREFLIGHT_ERROR_CODES = {
+    "BAILIAN_API_KEY_INVALID",
+    "BAILIAN_API_KEY_MISSING",
+    "BAILIAN_ATTEMPTS_INVALID",
+    "BAILIAN_BASE_URL_INVALID",
+    "BAILIAN_ENV_FILE_INVALID",
+    "BAILIAN_ENV_FILE_UNSAFE",
+    "BAILIAN_MODEL_INVALID",
+    "BAILIAN_TIMEOUT_INVALID",
+}
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="treeguard-ai-review")
@@ -139,6 +150,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "suggested_disposition": draft.suggested_disposition,
             }
         except BailianProviderError as exc:
+            if exc.code in _MODEL_PREFLIGHT_ERROR_CODES:
+                _print_error(exc.code)
+                return 2
             model_call = {
                 "provider": "BAILIAN_OPENAI_COMPATIBLE",
                 "capability": "JSON_OBJECT",
@@ -250,6 +264,10 @@ def _print_error(code: str) -> None:
                 "valid": False,
                 "status": "REJECTED",
                 "error_code": code,
+                "ai": {
+                    "called": False,
+                    "status": "NOT_CALLED",
+                },
             },
             ensure_ascii=False,
             sort_keys=True,

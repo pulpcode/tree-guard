@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import json
 import os
+import tempfile
 import unittest
 import urllib.request
 from dataclasses import replace
@@ -551,10 +552,126 @@ class AIReviewTests(unittest.TestCase):
                 "https://example.com/",
             )
         )
-        with patch.dict(os.environ, {}, clear=True):
-            with self.assertRaises(BailianProviderError) as error:
-                BailianConfig.from_env()
+        with tempfile.TemporaryDirectory() as directory_name:
+            previous_directory = Path.cwd()
+            os.chdir(directory_name)
+            try:
+                with patch.dict(os.environ, {}, clear=True):
+                    with self.assertRaises(BailianProviderError) as error:
+                        BailianConfig.from_env()
+            finally:
+                os.chdir(previous_directory)
         self.assertEqual(error.exception.code, "BAILIAN_API_KEY_MISSING")
+
+    def test_private_local_dotenv_is_loaded_and_environment_wins(self) -> None:
+        with tempfile.TemporaryDirectory() as directory_name:
+            directory = Path(directory_name)
+            env_path = directory / ".env"
+            env_path.write_text(
+                "\n".join(
+                    (
+                        "BAILIAN_API_KEY=file-only-fictional-key",
+                        (
+                            "TREEGUARD_LLM_BASE_URL="
+                            "https://dashscope.aliyuncs.com/"
+                            "compatible-mode/v1"
+                        ),
+                        "TREEGUARD_LLM_MODEL=qwen3.6-35b-a3b",
+                    )
+                ),
+                encoding="utf-8",
+            )
+            env_path.chmod(0o600)
+            previous_directory = Path.cwd()
+            os.chdir(directory)
+            try:
+                with patch.dict(os.environ, {}, clear=True):
+                    file_config = BailianConfig.from_env()
+                    approval_config = BailianConfig.from_env(
+                        api_key_override="approval-plan-fictional-key"
+                    )
+                    self.assertNotIn("BAILIAN_API_KEY", os.environ)
+                with patch.dict(
+                    os.environ,
+                    {"BAILIAN_API_KEY": "process-fictional-key"},
+                    clear=True,
+                ):
+                    process_config = BailianConfig.from_env()
+                with patch.dict(
+                    os.environ,
+                    {"DASHSCOPE_API_KEY": "alias-fictional-key"},
+                    clear=True,
+                ):
+                    alias_config = BailianConfig.from_env()
+                with patch.dict(
+                    os.environ,
+                    {"BAILIAN_API_KEY": ""},
+                    clear=True,
+                ):
+                    with self.assertRaises(
+                        BailianProviderError
+                    ) as cleared_error:
+                        BailianConfig.from_env()
+            finally:
+                os.chdir(previous_directory)
+
+        self.assertEqual(file_config.api_key, "file-only-fictional-key")
+        self.assertEqual(
+            approval_config.api_key,
+            "approval-plan-fictional-key",
+        )
+        self.assertEqual(approval_config.base_url, file_config.base_url)
+        self.assertEqual(approval_config.model, file_config.model)
+        self.assertEqual(process_config.api_key, "process-fictional-key")
+        self.assertEqual(alias_config.api_key, "alias-fictional-key")
+        self.assertEqual(
+            cleared_error.exception.code,
+            "BAILIAN_API_KEY_MISSING",
+        )
+        self.assertNotIn(file_config.api_key, repr(file_config))
+        self.assertNotIn(process_config.api_key, repr(process_config))
+
+    def test_local_dotenv_rejects_public_mode_and_malformed_keys(self) -> None:
+        with tempfile.TemporaryDirectory() as directory_name:
+            directory = Path(directory_name)
+            env_path = directory / ".env"
+            env_path.write_text(
+                "BAILIAN_API_KEY=fictional-key\n",
+                encoding="utf-8",
+            )
+            env_path.chmod(0o644)
+            previous_directory = Path.cwd()
+            os.chdir(directory)
+            try:
+                with (
+                    patch.dict(os.environ, {}, clear=True),
+                    self.assertRaises(BailianProviderError) as mode_error,
+                ):
+                    BailianConfig.from_env()
+                env_path.chmod(0o600)
+                env_path.write_text(
+                    (
+                        "BAILIAN_API_KEY=fictional-key\n"
+                        "UNSUPPORTED_SECRET=must-not-load\n"
+                    ),
+                    encoding="utf-8",
+                )
+                with (
+                    patch.dict(os.environ, {}, clear=True),
+                    self.assertRaises(BailianProviderError) as format_error,
+                ):
+                    BailianConfig.from_env()
+            finally:
+                os.chdir(previous_directory)
+
+        self.assertEqual(
+            mode_error.exception.code,
+            "BAILIAN_ENV_FILE_UNSAFE",
+        )
+        self.assertEqual(
+            format_error.exception.code,
+            "BAILIAN_ENV_FILE_INVALID",
+        )
 
 
 if __name__ == "__main__":

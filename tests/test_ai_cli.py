@@ -68,22 +68,31 @@ class AIReviewCLITests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory_name:
             before_path, after_path = version_files(Path(directory_name))
             stdout = io.StringIO()
-            with patch.dict("os.environ", {}, clear=True), redirect_stdout(stdout):
-                exit_code = main(
-                    [
-                        str(before_path),
-                        str(after_path),
-                        "--live",
-                        "--external-data-approved",
-                    ]
-                )
+            previous_directory = Path.cwd()
+            os.chdir(directory_name)
+            try:
+                with (
+                    patch.dict("os.environ", {}, clear=True),
+                    redirect_stdout(stdout),
+                ):
+                    exit_code = main(
+                        [
+                            str(before_path),
+                            str(after_path),
+                            "--live",
+                            "--external-data-approved",
+                        ]
+                    )
+            finally:
+                os.chdir(previous_directory)
             report = json.loads(stdout.getvalue())
 
-        self.assertEqual(exit_code, 3)
+        self.assertEqual(exit_code, 2)
         self.assertFalse(report["valid"])
-        self.assertEqual(report["status"], "AI_REVIEW_ABSTAIN")
-        self.assertEqual(report["ai"]["status"], "ABSTAIN")
-        self.assertEqual(report["ai"]["error_code"], "BAILIAN_API_KEY_MISSING")
+        self.assertEqual(report["status"], "REJECTED")
+        self.assertFalse(report["ai"]["called"])
+        self.assertEqual(report["ai"]["status"], "NOT_CALLED")
+        self.assertEqual(report["error_code"], "BAILIAN_API_KEY_MISSING")
 
     def test_live_requires_explicit_external_data_approval(self) -> None:
         stdout = io.StringIO()

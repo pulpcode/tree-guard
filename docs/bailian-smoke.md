@@ -49,7 +49,9 @@ actor、时间、会话状态、最终理由或内部哈希。真实专家讨论
 
 ```bash
 UV_CACHE_DIR=/tmp/treeguard-uv-cache uv sync --frozen
-export BAILIAN_API_KEY='replace-with-a-rotated-key'
+cp .env.example .env
+chmod 600 .env
+# 在 .env 的 BAILIAN_API_KEY= 后填入轮换后的 Key
 ```
 
 默认配置：
@@ -61,7 +63,9 @@ TREEGUARD_LLM_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
 
 API Key 与地域绑定。若 Key 不属于北京区，必须把
 `TREEGUARD_LLM_BASE_URL` 改为控制台给出的对应地域或业务空间官方端点。Key 只通过
-进程环境注入；不要写入 `.env`、shell 脚本、命令历史、测试产物或 Git。
+进程环境或当前工作目录的私有 `.env` 注入；进程环境优先。`.env` 必须是 `0600`
+普通文件且已被 Git 忽略，生产环境仍应使用密钥管理服务。不要写入
+`.env.example`、shell 脚本、命令历史、测试产物、日志或 Git。
 
 专家审查 CLI 会拒绝组/其他用户可读的输入。在运行第 5 节各条命令前，对本次实际
 存在的全部输入执行，例如：
@@ -193,7 +197,26 @@ replay`，不会调用模型。
 的后继文件；它们都不是自动选定的发布分支。辅助会话即使到达 `APPROVED`，仍然
 `patch_eligible=false`、`gold_eligible=false`。v1 每个会话最多一次 AI 整理。
 
-## 6. 内网迁移
+## 6. 已验证的虚构样本基线
+
+2026-07-28 使用完全虚构的博物馆目录版本对完成了一次开发冒烟，模型为
+`qwen3.6-35b-a3b`。验证结果如下：
+
+- AI 初审完成，本地合同、引用和来源绑定校验通过；
+- 在精确外发清单获批后，专家思考 AI 整理完成；
+- 会话包含一条专家思考事件和一条 AI 整理事件，权威状态保持
+  `DELIBERATING`；
+- 冻结制品离线回放通过，完整性为 `VALID`，回放未再次调用模型；
+- 文件模式门禁生效，私有输入和运行制品均为 `0600`；
+- 会话仍为 `patch_eligible=false`、`gold_eligible=false`，不会转化为自动发布
+  或评测真值。
+
+本次结果证明百炼适配、受控出域、严格输出校验、专家协作事件链和确定性回放能够
+串联运行。样本不包含真实消防业务语义，因此不证明领域建议质量，也不证明外部模型
+与内网 `Qwen3.6-35B-A3B-FP8` 部署效果等价。运行制品保留在 Git 忽略的私有
+`artifacts/` 目录中，不作为仓库测试夹具提交。
+
+## 7. 内网迁移
 
 内网 Qwen 若提供同一 OpenAI 兼容协议，可以复用 `AIReviewDraft` 和 EvidencePack
 合同，只替换 Provider 的鉴权、端点和能力探测。迁移验收必须重新验证：

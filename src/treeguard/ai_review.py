@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from treeguard.evidence import LLMEvidencePack
+from treeguard.json_utils import StrictJSONError, strict_json_loads
 
 
 SCHEMA_VERSION = "ai-review-draft.v1"
@@ -73,6 +74,10 @@ _MAAS_REGIONS = {
 }
 _DNS_LABEL = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")
 _MODEL_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
+_CONTROL_CHARACTER = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")
+_SURROGATE_CHARACTER = re.compile(r"[\ud800-\udfff]")
+_MAX_LIST_ITEMS = 20
+_MAX_TEXT_CHARS = 1_000
 
 
 class AIReviewValidationError(ValueError):
@@ -188,7 +193,7 @@ class AIReviewDraft:
             evidence_pack.allowed_refs,
         )
         disposition = payload["suggested_disposition"]
-        if disposition not in DISPOSITIONS:
+        if not isinstance(disposition, str) or disposition not in DISPOSITIONS:
             raise AIReviewValidationError(
                 "AI_REVIEW_DISPOSITION_INVALID",
                 "AI review disposition is not allowlisted",
@@ -271,6 +276,15 @@ class AIReviewDraft:
             "uncertainties": list(self.uncertainties),
         }
 
+    def to_model_dict(self) -> dict[str, Any]:
+        """Return the safe model view without internal source identifiers."""
+
+        payload = self.to_dict()
+        payload.pop("case_id")
+        payload.pop("source_pack_hash")
+        payload["schema_version"] = MODEL_OUTPUT_SCHEMA_VERSION
+        return payload
+
 
 @dataclass(frozen=True, slots=True)
 class BailianConfig:
@@ -297,6 +311,11 @@ class BailianConfig:
             raise BailianProviderError(
                 "BAILIAN_API_KEY_INVALID",
                 "Bailian API key must be a printable ASCII token without whitespace",
+            )
+        if not isinstance(self.base_url, str):
+            raise BailianProviderError(
+                "BAILIAN_BASE_URL_INVALID",
+                "Bailian base_url must be an allowlisted OpenAI-compatible endpoint",
             )
         parsed = urllib.parse.urlparse(self.base_url)
         try:
@@ -367,7 +386,10 @@ class BailianAIReviewProvider:
 
     def __init__(self, config: BailianConfig) -> None:
         self.config = config
-        self._opener = urllib.request.build_opener(_NoRedirectHandler())
+        self._opener = urllib.request.build_opener(
+            urllib.request.ProxyHandler({}),
+            _NoRedirectHandler(),
+        )
 
     def review(self, evidence_pack: LLMEvidencePack) -> AIReviewDraft:
         try:
@@ -389,7 +411,14 @@ class BailianAIReviewProvider:
                 return AIReviewDraft.from_model_dict(payload, evidence_pack)
             except AIReviewValidationError as exc:
                 last_code = exc.code
-            except (KeyError, TypeError, json.JSONDecodeError):
+            except (
+                StrictJSONError,
+                KeyError,
+                RecursionError,
+                TypeError,
+                UnicodeError,
+                json.JSONDecodeError,
+            ):
                 last_code = "AI_REVIEW_RESPONSE_INVALID"
         raise BailianProviderError(
             last_code,
@@ -507,8 +536,13 @@ class BailianAIReviewProvider:
                 "Bailian response exceeded the configured size limit",
             )
         try:
-            return json.loads(raw)
-        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+            return strict_json_loads(raw)
+        except (
+            StrictJSONError,
+            RecursionError,
+            json.JSONDecodeError,
+            UnicodeDecodeError,
+        ) as exc:
             raise BailianProviderError(
                 "BAILIAN_RESPONSE_NOT_JSON",
                 "Bailian response envelope was not JSON",
@@ -558,7 +592,7 @@ def _extract_content_json(response: Any) -> Any:
     content = message["content"]
     if not isinstance(content, str):
         raise TypeError("response content must be a string")
-    return json.loads(content)
+    return strict_json_loads(content)
 
 
 def _validate_cross_field_policy(
@@ -595,7 +629,7 @@ def _parse_claims(
     field_name: str,
     allowed_refs: frozenset[str],
 ) -> tuple[ReviewClaim, ...]:
-    if not isinstance(value, list):
+    if not isinstance(value, list) or len(value) > _MAX_LIST_ITEMS:
         raise AIReviewValidationError(
             "AI_REVIEW_CLAIMS_INVALID",
             f"{field_name} must be an array",
@@ -621,7 +655,7 @@ def _parse_candidate_assessments(
     value: Any,
     candidate_refs: frozenset[str],
 ) -> tuple[CandidateAssessment, ...]:
-    if not isinstance(value, list):
+    if not isinstance(value, list) or len(value) > _MAX_LIST_ITEMS:
         raise AIReviewValidationError(
             "AI_REVIEW_CANDIDATES_INVALID",
             "candidate_assessments must be an array",
@@ -635,13 +669,20 @@ def _parse_candidate_assessments(
                 "candidate assessments must use exact fields",
             )
         candidate_ref = item["candidate_ref"]
-        if candidate_ref not in candidate_refs or candidate_ref in seen:
+        if (
+            not isinstance(candidate_ref, str)
+            or candidate_ref not in candidate_refs
+            or candidate_ref in seen
+        ):
             raise AIReviewValidationError(
                 "AI_REVIEW_CANDIDATE_REF_INVALID",
                 "candidate assessment references an unavailable candidate",
             )
         relation = item["relation"]
-        if relation not in CANDIDATE_RELATIONS:
+        if (
+            not isinstance(relation, str)
+            or relation not in CANDIDATE_RELATIONS
+        ):
             raise AIReviewValidationError(
                 "AI_REVIEW_CANDIDATE_RELATION_INVALID",
                 "candidate relation is not allowlisted",
@@ -666,7 +707,10 @@ def _parse_placement(
             "AI_REVIEW_PLACEMENT_INVALID",
             "placement_assessment must use exact fields",
         )
-    if value["status"] not in PLACEMENT_STATUSES:
+    if (
+        not isinstance(value["status"], str)
+        or value["status"] not in PLACEMENT_STATUSES
+    ):
         raise AIReviewValidationError(
             "AI_REVIEW_PLACEMENT_INVALID",
             "placement status is not allowlisted",
@@ -685,6 +729,7 @@ def _parse_refs(
     if (
         not isinstance(value, list)
         or not value
+        or len(value) > _MAX_LIST_ITEMS
         or any(not isinstance(item, str) or item not in allowed_refs for item in value)
         or len(value) != len(set(value))
     ):
@@ -696,7 +741,7 @@ def _parse_refs(
 
 
 def _parse_text_list(value: Any, field_name: str) -> tuple[str, ...]:
-    if not isinstance(value, list):
+    if not isinstance(value, list) or len(value) > _MAX_LIST_ITEMS:
         raise AIReviewValidationError(
             "AI_REVIEW_TEXT_LIST_INVALID",
             f"{field_name} must be an array",
@@ -705,7 +750,13 @@ def _parse_text_list(value: Any, field_name: str) -> tuple[str, ...]:
 
 
 def _required_text(value: Any, field_name: str) -> str:
-    if not isinstance(value, str) or not value.strip():
+    if (
+        not isinstance(value, str)
+        or not value.strip()
+        or len(value) > _MAX_TEXT_CHARS
+        or _CONTROL_CHARACTER.search(value) is not None
+        or _SURROGATE_CHARACTER.search(value) is not None
+    ):
         raise AIReviewValidationError(
             "AI_REVIEW_TEXT_INVALID",
             f"{field_name} must be a non-empty string",

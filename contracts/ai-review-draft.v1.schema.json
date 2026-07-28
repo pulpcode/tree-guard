@@ -21,17 +21,20 @@
     "schema_version": {"const": "ai-review-draft.v1"},
     "case_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "source_pack_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "change_summary": {"type": "string", "minLength": 1},
+    "change_summary": {"type": "string", "minLength": 1, "maxLength": 1000},
     "observations": {
       "type": "array",
+      "maxItems": 20,
       "items": {"$ref": "#/$defs/claim"}
     },
     "hypotheses": {
       "type": "array",
+      "maxItems": 20,
       "items": {"$ref": "#/$defs/claim"}
     },
     "candidate_assessments": {
       "type": "array",
+      "maxItems": 20,
       "uniqueItems": true,
       "items": {"$ref": "#/$defs/candidateAssessment"}
     },
@@ -50,11 +53,13 @@
     },
     "questions_for_expert": {
       "type": "array",
-      "items": {"type": "string", "minLength": 1}
+      "maxItems": 20,
+      "items": {"type": "string", "minLength": 1, "maxLength": 1000}
     },
     "uncertainties": {
       "type": "array",
-      "items": {"type": "string", "minLength": 1}
+      "maxItems": 20,
+      "items": {"type": "string", "minLength": 1, "maxLength": 1000}
     }
   },
   "$defs": {
@@ -63,10 +68,11 @@
       "additionalProperties": false,
       "required": ["statement", "evidence_refs"],
       "properties": {
-        "statement": {"type": "string", "minLength": 1},
+        "statement": {"type": "string", "minLength": 1, "maxLength": 1000},
         "evidence_refs": {
           "type": "array",
           "minItems": 1,
+          "maxItems": 20,
           "uniqueItems": true,
           "items": {"type": "string", "pattern": "^[FXC][0-9]{3}$"}
         }
@@ -86,7 +92,7 @@
             "NEED_EVIDENCE"
           ]
         },
-        "reason": {"type": "string", "minLength": 1}
+        "reason": {"type": "string", "minLength": 1, "maxLength": 1000}
       }
     },
     "placementAssessment": {
@@ -97,10 +103,11 @@
         "status": {
           "enum": ["NO_CONCERN", "REVIEW_PLACEMENT", "NEED_EVIDENCE"]
         },
-        "reason": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1, "maxLength": 1000},
         "evidence_refs": {
           "type": "array",
           "minItems": 1,
+          "maxItems": 20,
           "uniqueItems": true,
           "items": {"type": "string", "pattern": "^[FXC][0-9]{3}$"}
         }

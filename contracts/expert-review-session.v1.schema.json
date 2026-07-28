@@ -1,0 +1,400 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/expert-review-session.v1.schema.json",
+  "title": "TreeGuard Expert Review Session v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "workflow_version",
+    "review_mode",
+    "actor_identity_status",
+    "initial_ai_provenance_status",
+    "session_id",
+    "case_id",
+    "source_pack_hash",
+    "source_ai_draft_hash",
+    "genesis_hash",
+    "state",
+    "events",
+    "head_event_hash",
+    "session_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "expert-review-session.v1"},
+    "workflow_version": {"const": "treeguard.expert-review-workflow.v1"},
+    "review_mode": {"const": "ASSISTED"},
+    "actor_identity_status": {"const": "UNVERIFIED_FILE_ASSERTION"},
+    "initial_ai_provenance_status": {"const": "UNVERIFIED_FILE_BUNDLE"},
+    "session_id": {"$ref": "#/$defs/hash"},
+    "case_id": {"$ref": "#/$defs/hash"},
+    "source_pack_hash": {"$ref": "#/$defs/hash"},
+    "source_ai_draft_hash": {"$ref": "#/$defs/hash"},
+    "genesis_hash": {
+      "$ref": "#/$defs/hash",
+      "description": "The previous_event_hash for the first event."
+    },
+    "state": {
+      "enum": [
+        "OPEN",
+        "DELIBERATING",
+        "NEED_EVIDENCE",
+        "PROVISIONAL",
+        "APPROVED",
+        "REJECTED"
+      ]
+    },
+    "events": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {"$ref": "#/$defs/event"}
+    },
+    "head_event_hash": {
+      "$ref": "#/$defs/hash",
+      "description": "Equals genesis_hash for an empty event ledger; otherwise equals the final event_hash."
+    },
+    "session_hash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonBlankText": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "evidenceRef": {
+      "type": "string",
+      "pattern": "^[FXCT][0-9]{3}$"
+    },
+    "treeEvidenceRef": {
+      "type": "string",
+      "pattern": "^[FXC][0-9]{3}$"
+    },
+    "evidenceRefList": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/evidenceRef"}
+    },
+    "optionalEvidenceRefList": {
+      "type": "array",
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/treeEvidenceRef"}
+    },
+    "finalDisposition": {
+      "enum": [
+        "ACCEPT_AS_PATTERN",
+        "POSSIBLE_DUPLICATE",
+        "REUSE_SHARED_CONTRACT",
+        "KEEP_CONTEXT_EXTENSION",
+        "REVIEW_PLACEMENT",
+        "REVIEW_TYPE_OR_CARDINALITY"
+      ]
+    },
+    "thoughtPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["thought_ref", "raw_text", "evidence_refs"],
+      "properties": {
+        "thought_ref": {
+          "type": "string",
+          "pattern": "^T[0-9]{3}$"
+        },
+        "raw_text": {
+          "allOf": [
+            {"$ref": "#/$defs/nonBlankText"},
+            {"maxLength": 8000}
+          ]
+        },
+        "evidence_refs": {"$ref": "#/$defs/optionalEvidenceRefList"}
+      }
+    },
+    "synthesisPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "model",
+        "prompt_version",
+        "external_approval",
+        "draft"
+      ],
+      "properties": {
+        "provider": {
+          "allOf": [
+            {"$ref": "#/$defs/nonBlankText"},
+            {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]*$"
+            }
+          ]
+        },
+        "model": {
+          "allOf": [
+            {"$ref": "#/$defs/nonBlankText"},
+            {
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]*$"
+            }
+          ]
+        },
+        "prompt_version": {
+          "allOf": [
+            {"$ref": "#/$defs/nonBlankText"},
+            {
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]*$"
+            }
+          ]
+        },
+        "external_approval": {
+          "oneOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "external-expert-synthesis-approval.v1.schema.json"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "approval_status": {"const": "APPROVED"},
+                    "approved_by": {"type": "string"},
+                    "approved_at": {"type": "string"}
+                  }
+                }
+              ]
+            },
+            {"type": "null"}
+          ]
+        },
+        "draft": {
+          "$ref": "expert-synthesis-draft.v1.schema.json"
+        }
+      }
+    },
+    "statusPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_state",
+        "rationale",
+        "evidence_refs",
+        "proposed_disposition"
+      ],
+      "properties": {
+        "target_state": {
+          "enum": ["NEED_EVIDENCE", "PROVISIONAL"]
+        },
+        "rationale": {
+          "allOf": [
+            {"$ref": "#/$defs/nonBlankText"},
+            {"maxLength": 4000}
+          ]
+        },
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefList"},
+        "proposed_disposition": {
+          "oneOf": [
+            {"$ref": "#/$defs/finalDisposition"},
+            {"type": "null"}
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"target_state": {"const": "NEED_EVIDENCE"}},
+            "required": ["target_state"]
+          },
+          "then": {
+            "properties": {
+              "proposed_disposition": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "proposed_disposition": {
+                "$ref": "#/$defs/finalDisposition"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "finalPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_state",
+        "final_disposition",
+        "rationale",
+        "evidence_refs",
+        "ai_draft_relation",
+        "expected_session_hash"
+      ],
+      "properties": {
+        "target_state": {"enum": ["APPROVED", "REJECTED"]},
+        "final_disposition": {
+          "oneOf": [
+            {"$ref": "#/$defs/finalDisposition"},
+            {"type": "null"}
+          ]
+        },
+        "rationale": {
+          "allOf": [
+            {"$ref": "#/$defs/nonBlankText"},
+            {"maxLength": 4000}
+          ]
+        },
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefList"},
+        "ai_draft_relation": {
+          "enum": ["ACCEPTED", "REVISED", "REJECTED", "NOT_USED"]
+        },
+        "expected_session_hash": {"$ref": "#/$defs/hash"}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"target_state": {"const": "APPROVED"}},
+            "required": ["target_state"]
+          },
+          "then": {
+            "properties": {
+              "final_disposition": {"$ref": "#/$defs/finalDisposition"}
+            }
+          },
+          "else": {
+            "properties": {
+              "final_disposition": {"type": "null"}
+            }
+          }
+        }
+      ]
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence",
+        "action_id",
+        "event_type",
+        "actor_role",
+        "actor_ref",
+        "recorded_at",
+        "payload",
+        "previous_event_hash",
+        "event_hash"
+      ],
+      "properties": {
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 512
+        },
+        "action_id": {"$ref": "#/$defs/hash"},
+        "event_type": {
+          "enum": [
+            "EXPERT_THOUGHT_SUBMITTED",
+            "AI_SYNTHESIS_RECORDED",
+            "EXPERT_STATUS_RECORDED",
+            "EXPERT_FINAL_DECISION_RECORDED"
+          ]
+        },
+        "actor_role": {
+          "enum": ["DOMAIN_EXPERT", "SCHEMA_STEWARD", "AI_ASSISTANT"]
+        },
+        "actor_ref": {
+          "allOf": [
+            {"$ref": "#/$defs/nonBlankText"},
+            {
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]*$"
+            }
+          ]
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 20,
+          "maxLength": 35
+        },
+        "payload": {
+          "oneOf": [
+            {"$ref": "#/$defs/thoughtPayload"},
+            {"$ref": "#/$defs/synthesisPayload"},
+            {"$ref": "#/$defs/statusPayload"},
+            {"$ref": "#/$defs/finalPayload"}
+          ]
+        },
+        "previous_event_hash": {"$ref": "#/$defs/hash"},
+        "event_hash": {"$ref": "#/$defs/hash"}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "event_type": {"const": "EXPERT_THOUGHT_SUBMITTED"}
+            },
+            "required": ["event_type"]
+          },
+          "then": {
+            "properties": {
+              "actor_role": {
+                "enum": ["DOMAIN_EXPERT", "SCHEMA_STEWARD"]
+              },
+              "payload": {"$ref": "#/$defs/thoughtPayload"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "event_type": {"const": "AI_SYNTHESIS_RECORDED"}
+            },
+            "required": ["event_type"]
+          },
+          "then": {
+            "properties": {
+              "actor_role": {"const": "AI_ASSISTANT"},
+              "payload": {"$ref": "#/$defs/synthesisPayload"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "event_type": {"const": "EXPERT_STATUS_RECORDED"}
+            },
+            "required": ["event_type"]
+          },
+          "then": {
+            "properties": {
+              "actor_role": {"const": "DOMAIN_EXPERT"},
+              "payload": {"$ref": "#/$defs/statusPayload"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "event_type": {
+                "const": "EXPERT_FINAL_DECISION_RECORDED"
+              }
+            },
+            "required": ["event_type"]
+          },
+          "then": {
+            "properties": {
+              "actor_role": {"const": "DOMAIN_EXPERT"},
+              "payload": {"$ref": "#/$defs/finalPayload"}
+            }
+          }
+        }
+      ]
+    }
+  }
+}

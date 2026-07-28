@@ -179,7 +179,29 @@ API Key 只从进程环境读取，不得写入配置样例、`.env`、日志、
 Provider 只接受官方已列出的 DashScope 共享主机或固定地域的
 `[workspace-id].[region].maas.aliyuncs.com` 形态，并要求标准
 `/compatible-mode/v1` 路径。HTTP 重定向被禁用，避免 `Authorization` 被转发到其他
-目标。完整内部输出以 `0600`、拒绝覆盖和拒绝最终符号链接的方式新建。
+目标；进程环境中的 HTTP(S) proxy 也不会被继承。响应和敏感文件使用严格 JSON
+解析，重复键、`NaN`/无穷数、超长整数、超限载荷和非普通文件全部拒绝。完整内部
+输出以 `0600`、拒绝覆盖和拒绝最终符号链接的方式新建。
+
+专家原文是新的独立敏感载荷，不能继承 EvidencePack 初审时的一次性出域确认。
+`treeguard-expert-review prepare-approval` 先在不联网的情况下生成一个私有
+`PENDING` 清单，其哈希覆盖准确专家原文、EvidencePack、初审草稿、官方端点、
+模型、Prompt、生成参数以及首次/重试请求体。审批人必须保留请求文件并另存
+`APPROVED` 清单；实际调用同时要求 `--external-data-approved` 与
+`--external-approval-file`。Provider 在联网前重算精确哈希，会话回放也重算并校验，
+且 `approved_at` 必须不晚于 AI 事件时间。请求不包含 actor、时间、会话状态、最终
+理由、内部 ID 或内部哈希。真实专家讨论默认只进入内网 Qwen；外部百炼只处理完全
+虚构或组织明确批准的脱敏内容。授权失败必须发生在网络调用前。
+
+该清单只能证明“一个可回放文件声明了审批且哈希覆盖本次请求”，不能认证
+`approved_by`。当前 action actor、审批人和初始 AI 来源分别标记为
+`UNVERIFIED_FILE_ASSERTION` / `UNVERIFIED_FILE_BUNDLE`；正式环境仍需要服务端身份、
+ACL 和不可篡改审计。
+
+专家原文、AI 整理和专家裁决分别保存，不允许 AI 回写原文或隐式晋升状态。完整
+会话仍使用 `0600`、拒绝覆盖和拒绝最终符号链接的内部文件；树导出、bundle、
+action、上一会话和审批清单输入也必须不宽于 `0600`。聚合输出不包含文本、证据
+引用、actor、版本、路径、ID 或哈希。
 
 ### 6.7 Shadow 自动化偏见
 
@@ -190,7 +212,30 @@ Provider 只接受官方已列出的 DashScope 共享主机或固定地域的
 - 人工作答冻结后再揭示并比较；
 - 专家分歧进入仲裁或 ambiguity 集。
 
-### 6.8 Trace 泄露
+当前 `ExpertReviewSession` 固定标记为 `ASSISTED`。因为专家在裁决前可以看到 AI
+整理，该结果不得标为 `REAL_HUMAN_GOLD`。建立冻结 Gold 时仍应使用盲评流程：先
+冻结独立人工作答，再揭示 AI 草稿并比较。辅助审查数据可以衡量接受、修订和拒绝
+比例，但不能冒充独立模型评测标签。
+
+v1 每个会话最多记录一次 AI 整理。AI 整理后新增的专家思考可以继续进入人工状态
+与最终裁决，但不会在原会话再次调用模型；若确需新的 AI 整理，应创建新会话并明确
+来源关系。
+
+### 6.8 事件账本完整性边界
+
+会话使用来源绑定的 genesis hash、事件前序哈希和完整 session hash，回放可发现
+原文或理由被改写、事件删除、复制、重排、状态伪造以及 pack/draft 来源漂移。
+这些都是无密钥 SHA-256；拥有完整写权限的攻击者可以重算整条链，因此不能宣传为
+密码学不可抵赖。正式跨进程信任仍需要最小权限 ACL，并在风险评估后增加 MAC、
+签名、审计存储或 WORM。
+
+文件模式还没有权威 HEAD、跨进程 compare-and-swap 或全局 action registry。同一
+输入会话可以产生多个分别完整、分别可回放的后继分支，聚合报告因此明确返回
+`authoritative_head_status=NOT_AVAILABLE_FILE_MODE`。只有未来受控仓库/数据库选定
+head 并记录 supersession 后，某个分支才能被视为权威；文件回放成功本身不具备该
+语义。任何 `APPROVED` 分支仍然 `patch_eligible=false`、`gold_eligible=false`。
+
+### 6.9 Trace 泄露
 
 缓解：
 

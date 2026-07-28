@@ -17,21 +17,24 @@
   ],
   "properties": {
     "schema_version": {"const": "ai-review-model-output.v1"},
-    "change_summary": {"type": "string", "minLength": 1},
+    "change_summary": {"type": "string", "minLength": 1, "maxLength": 1000},
     "observations": {
       "type": "array",
+      "maxItems": 20,
       "items": {
         "$ref": "ai-review-draft.v1.schema.json#/$defs/claim"
       }
     },
     "hypotheses": {
       "type": "array",
+      "maxItems": 20,
       "items": {
         "$ref": "ai-review-draft.v1.schema.json#/$defs/claim"
       }
     },
     "candidate_assessments": {
       "type": "array",
+      "maxItems": 20,
       "uniqueItems": true,
       "items": {
         "$ref": "ai-review-draft.v1.schema.json#/$defs/candidateAssessment"
@@ -54,11 +57,13 @@
     },
     "questions_for_expert": {
       "type": "array",
-      "items": {"type": "string", "minLength": 1}
+      "maxItems": 20,
+      "items": {"type": "string", "minLength": 1, "maxLength": 1000}
     },
     "uncertainties": {
       "type": "array",
-      "items": {"type": "string", "minLength": 1}
+      "maxItems": 20,
+      "items": {"type": "string", "minLength": 1, "maxLength": 1000}
     }
   }
 }

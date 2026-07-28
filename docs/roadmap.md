@@ -99,6 +99,13 @@
 - 实现结构校验、前置条件和 Dry Run；
 - 完成开发集并独立裁决至少 30 条最终冻结案例。
 
+当前已完成其中一个独立的 clean-room 纵切：`ExpertReviewSession v1` 支持专家自由
+文本、一次受约束 AI 整理、专家暂定状态、最终裁决、来源绑定哈希链、单动作文件
+追加、精确外发请求审批清单和离线回放。它尚不包含认证身份、权威 HEAD、Overlay
+页面、结构审批或 Patch，因此即使专家语义状态为 `APPROVED`，仍保持
+`patch_eligible=false`、`gold_eligible=false`。文件分支在接入受控仓库前只能视为
+可回放制品，不能视为权威记录。
+
 验收：
 
 - 只有 `EXPERT_APPROVED` Overlay 可用于正式建议；

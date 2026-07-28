@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import io
 import json
+import os
 import stat
 import tempfile
 import unittest
@@ -10,7 +11,7 @@ from contextlib import redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
-from treeguard.ai_cli import main
+from treeguard.ai_cli import _write_internal_output, main
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -162,6 +163,52 @@ class AIReviewCLITests(unittest.TestCase):
         self.assertEqual(exit_code, 2)
         self.assertEqual(report["error_code"], "INTERNAL_OUTPUT_WRITE_FAILED")
         self.assertEqual(existing, "keep-me")
+
+    def test_internal_output_publish_failure_leaves_no_partial_file(self) -> None:
+        with tempfile.TemporaryDirectory() as directory_name:
+            directory = Path(directory_name)
+            output_path = directory / "atomic.json"
+            real_write = os.write
+            write_count = 0
+
+            def partial_then_fail(descriptor, value):
+                nonlocal write_count
+                write_count += 1
+                if write_count == 1:
+                    return real_write(descriptor, value[:5])
+                raise OSError("fictional disk failure")
+
+            with patch(
+                "treeguard.ai_cli.os.write",
+                side_effect=partial_then_fail,
+            ):
+                written = _write_internal_output(
+                    output_path,
+                    {"sensitive": "canary"},
+                )
+            leftovers = tuple(directory.iterdir())
+
+        self.assertFalse(written)
+        self.assertFalse(output_path.exists())
+        self.assertEqual(leftovers, ())
+
+    def test_internal_output_link_failure_leaves_no_temporary_file(self) -> None:
+        with tempfile.TemporaryDirectory() as directory_name:
+            directory = Path(directory_name)
+            output_path = directory / "atomic.json"
+            with patch(
+                "treeguard.ai_cli.os.link",
+                side_effect=OSError("fictional publish failure"),
+            ):
+                written = _write_internal_output(
+                    output_path,
+                    {"sensitive": "canary"},
+                )
+            leftovers = tuple(directory.iterdir())
+
+        self.assertFalse(written)
+        self.assertFalse(output_path.exists())
+        self.assertEqual(leftovers, ())
 
 
 if __name__ == "__main__":

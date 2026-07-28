@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/expert-review-action.v1.schema.json",
+  "title": "TreeGuard Expert Review Action v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "action_id",
+    "case_id",
+    "expected_session_hash",
+    "action_type",
+    "actor_role",
+    "actor_ref",
+    "recorded_at",
+    "payload"
+  ],
+  "properties": {
+    "schema_version": {"const": "expert-review-action.v1"},
+    "action_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "case_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "expected_session_hash": {
+      "oneOf": [
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        {"type": "null"}
+      ]
+    },
+    "action_type": {
+      "enum": [
+        "EXPERT_THOUGHT_SUBMITTED",
+        "EXPERT_STATUS_RECORDED",
+        "EXPERT_FINAL_DECISION_RECORDED"
+      ]
+    },
+    "actor_role": {"enum": ["DOMAIN_EXPERT", "SCHEMA_STEWARD"]},
+    "actor_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]*$"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "minLength": 20,
+      "maxLength": 35
+    },
+    "payload": {
+      "oneOf": [
+        {"$ref": "#/$defs/thoughtPayload"},
+        {"$ref": "#/$defs/statusPayload"},
+        {"$ref": "#/$defs/finalPayload"}
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "action_type": {"const": "EXPERT_THOUGHT_SUBMITTED"}
+        },
+        "required": ["action_type"]
+      },
+      "then": {
+        "properties": {
+          "payload": {"$ref": "#/$defs/thoughtPayload"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action_type": {"const": "EXPERT_STATUS_RECORDED"}
+        },
+        "required": ["action_type"]
+      },
+      "then": {
+        "properties": {
+          "actor_role": {"const": "DOMAIN_EXPERT"},
+          "payload": {"$ref": "#/$defs/statusPayload"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action_type": {"const": "EXPERT_FINAL_DECISION_RECORDED"}
+        },
+        "required": ["action_type"]
+      },
+      "then": {
+        "properties": {
+          "actor_role": {"const": "DOMAIN_EXPERT"},
+          "payload": {"$ref": "#/$defs/finalPayload"}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nonBlankText": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "treeEvidenceRefList": {
+      "type": "array",
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[FXC][0-9]{3}$"
+      }
+    },
+    "reviewEvidenceRefList": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[FXCT][0-9]{3}$"
+      }
+    },
+    "finalDisposition": {
+      "enum": [
+        "ACCEPT_AS_PATTERN",
+        "POSSIBLE_DUPLICATE",
+        "REUSE_SHARED_CONTRACT",
+        "KEEP_CONTEXT_EXTENSION",
+        "REVIEW_PLACEMENT",
+        "REVIEW_TYPE_OR_CARDINALITY"
+      ]
+    },
+    "thoughtPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["raw_text", "evidence_refs"],
+      "properties": {
+        "raw_text": {
+          "allOf": [
+            {"$ref": "#/$defs/nonBlankText"},
+            {"maxLength": 8000}
+          ]
+        },
+        "evidence_refs": {"$ref": "#/$defs/treeEvidenceRefList"}
+      }
+    },
+    "statusPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_state",
+        "rationale",
+        "evidence_refs",
+        "proposed_disposition"
+      ],
+      "properties": {
+        "target_state": {"enum": ["NEED_EVIDENCE", "PROVISIONAL"]},
+        "rationale": {
+          "allOf": [
+            {"$ref": "#/$defs/nonBlankText"},
+            {"maxLength": 4000}
+          ]
+        },
+        "evidence_refs": {"$ref": "#/$defs/reviewEvidenceRefList"},
+        "proposed_disposition": {
+          "oneOf": [
+            {"$ref": "#/$defs/finalDisposition"},
+            {"type": "null"}
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"target_state": {"const": "NEED_EVIDENCE"}},
+            "required": ["target_state"]
+          },
+          "then": {
+            "properties": {
+              "proposed_disposition": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "proposed_disposition": {
+                "$ref": "#/$defs/finalDisposition"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "finalPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_state",
+        "final_disposition",
+        "rationale",
+        "evidence_refs",
+        "ai_draft_relation"
+      ],
+      "properties": {
+        "target_state": {"enum": ["APPROVED", "REJECTED"]},
+        "final_disposition": {
+          "oneOf": [
+            {"$ref": "#/$defs/finalDisposition"},
+            {"type": "null"}
+          ]
+        },
+        "rationale": {
+          "allOf": [
+            {"$ref": "#/$defs/nonBlankText"},
+            {"maxLength": 4000}
+          ]
+        },
+        "evidence_refs": {"$ref": "#/$defs/reviewEvidenceRefList"},
+        "ai_draft_relation": {
+          "enum": ["ACCEPTED", "REVISED", "REJECTED", "NOT_USED"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"target_state": {"const": "APPROVED"}},
+            "required": ["target_state"]
+          },
+          "then": {
+            "properties": {
+              "final_disposition": {"$ref": "#/$defs/finalDisposition"}
+            }
+          },
+          "else": {
+            "properties": {
+              "final_disposition": {"type": "null"}
+            }
+          }
+        }
+      ]
+    }
+  }
+}

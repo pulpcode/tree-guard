@@ -193,6 +193,25 @@ class AIReviewTests(unittest.TestCase):
             "AI_REVIEW_EVIDENCE_INVALID",
         )
 
+        pack = evidence_pack()
+        payload = valid_draft_payload(pack)
+        payload["suggested_disposition"] = {}
+        with self.assertRaises(AIReviewValidationError) as enum_error:
+            AIReviewDraft.from_model_dict(payload, pack)
+        self.assertEqual(
+            enum_error.exception.code,
+            "AI_REVIEW_DISPOSITION_INVALID",
+        )
+
+        payload = valid_draft_payload(pack)
+        payload["placement_assessment"]["status"] = {}
+        with self.assertRaises(AIReviewValidationError) as placement_error:
+            AIReviewDraft.from_model_dict(payload, pack)
+        self.assertEqual(
+            placement_error.exception.code,
+            "AI_REVIEW_PLACEMENT_INVALID",
+        )
+
     def test_provider_uses_json_mode_retries_and_never_sends_node_ids(self) -> None:
         pack = evidence_pack()
         valid_response = {
@@ -271,6 +290,70 @@ class AIReviewTests(unittest.TestCase):
             InvalidProvider(BailianConfig(api_key="test-secret")).review(pack)
         self.assertEqual(error.exception.code, "AI_REVIEW_FIELDS_INVALID")
         self.assertNotIn("test-secret", str(error.exception))
+
+    def test_strict_json_rejects_nonfinite_and_oversized_numbers(self) -> None:
+        pack = evidence_pack()
+        invalid_json_values = (
+            '{"x":NaN}',
+            '{"x":' + ("9" * 5_000) + "}",
+        )
+
+        class FakeResponse:
+            def __init__(self, raw: bytes) -> None:
+                self.raw = raw
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc, traceback):
+                return False
+
+            def read(self, limit):
+                return self.raw
+
+        class StaticOpener:
+            def __init__(self, raw: bytes) -> None:
+                self.raw = raw
+
+            def open(self, request, timeout):
+                return FakeResponse(self.raw)
+
+        for invalid_json in invalid_json_values:
+            with self.subTest(layer="envelope", prefix=invalid_json[:12]):
+                provider = BailianAIReviewProvider(
+                    BailianConfig(api_key="test-secret", max_attempts=1)
+                )
+                provider._opener = StaticOpener(invalid_json.encode("utf-8"))
+                with self.assertRaises(BailianProviderError) as error:
+                    provider._post_json({"model": "fixture"})
+                self.assertEqual(
+                    error.exception.code,
+                    "BAILIAN_RESPONSE_NOT_JSON",
+                )
+
+            class InvalidContentProvider(BailianAIReviewProvider):
+                def _post_json(self, body):
+                    return {
+                        "choices": [
+                            {
+                                "finish_reason": "stop",
+                                "message": {"content": invalid_json},
+                            }
+                        ]
+                    }
+
+            with self.subTest(layer="content", prefix=invalid_json[:12]):
+                with self.assertRaises(BailianProviderError) as error:
+                    InvalidContentProvider(
+                        BailianConfig(
+                            api_key="test-secret",
+                            max_attempts=1,
+                        )
+                    ).review(pack)
+                self.assertEqual(
+                    error.exception.code,
+                    "AI_REVIEW_RESPONSE_INVALID",
+                )
 
     def test_http_transport_keeps_key_in_authorization_header_only(self) -> None:
         pack = evidence_pack()
@@ -435,7 +518,21 @@ class AIReviewTests(unittest.TestCase):
                 "compatible-mode/v1"
             ),
         )
-        provider = BailianAIReviewProvider(workspace_config)
+        with patch(
+            "urllib.request.getproxies",
+            return_value={"https": "http://untrusted-proxy.invalid"},
+        ) as getproxies:
+            provider = BailianAIReviewProvider(workspace_config)
+        getproxies.assert_not_called()
+        proxy_handlers = [
+            handler
+            for handler in provider._opener.handlers
+            if isinstance(handler, urllib.request.ProxyHandler)
+        ]
+        self.assertTrue(
+            not proxy_handlers
+            or all(handler.proxies == {} for handler in proxy_handlers)
+        )
         redirect_handlers = [
             handler
             for handler in provider._opener.handlers

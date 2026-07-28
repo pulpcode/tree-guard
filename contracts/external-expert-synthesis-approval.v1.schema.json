@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/external-expert-synthesis-approval.v1.schema.json",
+  "title": "TreeGuard External Expert Synthesis Approval v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "approval_status",
+    "approval_payload_hash",
+    "provider",
+    "endpoint",
+    "model",
+    "prompt_version",
+    "approved_by",
+    "approved_at",
+    "identity_status"
+  ],
+  "properties": {
+    "schema_version": {"const": "external-expert-synthesis-approval.v1"},
+    "approval_status": {"enum": ["PENDING", "APPROVED"]},
+    "approval_payload_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]*$"
+    },
+    "endpoint": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]*$"
+    },
+    "prompt_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]*$"
+    },
+    "approved_by": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]*$"
+        },
+        {"type": "null"}
+      ]
+    },
+    "approved_at": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 20,
+          "maxLength": 35
+        },
+        {"type": "null"}
+      ]
+    },
+    "identity_status": {"const": "UNVERIFIED_FILE_ASSERTION"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"approval_status": {"const": "APPROVED"}},
+        "required": ["approval_status"]
+      },
+      "then": {
+        "properties": {
+          "approved_by": {"type": "string"},
+          "approved_at": {"type": "string"}
+        }
+      },
+      "else": {
+        "properties": {
+          "approved_by": {"type": "null"},
+          "approved_at": {"type": "null"}
+        }
+      }
+    }
+  ]
+}

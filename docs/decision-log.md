@@ -242,6 +242,56 @@ Schema 保证，因此必须本地验证精确字段、枚举、case 和引用�
 云端只发送完全虚构或经明确审批允许出域的脱敏样本，并要求 CLI 显式确认。云端
 表现不能证明与内网 FP8 量化部署等价，内网迁移后必须用冻结样本重新评测。
 
+### D-037：专家审查采用单案例追加式事件账本
+
+`ExpertReviewSession v1` 分离保存专家逐字原文、不可信 AI 整理和专家最终裁决。
+固定状态机为 `OPEN → DELIBERATING → NEED_EVIDENCE / PROVISIONAL →
+APPROVED / REJECTED`。AI 整理不能携带或触发状态、审批、最终动作或 Patch；只有
+领域专家可以提交状态和最终裁决。`PROVISIONAL` 后新增思考会回到
+`DELIBERATING`，终态不可追加。
+
+会话以 EvidencePack 和初始 AIReviewDraft 为来源锚点。首事件指向由全部来源共同
+生成的 genesis hash，后续事件形成前序哈希链；最终裁决还必须匹配专家实际看到的
+`expected_session_hash`。回放不调用模型。SHA-256 只用于完整性检查，不等于签名或
+不可抵赖。
+
+### D-038：专家动作按单次原子追加执行
+
+文件 CLI 每次只接受一个专家 action，并独占创建下一版 `0600` 会话文件，不覆盖旧
+文件。最终裁决不能和暂定结论打包为一个自动步骤，避免绕过专家查看最新会话和
+并发锚点。完整会话留在内网，标准输出只给固定枚举和计数。当前
+`APPROVED` 只是语义裁决完成，仍然 `patch_eligible=false`。
+
+### D-039：专家原文出域需要独立精确授权
+
+EvidencePack 的通用出域确认不自动授权随后新增的专家文字。外部百炼整理必须同时
+获得数据载荷授权和本次 action 原文授权。先由 `prepare-approval` 对 EvidencePack、
+初审草稿、专家原文、端点、模型、Prompt 和首次/重试请求体生成 `PENDING` 私有
+清单，再由审批人另存 `APPROVED` 清单；Provider 在联网前重算哈希，回放也重算并
+要求审批时间不晚于 AI 事件。缺任一授权时网络调用数必须为零。请求排除 actor、
+时间、会话哈希、最终理由和内部标识。真实专家讨论默认只在内网 Qwen 处理。
+
+当前审批人身份只是 `UNVERIFIED_FILE_ASSERTION`。这能证明会话中的审批摘要覆盖
+确定请求计划，不能证明是谁批准；正式环境需要服务端身份和审计存储。
+
+### D-040：辅助审查与盲评 Gold 分开
+
+当前专家会话固定为 `ASSISTED`，AI 影响后的专家裁决不能标为
+`REAL_HUMAN_GOLD`。冻结评测仍采用人工先独立作答、再揭示 AI 的盲评流程。对于
+历史版本审查，AI 初审加一次专家思考整理构成两个逻辑模型步骤；v1 每个会话最多
+保存一次 AI 整理，不扩展为自由多轮 Agent。
+
+### D-041：文件会话不声明权威 HEAD
+
+文件 MVP 不实现跨进程 compare-and-swap、全局 action registry 或 supersession
+仓库。同一会话文件可能派生多个分别通过完整性回放的后继分支，因此聚合报告固定
+声明 `authoritative_head_status=NOT_AVAILABLE_FILE_MODE`。actor、审批人和初始 AI
+来源也只分别是 `UNVERIFIED_FILE_ASSERTION` 与 `UNVERIFIED_FILE_BUNDLE`。
+
+回放成功只说明来源、事件链、状态和外发请求计划在本地合同下自洽，不等于身份已
+认证、分支已被选为 head、Patch 可发布或样本可作为 Gold。当前所有分支都保持
+`patch_eligible=false`、`gold_eligible=false`。
+
 ## 6. 仍需内网核实的事实
 
 以下问题不能由外网假设替代：

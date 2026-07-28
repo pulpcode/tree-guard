@@ -4,7 +4,7 @@ TreeGuard 是面向大型信息树的语义编译与变更治理助手。
 
 它将建设人员提交的自然语言需求和领域专家的思考，编译为结构化变更意图；在整棵信息树中检索可能复用或冲突的语义；经过人机协作审查后，生成可验证、可审计、可回放的声明式 Schema Patch。
 
-> 当前阶段：TreeSnapshot/TreeDiff/HistoryReview v1、跨业务版本审查、白名单 LLM EvidencePack、受约束 AI 审查草稿和百炼冒烟 Provider 已实现。主运行目标仍是一个文件驱动、无生产写权限的内网 Shadow MVP；外部百炼只用于完全虚构或经明确审批的脱敏样本。
+> 当前阶段：TreeSnapshot/TreeDiff/HistoryReview v1、跨业务版本审查、白名单 LLM EvidencePack、受约束 AI 初审，以及可回放的 AI 辅助专家审查账本已实现。主运行目标仍是一个文件驱动、无生产写权限的内网 Shadow MVP；外部百炼只用于完全虚构或经明确审批的脱敏样本。
 
 ## 为什么做 TreeGuard
 
@@ -71,7 +71,7 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 
 ## 当前实现
 
-当前代码覆盖确定性 Diff、两类版本审查、模型安全投影和一个可替换的百炼开发 Provider；尚不包含 Web、数据库连接、向量检索或 Patch 发布：
+当前代码覆盖确定性 Diff、两类版本审查、模型安全投影、AI 初审和专家审查闭环；尚不包含 Web、数据库连接、向量检索或 Patch 发布：
 
 - `contracts/tree-snapshot.v1.schema.json`：Canonical Tree JSON Schema；
 - `contracts/tree-diff.v1.schema.json`：字段级 Snapshot Diff JSON Schema；
@@ -80,6 +80,11 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - `contracts/llm-evidence-pack.v1.schema.json`：模型输入白名单合同；
 - `contracts/ai-review-model-output.v1.schema.json`：不可信模型原始 JSON 合同；
 - `contracts/ai-review-draft.v1.schema.json`：AI 审查草稿合同；
+- `contracts/expert-synthesis-model-output.v1.schema.json`：不含状态或审批字段的专家思考 AI 整理合同；
+- `contracts/expert-synthesis-draft.v1.schema.json`：绑定来源会话、专家原文引用和初审草稿的 AI 整理制品；
+- `contracts/expert-review-action.v1.schema.json`：单次专家动作输入合同；
+- `contracts/expert-review-session.v1.schema.json`：追加式专家审查事件账本合同；
+- `contracts/external-expert-synthesis-approval.v1.schema.json`：精确外发请求计划的两阶段审批清单合同；
 - `src/treeguard/adapter.py`：直接导出和 API 响应的递归适配器；
 - `src/treeguard/hashing.py`：排除 VALUE 和审计字段的稳定 Schema 哈希；
 - `src/treeguard/diff.py`：只按稳定 `node_id` 匹配的保存修订/业务版本 Diff；
@@ -88,6 +93,10 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - `src/treeguard/evidence.py`：过滤未知字段、审计信息和原始 VALUE，以临时 `F/X/C` 引用构造有界 EvidencePack；
 - `src/treeguard/ai_review.py`：百炼 OpenAI 兼容 Provider、本地严格合同校验、最多一次受控重试和失败拒答；
 - `src/treeguard/ai_cli.py`：默认只输出聚合信息的内部冒烟 CLI；
+- `src/treeguard/expert_synthesis.py`：专家原文 AI 整理、本地来源绑定和外部载荷授权门；
+- `src/treeguard/expert_review.py`：专家思考、AI 整理、暂定状态和最终裁决的确定性状态机与回放；
+- `src/treeguard/expert_cli.py`：单动作追加与只读回放 CLI，完整会话使用 `0600` 新文件保存；
+- `src/treeguard/json_utils.py`：拒绝重复键、非有限数和超长整数的严格 JSON 解析；
 - `src/treeguard/cli.py`：不输出名称、ID、路径和 VALUE 的聚合式 Conformance CLI；
 - `tests/fixtures/fictional/`：完全虚构的递归复合属性样例；
 - `tests/`：标准库单元测试，无运行时第三方依赖；
@@ -140,6 +149,86 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-ai-review \
 完整 EvidencePack 和 AI 草稿仍属于敏感内部制品；除非显式指定
 `--internal-output`，CLI 只输出固定状态和聚合计数。内部输出以 `0600` 新建并拒绝
 覆盖已有目标。
+
+## AI 辅助专家审查
+
+先用 `treeguard-ai-review --internal-output` 生成包含非空 `ai_review_draft` 的内部
+bundle。专家动作从 JSON 文件读取，不把原文、理由或来源哈希放入命令行。action
+顶层必须包含：
+
+- 唯一的 64 位十六进制 `action_id`；
+- bundle 内 `ai_review_draft.case_id` 对应的 `case_id`；
+- 首次动作为 `null`、后续动作为上一会话 `session_hash` 的
+  `expected_session_hash`；
+- `action_type`、`actor_role`、`actor_ref`、带时区的 `recorded_at` 和 `payload`。
+
+每次命令只追加一个专家动作，并把新会话写到一个尚不存在的新文件：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-expert-review apply \
+  /path/to/base-version.json \
+  /path/to/target-version.json \
+  /approved/internal/ai-bundle.json \
+  /approved/internal/expert-action.json \
+  --session-input /approved/internal/session-001.json \
+  --internal-output /approved/internal/session-002.json
+```
+
+首条思考不提供 `--session-input`。若要让外部百炼整理本次专家原文，动作必须是
+`EXPERT_THOUGHT_SUBMITTED`。先离线生成精确请求计划的 `PENDING` 清单，不会联网：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-expert-review prepare-approval \
+  /path/to/base-version.json \
+  /path/to/target-version.json \
+  /approved/internal/ai-bundle.json \
+  /approved/internal/expert-action.json \
+  --internal-output /approved/internal/approval-request.json
+```
+
+审批人应保留该文件，并在受控流程中另存一份 `APPROVED` 清单：只把
+`approval_status` 改为 `APPROVED`，填写 `approved_by` 与不晚于模型事件的
+RFC3339 `approved_at`，其余字段原样保留。当前文件只是
+`UNVERIFIED_FILE_ASSERTION`，不能证明审批人身份。随后才能执行：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-expert-review apply \
+  /path/to/base-version.json \
+  /path/to/target-version.json \
+  /approved/internal/ai-bundle.json \
+  /approved/internal/expert-action.json \
+  --internal-output /approved/internal/session-001.json \
+  --live-synthesis \
+  --external-data-approved \
+  --external-approval-file /approved/internal/approval-approved.json
+```
+
+Provider 和回放都会根据冻结来源、专家原文、端点、模型、Prompt 及最多两次请求体
+重新计算审批哈希；不匹配时在联网前或回放时拒绝。真实专家讨论默认不应出内网。
+
+回放只使用冻结制品，不调用模型或网络：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-expert-review replay \
+  /path/to/base-version.json \
+  /path/to/target-version.json \
+  /approved/internal/ai-bundle.json \
+  /approved/internal/session-002.json
+```
+
+AI 整理事件永远不改变权威状态。只有领域专家能进入 `NEED_EVIDENCE`、
+`PROVISIONAL`、`APPROVED` 或 `REJECTED`；最终动作还必须携带专家实际查看过的
+`expected_session_hash`。当前 `APPROVED` 只表示专家语义裁决，仍然
+`patch_eligible=false`、`gold_eligible=false`，等待后续结构审批和独立盲评。
+
+所有树导出、bundle、action、上一会话和审批清单都是敏感输入，文件模式要求其权限
+不宽于 `0600`（例如在受控目录执行 `chmod 600 <files...>`）；符号链接、管道、超限
+文件和宽权限输入会被拒绝。会话中的 actor 与初始 AI 来源分别标为
+`UNVERIFIED_FILE_ASSERTION` 和 `UNVERIFIED_FILE_BUNDLE`。哈希链用于完整性检查，
+不是签名。文件模式也没有全局权威 HEAD：同一输入可以产生多个各自可回放的后继
+分支，必须由未来的受控仓库/数据库选择 head 或记录 supersession，不能把任一文件
+分支自动视为权威发布结果。v1 每个会话最多保存一次 AI 整理；后续补充由人工继续
+裁决，或为新的模型整理创建新会话。
 
 ## 当前运行约束
 

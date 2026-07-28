@@ -220,7 +220,58 @@ STALE
 
 ### 4.8 `DeliberationRecord`
 
-包含专家原文、事实、假设、风险、未决问题、证据、修订历史和审批状态。
+当前落地合同名为 `ExpertReviewSession v1`，是单案例、文件型、追加式事件账本，
+不实现聊天系统、Web、数据库或 Patch。会话在创建时绑定：
+
+- `case_id`；
+- `source_pack_hash`；
+- `source_ai_draft_hash`；
+- 固定工作流版本和 `ASSISTED` 评审模式。
+
+文件实现同时记录 `actor_identity_status=UNVERIFIED_FILE_ASSERTION` 和
+`initial_ai_provenance_status=UNVERIFIED_FILE_BUNDLE`。它们表示来源已被哈希绑定，
+但 actor 身份、审批人身份以及初始 AI 调用来源尚未经过服务端认证。
+
+来源共同生成 `genesis_hash`，首事件的 `previous_event_hash` 必须指向它，避免把完整
+事件链移植到另一案例。后续事件按连续序号和前序哈希相连，会话状态与 head hash
+全部由 reducer 重放得到。无密钥 SHA-256 只能发现普通删改、重排和来源漂移，不是
+数字签名；跨进程可信仍依赖内网 ACL，后续可增加 MAC、签名或 WORM 存储。
+
+事件固定为：
+
+1. `EXPERT_THOUGHT_SUBMITTED`：领域专家或信息树建设人员提交逐字原文，系统确定性
+   分配 `Txxx` 引用；
+2. `AI_SYNTHESIS_RECORDED`：保存不可信 AI 整理草稿，只能包含专家主张、假设、
+   不确定性、风险、证据请求和追问，每个条目至少引用一个本次获准的 `Txxx`；
+3. `EXPERT_STATUS_RECORDED`：只有领域专家可以进入 `NEED_EVIDENCE` 或
+   `PROVISIONAL`；
+4. `EXPERT_FINAL_DECISION_RECORDED`：只有领域专家能从 `PROVISIONAL` 进入
+   `APPROVED` 或 `REJECTED`，并必须绑定提交前的 `expected_session_hash`。
+
+AI 事件永远不改变权威状态，也不能包含 state、approval、final decision 或 Patch。
+专家在 `PROVISIONAL` 后新增思考会回到 `DELIBERATING`。终态拒绝任何追加；纠错应
+创建新会话，正式 supersession 留到后续版本。为保持上下文和调用预算有界，v1
+每个会话最多记录一次 AI 整理；整理后的新增思考由人工继续裁决，或进入新会话。
+
+外部百炼整理采用两阶段清单。`prepare-approval` 在不联网的情况下，根据冻结
+EvidencePack、初审草稿、逐字专家原文、端点、模型、Prompt 和最多两次请求体生成
+精确请求计划哈希及 `PENDING` 私有清单。审批人另存 `APPROVED` 清单后，
+Provider 在联网前重算哈希；会话回放也重算同一哈希，并要求审批时间不晚于 AI
+事件时间。该机制能验证“文件中声明的审批覆盖了请求计划及其全部字段”，但因为
+审批身份仍是 `UNVERIFIED_FILE_ASSERTION`，不能证明是谁批准，也不是数字签名。
+
+`treeguard-expert-review apply` 每次只追加一个专家动作并独占创建新的 `0600`
+会话文件；所有树、bundle、action、上一会话和审批清单输入也必须不宽于 `0600`。
+`replay` 只重算来源、审批请求计划、事件链和状态，绝不联网。标准输出只含固定枚举
+和计数，不含原文、actor、引用、路径、版本或哈希。当前任何状态都不直接生成
+Patch；`APPROVED` 只代表领域语义裁决完成，仍然
+`patch_eligible=false`、`gold_eligible=false`。
+
+文件模式没有持久化的权威 HEAD、原子 compare-and-swap 或全局 action registry。
+因此两个进程可以从同一会话文件生成两个分别通过回放的后继分支；聚合报告固定显示
+`authoritative_head_status=NOT_AVAILABLE_FILE_MODE`。未来接入仓库或数据库时必须
+由受控服务选择 head、拒绝陈旧提交并记录 supersession。在此之前，“完整性有效”
+不能解释成“该分支已被选为权威结果”。
 
 ### 4.9 `SchemaPatch`
 

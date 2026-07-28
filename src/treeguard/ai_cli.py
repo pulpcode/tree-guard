@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import secrets
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -191,32 +192,54 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 def _write_internal_output(path: Path, payload: dict[str, object]) -> bool:
+    try:
+        encoded = (
+            json.dumps(
+                payload,
+                ensure_ascii=False,
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n"
+        ).encode("utf-8")
+    except (TypeError, ValueError, UnicodeError):
+        return False
+
     descriptor = -1
+    temporary_path = path.parent / (
+        f".{path.name}.treeguard-{secrets.token_hex(12)}.tmp"
+    )
+    published = False
     try:
         descriptor = os.open(
-            path,
+            temporary_path,
             os.O_WRONLY
             | os.O_CREAT
             | os.O_EXCL
             | getattr(os, "O_NOFOLLOW", 0),
             0o600,
         )
-        handle = os.fdopen(descriptor, "w", encoding="utf-8")
+        offset = 0
+        while offset < len(encoded):
+            written = os.write(descriptor, encoded[offset:])
+            if written <= 0:
+                raise OSError("internal output write made no progress")
+            offset += written
+        os.fsync(descriptor)
+        os.close(descriptor)
         descriptor = -1
-        with handle:
-            json.dump(
-                payload,
-                handle,
-                ensure_ascii=False,
-                indent=2,
-                sort_keys=True,
-            )
-            handle.write("\n")
+        os.link(temporary_path, path, follow_symlinks=False)
+        published = True
     except OSError:
         if descriptor >= 0:
             os.close(descriptor)
         return False
-    return True
+    finally:
+        try:
+            os.unlink(temporary_path)
+        except OSError:
+            pass
+    return published
 
 
 def _print_error(code: str) -> None:

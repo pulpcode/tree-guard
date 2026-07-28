@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/expert-synthesis-draft.v1.schema.json",
+  "title": "TreeGuard Expert Synthesis Draft v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_pack_hash",
+    "source_ai_draft_hash",
+    "source_session_hash",
+    "source_thought_refs",
+    "expert_claims",
+    "hypotheses",
+    "uncertainties",
+    "risks",
+    "evidence_requests",
+    "questions_for_expert",
+    "draft_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "expert-synthesis-draft.v1"},
+    "source_pack_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_ai_draft_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_session_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_thought_refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^T[0-9]{3}$"
+      }
+    },
+    "expert_claims": {
+      "$ref": "expert-synthesis-model-output.v1.schema.json#/$defs/groundedClaimList"
+    },
+    "hypotheses": {
+      "$ref": "expert-synthesis-model-output.v1.schema.json#/$defs/groundedClaimList"
+    },
+    "uncertainties": {
+      "$ref": "expert-synthesis-model-output.v1.schema.json#/$defs/groundedClaimList"
+    },
+    "risks": {
+      "$ref": "expert-synthesis-model-output.v1.schema.json#/$defs/groundedClaimList"
+    },
+    "evidence_requests": {
+      "$ref": "expert-synthesis-model-output.v1.schema.json#/$defs/groundedClaimList"
+    },
+    "questions_for_expert": {
+      "$ref": "expert-synthesis-model-output.v1.schema.json#/$defs/questionList"
+    },
+    "draft_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "anyOf": [
+    {"properties": {"expert_claims": {"minItems": 1}}},
+    {"properties": {"hypotheses": {"minItems": 1}}},
+    {"properties": {"uncertainties": {"minItems": 1}}},
+    {"properties": {"risks": {"minItems": 1}}},
+    {"properties": {"evidence_requests": {"minItems": 1}}},
+    {"properties": {"questions_for_expert": {"minItems": 1}}}
+  ]
+}

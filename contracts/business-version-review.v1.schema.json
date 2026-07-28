@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/business-version-review.v1.schema.json",
+  "title": "TreeGuard Business Version Review Run v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "algorithm_version",
+    "policy_version",
+    "knowledge_status",
+    "source_diff_hash",
+    "scope",
+    "base",
+    "target",
+    "comparison_semantics",
+    "version_order",
+    "reconstructs_historical_operations",
+    "review_cases",
+    "informational_observations",
+    "summary",
+    "run_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "business-version-review.v1"},
+    "algorithm_version": {"const": "treeguard.business-version-review.v1"},
+    "policy_version": {"const": "treeguard.history-review-policy.v1"},
+    "knowledge_status": {"const": "EVIDENCE_ONLY"},
+    "source_diff_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "scope": {"const": "BUSINESS_VERSION"},
+    "base": {
+      "$ref": "history-review.v1.schema.json#/$defs/snapshotRef"
+    },
+    "target": {
+      "$ref": "history-review.v1.schema.json#/$defs/snapshotRef"
+    },
+    "comparison_semantics": {"const": "ENDPOINT_NET_CHANGE"},
+    "version_order": {"$ref": "#/$defs/versionOrder"},
+    "reconstructs_historical_operations": {"const": false},
+    "review_cases": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "history-review.v1.schema.json#/$defs/reviewCase"
+      }
+    },
+    "informational_observations": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "history-review.v1.schema.json#/$defs/informationalObservation"
+      }
+    },
+    "summary": {
+      "$ref": "history-review.v1.schema.json#/$defs/summary"
+    },
+    "run_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "versionOrder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["basis", "base_position", "target_position"],
+      "properties": {
+        "basis": {"const": "UNVERIFIED_EXPLICIT_SEQUENCE"},
+        "base_position": {"type": "integer", "minimum": 0},
+        "target_position": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

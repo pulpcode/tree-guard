@@ -584,6 +584,63 @@ def mine_history_pair(
 
     revision_gap = after.source_revision - before.source_revision
     interval_completeness = "ADJACENT" if revision_gap == 1 else "GAPPED"
+    review_cases, informational_observations, summary = _mine_review_artifacts(
+        before,
+        after,
+        tree_diff,
+        interval_completeness=interval_completeness,
+    )
+
+    payload = {
+        "schema_version": SCHEMA_VERSION,
+        "algorithm_version": ALGORITHM_VERSION,
+        "policy_version": POLICY_VERSION,
+        "knowledge_status": "EVIDENCE_ONLY",
+        "source_diff_hash": tree_diff.diff_hash,
+        "scope": tree_diff.scope,
+        "base": tree_diff.base.to_dict(),
+        "target": tree_diff.target.to_dict(),
+        "revision_gap": revision_gap,
+        "interval_completeness": interval_completeness,
+        "reconstructs_historical_operations": False,
+        "review_cases": [item.to_dict() for item in review_cases],
+        "informational_observations": [
+            item.to_dict() for item in informational_observations
+        ],
+        "summary": summary.to_dict(),
+    }
+    return HistoryReviewRun(
+        schema_version=SCHEMA_VERSION,
+        algorithm_version=ALGORITHM_VERSION,
+        policy_version=POLICY_VERSION,
+        knowledge_status="EVIDENCE_ONLY",
+        source_diff_hash=tree_diff.diff_hash,
+        scope=tree_diff.scope,
+        base=tree_diff.base,
+        target=tree_diff.target,
+        revision_gap=revision_gap,
+        interval_completeness=interval_completeness,
+        reconstructs_historical_operations=False,
+        review_cases=review_cases,
+        informational_observations=informational_observations,
+        summary=summary,
+        run_hash=canonical_digest(payload),
+    )
+
+
+def _mine_review_artifacts(
+    before: CanonicalTree,
+    after: CanonicalTree,
+    tree_diff: TreeDiff,
+    *,
+    interval_completeness: str,
+) -> tuple[
+    tuple[ReviewCase, ...],
+    tuple[InformationalObservation, ...],
+    HistorySummary,
+]:
+    """Build shared deterministic review artifacts from an accepted TreeDiff."""
+
     before_nodes = {node.node_id: node for node in before.nodes}
     after_nodes = {node.node_id: node for node in after.nodes}
 
@@ -649,42 +706,7 @@ def mine_history_pair(
         informational_deltas=informational_deltas,
         suppressed_informational_count=suppressed_informational_count,
     )
-
-    payload = {
-        "schema_version": SCHEMA_VERSION,
-        "algorithm_version": ALGORITHM_VERSION,
-        "policy_version": POLICY_VERSION,
-        "knowledge_status": "EVIDENCE_ONLY",
-        "source_diff_hash": tree_diff.diff_hash,
-        "scope": tree_diff.scope,
-        "base": tree_diff.base.to_dict(),
-        "target": tree_diff.target.to_dict(),
-        "revision_gap": revision_gap,
-        "interval_completeness": interval_completeness,
-        "reconstructs_historical_operations": False,
-        "review_cases": [item.to_dict() for item in review_cases],
-        "informational_observations": [
-            item.to_dict() for item in informational_observations
-        ],
-        "summary": summary.to_dict(),
-    }
-    return HistoryReviewRun(
-        schema_version=SCHEMA_VERSION,
-        algorithm_version=ALGORITHM_VERSION,
-        policy_version=POLICY_VERSION,
-        knowledge_status="EVIDENCE_ONLY",
-        source_diff_hash=tree_diff.diff_hash,
-        scope=tree_diff.scope,
-        base=tree_diff.base,
-        target=tree_diff.target,
-        revision_gap=revision_gap,
-        interval_completeness=interval_completeness,
-        reconstructs_historical_operations=False,
-        review_cases=review_cases,
-        informational_observations=informational_observations,
-        summary=summary,
-        run_hash=canonical_digest(payload),
-    )
+    return review_cases, informational_observations, summary
 
 
 def verify_history_run_against_snapshots(

@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/ai-review-draft.v1.schema.json",
+  "title": "TreeGuard AI Review Draft v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "source_pack_hash",
+    "change_summary",
+    "observations",
+    "hypotheses",
+    "candidate_assessments",
+    "placement_assessment",
+    "suggested_disposition",
+    "questions_for_expert",
+    "uncertainties"
+  ],
+  "properties": {
+    "schema_version": {"const": "ai-review-draft.v1"},
+    "case_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_pack_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "change_summary": {"type": "string", "minLength": 1},
+    "observations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/claim"}
+    },
+    "hypotheses": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/claim"}
+    },
+    "candidate_assessments": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/candidateAssessment"}
+    },
+    "placement_assessment": {"$ref": "#/$defs/placementAssessment"},
+    "suggested_disposition": {
+      "enum": [
+        "ACCEPT_AS_PATTERN",
+        "POSSIBLE_DUPLICATE",
+        "REUSE_SHARED_CONTRACT",
+        "KEEP_CONTEXT_EXTENSION",
+        "REVIEW_PLACEMENT",
+        "REVIEW_TYPE_OR_CARDINALITY",
+        "NEED_EVIDENCE",
+        "ABSTAIN"
+      ]
+    },
+    "questions_for_expert": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "evidence_refs"],
+      "properties": {
+        "statement": {"type": "string", "minLength": 1},
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[FXC][0-9]{3}$"}
+        }
+      }
+    },
+    "candidateAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_ref", "relation", "reason"],
+      "properties": {
+        "candidate_ref": {"type": "string", "pattern": "^C[0-9]{3}$"},
+        "relation": {
+          "enum": [
+            "POSSIBLE_DUPLICATE",
+            "RELATED",
+            "NOT_EQUIVALENT",
+            "NEED_EVIDENCE"
+          ]
+        },
+        "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "placementAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reason", "evidence_refs"],
+      "properties": {
+        "status": {
+          "enum": ["NO_CONCERN", "REVIEW_PLACEMENT", "NEED_EVIDENCE"]
+        },
+        "reason": {"type": "string", "minLength": 1},
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[FXC][0-9]{3}$"}
+        }
+      }
+    }
+  }
+}

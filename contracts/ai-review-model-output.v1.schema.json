@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/ai-review-model-output.v1.schema.json",
+  "title": "TreeGuard Untrusted AI Review Model Output v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "change_summary",
+    "observations",
+    "hypotheses",
+    "candidate_assessments",
+    "placement_assessment",
+    "suggested_disposition",
+    "questions_for_expert",
+    "uncertainties"
+  ],
+  "properties": {
+    "schema_version": {"const": "ai-review-model-output.v1"},
+    "change_summary": {"type": "string", "minLength": 1},
+    "observations": {
+      "type": "array",
+      "items": {
+        "$ref": "ai-review-draft.v1.schema.json#/$defs/claim"
+      }
+    },
+    "hypotheses": {
+      "type": "array",
+      "items": {
+        "$ref": "ai-review-draft.v1.schema.json#/$defs/claim"
+      }
+    },
+    "candidate_assessments": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "ai-review-draft.v1.schema.json#/$defs/candidateAssessment"
+      }
+    },
+    "placement_assessment": {
+      "$ref": "ai-review-draft.v1.schema.json#/$defs/placementAssessment"
+    },
+    "suggested_disposition": {
+      "enum": [
+        "ACCEPT_AS_PATTERN",
+        "POSSIBLE_DUPLICATE",
+        "REUSE_SHARED_CONTRACT",
+        "KEEP_CONTEXT_EXTENSION",
+        "REVIEW_PLACEMENT",
+        "REVIEW_TYPE_OR_CARDINALITY",
+        "NEED_EVIDENCE",
+        "ABSTAIN"
+      ]
+    },
+    "questions_for_expert": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

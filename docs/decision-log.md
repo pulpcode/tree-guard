@@ -207,6 +207,41 @@ HistoryReview v1 只接受同一 `tree_id + tree_version + version_record_id` �
 
 存在修订缺口时允许分析端点净变化，候选的 `gate_status` 至少为 `UNKNOWN`；若已触发 VALUE 迁移阻断则保持更严格的 `BLOCKED`，不能用历史缺口降级已知安全风险。同时声明 `reconstructs_historical_operations=false`。全部输出保持 `knowledge_status=EVIDENCE_ONLY`，不能直接进入 Gold。完整制品留在内网；跨网只允许不含节点引用和哈希的固定码聚合计数。
 
+### D-034：首期以业务版本为审查单位
+
+当前接口只能稳定列出业务版本，MongoDB 中间保存副本没有公开读取接口。首期因此
+比较 `version-info` 顺序中的相邻业务版本，不阻塞于小版本采集。顺序暂由调用方
+显式声明并标为 `UNVERIFIED_EXPLICIT_SEQUENCE`，不解析版本字符串；
+`concurrent_version` 可以跨业务版本重置，不能用于判断业务版本先后。拿到脱敏的
+`version-info` 合同后，再把位置和 `version_record_id` 绑定到可重放清单。
+
+BusinessVersionReview 只表示两个发布端点的净变化，复用确定性结构分簇和 VALUE
+门禁，但不恢复发布过程、修改原因或专家意图。后续拿到小版本只会增加证据精度，
+不改变该合同的边界。
+
+### D-035：模型只接收白名单 EvidencePack
+
+ReviewCase 通过可信快照重放后，才投影为有界 EvidencePack。真实 `node_id` 用调用内
+一次性引用替代；内部 run/case/pack 哈希、业务版本标识、原始 VALUE、未知 metadata、
+extension 和审计字段不进入模型。模型只能引用已给出的焦点、上下文和候选，原始
+JSON 经本地合同校验并绑定内部 `case_id + source_pack_hash` 后才形成 AIReviewDraft，
+不能直接修改树或生成可执行 Patch。
+
+本地政策还要求响应正常结束；`BLOCKED` 案例不能获得接受性建议，重复或共享合同
+复用建议必须有对应候选评估。该门只阻止自相矛盾的草稿，不替代专家语义判断。
+
+模型草稿允许分别记录事实观察、假设、专家问题和不确定性。专家可以提交自由文本
+思路，不要求在证据不足时强行选择 N 分类；最终专家裁决属于后续独立合同。
+
+### D-036：百炼只作为外部开发基线
+
+百炼当前有与内网目标同名的 `qwen3.6-35b-a3b`。开发 Provider 使用 OpenAI 兼容
+`json_object`、`enable_thinking=false` 和最多一次受控重试。JSON Object 不是严格
+Schema 保证，因此必须本地验证精确字段、枚举、case 和引用；失败一律 `ABSTAIN`。
+
+云端只发送完全虚构或经明确审批允许出域的脱敏样本，并要求 CLI 显式确认。云端
+表现不能证明与内网 FP8 量化部署等价，内网迁移后必须用冻结样本重新评测。
+
 ## 6. 仍需内网核实的事实
 
 以下问题不能由外网假设替代：

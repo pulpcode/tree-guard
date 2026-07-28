@@ -151,11 +151,45 @@ run_hash
 
 JSON Schema、运行时不变量和无密钥哈希只验证制品内部自洽，不能证明每个节点变化确实来自某个 TreeDiff。跨进程读取完整制品时必须调用可信快照重放校验，重新执行 `mine_history_pair` 并逐字段比对；不能只校验 `run_hash`。
 
-### 4.4 `ChangeIntent`
+### 4.4 `BusinessVersionReview`
+
+首期只比较 `version-info` 能稳定提供的相邻业务版本。当前版本先后仅由调用方显式
+声明并标记为 `UNVERIFIED_EXPLICIT_SEQUENCE`，不解析 `version` 字符串，也不要求
+两个版本的 `source_revision` 连续。
+结果只表示发布端点之间的 `ENDPOINT_NET_CHANGE`，不能声称恢复了发布中的操作顺序、
+修改原因或专家意图。
+
+它复用 HistoryReview 的确定性结构分簇、VALUE 风险门和信息观察，但使用独立顶层
+合同。完整制品必须通过可信快照重放校验；显式版本顺序的真实性还需要未来由
+`version-info` 清单或签名导入清单提供来源证据。
+
+### 4.5 `LLMEvidencePack` 与 `AIReviewDraft`
+
+业务版本审查产生的一个 ReviewCase 经白名单投影后才可进入模型：
+
+- 只保留节点 kind、label、name、派生路径、类型、基数和是否存在 constraints；
+- 原始 VALUE、未知 metadata、extension、审计字段和真实 `node_id` 不进入模型；
+- 使用一次性 `F/X/C` 引用表示焦点、上下文和候选，映射只存在于明确的内部制品；
+- 内部 run/case/pack 哈希和业务版本标识不进入外部模型请求，避免形成稳定跨请求指纹；
+- 默认最多 5 个词法候选，序列化输入上限 48,000 字符，超限直接失败；
+- 模型只能提交观察、假设、候选关系、放置疑问、专家问题和不确定性，不能生成 Patch。
+
+百炼开发 Provider 使用 `qwen3.6-35b-a3b` 的 OpenAI 兼容 JSON Mode，并关闭思考
+模式。Provider 能力只能标记为 `JSON_OBJECT`：原始
+`ai-review-model-output.v1` 仍需由本地代码逐字段校验，然后由本地绑定
+`case_id + source_pack_hash` 生成可信来源明确的 `ai-review-draft.v1`；失败最多重试
+一次后 `ABSTAIN`。只接受 `finish_reason=stop` 的完整响应；确定性跨字段政策禁止
+`BLOCKED` 案例获得接受性建议，也禁止缺少候选评估时宣称重复或复用。专家审查合同
+与 AI 草稿分离，专家可以提交自由文本思路和不确定性，不会被强迫归入单一 N 分类。
+
+外部百炼只允许完全虚构或获批脱敏样本。真实 EvidencePack 和 AIReviewDraft 仍是
+内网敏感制品；内网 Qwen 复用相同合同但使用独立 Provider。
+
+### 4.6 `ChangeIntent`
 
 包含原始需求、主体、角色、场景、生命周期、属性归属、类型、基数、拟挂载位置、事实、假设和证据缺口。
 
-### 4.5 `SemanticOverlay`
+### 4.7 `SemanticOverlay`
 
 至少包含：
 
@@ -184,11 +218,11 @@ STALE
 
 只有 `EXPERT_APPROVED` 的补充语义可以进入在线判断。基础节点修改后，如果 `base_node_hash` 不再匹配，Overlay 自动变为 `STALE`。
 
-### 4.6 `DeliberationRecord`
+### 4.8 `DeliberationRecord`
 
 包含专家原文、事实、假设、风险、未决问题、证据、修订历史和审批状态。
 
-### 4.7 `SchemaPatch`
+### 4.9 `SchemaPatch`
 
 至少包含：
 
@@ -207,7 +241,7 @@ status
 
 MVP Patch 是声明式文件，不包含数据库连接和执行代码。
 
-### 4.8 `UsageManifest`
+### 4.10 `UsageManifest`
 
 至少包含：
 
@@ -225,7 +259,7 @@ manifest_hash
 
 邮件系统保持引用关系的事实来源。TreeGuard 周期性导入 Manifest，建立只读反向索引。
 
-### 4.9 `WorkflowTrace`
+### 4.11 `WorkflowTrace`
 
 至少记录：
 

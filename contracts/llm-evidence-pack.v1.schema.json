@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/llm-evidence-pack.v1.schema.json",
+  "title": "TreeGuard LLM Evidence Pack v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "projection_version",
+    "task_type",
+    "source_run_hash",
+    "case_id",
+    "base_version",
+    "target_version",
+    "comparison_semantics",
+    "risk_level",
+    "gate_status",
+    "reason_codes",
+    "focus_nodes",
+    "context_nodes",
+    "candidate_nodes",
+    "reference_to_node_id",
+    "pack_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "llm-evidence-pack.v1"},
+    "projection_version": {"const": "treeguard.llm-projection.v1"},
+    "task_type": {"const": "BUSINESS_VERSION_REVIEW"},
+    "source_run_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "case_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "base_version": {"type": "string", "minLength": 1},
+    "target_version": {"type": "string", "minLength": 1},
+    "comparison_semantics": {"const": "ENDPOINT_NET_CHANGE"},
+    "risk_level": {"enum": ["REVIEW_REQUIRED", "HIGH_RISK"]},
+    "gate_status": {"enum": ["REVIEWABLE", "UNKNOWN", "BLOCKED"]},
+    "reason_codes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string"}
+    },
+    "focus_nodes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/focusNode"}
+    },
+    "context_nodes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/contextNode"}
+    },
+    "candidate_nodes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/candidateNode"}
+    },
+    "reference_to_node_id": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[FXC][0-9]{3}$"},
+      "additionalProperties": {"type": "string", "minLength": 1}
+    },
+    "pack_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "nodeView": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "label",
+        "name",
+        "path",
+        "value_type",
+        "cardinality",
+        "has_constraints"
+      ],
+      "properties": {
+        "kind": {"type": "string"},
+        "label": {"type": "string"},
+        "name": {"type": "string"},
+        "path": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "value_type": {"type": ["string", "null"]},
+        "cardinality": {"type": ["string", "null"]},
+        "has_constraints": {"type": "boolean"}
+      }
+    },
+    "valueEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "base_direct_observed",
+        "base_ancestor_observed",
+        "target_direct_observed",
+        "target_ancestor_observed"
+      ],
+      "properties": {
+        "base_direct_observed": {"type": "boolean"},
+        "base_ancestor_observed": {"type": "boolean"},
+        "target_direct_observed": {"type": "boolean"},
+        "target_ancestor_observed": {"type": "boolean"}
+      }
+    },
+    "focusNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "change_types", "before", "after", "value_evidence"],
+      "properties": {
+        "ref": {"type": "string", "pattern": "^F[0-9]{3}$"},
+        "change_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "before": {
+          "oneOf": [
+            {"$ref": "#/$defs/nodeView"},
+            {"type": "null"}
+          ]
+        },
+        "after": {
+          "oneOf": [
+            {"$ref": "#/$defs/nodeView"},
+            {"type": "null"}
+          ]
+        },
+        "value_evidence": {"$ref": "#/$defs/valueEvidence"}
+      },
+      "anyOf": [
+        {"properties": {"before": {"$ref": "#/$defs/nodeView"}}},
+        {"properties": {"after": {"$ref": "#/$defs/nodeView"}}}
+      ]
+    },
+    "contextNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "node"],
+      "properties": {
+        "ref": {"type": "string", "pattern": "^X[0-9]{3}$"},
+        "node": {"$ref": "#/$defs/nodeView"}
+      }
+    },
+    "candidateNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "node"],
+      "properties": {
+        "ref": {"type": "string", "pattern": "^C[0-9]{3}$"},
+        "node": {"$ref": "#/$defs/nodeView"}
+      }
+    }
+  }
+}

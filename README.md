@@ -4,7 +4,7 @@ TreeGuard 是面向大型信息树的语义编译与变更治理助手。
 
 它将建设人员提交的自然语言需求和领域专家的思考，编译为结构化变更意图；在整棵信息树中检索可能复用或冲突的语义；经过人机协作审查后，生成可验证、可审计、可回放的声明式 Schema Patch。
 
-> 当前阶段：设计基线已冻结，TreeSnapshot/TreeDiff/HistoryReview v1 合同、递归 File Adapter、Schema 哈希、修订级字段 Diff、历史结构候选簇和聚合诊断已实现。第一阶段目标仍是一个完全离线、文件驱动、无生产写权限的 Shadow MVP。
+> 当前阶段：TreeSnapshot/TreeDiff/HistoryReview v1、跨业务版本审查、白名单 LLM EvidencePack、受约束 AI 审查草稿和百炼冒烟 Provider 已实现。主运行目标仍是一个文件驱动、无生产写权限的内网 Shadow MVP；外部百炼只用于完全虚构或经明确审批的脱敏样本。
 
 ## 为什么做 TreeGuard
 
@@ -67,26 +67,37 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - [六周实施路线](docs/roadmap.md)
 - [决策记录与待核实事项](docs/decision-log.md)
 - [实际源格式分析](docs/source-format-findings.md)
+- [百炼开发冒烟指南](docs/bailian-smoke.md)
 
 ## 当前实现
 
-当前代码只覆盖合同、确定性历史 Diff 和证据型历史审查，不包含 Web、数据库、LLM、检索或 Patch 发布：
+当前代码覆盖确定性 Diff、两类版本审查、模型安全投影和一个可替换的百炼开发 Provider；尚不包含 Web、数据库连接、向量检索或 Patch 发布：
 
 - `contracts/tree-snapshot.v1.schema.json`：Canonical Tree JSON Schema；
 - `contracts/tree-diff.v1.schema.json`：字段级 Snapshot Diff JSON Schema；
 - `contracts/history-review.v1.schema.json`：历史结构候选簇、安全门和信息观察 JSON Schema；
+- `contracts/business-version-review.v1.schema.json`：相邻业务版本端点净变化审查合同；
+- `contracts/llm-evidence-pack.v1.schema.json`：模型输入白名单合同；
+- `contracts/ai-review-model-output.v1.schema.json`：不可信模型原始 JSON 合同；
+- `contracts/ai-review-draft.v1.schema.json`：AI 审查草稿合同；
 - `src/treeguard/adapter.py`：直接导出和 API 响应的递归适配器；
 - `src/treeguard/hashing.py`：排除 VALUE 和审计字段的稳定 Schema 哈希；
 - `src/treeguard/diff.py`：只按稳定 `node_id` 匹配的保存修订/业务版本 Diff；
 - `src/treeguard/history.py`：同一业务版本内、只读、确定性的历史证据分簇、VALUE 风险门禁与可信快照重放校验；
+- `src/treeguard/business_review.py`：按外部显式顺序比较相邻业务版本，不解析版本字符串，也不依赖 `concurrent_version` 连续；
+- `src/treeguard/evidence.py`：过滤未知字段、审计信息和原始 VALUE，以临时 `F/X/C` 引用构造有界 EvidencePack；
+- `src/treeguard/ai_review.py`：百炼 OpenAI 兼容 Provider、本地严格合同校验、最多一次受控重试和失败拒答；
+- `src/treeguard/ai_cli.py`：默认只输出聚合信息的内部冒烟 CLI；
 - `src/treeguard/cli.py`：不输出名称、ID、路径和 VALUE 的聚合式 Conformance CLI；
 - `tests/fixtures/fictional/`：完全虚构的递归复合属性样例；
-- `tests/`：标准库单元测试，无运行时第三方依赖。
+- `tests/`：标准库单元测试，无运行时第三方依赖；
+- `uv.lock`：可复现 Python 环境锁。
 
 运行测试：
 
 ```bash
-PYTHONPATH=src python3 -B -m unittest discover -s tests -v
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv sync --frozen
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen python -B -m unittest discover -s tests -v
 ```
 
 验证纯 JSON 树导出：
@@ -102,6 +113,33 @@ PYTHONPATH=src python3 -B -m treeguard /path/to/transcript.txt --allow-curl-tran
 ```
 
 真实格式样本目录 `tree-schema/` 已加入 `.gitignore`，不得提交。
+
+离线构造一次“业务版本审查 + EvidencePack”，不会调用模型：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-ai-review \
+  /path/to/base-version.json \
+  /path/to/target-version.json
+```
+
+外部百炼开发冒烟必须使用虚构或已获批脱敏的数据，并显式确认：
+
+```bash
+export BAILIAN_API_KEY='replace-with-a-rotated-key'
+export TREEGUARD_LLM_MODEL='qwen3.6-35b-a3b'
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-ai-review \
+  /path/to/fictional-base.json \
+  /path/to/fictional-target.json \
+  --live \
+  --external-data-approved
+```
+
+默认使用北京区 OpenAI 兼容端点。其他地域或业务空间通过
+`TREEGUARD_LLM_BASE_URL` 显式配置，且只接受阿里云官方 HTTPS 域名。
+密钥只从环境变量读取，不得写入源码、`.env`、测试、Trace 或 Git。
+完整 EvidencePack 和 AI 草稿仍属于敏感内部制品；除非显式指定
+`--internal-output`，CLI 只输出固定状态和聚合计数。内部输出以 `0600` 新建并拒绝
+覆盖已有目标。
 
 ## 当前运行约束
 

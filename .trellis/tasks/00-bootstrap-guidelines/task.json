@@ -1,0 +1,43 @@
+{
+  "id": "00-bootstrap-guidelines",
+  "name": "00-bootstrap-guidelines",
+  "title": "审定 TreeGuard 项目规范",
+  "description": "基于仓库证据和人工决定，建立 Codex-only 中文开发规范",
+  "status": "in_progress",
+  "dev_type": "docs",
+  "scope": null,
+  "package": null,
+  "priority": "P1",
+  "creator": "bobot",
+  "assignee": "bobot",
+  "createdAt": "2026-07-28",
+  "completedAt": null,
+  "branch": "main",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    ".trellis/spec/backend/",
+    ".trellis/spec/guides/",
+    ".trellis/workflow.md",
+    ".trellis/config.yaml",
+    ".trellis/scripts/add_session.py",
+    ".trellis/scripts/common/developer.py",
+    ".trellis/scripts/common/task_context.py",
+    ".trellis/scripts/common/task_store.py",
+    ".trellis/tests/",
+    ".agents/skills/",
+    ".codex/",
+    "AGENTS.md"
+  ],
+  "notes": "Trellis 首次初始化任务；bobot 是不对应真实人员的非识别性别名；本次直接在 main 上完成初始化",
+  "meta": {
+    "reviewed_at": "2026-07-28",
+    "review_status": "项目负责人已确认本任务 PRD 中记录的七项审核决定",
+    "source_baseline": "6b55446aa00d7f915184171ef37e9c628da2f3fb"
+  }
+}

@@ -1,0 +1,69 @@
+# Trellis 配置
+# TreeGuard 项目级工作流设置
+#
+# All values have sensible defaults. Only override what you need.
+
+#-------------------------------------------------------------------------------
+# Session Recording
+#-------------------------------------------------------------------------------
+
+# Commit message used when auto-committing journal/index changes
+# after running add_session.py
+session_commit_message: "chore: 记录工作日志"
+
+# Maximum lines per journal file before rotating to a new one
+max_journal_lines: 2000
+
+#-------------------------------------------------------------------------------
+# Session Auto-Commit
+#-------------------------------------------------------------------------------
+
+# Auto-commit behavior for session journal + task archive operations.
+# - true (default): scripts auto-stage and auto-commit journal / task changes
+#   after add_session.py / task.py archive runs.
+# - false: scripts do not touch git. Files (journal-*.md, task archive moves)
+#   are still written to disk; you decide whether to git add / commit.
+#
+# Use `false` if your project's .gitignore intentionally excludes `.trellis/`
+# and you want session data kept local-only, or if you prefer to review
+# staged changes manually before each commit.
+#
+# Accepts: true / false / yes / no / 1 / 0 / on / off (case-insensitive).
+#
+# TreeGuard 规则：归档和日志改动必须先审阅，再决定是否暂存。
+session_auto_commit: false
+
+#-------------------------------------------------------------------------------
+# Task Lifecycle Hooks
+#-------------------------------------------------------------------------------
+
+# Shell commands to run after task lifecycle events.
+# Each hook receives TASK_JSON_PATH environment variable pointing to task.json.
+# Hook failures print a warning but do not block the main operation.
+#
+# hooks:
+#   after_create:
+#     - "echo 'Task created'"
+#   after_start:
+#     - "echo 'Task started'"
+#   after_finish:
+#     - "echo 'Task finished'"
+#   after_archive:
+#     - "echo 'Task archived'"
+
+#-------------------------------------------------------------------------------
+# Monorepo / Packages
+#-------------------------------------------------------------------------------
+
+# TreeGuard 当前是单一 Python 包，因此不设置 `packages` 和
+# `default_package`；只有出现真实独立包时才增加。
+
+#-------------------------------------------------------------------------------
+# Codex (dispatch behavior)
+#-------------------------------------------------------------------------------
+# Codex-only 设置。默认 "inline"：主代理直接实施，并在需要时按明确、不重叠的
+# 文件所有权委派独立子任务。不要依赖子代理继承活动任务；委派时必须显式提供
+# 经校验的仓库相对任务路径。
+#
+codex:
+  dispatch_mode: inline

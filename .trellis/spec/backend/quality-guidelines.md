@@ -70,6 +70,7 @@ tests/test_semantic_recommendation.py
 tests/test_ai_cli.py
 tests/test_expert_cli.py
 tests/test_governance_cli.py
+tests/test_demo_cli.py
 tests/test_contract.py
 ```
 

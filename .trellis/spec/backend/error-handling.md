@@ -34,6 +34,10 @@ code 使用大写 snake case，通常以领域开头，如 `EVIDENCE_*`、`AI_RE
 
 message 不是公开诊断合同，可能含进程内调试细节，不能跨安全 CLI 边界输出。
 
+`demo_cli.DemoError` 是应用编排边界的稳定拒绝，不是领域合同。它只携带固定
+code、失败步骤、退出类别和 `ai.called`，不得携带路径、模型内容或底层 message；
+正式治理 CLI 的错误码只有匹配大写 snake case 允许形状后才能进入演示聚合输出。
+
 ### 内部不变量失败
 
 constructor/`__post_init__()` 在代码尝试创建内部不一致工件时抛 `ValueError`，

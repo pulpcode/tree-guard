@@ -6,7 +6,8 @@
 
 当改动涉及 `IntentRequest`、`ChangeIntentDraft`、人工确认、候选评分、
 `SemanticRecommendationDraft`、`RecommendationRecord` 或
-`treeguard-governance` 时使用本规范。该能力属于 Shadow MVP 临时范围：
+`treeguard-governance` 或 `treeguard-governance-demo` 时使用本规范。该能力属于
+Shadow MVP 临时范围：
 
 - AI 可以起草意图，并在有界候选上给出一个受约束建议，但不确认、不审批、不生成
   Patch；
@@ -52,6 +53,12 @@ treeguard-governance replay-recommendation \
   <confirmation_file> <candidate_file> \
   <recommendation_draft_file> <recommendation_action_file> \
   <recommendation_record_file>
+
+treeguard-governance-demo \
+  --output-dir <new_directory> \
+  --review-decision (confirm | reject) \
+  [--mode (offline | bailian-live)] \
+  [--external-data-approved]
 ```
 
 核心签名：
@@ -145,6 +152,12 @@ Top-20 策略生成的 `CandidateSet`，并固定取前 8 个候选映射为 `C0
 模型已经开始调用后的传输/输出失败使用 exit 3 且 `ai.called=true`；确定性输入、
 配置 preflight、批准或私有 IO 拒绝使用 exit 2。
 
+演示入口只生成与真实领域无关的固定虚构输入，并依次调用六个正式治理命令。它不
+复制召回、哈希、模型校验或回放策略。`--review-decision` 必须显式提供；首段意图
+确认固定只授权检索，不是语义审批。offline 输出应在不同新目录间字节级确定；
+bailian-live 缺批准时必须在创建目录、生成输入和网络调用前失败。成功目录为
+`0700`、工件为 `0600`，只有完整回放后存在 `12-demo-completion.json`。
+
 ### 5. Good / Base / Bad Cases
 
 - Good：确认意图的主体与全树远端节点精确匹配；即使拟挂载位置不同，该节点仍可
@@ -175,6 +188,8 @@ Top-20 策略生成的 `CandidateSet`，并固定取前 8 个候选映射为 `C0
 - CLI 泄漏：stdout 不含需求文本、节点 ID/路径、hash、模型内容或凭据；
 - Provider：两个 Prompt 均为 JSON Object、最多两次、批准前零网络、失败时准确
   `ai.called`。
+- 演示：confirm/reject 均可回放、离线字节确定、live Mock 双调用、输出目录
+  existing/symlink/公开权限拒绝、失败无完成标志、聚合无路径/ID/文本/hash/凭据。
 
 ### 7. Wrong vs Correct
 

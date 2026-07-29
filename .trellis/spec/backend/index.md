@@ -1,6 +1,6 @@
 # TreeGuard Python 核心规范
 
-这些规范描述基线提交中真实存在的 Python 核心和四个文件驱动 CLI。本文中的
+这些规范描述基线提交中真实存在的 Python 核心和五个文件驱动 CLI。本文中的
 “backend”不表示已经存在 Web 服务、数据库连接器、worker 或生产写入路径。
 
 ## 规则分类

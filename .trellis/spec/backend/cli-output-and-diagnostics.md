@@ -48,6 +48,7 @@
 | `treeguard-ai-review` | 离线 evidence、无 case 或 AI 审查完成 | 输入、批准、Provider preflight、确定性 gate、私有写入拒绝 | 已尝试模型，但网络/响应/输出校验失败 |
 | `treeguard-expert-review` | apply、replay 或 approval preparation 完成 | 输入、批准、Provider preflight、状态/完整性、私有写入拒绝 | 已尝试外部 synthesis 且失败 |
 | `treeguard-governance` | draft、confirm、search、recommend、review-recommendation 或 replay-recommendation 完成，包括合法无候选、信号不足或 `ABSTAIN` | 输入、确认、来源、语义政策、Provider preflight 或私有 IO 拒绝 | 已尝试外部意图/语义模型调用且失败 |
+| `treeguard-governance-demo` | 六个正式治理步骤完成且完成标志已私有发布 | 参数、目录、正式步骤、工件或完成标志拒绝 | live 模式已尝试外部意图/语义模型调用且失败 |
 
 preflight 失败保持 `ai.called=false`。新增 Provider error 时，必须同步所有 AI 能力 CLI
 的 preflight code 分类和测试。

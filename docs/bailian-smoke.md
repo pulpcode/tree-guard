@@ -85,6 +85,39 @@ chmod 600 \
 
 ## 4. 分层验证
 
+### 4.1 一键虚构治理闭环
+
+不准备任何业务样本时，可以先运行内置完全虚构演示。离线默认模式贯通意图草稿、
+检索确认、全树候选、语义建议文件、显式建议复核和可信回放，不调用网络：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
+  treeguard-governance-demo \
+  --output-dir /tmp/treeguard-fictional-demo \
+  --review-decision confirm
+```
+
+输出目录必须尚不存在。成功时目录权限为 `0700`、JSON 工件为 `0600`，且最后生成
+`12-demo-completion.json`。`--review-decision reject` 可验证拒绝记录同样能可信
+回放。这个参数只是完全虚构的演示输入，不能替代真实专家身份或审批。
+
+实际调用百炼的演示会发起意图草稿和候选语义建议两段请求：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
+  treeguard-governance-demo \
+  --output-dir /tmp/treeguard-fictional-live-demo \
+  --review-decision confirm \
+  --mode bailian-live \
+  --external-data-approved
+```
+
+缺少 `--external-data-approved` 时，命令会在创建输出目录、生成输入和调用网络前
+拒绝。单元测试只使用 Mock transport；上面的命令才是实际外部网络冒烟。虚构演示
+结果固定不是 Gold、语义审批或 Patch，也不证明内网 Qwen 效果。
+
+### 4.2 分步验证
+
 先离线验证适配、业务版本 Diff、ReviewCase 和 EvidencePack：
 
 ```bash

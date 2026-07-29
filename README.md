@@ -6,7 +6,8 @@ TreeGuard 是面向大型信息树的语义编译与变更治理助手。
 
 > 当前阶段：TreeSnapshot/TreeDiff/HistoryReview v1、跨业务版本审查、白名单
 > LLM EvidencePack、受约束 AI 初审、可回放专家审查账本，以及“新增需求 →
-> AI 意图草稿 → 人工确认 → 确定性全树候选”的文件型纵切已实现。主运行目标
+> AI 意图草稿 → 人工确认 → 确定性全树候选 → AI 语义建议 → 人工复核 →
+> 可信回放”的文件型纵切已实现。主运行目标
 > 仍是无生产写权限的内网 Shadow MVP；外部百炼只用于完全虚构或经明确审批的
 > 脱敏样本。
 
@@ -80,8 +81,8 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 ## 当前实现
 
 当前代码覆盖确定性 Diff、两类版本审查、模型安全投影、AI 初审、专家审查，以及
-新增需求意图确认和无 embedding 的全树词法/结构召回；尚不包含 Web、数据库连接、
-向量检索、候选语义决策或 Patch 发布：
+新增需求意图确认、无 embedding 的全树词法/结构召回、受约束候选语义建议和人工
+复核；尚不包含 Web、数据库连接、向量检索、语义 Gold 或 Patch 发布：
 
 - `contracts/tree-snapshot.v1.schema.json`：Canonical Tree JSON Schema；
 - `contracts/tree-diff.v1.schema.json`：字段级 Snapshot Diff JSON Schema；
@@ -124,6 +125,7 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - `src/treeguard/semantic_recommendation.py`：Top-8 候选投影、语义关系/动作门禁、人工复核记录和可信回放；
 - `src/treeguard/private_io.py`：敏感 JSON 的有界私有读取和不可覆盖原子发布；
 - `src/treeguard/governance_cli.py`：意图、召回、语义建议、人工复核和回放的文件型旁路工作流；
+- `src/treeguard/demo_cli.py`：使用内置完全虚构数据编排正式六步治理命令的一键演示；
 - `src/treeguard/json_utils.py`：拒绝重复键、非有限数和超长整数的严格 JSON 解析；
 - `src/treeguard/cli.py`：不输出名称、ID、路径和 VALUE 的聚合式 Conformance CLI；
 - `tests/fixtures/fictional/`：完全虚构的递归复合属性样例；
@@ -183,6 +185,41 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-ai-review \
 覆盖已有目标。
 
 ## AI 辅助新增需求治理
+
+### 一键虚构 E2E 演示
+
+先用独立演示入口验证完整工程闭环。输出目录必须尚不存在；命令会以 `0700`
+新建目录，并以 `0600` 保存全部虚构中间工件：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
+  treeguard-governance-demo \
+  --output-dir /tmp/treeguard-fictional-demo \
+  --review-decision confirm
+```
+
+`--review-decision` 是调用者显式提交的虚构建议复核动作，可选 `confirm` 或
+`reject`。演示为了贯通召回，会生成一条固定为“只允许进入检索”的虚构意图确认；
+它不是语义审批。只有存在 `12-demo-completion.json` 且命令 exit 0，才能认为本次
+演示六步回放完成。stdout 不包含目录、节点、文本或哈希，只报告固定状态和聚合
+计数；无论确认还是拒绝，结果都固定为非 Gold、非语义审批、非 Patch。
+
+离线模式是默认基线，不调用模型。要用内置虚构数据验证百炼的两段模型调用，必须
+显式启用 live 和出域批准：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
+  treeguard-governance-demo \
+  --output-dir /tmp/treeguard-fictional-live-demo \
+  --review-decision confirm \
+  --mode bailian-live \
+  --external-data-approved
+```
+
+该 live 命令只证明外部协议链路和本地合同可以贯通，不代表真实领域质量、内网
+Qwen 效果或专家审批已经验证。
+
+### 手工文件工作流
 
 `treeguard-governance` 将新需求处理拆成可回放的文件步骤：
 

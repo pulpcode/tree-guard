@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/intent-review-action.v1.schema.json",
+  "title": "TreeGuard Intent Review Action v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "expected_draft_hash",
+    "decision",
+    "reviewer_ref",
+    "recorded_at",
+    "confirmed_intent"
+  ],
+  "properties": {
+    "schema_version": {"const": "intent-review-action.v1"},
+    "expected_draft_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "decision": {
+      "enum": ["CONFIRM_FOR_RETRIEVAL", "REJECT_DRAFT"]
+    },
+    "reviewer_ref": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$"
+    },
+    "recorded_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "confirmed_intent": {
+      "oneOf": [
+        {
+          "$ref": "change-intent-model-output.v1.schema.json#/$defs/intentContent"
+        },
+        {"type": "null"}
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"decision": {"const": "CONFIRM_FOR_RETRIEVAL"}}
+      },
+      "then": {
+        "properties": {
+          "confirmed_intent": {
+            "$ref": "change-intent-model-output.v1.schema.json#/$defs/intentContent"
+          }
+        }
+      },
+      "else": {
+        "properties": {"confirmed_intent": {"type": "null"}}
+      }
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/candidate-set.v1.schema.json",
+  "title": "TreeGuard Deterministic Candidate Set v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "algorithm_version",
+    "retrieval_semantics",
+    "source_confirmation_hash",
+    "source_snapshot_hash",
+    "status",
+    "embedding_used",
+    "allows_addition",
+    "query_term_count",
+    "max_candidates",
+    "candidates",
+    "candidate_set_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "candidate-set.v1"},
+    "algorithm_version": {
+      "const": "treeguard.lexical-structural-retrieval.v1"
+    },
+    "retrieval_semantics": {"const": "BASELINE_LEXICAL_STRUCTURE"},
+    "source_confirmation_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_snapshot_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "status": {
+      "enum": [
+        "CANDIDATES_READY",
+        "NO_CANDIDATES",
+        "INSUFFICIENT_SIGNAL"
+      ]
+    },
+    "embedding_used": {"const": false},
+    "allows_addition": {"const": false},
+    "query_term_count": {"type": "integer", "minimum": 0},
+    "max_candidates": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "candidates": {
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/candidate"}
+    },
+    "candidate_set_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"status": {"const": "CANDIDATES_READY"}}
+      },
+      "then": {
+        "properties": {
+          "candidates": {"minItems": 1}
+        }
+      },
+      "else": {
+        "properties": {
+          "candidates": {"maxItems": 0}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"status": {"const": "INSUFFICIENT_SIGNAL"}}
+      },
+      "then": {
+        "properties": {
+          "query_term_count": {"const": 0}
+        }
+      },
+      "else": {
+        "properties": {
+          "query_term_count": {"minimum": 1}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "score": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name_overlap",
+        "path_overlap",
+        "subject_match",
+        "kind_match",
+        "value_type_match",
+        "cardinality_match",
+        "parent_relation",
+        "total"
+      ],
+      "properties": {
+        "name_overlap": {"type": "integer", "minimum": 0},
+        "path_overlap": {"type": "integer", "minimum": 0},
+        "subject_match": {"type": "boolean"},
+        "kind_match": {"type": "boolean"},
+        "value_type_match": {"type": "boolean"},
+        "cardinality_match": {"type": "boolean"},
+        "parent_relation": {
+          "enum": [
+            "NONE",
+            "PROPOSED_PARENT",
+            "DIRECT_CHILD",
+            "SAME_BRANCH"
+          ]
+        },
+        "total": {"type": "integer", "minimum": 0}
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rank",
+        "node_id",
+        "node_hash",
+        "kind",
+        "label",
+        "name",
+        "path_labels",
+        "value_type",
+        "cardinality",
+        "score"
+      ],
+      "properties": {
+        "rank": {"type": "integer", "minimum": 1},
+        "node_id": {"type": "string", "minLength": 1},
+        "node_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "kind": {"type": "string", "minLength": 1},
+        "label": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "path_labels": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "value_type": {
+          "type": ["string", "null"],
+          "minLength": 1
+        },
+        "cardinality": {
+          "enum": ["SINGLE", "MULTIPLE", null]
+        },
+        "score": {"$ref": "#/$defs/score"}
+      }
+    }
+  }
+}

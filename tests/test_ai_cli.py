@@ -11,7 +11,8 @@ from contextlib import redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
-from treeguard.ai_cli import _write_internal_output, main
+from treeguard.ai_cli import main
+from treeguard.private_io import write_private_json
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -188,10 +189,10 @@ class AIReviewCLITests(unittest.TestCase):
                 raise OSError("fictional disk failure")
 
             with patch(
-                "treeguard.ai_cli.os.write",
+                "treeguard.private_io.os.write",
                 side_effect=partial_then_fail,
             ):
-                written = _write_internal_output(
+                written = write_private_json(
                     output_path,
                     {"sensitive": "canary"},
                 )
@@ -206,10 +207,10 @@ class AIReviewCLITests(unittest.TestCase):
             directory = Path(directory_name)
             output_path = directory / "atomic.json"
             with patch(
-                "treeguard.ai_cli.os.link",
+                "treeguard.private_io.os.link",
                 side_effect=OSError("fictional publish failure"),
             ):
-                written = _write_internal_output(
+                written = write_private_json(
                     output_path,
                     {"sensitive": "canary"},
                 )

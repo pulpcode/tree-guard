@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/intent-confirmation.v1.schema.json",
+  "title": "TreeGuard Retrieval-only Intent Confirmation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "identity_status",
+    "semantic_approval",
+    "patch_eligible",
+    "source_request_hash",
+    "source_snapshot_hash",
+    "source_draft_hash",
+    "source_action_hash",
+    "proposed_parent_node_id",
+    "reviewer_ref",
+    "recorded_at",
+    "intent",
+    "confirmation_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "intent-confirmation.v1"},
+    "status": {"enum": ["CONFIRMED_FOR_RETRIEVAL", "REJECTED"]},
+    "identity_status": {"const": "UNVERIFIED_FILE_ASSERTION"},
+    "semantic_approval": {"const": false},
+    "patch_eligible": {"const": false},
+    "source_request_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_snapshot_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_draft_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_action_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "proposed_parent_node_id": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$"
+    },
+    "reviewer_ref": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$"
+    },
+    "recorded_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "intent": {
+      "oneOf": [
+        {
+          "$ref": "change-intent-model-output.v1.schema.json#/$defs/intentContent"
+        },
+        {"type": "null"}
+      ]
+    },
+    "confirmation_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"status": {"const": "CONFIRMED_FOR_RETRIEVAL"}}
+      },
+      "then": {
+        "properties": {
+          "intent": {
+            "$ref": "change-intent-model-output.v1.schema.json#/$defs/intentContent"
+          }
+        }
+      },
+      "else": {
+        "properties": {"intent": {"type": "null"}}
+      }
+    }
+  ]
+}

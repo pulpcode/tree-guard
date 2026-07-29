@@ -8,6 +8,7 @@ HTTP 服务或 Spring Boot/MongoDB 连接器。已实现的持久化模型只有
 - 输入树导出和已解码 API response envelope；
 - 可选的私有 AI review bundle；
 - 不可变 expert action/session/approval JSON；
+- 不可变 intent request/draft/action/confirmation/candidate JSON；
 - 从冻结源工件做确定性回放。
 
 唯一实现的网络路径是显式启用的百炼 `POST /chat/completions`。MongoDB、搜索、
@@ -40,7 +41,7 @@ JSON，只有显式 opt-in 才支持 curl transcript；适配时限制 tree/node
 
 ### 私有专家工作流
 
-`expert_cli._read_json_file()` 是敏感文件边界：
+`private_io.read_private_json()` 是敏感文件边界：
 
 - 在支持的平台使用 no-follow/non-blocking flag；
 - 只接受普通文件；
@@ -56,7 +57,7 @@ expert workflow 的树输入使用更强 profile。该函数当前不校验 owne
 
 ## 私有输出发布
 
-敏感输出通过 `ai_cli._write_internal_output()`：
+敏感输出通过 `private_io.write_private_json()`：
 
 1. 接触最终路径前完整序列化 JSON；
 2. 以 `O_CREAT | O_EXCL`、no-follow（如支持）和 `0600` 创建随机同级临时文件；
@@ -67,8 +68,9 @@ expert workflow 的树输入使用更强 profile。该函数当前不校验 owne
 每次状态迁移写新的完整 session 文件，不原地更新 bundle/session；外部调用或
 写入失败不能留下部分发布工件。
 
-当前 helper 被跨 CLI 私有导入。出现下一个真实消费者时，提取公共 IO utility
-并保留全部安全测试，不再增加私有导入或复制实现。
+`private_io.preflight_private_output()` 用于在 live 模型调用前确认目标尚不存在且
+目录可创建私有文件。最终发布仍必须调用 `write_private_json()`，不能把 preflight
+当作原子保留。所有 CLI 复用这些公共 API，不得再复制或跨模块导入私有 writer。
 
 ## 本地配置
 

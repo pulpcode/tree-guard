@@ -11,6 +11,17 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 class ContractTests(unittest.TestCase):
+    def test_all_contracts_parse_and_declare_draft_2020_12(self) -> None:
+        contract_paths = sorted((PROJECT_ROOT / "contracts").glob("*.schema.json"))
+        self.assertGreaterEqual(len(contract_paths), 1)
+        for schema_path in contract_paths:
+            with self.subTest(contract=schema_path.name):
+                schema = json.loads(schema_path.read_text(encoding="utf-8"))
+                self.assertEqual(
+                    schema["$schema"],
+                    "https://json-schema.org/draft/2020-12/schema",
+                )
+
     def test_contract_is_valid_json_and_matches_serialized_field_set(self) -> None:
         schema_path = PROJECT_ROOT / "contracts" / "tree-snapshot.v1.schema.json"
         fixture_path = (

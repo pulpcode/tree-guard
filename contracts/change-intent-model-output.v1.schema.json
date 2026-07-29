@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/change-intent-model-output.v1.schema.json",
+  "title": "TreeGuard Untrusted Change Intent Model Output v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "subject",
+    "role",
+    "scenario",
+    "lifecycle",
+    "ownership",
+    "node_kind",
+    "value_type",
+    "cardinality",
+    "confirmed_facts",
+    "assumptions",
+    "evidence_gaps",
+    "clarification_question"
+  ],
+  "properties": {
+    "schema_version": {"const": "change-intent-model-output.v1"},
+    "subject": {"$ref": "#/$defs/nullableText"},
+    "role": {"$ref": "#/$defs/nullableText"},
+    "scenario": {"$ref": "#/$defs/nullableText"},
+    "lifecycle": {"$ref": "#/$defs/nullableText"},
+    "ownership": {
+      "enum": [
+        "LONG_LIVED_SUBJECT_PROPERTY",
+        "CURRENT_PARTICIPATION_STATE",
+        "TASK_LEVEL_PROPERTY",
+        "UNKNOWN"
+      ]
+    },
+    "node_kind": {
+      "enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]
+    },
+    "value_type": {"$ref": "#/$defs/nullableText"},
+    "cardinality": {
+      "enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]
+    },
+    "confirmed_facts": {"$ref": "#/$defs/textArray"},
+    "assumptions": {"$ref": "#/$defs/textArray"},
+    "evidence_gaps": {"$ref": "#/$defs/textArray"},
+    "clarification_question": {"$ref": "#/$defs/nullableText"}
+  },
+  "$defs": {
+    "nullableText": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "textArray": {
+      "type": "array",
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "intentContent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject",
+        "role",
+        "scenario",
+        "lifecycle",
+        "ownership",
+        "node_kind",
+        "value_type",
+        "cardinality",
+        "confirmed_facts",
+        "assumptions",
+        "evidence_gaps",
+        "clarification_question"
+      ],
+      "properties": {
+        "subject": {"$ref": "#/$defs/nullableText"},
+        "role": {"$ref": "#/$defs/nullableText"},
+        "scenario": {"$ref": "#/$defs/nullableText"},
+        "lifecycle": {"$ref": "#/$defs/nullableText"},
+        "ownership": {
+          "enum": [
+            "LONG_LIVED_SUBJECT_PROPERTY",
+            "CURRENT_PARTICIPATION_STATE",
+            "TASK_LEVEL_PROPERTY",
+            "UNKNOWN"
+          ]
+        },
+        "node_kind": {
+          "enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]
+        },
+        "value_type": {"$ref": "#/$defs/nullableText"},
+        "cardinality": {
+          "enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]
+        },
+        "confirmed_facts": {"$ref": "#/$defs/textArray"},
+        "assumptions": {"$ref": "#/$defs/textArray"},
+        "evidence_gaps": {"$ref": "#/$defs/textArray"},
+        "clarification_question": {"$ref": "#/$defs/nullableText"}
+      }
+    }
+  }
+}

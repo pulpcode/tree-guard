@@ -79,6 +79,12 @@
   - `ABSTAIN`。
 - 实现非法 JSON、未知节点、超时和版本漂移门禁。
 
+当前已完成其中一个文件型纵切：`IntentRequest → ChangeIntentDraft →
+IntentConfirmation → CandidateSet`。它支持百炼或私有模型输出文件、显式人工确认、
+可信来源回放，以及无 embedding 的全树词法/结构 Top-20 基线。该确认只授权检索，
+不构成语义审批；候选集也不输出最终动作或新增许可。内网 Qwen 直连、混合召回、
+候选语义比较和选择性动作仍待后续实现。
+
 验收：
 
 - 内网 Qwen 可以稳定调用；

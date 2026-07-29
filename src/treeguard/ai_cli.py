@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
-import secrets
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -24,6 +22,7 @@ from treeguard.evidence import (
     EvidenceProjectionError,
     build_business_review_evidence_pack,
 )
+from treeguard.private_io import write_private_json
 
 _MODEL_PREFLIGHT_ERROR_CODES = {
     "BAILIAN_API_KEY_INVALID",
@@ -91,7 +90,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 2
 
     if not review_run.review_cases:
-        if args.internal_output is not None and not _write_internal_output(
+        if args.internal_output is not None and not write_private_json(
             args.internal_output,
             {
                 "review": review_run.to_dict(),
@@ -176,7 +175,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             "ai_review_draft": draft.to_dict() if draft is not None else None,
             "model_call": model_call,
         }
-        if not _write_internal_output(args.internal_output, internal_payload):
+        if not write_private_json(args.internal_output, internal_payload):
             _print_error("INTERNAL_OUTPUT_WRITE_FAILED")
             return 2
 
@@ -203,57 +202,6 @@ def main(argv: Sequence[str] | None = None) -> int:
     }
     print(json.dumps(report, ensure_ascii=False, sort_keys=True))
     return 0 if report["valid"] else 3
-
-
-def _write_internal_output(path: Path, payload: dict[str, object]) -> bool:
-    try:
-        encoded = (
-            json.dumps(
-                payload,
-                ensure_ascii=False,
-                indent=2,
-                sort_keys=True,
-            )
-            + "\n"
-        ).encode("utf-8")
-    except (TypeError, ValueError, UnicodeError):
-        return False
-
-    descriptor = -1
-    temporary_path = path.parent / (
-        f".{path.name}.treeguard-{secrets.token_hex(12)}.tmp"
-    )
-    published = False
-    try:
-        descriptor = os.open(
-            temporary_path,
-            os.O_WRONLY
-            | os.O_CREAT
-            | os.O_EXCL
-            | getattr(os, "O_NOFOLLOW", 0),
-            0o600,
-        )
-        offset = 0
-        while offset < len(encoded):
-            written = os.write(descriptor, encoded[offset:])
-            if written <= 0:
-                raise OSError("internal output write made no progress")
-            offset += written
-        os.fsync(descriptor)
-        os.close(descriptor)
-        descriptor = -1
-        os.link(temporary_path, path, follow_symlinks=False)
-        published = True
-    except OSError:
-        if descriptor >= 0:
-            os.close(descriptor)
-        return False
-    finally:
-        try:
-            os.unlink(temporary_path)
-        except OSError:
-            pass
-    return published
 
 
 def _print_error(code: str) -> None:

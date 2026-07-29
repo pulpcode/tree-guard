@@ -13,6 +13,7 @@ dependencies = []
 treeguard = "treeguard.cli:main"
 treeguard-ai-review = "treeguard.ai_cli:main"
 treeguard-expert-review = "treeguard.expert_cli:main"
+treeguard-governance = "treeguard.governance_cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/intent-request.v1.schema.json",
+  "title": "TreeGuard Intent Request v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "requirement_text",
+    "proposed_parent_node_id",
+    "node_kind_hint",
+    "value_type_hint",
+    "cardinality_hint"
+  ],
+  "properties": {
+    "schema_version": {"const": "intent-request.v1"},
+    "requirement_text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8000
+    },
+    "proposed_parent_node_id": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$"
+    },
+    "node_kind_hint": {
+      "enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]
+    },
+    "value_type_hint": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "cardinality_hint": {
+      "enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]
+    }
+  }
+}

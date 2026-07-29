@@ -11,7 +11,7 @@ TreeGuard 是采用 `src` 布局的单一 Python 包：
 ├── src/treeguard/           # Python 核心与 CLI 应用边界
 ├── tests/
 │   └── fixtures/fictional/  # 完全虚构的源格式样例
-├── pyproject.toml           # 包元数据和三个 CLI 入口
+├── pyproject.toml           # 包元数据和四个 CLI 入口
 └── uv.lock                  # 可复现开发环境
 ```
 
@@ -20,6 +20,7 @@ TreeGuard 是采用 `src` 布局的单一 Python 包：
 - `treeguard` → `treeguard.cli:main`
 - `treeguard-ai-review` → `treeguard.ai_cli:main`
 - `treeguard-expert-review` → `treeguard.expert_cli:main`
+- `treeguard-governance` → `treeguard.governance_cli:main`
 
 当前没有 Web 应用、入站 HTTP API、数据库驱动、ORM、repository、migration、
 worker、queue、vector index 或生产 Patch publisher。
@@ -31,6 +32,8 @@ worker、queue、vector index 或生产 Patch publisher。
 - `models.py`：不可变规范树类型，`freeze_json()` / `thaw_json()`；
 - `hashing.py`：唯一的规范 JSON SHA-256 实现和审计字段过滤；
 - `json_utils.py`：安全敏感输入的严格 JSON 解析；
+- `private_io.py`：有界私有 JSON 读取、输出 preflight 和不可覆盖原子发布；
+- `lexical.py`：历史 Evidence 与在线召回共享的确定性词法切分；
 - `validation.py`：适配非完美源树时收集 issue；
 - `adapter.py`：唯一已实现的源树归一化边界，把直接导出或已解码 API envelope
   转换为 `CanonicalTree`。
@@ -42,6 +45,8 @@ worker、queue、vector index 或生产 Patch publisher。
 - `business_review.py`：使用显式顺序的业务版本端点审查；
 - `evidence.py`：允许列表化、有界、带临时引用的模型投影；
 - `expert_review.py`：纯内存专家审查状态机与事件回放。
+- `change_intent.py`：新增需求、模型草稿、人工确认与可信来源回放；
+- `retrieval.py`：确认意图上的确定性全树候选评分、截断和回放。
 
 这些模块必须保持确定性，不得自行发起网络或文件系统副作用。
 
@@ -58,6 +63,7 @@ Provider 可以执行网络 IO；返回 JSON 必须通过本地字段、枚举�
 - `cli.py`：聚合一致性命令；
 - `ai_cli.py`：单个业务版本审查案例、可选 AI 调用和私有 bundle 输出；
 - `expert_cli.py`：`apply`、`prepare-approval`、`replay` 私有文件工作流；
+- `governance_cli.py`：`draft`、`confirm`、`search` 私有旁路工作流；
 - `__main__.py`：分派基础一致性 CLI。
 
 CLI 只负责参数、编排、预期异常转换和获批准 IO。新的领域策略必须进入所属
@@ -75,13 +81,18 @@ validation → adapter → diff → history → business_review → evidence
                                                 expert_review
                                                         ↓
                                               CLI entry modules
+
+models / hashing ─────────────→ change_intent ──→ retrieval
+models / lexical ───────────────────────────────→ retrieval
+evidence / change_intent / models ─────────────→ ai_review
+adapter / ai_review / change_intent / retrieval / private_io
+                                                └→ governance_cli
 ```
 
 核心模块不得反向导入 CLI。以下跨模块私有导入是当前技术债，不得继续扩散：
 
 - `business_review.py` 使用 `history.py` 私有证据 helper；
 - `expert_synthesis.py` 使用 `ai_review.py` 私有响应 helper；
-- `expert_cli.py` 使用 `ai_cli.py` 私有输出 writer。
 
 下一次有真实复用需求时，提取命名明确的公共模块/API，并保留原安全测试；不在
 没有需求时做全量重构。

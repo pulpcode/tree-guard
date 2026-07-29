@@ -4,17 +4,14 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import secrets
-import stat
 from collections.abc import Sequence
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from treeguard.adapter import TreeFormatError, adapt_tree_document
-from treeguard.ai_cli import _write_internal_output
 from treeguard.ai_review import (
     AIReviewDraft,
     AIReviewValidationError,
@@ -51,7 +48,11 @@ from treeguard.expert_synthesis import (
 from treeguard.hashing import canonical_digest
 from treeguard.json_utils import (
     StrictJSONError,
-    strict_json_loads,
+)
+from treeguard.private_io import (
+    preflight_private_output,
+    read_private_json,
+    write_private_json,
 )
 
 
@@ -192,7 +193,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         evidence_pack, ai_review_draft = _load_sources(args)
         if args.command == "replay":
-            stored_session = _read_json_file(
+            stored_session = read_private_json(
                 args.session_file,
                 max_bytes=_MAX_INTERNAL_INPUT_BYTES,
             )
@@ -207,7 +208,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(json.dumps(report, ensure_ascii=False, sort_keys=True))
             return 0
 
-        action = _read_json_file(
+        action = read_private_json(
             args.action_file,
             max_bytes=_MAX_ACTION_BYTES,
         )
@@ -258,7 +259,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "approved_at": None,
                 "identity_status": "UNVERIFIED_FILE_ASSERTION",
             }
-            if not _write_internal_output(
+            if not write_private_json(
                 args.internal_output,
                 approval_manifest,
             ):
@@ -295,7 +296,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.live_synthesis:
             _preflight_internal_output(args.internal_output)
             external_approval = _parse_external_approval_manifest(
-                _read_json_file(
+                read_private_json(
                     args.external_approval_file,
                     max_bytes=_MAX_ACTION_BYTES,
                 ),
@@ -310,7 +311,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             live_synthesis=args.live_synthesis,
             external_approval=external_approval,
         )
-        if not _write_internal_output(args.internal_output, session.to_dict()):
+        if not write_private_json(args.internal_output, session.to_dict()):
             _print_error(
                 "INTERNAL_OUTPUT_WRITE_FAILED",
                 ai_called=ai_report["called"],
@@ -351,11 +352,11 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 def _load_sources(args: argparse.Namespace):
-    base_document = _read_json_file(
+    base_document = read_private_json(
         Path(args.base_file),
         max_bytes=_MAX_TREE_INPUT_BYTES,
     )
-    target_document = _read_json_file(
+    target_document = read_private_json(
         Path(args.target_file),
         max_bytes=_MAX_TREE_INPUT_BYTES,
     )
@@ -383,7 +384,7 @@ def _load_sources(args: argparse.Namespace):
         target_result.tree,
         case_index=args.case_index,
     )
-    bundle = _read_json_file(
+    bundle = read_private_json(
         args.ai_bundle_file,
         max_bytes=_MAX_INTERNAL_INPUT_BYTES,
     )
@@ -429,7 +430,7 @@ def _load_or_open_session(
             ai_review_draft,
             session_id=secrets.token_hex(32),
         )
-    stored_session = _read_json_file(
+    stored_session = read_private_json(
         args.session_input,
         max_bytes=_MAX_INTERNAL_INPUT_BYTES,
     )
@@ -755,47 +756,12 @@ def _parse_timestamp(value: str) -> datetime:
 
 def _preflight_internal_output(path: Path) -> None:
     try:
-        os.lstat(path)
-    except FileNotFoundError:
-        pass
+        preflight_private_output(path)
     except OSError:
         raise ExpertReviewError(
             "INTERNAL_OUTPUT_WRITE_FAILED",
-            "internal output path cannot be inspected safely",
+            "internal output cannot be created safely",
         ) from None
-    else:
-        raise ExpertReviewError(
-            "INTERNAL_OUTPUT_WRITE_FAILED",
-            "internal output path already exists",
-        )
-
-    probe = path.parent / (
-        f".{path.name}.treeguard-preflight-{secrets.token_hex(8)}.tmp"
-    )
-    descriptor = -1
-    try:
-        descriptor = os.open(
-            probe,
-            os.O_WRONLY
-            | os.O_CREAT
-            | os.O_EXCL
-            | getattr(os, "O_NOFOLLOW", 0),
-            0o600,
-        )
-        os.close(descriptor)
-        descriptor = -1
-    except OSError:
-        if descriptor >= 0:
-            os.close(descriptor)
-        raise ExpertReviewError(
-            "INTERNAL_OUTPUT_WRITE_FAILED",
-            "internal output directory is not writable",
-        ) from None
-    finally:
-        try:
-            os.unlink(probe)
-        except OSError:
-            pass
 
 
 def _action_refs(value: Any) -> tuple[str, ...]:
@@ -805,33 +771,6 @@ def _action_refs(value: Any) -> tuple[str, ...]:
             "expert action evidence_refs must be an array",
         )
     return tuple(value)
-
-
-def _read_json_file(path: Path, *, max_bytes: int) -> Any:
-    descriptor = -1
-    try:
-        descriptor = os.open(
-            path,
-            os.O_RDONLY
-            | getattr(os, "O_NOFOLLOW", 0)
-            | getattr(os, "O_NONBLOCK", 0),
-        )
-        file_stat = os.fstat(descriptor)
-        if (
-            not stat.S_ISREG(file_stat.st_mode)
-            or file_stat.st_size > max_bytes
-            or file_stat.st_mode & 0o077
-        ):
-            raise OSError("input is not a bounded regular file")
-        with os.fdopen(descriptor, "rb") as handle:
-            descriptor = -1
-            raw = handle.read(max_bytes + 1)
-        if len(raw) > max_bytes:
-            raise OSError("input exceeds its size limit")
-        return strict_json_loads(raw.decode("utf-8"))
-    finally:
-        if descriptor >= 0:
-            os.close(descriptor)
 
 
 def _print_error(code: str, *, ai_called: bool = False) -> None:

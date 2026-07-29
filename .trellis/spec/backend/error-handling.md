@@ -24,6 +24,8 @@
 - `BailianProviderError`
 - `ExpertSynthesisValidationError`
 - `ExpertReviewError`
+- `IntentValidationError`
+- `CandidateRetrievalError`
 
 code 使用大写 snake case，通常以领域开头，如 `EVIDENCE_*`、`AI_REVIEW_*`、
 `BAILIAN_*`、`EXPERT_*`；`BAILIAN_HTTP_<status>` 是明确允许的动态 code family。
@@ -58,7 +60,7 @@ constructor/`__post_init__()` 在代码尝试创建内部不一致工件时抛 `
 已处理失败输出版本化聚合 JSON，不输出异常 message 或 stack trace：
 
 - exit 2：输入、preflight、确定性 gate、配置或私有写入拒绝；
-- 两个 AI CLI 的 exit 3：已经尝试外部模型调用，但失败或 abstain；
+- AI 能力 CLI 的 exit 3：已经尝试外部模型调用，但失败或 abstain；
 - exit 0：请求操作完成，包括合法空结果/无 case。
 
 详见 [CLI 输出与诊断](./cli-output-and-diagnostics.md)。`ai.called` 必须与网络
@@ -84,7 +86,7 @@ constructor/`__post_init__()` 在代码尝试创建内部不一致工件时抛 `
 
 - 这是可收集 issue、预期领域拒绝，还是内部不变量？
 - 新边界错误是否有稳定、非敏感 code？
-- Provider 配置 code 变化时，两个 AI CLI 的 preflight 集合和测试是否同步？
+- Provider 配置 code 变化时，各 AI 能力 CLI 的 preflight 集合和测试是否同步？
 - 缺少批准时，是否在读文件/发网络之前失败？
 - 错误是否可能泄漏路径、源文本、Provider 响应、Prompt、key 或 hash？
 - 可重试传输失败是否与确定性非法输入分离？

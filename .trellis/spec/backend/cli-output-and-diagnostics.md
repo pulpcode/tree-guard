@@ -46,8 +46,9 @@
 | `treeguard` | 一致性有效 | 格式/一致性拒绝 | 不使用 |
 | `treeguard-ai-review` | 离线 evidence、无 case 或 AI 审查完成 | 输入、批准、Provider preflight、确定性 gate、私有写入拒绝 | 已尝试模型，但网络/响应/输出校验失败 |
 | `treeguard-expert-review` | apply、replay 或 approval preparation 完成 | 输入、批准、Provider preflight、状态/完整性、私有写入拒绝 | 已尝试外部 synthesis 且失败 |
+| `treeguard-governance` | draft、confirm 或 search 完成，包括合法无候选/信号不足 | 输入、确认、来源、Provider preflight 或私有 IO 拒绝 | 已尝试外部意图草稿调用且失败 |
 
-preflight 失败保持 `ai.called=false`。新增 Provider error 时，必须同步两个 CLI
+preflight 失败保持 `ai.called=false`。新增 Provider error 时，必须同步所有 AI 能力 CLI
 的 preflight code 分类和测试。
 
 ### 已知偏差
@@ -79,7 +80,8 @@ preflight 失败保持 `ai.called=false`。新增 Provider error 时，必须同
 - 能跨导出重新关联的稳定伪名 map。
 
 `tests/test_ai_cli.py`、`tests/test_expert_cli.py`、
-`tests/test_business_review.py` 使用 canary 和 `assertNotIn` 验证边界。
+`tests/test_governance_cli.py` 和 `tests/test_business_review.py` 使用 canary 和
+`assertNotIn` 验证边界。
 
 ## 完整内部工件
 

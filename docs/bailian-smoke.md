@@ -121,6 +121,37 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-ai-review \
 该文件含节点文本、路径、版本和模型草稿，不得外传或提交 Git。
 文件以 `0600` 新建；目标已存在或为符号链接时拒绝，不会覆盖。
 
+新增需求意图草稿使用同一个百炼传输安全边界，但采用独立 Prompt 与合同。只对
+完全虚构或最终外发字节已经获批的需求和树视图执行：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance draft \
+  /path/to/fictional-tree.json \
+  /path/to/fictional-intent-request.json \
+  --live \
+  --external-data-approved \
+  --internal-output /approved/internal/intent-draft.json
+```
+
+模型输入排除稳定节点 ID、树版本、哈希和 VALUE，但保留需求文本以及拟挂载节点的
+名称、label 和路径，因此白名单投影仍不等于允许出域。缺少
+`--external-data-approved` 时，命令在读取文件和调用网络前拒绝。模型只能返回
+意图字段；本地校验拒绝额外审批/动作字段、已知节点 ID 和常见伪造内部 ID 形态。
+完整草稿使用 `0600` 独占创建，stdout 不显示需求、路径、ID 或哈希。
+
+内网 Qwen Provider 尚未直连时，可先把其 `json_object` 输出保存为私有文件并执行
+无网络合同验证：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance draft \
+  /approved/internal/current-tree.json \
+  /approved/internal/intent-request.json \
+  --model-output-file /approved/internal/qwen-model-output.json \
+  --internal-output /approved/internal/intent-draft.json
+```
+
+该路径只验证模型输出与后续确认/召回合同，不证明内网 Qwen 的 HTTP 适配已经完成。
+
 ## 5. 专家思考 AI 整理冒烟
 
 先用上一节的 `treeguard-ai-review --live --external-data-approved
@@ -218,8 +249,10 @@ replay`，不会调用模型。
 
 ## 7. 内网迁移
 
-内网 Qwen 若提供同一 OpenAI 兼容协议，可以复用 `AIReviewDraft` 和 EvidencePack
-合同，只替换 Provider 的鉴权、端点和能力探测。迁移验收必须重新验证：
+内网 Qwen 若提供同一 OpenAI 兼容协议，可以复用 `AIReviewDraft`、EvidencePack
+和 `ChangeIntentDraft` 合同，只替换 Provider 的鉴权、端点和能力探测。当前可先
+使用 `--model-output-file` 验证意图合同；内网直连 Provider 仍需独立适配和验证。
+迁移验收必须重新验证：
 
 1. `json_object` 是否真的可用；
 2. `enable_thinking=false` 是否生效；

@@ -4,7 +4,11 @@ TreeGuard 是面向大型信息树的语义编译与变更治理助手。
 
 它将建设人员提交的自然语言需求和领域专家的思考，编译为结构化变更意图；在整棵信息树中检索可能复用或冲突的语义；经过人机协作审查后，生成可验证、可审计、可回放的声明式 Schema Patch。
 
-> 当前阶段：TreeSnapshot/TreeDiff/HistoryReview v1、跨业务版本审查、白名单 LLM EvidencePack、受约束 AI 初审，以及可回放的 AI 辅助专家审查账本已实现。主运行目标仍是一个文件驱动、无生产写权限的内网 Shadow MVP；外部百炼只用于完全虚构或经明确审批的脱敏样本。
+> 当前阶段：TreeSnapshot/TreeDiff/HistoryReview v1、跨业务版本审查、白名单
+> LLM EvidencePack、受约束 AI 初审、可回放专家审查账本，以及“新增需求 →
+> AI 意图草稿 → 人工确认 → 确定性全树候选”的文件型纵切已实现。主运行目标
+> 仍是无生产写权限的内网 Shadow MVP；外部百炼只用于完全虚构或经明确审批的
+> 脱敏样本。
 
 2026-07-28 已使用完全虚构版本对完成百炼 AI 初审、专家思考 AI 整理和无网络回放
 冒烟；该结果只证明工程协议链路可运行，不代表消防领域质量或内网量化模型效果已经
@@ -75,7 +79,9 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 
 ## 当前实现
 
-当前代码覆盖确定性 Diff、两类版本审查、模型安全投影、AI 初审和专家审查闭环；尚不包含 Web、数据库连接、向量检索或 Patch 发布：
+当前代码覆盖确定性 Diff、两类版本审查、模型安全投影、AI 初审、专家审查，以及
+新增需求意图确认和无 embedding 的全树词法/结构召回；尚不包含 Web、数据库连接、
+向量检索、候选语义决策或 Patch 发布：
 
 - `contracts/tree-snapshot.v1.schema.json`：Canonical Tree JSON Schema；
 - `contracts/tree-diff.v1.schema.json`：字段级 Snapshot Diff JSON Schema；
@@ -89,17 +95,28 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - `contracts/expert-review-action.v1.schema.json`：单次专家动作输入合同；
 - `contracts/expert-review-session.v1.schema.json`：追加式专家审查事件账本合同；
 - `contracts/external-expert-synthesis-approval.v1.schema.json`：精确外发请求计划的两阶段审批清单合同；
+- `contracts/intent-request.v1.schema.json`：私有新增需求输入合同；
+- `contracts/change-intent-model-output.v1.schema.json`：不含 ID、审批或动作的模型意图输出合同；
+- `contracts/change-intent-draft.v1.schema.json`：绑定需求与快照的 AI 意图草稿；
+- `contracts/intent-review-action.v1.schema.json`：人工确认、修订或拒绝草稿的输入合同；
+- `contracts/intent-confirmation.v1.schema.json`：只允许进入检索的确认制品；
+- `contracts/candidate-set.v1.schema.json`：确定性全树候选与可解释评分合同；
 - `src/treeguard/adapter.py`：直接导出和 API 响应的递归适配器；
 - `src/treeguard/hashing.py`：排除 VALUE 和审计字段的稳定 Schema 哈希；
 - `src/treeguard/diff.py`：只按稳定 `node_id` 匹配的保存修订/业务版本 Diff；
 - `src/treeguard/history.py`：同一业务版本内、只读、确定性的历史证据分簇、VALUE 风险门禁与可信快照重放校验；
 - `src/treeguard/business_review.py`：按外部显式顺序比较相邻业务版本，不解析版本字符串，也不依赖 `concurrent_version` 连续；
 - `src/treeguard/evidence.py`：过滤未知字段、审计信息和原始 VALUE，以临时 `F/X/C` 引用构造有界 EvidencePack；
-- `src/treeguard/ai_review.py`：百炼 OpenAI 兼容 Provider、本地严格合同校验、最多一次受控重试和失败拒答；
+- `src/treeguard/ai_review.py`：百炼 OpenAI 兼容 Provider、版本审查和意图草稿的本地严格校验、最多一次受控重试和失败拒答；
 - `src/treeguard/ai_cli.py`：默认只输出聚合信息的内部冒烟 CLI；
 - `src/treeguard/expert_synthesis.py`：专家原文 AI 整理、本地来源绑定和外部载荷授权门；
 - `src/treeguard/expert_review.py`：专家思考、AI 整理、暂定状态和最终裁决的确定性状态机与回放；
 - `src/treeguard/expert_cli.py`：单动作追加与只读回放 CLI，完整会话使用 `0600` 新文件保存；
+- `src/treeguard/change_intent.py`：需求、AI 草稿、人工确认和可信来源回放；
+- `src/treeguard/lexical.py`：历史 Evidence 与在线召回共享的确定性词法切分；
+- `src/treeguard/retrieval.py`：全树词法/结构召回、父位置 boost、确定性排序和候选回放；
+- `src/treeguard/private_io.py`：敏感 JSON 的有界私有读取和不可覆盖原子发布；
+- `src/treeguard/governance_cli.py`：`draft`、`confirm`、`search` 三步旁路工作流；
 - `src/treeguard/json_utils.py`：拒绝重复键、非有限数和超长整数的严格 JSON 解析；
 - `src/treeguard/cli.py`：不输出名称、ID、路径和 VALUE 的聚合式 Conformance CLI；
 - `tests/fixtures/fictional/`：完全虚构的递归复合属性样例；
@@ -157,6 +174,58 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-ai-review \
 完整 EvidencePack 和 AI 草稿仍属于敏感内部制品；除非显式指定
 `--internal-output`，CLI 只输出固定状态和聚合计数。内部输出以 `0600` 新建并拒绝
 覆盖已有目标。
+
+## AI 辅助新增需求治理
+
+`treeguard-governance` 将新需求处理拆成三个不可变步骤：
+
+```text
+私有 IntentRequest
+→ AI ChangeIntentDraft
+→ 建设人员 CONFIRM_FOR_RETRIEVAL / REJECT_DRAFT
+→ 确定性全树 CandidateSet
+```
+
+所有树、需求、模型输出、草稿、action、确认和候选文件必须为不宽于 `0600` 的普通文件。
+完整文本、节点 ID、路径和候选只进入显式 `--internal-output`；stdout 只包含固定状态
+与聚合计数。人工确认只允许进入候选检索，固定
+`semantic_approval=false`、`patch_eligible=false`，不等同于专家语义审批。
+
+先用冻结模型输出完成无网络验证：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance draft \
+  /approved/internal/current-tree.json \
+  /approved/internal/intent-request.json \
+  --model-output-file /approved/internal/model-output.json \
+  --internal-output /approved/internal/intent-draft.json
+```
+
+建设人员复制并修订草稿中的 `intent`，写入符合
+`intent-review-action.v1` 的 action；`expected_draft_hash` 必须来自实际查看的草稿。
+然后确认并检索：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance confirm \
+  /approved/internal/current-tree.json \
+  /approved/internal/intent-request.json \
+  /approved/internal/intent-draft.json \
+  /approved/internal/intent-action.json \
+  --internal-output /approved/internal/intent-confirmation.json
+
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance search \
+  /approved/internal/current-tree.json \
+  /approved/internal/intent-request.json \
+  /approved/internal/intent-draft.json \
+  /approved/internal/intent-action.json \
+  /approved/internal/intent-confirmation.json \
+  --internal-output /approved/internal/candidate-set.json
+```
+
+第一版召回不要求 embedding：名称、主体覆盖、路径、类型、基数和拟挂载位置形成
+可解释分项；拟挂载位置只 boost，不裁剪全树。零候选和信号不足均保持
+`allows_addition=false`。外部百炼 live 草稿仍必须显式添加 `--live` 和
+`--external-data-approved`；真实需求默认只在内网处理。
 
 ## AI 辅助专家审查
 

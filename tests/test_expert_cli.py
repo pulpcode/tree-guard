@@ -21,9 +21,10 @@ from treeguard.ai_review import (
 )
 from treeguard.business_review import mine_business_version_pair
 from treeguard.evidence import build_business_review_evidence_pack
-from treeguard.expert_cli import _read_json_file, main
+from treeguard.expert_cli import main
 from treeguard.expert_synthesis import BailianExpertSynthesisProvider
 from treeguard.hashing import canonical_digest
+from treeguard.private_io import read_private_json
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -904,7 +905,7 @@ class ExpertReviewCLITests(unittest.TestCase):
             fifo_path = directory / "input.fifo"
             os.mkfifo(fifo_path, 0o600)
             with self.assertRaises(OSError):
-                _read_json_file(fifo_path, max_bytes=64_000)
+                read_private_json(fifo_path, max_bytes=64_000)
 
         self.assertEqual(duplicate_code, 2)
         self.assertEqual(

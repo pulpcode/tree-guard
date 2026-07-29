@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/change-intent-draft.v1.schema.json",
+  "title": "TreeGuard Change Intent Draft v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "model_provider",
+    "model_capability",
+    "model_name",
+    "prompt_version",
+    "model_provenance_status",
+    "source_request_hash",
+    "source_snapshot_hash",
+    "review_status",
+    "intent",
+    "draft_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "change-intent-draft.v1"},
+    "model_provider": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "model_capability": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "model_name": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "prompt_version": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "model_provenance_status": {"const": "UNVERIFIED_FILE_ASSERTION"},
+    "source_request_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_snapshot_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "review_status": {
+      "enum": ["READY_FOR_HUMAN_REVIEW", "NEEDS_CLARIFICATION"]
+    },
+    "intent": {
+      "$ref": "change-intent-model-output.v1.schema.json#/$defs/intentContent"
+    },
+    "draft_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "intent": {
+            "properties": {
+              "clarification_question": {"type": "string"}
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "review_status": {"const": "NEEDS_CLARIFICATION"}
+        }
+      },
+      "else": {
+        "properties": {
+          "review_status": {"const": "READY_FOR_HUMAN_REVIEW"}
+        }
+      }
+    }
+  ]
+}

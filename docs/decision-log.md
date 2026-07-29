@@ -292,6 +292,19 @@ EvidencePack 的通用出域确认不自动授权随后新增的专家文字。�
 认证、分支已被选为 head、Patch 可发布或样本可作为 Gold。当前所有分支都保持
 `patch_eligible=false`、`gold_eligible=false`。
 
+### D-042：新增需求先完成意图确认与确定性全树召回
+
+在线治理的首个实现纵切固定为 `IntentRequest → ChangeIntentDraft →
+IntentConfirmation → CandidateSet`。AI 只整理主体、角色、场景、生命周期、归属、
+类型、基数、事实、假设、证据缺口和一个关键追问；精确字段校验禁止它输出内部 ID、
+审批、动作或 Patch。建设人员可以修订草稿，但确认状态只表示
+`CONFIRMED_FOR_RETRIEVAL`，不等于专家语义审批，也不获得 Patch 资格。
+
+第一版候选检索使用可离线回放的词法与结构特征，不把 embedding 设为运行前置。
+名称与主体覆盖、路径、节点类型、值类型、基数和拟挂载位置分别计分；拟挂载位置只
+boost，不裁剪全树。零候选和信号不足都保持 `allows_addition=false`。后续是否增加
+embedding 和 reranker 由内网冻结案例的分层召回结果决定。
+
 ## 6. 仍需内网核实的事实
 
 以下问题不能由外网假设替代：

@@ -1,6 +1,6 @@
 # TreeGuard Python 核心规范
 
-这些规范描述基线提交中真实存在的 Python 核心和三个文件驱动 CLI。本文中的
+这些规范描述基线提交中真实存在的 Python 核心和四个文件驱动 CLI。本文中的
 “backend”不表示已经存在 Web 服务、数据库连接器、worker 或生产写入路径。
 
 ## 规则分类
@@ -42,6 +42,7 @@
 | [持久化与集成](./persistence-and-integration.md) | 增加文件、HTTP、数据库或环境访问 |
 | [错误处理](./error-handling.md) | 增加校验、错误码、异常转换或退出行为 |
 | [CLI 输出与诊断](./cli-output-and-diagnostics.md) | 修改 stdout、报告、敏感输出或模型执行 |
+| [新增需求意图与候选召回](./governance-intake-and-retrieval.md) | 修改 ChangeIntent、人工确认、全树召回或治理 CLI |
 | [质量规范](./quality-guidelines.md) | 每次实施与审查 |
 
 ## 开发前检查

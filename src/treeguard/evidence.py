@@ -14,6 +14,7 @@ from treeguard.business_review import (
     verify_business_version_review_against_snapshots,
 )
 from treeguard.hashing import canonical_digest
+from treeguard.lexical import text_terms
 from treeguard.models import CanonicalNode, CanonicalTree, freeze_json, thaw_json
 
 
@@ -23,8 +24,6 @@ TASK_TYPE = "BUSINESS_VERSION_REVIEW"
 DEFAULT_MAX_CANDIDATES = 5
 DEFAULT_MAX_PAYLOAD_CHARS = 48_000
 
-_ASCII_WORD = re.compile(r"[a-z0-9]+")
-_CJK_RUN = re.compile(r"[\u3400-\u9fff]+")
 _DIGEST = re.compile(r"^[0-9a-f]{64}$")
 _REFERENCE = re.compile(r"^[FXC][0-9]{3}$")
 _NODE_VIEW_KEYS = {
@@ -497,16 +496,7 @@ def _rank_candidates(
 
 
 def _node_terms(node: CanonicalNode) -> set[str]:
-    return _text_terms(" ".join((node.name, node.label, *node.path_labels)))
-
-
-def _text_terms(value: str) -> set[str]:
-    normalized = value.lower()
-    terms = set(_ASCII_WORD.findall(normalized))
-    for run in _CJK_RUN.findall(normalized):
-        terms.update(run)
-        terms.update(run[index : index + 2] for index in range(len(run) - 1))
-    return {term for term in terms if term}
+    return text_terms(" ".join((node.name, node.label, *node.path_labels)))
 
 
 __all__ = [

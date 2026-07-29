@@ -85,28 +85,39 @@ evaluation
 
 MVP 不引入 Elasticsearch、图数据库、Kafka 或多微服务编排。
 
-### 3.1 已实现的只读工作台纵切
+### 3.1 已实现的工作台与治理纵切
 
-当前已经实现其中最小的只读浏览纵切：
+当前已经实现只读浏览和第一个治理交互纵切：
 
 ```text
 React + Ant Design Tree
   → Vite development proxy
   → loopback FastAPI Workbench API
-  → WorkbenchService 正向允许列表
-  → ProvisionalRepositoryClient
-  → Clean-room Simulator
-  → CanonicalTree
+      ├→ WorkbenchService 正向允许列表
+      │   → ProvisionalRepositoryClient
+      │   → Clean-room Simulator
+      │   → CanonicalTree
+      └→ WorkbenchGovernanceService
+          → Intent / Retrieval / Semantic Core
+          → loopback Simulator 或显式批准的百炼 Provider
+          → private sidecar
 ```
 
-FastAPI 只提供分类、资源、版本和树视图读取。树视图用一次性 `N000001` 形式引用
-替换稳定节点 ID，只包含名称、label、kind、类型、基数、顺序、子引用和派生名称
-面包屑；不返回 VALUE、未知 metadata、extension、source route、哈希或文件路径。
-浏览器不直连仓库或模型，API 关闭访问日志并对响应设置 `no-store`。
+FastAPI 的目录接口只提供分类、资源、版本和树视图读取。树视图用一次性
+`N000001` 形式引用替换稳定节点 ID，只包含名称、label、kind、类型、基数、顺序、
+子引用和派生名称面包屑；不返回 VALUE、未知 metadata、extension、source route、
+哈希或文件路径。独立治理接口提供受约束的 case/operation 状态。浏览器不直连
+仓库或模型，API 关闭访问日志并对响应设置 `no-store`。
 
-该纵切尚未把意图、候选、AI 建议、专家审查和回放接入 Web，也没有数据库、认证、
-队列或生产写能力。它只证明 2,001 节点虚构树的前后端协议、搜索定位和可视化基础
-可以运行。
+治理 API 使用进程内 operation registry 承载模型调用；浏览器只持有随机
+`case_ref`、`operation_ref`、树视图 `N000001` 和候选 `C001`—`C008` 引用。
+服务端重新读取指定快照，复用既有意图、单轮澄清、候选召回、语义建议和人工复核
+状态机，并把正式工件不可覆盖地写入私有 case 目录。人工接受或拒绝后仍固定为
+运营反馈，`semantic_approval=false`、`gold_eligible=false`、
+`patch_eligible=false`。
+
+当前没有跨进程 case 恢复、数据库、认证、多 worker 队列或生产写能力。该纵切只
+证明 2,001 节点虚构树上的浏览、AI 建议、人工复核与可回放旁路可以端到端运行。
 
 ## 4. 版本化合同
 

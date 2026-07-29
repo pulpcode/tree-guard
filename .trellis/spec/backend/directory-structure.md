@@ -79,6 +79,8 @@ Provider 可以执行网络 IO；返回 JSON 必须通过本地字段、枚举�
 - `repository_client.py`：只接受 loopback 的暂定仓库合同客户端；
 - `simulator_cli.py`：启动服务和四类仓库聚合验证；
 - `workbench.py`：只读目录应用服务和浏览器树视图允许列表；
+- `workbench_governance.py`：Web case/operation、Core/Provider 编排和私有
+  sidecar；
 - `web.py`：FastAPI DTO、路由、固定错误和响应加固；
 - `workbench_cli.py`：只监听 loopback 的 Workbench API 入口；
 - `__main__.py`：分派基础一致性 CLI。

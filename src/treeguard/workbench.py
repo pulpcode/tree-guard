@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Protocol
+from types import MappingProxyType
+from typing import Any, Mapping, Protocol
 
 from treeguard.models import CanonicalTree, ImportResult
 from treeguard.repository_client import (
@@ -106,8 +107,17 @@ class WorkbenchService:
         return build_tree_view(result.tree)
 
 
-def build_tree_view(tree: CanonicalTree) -> dict[str, Any]:
-    """Project a canonical tree into the browser's exact read-only allowlist."""
+@dataclass(frozen=True, slots=True)
+class TreeReferenceIndex:
+    """Internal mapping between one browser view and canonical node identities."""
+
+    ordered_node_ids: tuple[str, ...]
+    ref_by_node_id: Mapping[str, str]
+    node_id_by_ref: Mapping[str, str]
+
+
+def build_tree_reference_index(tree: CanonicalTree) -> TreeReferenceIndex:
+    """Build the deterministic response-scoped reference mapping for one tree."""
 
     nodes_by_id = {node.node_id: node for node in tree.nodes}
     ordered_node_ids: list[str] = []
@@ -128,10 +138,28 @@ def build_tree_view(tree: CanonicalTree) -> dict[str, Any]:
             "WORKBENCH_TREE_RELATION_INVALID",
             "canonical tree relation could not be projected",
         )
-    references = {
+    ref_by_node_id = {
         node_id: f"N{index:06d}"
         for index, node_id in enumerate(ordered_node_ids, start=1)
     }
+    return TreeReferenceIndex(
+        ordered_node_ids=tuple(ordered_node_ids),
+        ref_by_node_id=MappingProxyType(ref_by_node_id),
+        node_id_by_ref=MappingProxyType(
+            {
+                reference: node_id
+                for node_id, reference in ref_by_node_id.items()
+            }
+        ),
+    )
+
+
+def build_tree_view(tree: CanonicalTree) -> dict[str, Any]:
+    """Project a canonical tree into the browser's exact read-only allowlist."""
+
+    nodes_by_id = {node.node_id: node for node in tree.nodes}
+    reference_index = build_tree_reference_index(tree)
+    references = reference_index.ref_by_node_id
 
     def breadcrumb(node_id: str) -> list[str]:
         names: list[str] = []
@@ -151,7 +179,7 @@ def build_tree_view(tree: CanonicalTree) -> dict[str, Any]:
         return names
 
     projected_nodes: list[dict[str, Any]] = []
-    for node_id in ordered_node_ids:
+    for node_id in reference_index.ordered_node_ids:
         node = nodes_by_id[node_id]
         value_contract = node.value_contract
         projected_nodes.append(
@@ -194,9 +222,11 @@ def build_tree_view(tree: CanonicalTree) -> dict[str, Any]:
 
 __all__ = [
     "ReadOnlyTreeRepository",
+    "TreeReferenceIndex",
     "TREE_VIEW_SCHEMA_VERSION",
     "WORKBENCH_API_VERSION",
     "WorkbenchError",
     "WorkbenchService",
+    "build_tree_reference_index",
     "build_tree_view",
 ]

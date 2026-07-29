@@ -596,9 +596,12 @@ class ChangeIntentTests(unittest.TestCase):
             "INTENT_ACTION_CLARIFICATION_UNRESOLVED",
         )
 
-    def test_provider_retries_with_json_mode_and_no_internal_ids(self) -> None:
+    def test_provider_retries_with_exact_contract_and_safe_error_code(
+        self,
+    ) -> None:
         tree = _tree()
         request = IntentRequest.from_dict(_request_payload(), tree)
+        rejected_marker = "fictional-rejected-response-marker"
 
         class RecordingProvider(BailianIntentDraftProvider):
             def __init__(self):
@@ -613,7 +616,10 @@ class ChangeIntentTests(unittest.TestCase):
             def _post_json(self, body):
                 self.bodies.append(body)
                 payload = (
-                    {"schema_version": "change-intent-model-output.v1"}
+                    {
+                        "intent": _model_payload(),
+                        "debug_note": rejected_marker,
+                    }
                     if len(self.bodies) == 1
                     else _model_payload()
                 )
@@ -636,6 +642,49 @@ class ChangeIntentTests(unittest.TestCase):
             provider.bodies[0]["response_format"],
             {"type": "json_object"},
         )
+        first_user_payload = json.loads(
+            provider.bodies[0]["messages"][1]["content"]
+        )
+        retry_user_payload = json.loads(
+            provider.bodies[1]["messages"][1]["content"]
+        )
+        output_contract = first_user_payload["output_contract"]
+        self.assertEqual(
+            set(output_contract["exact_object_template"]),
+            set(_model_payload()),
+        )
+        self.assertFalse(output_contract["additional_fields_allowed"])
+        self.assertTrue(output_contract["top_level_object_only"])
+        self.assertIn(
+            "输入直接支持时",
+            output_contract["template_usage"],
+        )
+        self.assertEqual(
+            output_contract["field_semantics"]["subject"],
+            "本次要治理的信息项或字段名称，不是树 ID",
+        )
+        self.assertIn("必须写入", output_contract["hint_policy"])
+        self.assertEqual(
+            retry_user_payload["previous_validation_error"],
+            "INTENT_MODEL_FIELDS_INVALID",
+        )
+        self.assertIn(
+            "失败类别为 INTENT_MODEL_FIELDS_INVALID",
+            provider.bodies[1]["messages"][0]["content"],
+        )
+        self.assertIn(
+            "不能机械照抄",
+            provider.bodies[0]["messages"][0]["content"],
+        )
+        self.assertIn(
+            "subject 表示本次要治理的信息项或字段名称",
+            provider.bodies[0]["messages"][0]["content"],
+        )
+        self.assertEqual(
+            draft.prompt_version,
+            "treeguard.change-intent.zh.v2",
+        )
+        self.assertNotIn(rejected_marker, json.dumps(provider.bodies[1]))
         self.assertNotIn("node-002", encoded)
         self.assertNotIn("tree-fictional-museum", encoded)
 
@@ -695,6 +744,8 @@ class ChangeIntentTests(unittest.TestCase):
         self.assertIn("不得同时保留", system_prompt)
         self.assertIn("一个最重要的原子问题", system_prompt)
         self.assertIn("不得拼接两个问题", system_prompt)
+        self.assertIn("必须返回 JSON null", system_prompt)
+        self.assertIn("必须返回空数组", system_prompt)
 
 
 if __name__ == "__main__":

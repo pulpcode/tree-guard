@@ -128,9 +128,19 @@ RecommendationRecord.from_dict(payload, draft, action, confirmation, candidate_s
 再构造 `IntentClarificationRound v1`。修订意图无追问时状态为
 `READY_FOR_HUMAN_REVIEW`；仍有追问时状态固定为
 `CLARIFICATION_LIMIT_REACHED`，不得再次自动澄清或确认进入检索。人工拒绝仍允许。
-`treeguard.change-intent-clarification.zh.v2` Prompt 要求已经由回答明确解决的事实
+`treeguard.change-intent.zh.v2` 初始意图 Prompt 必须给出精确的 13 字段顶层对象
+模板，明确禁止 `intent`、`data`、`result` 等外层包装，约束可空文本使用 JSON
+`null`、列表使用数组。模板只规定结构和缺少证据时的缺省值；输入直接支持字段时
+模型必须用提取结果替换 `null`、`UNKNOWN` 或空数组，不能机械照抄模板。Prompt
+必须明确 `subject` 是待治理的信息项/字段名称、其余可空业务字段的含义，
+以及非 `UNKNOWN`、非 `null` 用户 hints 在无冲突时必须写入对应字段。首次本地校验
+失败时只把固定错误码带入至多一次纠错重试，不得回传被拒绝的原始模型响应，也不得
+在本地删除多余字段、补字段或归一化为合法合同；重试仍失败则按原稳定错误码关闭。
+`treeguard.change-intent-clarification.zh.v3` Prompt 要求已经由回答明确解决的事实
 不得同时保留为假设、证据缺口或再次追问；剩余追问只能选择一个原子问题，不能拼接
-多个问题。这是模型质量约束，本地确定性门禁仍只依据合同字段和状态安全停止。
+多个问题。真实 OpenAI 兼容模型可能用空字符串表达缺省值，因此 Prompt 还必须要求
+所有可空文本字段使用 JSON `null`、空列表使用 `[]`；本地不得静默把不合格输出
+归一化为合法合同。这是模型质量约束，本地确定性门禁仍只依据合同字段和状态安全停止。
 无澄清路径最多发生意图与语义建议两段顺序模型调用；单轮澄清路径最多三段。
 
 第一版 `CandidateSet` 算法版本为

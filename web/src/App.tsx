@@ -1,6 +1,5 @@
 import {
   ApartmentOutlined,
-  CheckCircleOutlined,
   FileSearchOutlined,
   LockOutlined,
   ReloadOutlined,
@@ -27,6 +26,7 @@ import {
   Typography,
 } from "antd";
 
+import GovernancePanel from "./GovernancePanel";
 import {
   fetchCategories,
   fetchResources,
@@ -202,7 +202,7 @@ function App() {
         </div>
         <Space>
           <Tag className="shadow-tag" icon={<LockOutlined />}>
-            SHADOW · 只读
+            SHADOW · 旁路
           </Tag>
           <Tag color="green">Clean-room Simulator</Tag>
         </Space>
@@ -344,8 +344,8 @@ function App() {
                 从树中定位证据，再进入语义治理
               </Typography.Title>
               <Typography.Paragraph>
-                当前纵切验证大型信息树的只读浏览、搜索和精确定位。需求意图、候选召回
-                与专家复核将在下一纵切接入现有可回放核心。
+                浏览大型信息树、描述治理需求、比较全树候选，并把 AI 建议交给专家
+                复核。所有结果只进入可回放旁路，不修改源信息树。
               </Typography.Paragraph>
               <div className="metric-row">
                 <Statistic
@@ -360,36 +360,10 @@ function App() {
               </div>
             </Card>
 
-            <Card
-              className="panel-card flow-card"
-              title="治理流程"
-              extra={<Tag color="gold">后续纵切</Tag>}
-            >
-              <div className="flow-list">
-                <FlowItem
-                  index="01"
-                  title="描述变更需求"
-                  description="把口头需求编译为结构化意图卡"
-                />
-                <FlowItem
-                  index="02"
-                  title="比较全树候选"
-                  description="确定性召回后由 AI 给出受约束建议"
-                />
-                <FlowItem
-                  index="03"
-                  title="专家复核与回放"
-                  description="保留思考、证据缺口和人工动作"
-                />
-              </div>
-            </Card>
-
-            <Alert
-              showIcon
-              icon={<CheckCircleOutlined />}
-              type="success"
-              title="当前页面只有读取能力"
-              description="刷新、搜索和选择节点均不会产生治理工件，也不会修改信息树。"
+            <GovernancePanel
+              resourceId={resourceId}
+              version={version}
+              selectedNode={selectedNode}
             />
           </main>
 
@@ -494,26 +468,6 @@ function NodeDetail({ node }: { node: TreeViewNode }) {
         title="会话级节点引用"
         description={`页面引用 ${node.ref} 只用于本次树视图联动，不是生产 node_id。`}
       />
-    </div>
-  );
-}
-
-function FlowItem({
-  index,
-  title,
-  description,
-}: {
-  index: string;
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="flow-item">
-      <span>{index}</span>
-      <div>
-        <Typography.Text strong>{title}</Typography.Text>
-        <Typography.Paragraph>{description}</Typography.Paragraph>
-      </div>
     </div>
   );
 }

@@ -4,7 +4,8 @@
 
 TreeGuard 当前没有数据库代码、ORM、migration、transaction 或
 Spring Boot/MongoDB 连接器。除既有 CLI/file 边界外，已实现一个只监听 loopback
-的只读 FastAPI Workbench API。已实现的持久化模型只有：
+的 FastAPI Workbench API：目录和树视图只读，治理 case 只写私有 sidecar。
+已实现的持久化模型只有：
 
 - 输入树导出和已解码 API response envelope；
 - 可选的私有 AI review bundle；
@@ -13,12 +14,14 @@ Spring Boot/MongoDB 连接器。除既有 CLI/file 边界外，已实现一个�
 - 不可变 intent clarification answer/round JSON；
 - 不可变 semantic recommendation draft/review action/record JSON；
 - 一键虚构演示的全新 `0700` 运行目录、`0600` 中间工件和完成标志；
+- Web 治理 case 的全新 `0700` 目录、逐步 `0600` 工件和最终非 Gold 建议记录；
 - 从冻结源工件做确定性回放。
 
 已实现的网络路径包括显式启用的百炼 `POST /chat/completions`、只监听 loopback
-的暂定开发仿真服务/客户端，以及读取该客户端的 loopback Workbench API。后两者
-都不是生产入站 API、生产 repository 或真实内网合同。MongoDB、搜索、Overlay
-和 Patch 发布的设计文档不能被写成已存在层的代码规范。
+的暂定开发仿真服务/客户端，以及读取该客户端并编排既有治理 Core/Provider 的
+loopback Workbench API。后两者都不是生产入站 API、生产 repository 或真实内网
+合同。MongoDB、搜索、持久化 operation registry 和 Patch 发布的设计文档不能被
+写成已存在层的代码规范。
 
 ## 永久职责边界
 
@@ -86,6 +89,12 @@ expert workflow 的树输入使用更强 profile。该函数当前不校验 owne
 `private_io.preflight_private_output()` 用于在 live 模型调用前确认目标尚不存在且
 目录可创建私有文件。最终发布仍必须调用 `write_private_json()`，不能把 preflight
 当作原子保留。所有 CLI 复用这些公共 API，不得再复制或跨模块导入私有 writer。
+
+Workbench Web 治理使用 `TREEGUARD_WORKBENCH_SIDECAR_DIR` 指定服务端私有根目录。
+显式值必须是绝对路径；根目录和 case 目录必须属于当前用户且没有 group/other
+权限。浏览器不能提交或读取该路径。每个模型/人工阶段发布新的不可覆盖文件；最终
+记录发布失败时不得把 case 标为完成。当前 case/operation 索引只存在于单进程
+内存，服务重启不会从目录自动恢复，不能声称 sidecar 已等价于数据库或队列。
 
 ## 本地配置
 

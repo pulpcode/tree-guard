@@ -60,10 +60,110 @@ export class WorkbenchAPIError extends Error {
   }
 }
 
-async function requestJSON<T>(path: string): Promise<T> {
+export type GovernanceModelMode = "SIMULATOR_LIVE" | "BAILIAN_LIVE";
+
+export interface GovernanceOperation {
+  schema_version: "workbench-operation-view.v1";
+  operation_ref: string;
+  case_ref: string;
+  kind: string;
+  status: "PENDING" | "RUNNING" | "SUCCEEDED" | "FAILED";
+  error_code: string | null;
+  case_status: string;
+}
+
+export interface GovernanceIntentContent {
+  subject: string | null;
+  role: string | null;
+  scenario: string | null;
+  lifecycle: string | null;
+  ownership: string;
+  node_kind: string;
+  value_type: string | null;
+  cardinality: string;
+  confirmed_facts: string[];
+  assumptions: string[];
+  evidence_gaps: string[];
+  clarification_question: string | null;
+}
+
+export interface GovernanceCandidate {
+  candidate_ref: string;
+  rank: number;
+  kind: string;
+  label: string;
+  name: string;
+  path_labels: string[];
+  path_names: string[];
+  value_type: string | null;
+  cardinality: string | null;
+  parent_relation: string;
+}
+
+export interface GovernanceRecommendation {
+  schema_version: "semantic-recommendation-content.v1";
+  candidate_assessments: Array<{
+    candidate_ref: string;
+    relation: string;
+    reason: string;
+  }>;
+  recommended_action: string;
+  selected_candidate_ref: string | null;
+  rationale: string;
+  uncertainties: string[];
+  evidence_gaps: string[];
+  clarification_question: string | null;
+}
+
+export interface GovernanceCase {
+  schema_version: "workbench-governance-case-view.v1";
+  case_ref: string;
+  status: string;
+  model_mode: GovernanceModelMode;
+  intent: {
+    review_status: string;
+    content: GovernanceIntentContent;
+  } | null;
+  candidates: {
+    status: string;
+    items: GovernanceCandidate[];
+  } | null;
+  recommendation: GovernanceRecommendation | null;
+  record: {
+    report_version: "recommendation-record-aggregate.v1";
+    valid: boolean;
+    record_semantics: "OPERATIONAL_FEEDBACK_ONLY";
+    status: string;
+    semantic_approval: false;
+    patch_eligible: false;
+    gold_eligible: false;
+  } | null;
+}
+
+export interface GovernanceCaseCreateInput {
+  resource_id: string;
+  version: string;
+  requirement_text: string;
+  proposed_parent_ref: string | null;
+  node_kind_hint: "CONCEPT" | "PROPERTY" | "UNKNOWN";
+  value_type_hint: string | null;
+  cardinality_hint: "SINGLE" | "MULTIPLE" | "UNKNOWN";
+  model_mode: GovernanceModelMode;
+  external_data_approved: boolean;
+}
+
+async function requestJSON<T>(
+  path: string,
+  init: RequestInit = {},
+): Promise<T> {
   const response = await fetch(path, {
-    method: "GET",
-    headers: { Accept: "application/json" },
+    method: init.method ?? "GET",
+    ...init,
+    headers: {
+      Accept: "application/json",
+      ...(init.body ? { "Content-Type": "application/json" } : {}),
+      ...init.headers,
+    },
     cache: "no-store",
     credentials: "same-origin",
   });
@@ -109,5 +209,73 @@ export async function fetchTree(
   const query = new URLSearchParams({ version });
   return requestJSON<TreeView>(
     `/api/v1/resources/${encodedResource}/tree?${query.toString()}`,
+  );
+}
+
+export async function createGovernanceCase(
+  input: GovernanceCaseCreateInput,
+): Promise<GovernanceOperation> {
+  return requestJSON<GovernanceOperation>("/api/v1/governance/cases", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export async function fetchGovernanceOperation(
+  operationRef: string,
+): Promise<GovernanceOperation> {
+  return requestJSON<GovernanceOperation>(
+    `/api/v1/governance/operations/${encodeURIComponent(operationRef)}`,
+  );
+}
+
+export async function fetchGovernanceCase(
+  caseRef: string,
+): Promise<GovernanceCase> {
+  return requestJSON<GovernanceCase>(
+    `/api/v1/governance/cases/${encodeURIComponent(caseRef)}`,
+  );
+}
+
+export async function clarifyGovernanceCase(
+  caseRef: string,
+  answerText: string,
+): Promise<GovernanceOperation> {
+  return requestJSON<GovernanceOperation>(
+    `/api/v1/governance/cases/${encodeURIComponent(caseRef)}/clarification`,
+    {
+      method: "POST",
+      body: JSON.stringify({ answer_text: answerText }),
+    },
+  );
+}
+
+export async function reviewGovernanceIntent(
+  caseRef: string,
+  decision: "CONFIRM" | "REJECT",
+): Promise<GovernanceOperation> {
+  return requestJSON<GovernanceOperation>(
+    `/api/v1/governance/cases/${encodeURIComponent(caseRef)}/intent-review`,
+    {
+      method: "POST",
+      body: JSON.stringify({ decision }),
+    },
+  );
+}
+
+export async function reviewGovernanceRecommendation(
+  caseRef: string,
+  decision: "CONFIRM" | "REJECT",
+  reviewerReasoning: string | null,
+): Promise<GovernanceOperation> {
+  return requestJSON<GovernanceOperation>(
+    `/api/v1/governance/cases/${encodeURIComponent(caseRef)}/recommendation-review`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        decision,
+        reviewer_reasoning: reviewerReasoning,
+      }),
+    },
   );
 }

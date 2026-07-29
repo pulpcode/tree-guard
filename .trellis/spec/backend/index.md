@@ -45,6 +45,7 @@
 | [CLI 输出与诊断](./cli-output-and-diagnostics.md) | 修改 stdout、报告、敏感输出或模型执行 |
 | [新增需求意图、候选召回与语义推荐](./governance-intake-and-retrieval.md) | 修改 ChangeIntent、人工确认、全树召回、语义建议或治理 CLI |
 | [只读 Workbench API](./workbench-api.md) | 修改 FastAPI、树视图 DTO、前端代理或工作台启动入口 |
+| [Workbench 治理 API](./workbench-governance-api.md) | 修改 Web case、operation、模型调用、人工动作或 sidecar |
 | [质量规范](./quality-guidelines.md) | 每次实施与审查 |
 
 ## 开发前检查

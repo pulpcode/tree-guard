@@ -172,10 +172,23 @@ PYTHONPATH=src python3 -B -m treeguard /path/to/transcript.txt --allow-curl-tran
 
 真实格式样本目录 `tree-schema/` 已加入 `.gitignore`，不得提交。
 
-## 只读可视化工作台
+## 可视化治理工作台
 
-工作台当前只验证分类、资源、版本和 2,000+ 节点信息树浏览，不提供 AI 治理操作，
-不写 sidecar，也没有生产写权限。三个终端依次启动：
+工作台已经接通分类、资源、版本和 2,000+ 节点树浏览，以及完全虚构数据上的
+治理交互闭环：
+
+```text
+自然语言需求
+→ AI 意图草稿
+→ 可选的一次澄清
+→ 人工确认意图
+→ 确定性全树 Top-20 / 模型 Top-8
+→ AI 受约束建议
+→ 人工接受或拒绝
+→ 私有可回放旁路记录
+```
+
+它仍没有生产写权限，不修改信息树，也不产生 Gold 或 Patch。三个终端依次启动：
 
 ```bash
 # 终端 1：完全虚构的 2,001 节点仓库
@@ -185,7 +198,7 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
   --node-count 2001 \
   --model-scenario ready
 
-# 终端 2：只读 Workbench API
+# 终端 2：Workbench API 与本机私有 sidecar
 UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
   treeguard-workbench --port 8000
 
@@ -203,6 +216,29 @@ npm run dev
 不返回稳定 `node_id`、VALUE、未知 metadata、extension、source route、快照哈希
 或文件路径。前端搜索 2,001 节点时只渲染命中路径，Ant Design Tree 继续使用虚拟
 滚动。
+
+治理页面默认使用同一仿真服务的 OpenAI-compatible 模型接口。模型调用使用
+`operation_ref` 轮询；刷新页面只恢复同一个运行时引用，不会重复调用模型。正式
+需求、模型草稿、确认、候选和人工记录以 `0600` 文件写入 `0700` case 目录。
+默认根目录位于操作系统临时目录；也可以通过进程环境设置一个绝对路径：
+
+```bash
+TREEGUARD_WORKBENCH_SIDECAR_DIR=/absolute/private/path \
+  UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
+  treeguard-workbench --port 8000
+```
+
+该目录必须属于当前用户且不能向 group/other 开放。不得把它指向 Git 仓库、共享
+目录或外网同步目录。
+
+页面也可选择“百炼真实模型”。该模式仍读取私有 `.env` 中的模型配置，并要求用户
+在页面明确确认本次文本完全虚构或已获准出域；未确认时后端在创建 sidecar 和网络
+调用前失败关闭。该批准只绑定当前 case，重新发起或切换信息树版本后必须重新勾选。
+完整需求、AI 结果和专家理由不会进入 API 错误、stdout 或普通访问日志。
+
+当前 operation registry 是单进程内存实现：浏览器刷新可恢复，但 Workbench API
+进程重启后不能恢复 case 页面。已经发布的私有 sidecar 文件仍保留；跨进程恢复、
+多 worker、认证、生产队列和人工修订建议留待后续任务。
 
 前端验证：
 

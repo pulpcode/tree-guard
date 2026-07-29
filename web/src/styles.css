@@ -196,6 +196,127 @@ input {
   gap: 18px;
 }
 
+.governance-card > .ant-card-body {
+  display: grid;
+  gap: 22px;
+}
+
+.governance-stage {
+  display: grid;
+  gap: 16px;
+}
+
+.governance-stage h4.ant-typography {
+  margin: 0 0 4px;
+}
+
+.field-stack {
+  display: grid;
+  gap: 7px;
+  color: #59655f;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.hint-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.hint-grid .ant-select,
+.model-row .ant-select {
+  width: 100%;
+}
+
+.model-row {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(260px, 1.3fr);
+  gap: 18px;
+  align-items: end;
+}
+
+.governance-loading {
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.governance-error {
+  margin-top: 2px;
+}
+
+.intent-card {
+  border-color: #dce8e2;
+  background: #fbfdfc;
+}
+
+.fact-list {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #edf0ed;
+}
+
+.fact-list ul {
+  margin: 5px 0 0;
+  padding-inline-start: 20px;
+  color: #45514b;
+}
+
+.candidate-list {
+  max-height: 520px;
+  display: grid;
+  gap: 10px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.candidate {
+  border-color: #e3e6e2;
+}
+
+.selected-candidate {
+  border-color: #79ad98;
+  background: #f3faf6;
+  box-shadow: inset 3px 0 #2e8268;
+}
+
+.candidate-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.candidate-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.candidate-tags .ant-tag {
+  margin: 0;
+}
+
+.candidate-reason.ant-typography {
+  margin: 9px 0 0;
+  color: #5c6762;
+}
+
+.recommendation-card {
+  border-color: #e9d39b;
+  background: #fffcf3;
+}
+
+.recommendation-card p.ant-typography {
+  margin: 12px 0 0;
+}
+
 .hero-card {
   color: #eef6f2;
   background:

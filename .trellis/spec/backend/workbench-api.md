@@ -8,6 +8,9 @@
 字段时适用。本场景只允许读取暂定 loopback 仿真仓库并展示信息树，不获得治理
 状态迁移、sidecar 写入、模型调用或生产写权限。
 
+治理操作属于独立的 [Workbench 治理 API](./workbench-governance-api.md) 场景；
+不得为了治理而扩大本文件定义的树读取 DTO。
+
 ### 2. Signatures
 
 启动入口：

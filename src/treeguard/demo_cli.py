@@ -538,7 +538,7 @@ def _fictional_tree() -> dict[str, Any]:
             "id": "fictional-version-record",
             "map_id": "fictional-museum-tree",
             "map_type": "resource",
-            "map_name": "Imaginary Museum Catalog",
+            "map_name": "虚构博物馆藏品目录",
             "version": "V1",
             "category_id": "fictional-category",
             "concurrent_version": 1,
@@ -548,7 +548,7 @@ def _fictional_tree() -> dict[str, Any]:
                 "metadata": {
                     "node_id": "fictional-museum-root",
                     "node_type": "concept",
-                    "node_name": "Museum",
+                    "node_name": "虚构博物馆",
                     "node_label": "MUSEUM",
                     "node_label_route": "MUSEUM",
                     "node_order": 1,
@@ -559,7 +559,7 @@ def _fictional_tree() -> dict[str, Any]:
                             "node_id": "fictional-catalog",
                             "parent_node_id": "fictional-museum-root",
                             "node_type": "concept",
-                            "node_name": "Catalog",
+                            "node_name": "藏品目录",
                             "node_label": "CATALOG",
                             "node_label_route": "MUSEUM/-/CATALOG",
                             "node_order": 1,
@@ -570,7 +570,7 @@ def _fictional_tree() -> dict[str, Any]:
                                     "node_id": "fictional-dimensions",
                                     "parent_node_id": "fictional-catalog",
                                     "node_type": "property",
-                                    "node_name": "Dimensions",
+                                    "node_name": "展品尺寸",
                                     "node_label": "DIMENSIONS",
                                     "node_label_route": (
                                         "MUSEUM/-/CATALOG/-/DIMENSIONS"
@@ -590,7 +590,7 @@ def _fictional_tree() -> dict[str, Any]:
                                                 "fictional-dimensions"
                                             ),
                                             "node_type": "property",
-                                            "node_name": "Display height",
+                                            "node_name": "陈列高度",
                                             "node_label": "HEIGHT",
                                             "node_label_route": (
                                                 "MUSEUM/-/CATALOG/-/"
@@ -611,7 +611,7 @@ def _fictional_tree() -> dict[str, Any]:
                                                 "fictional-dimensions"
                                             ),
                                             "node_type": "property",
-                                            "node_name": "Display width",
+                                            "node_name": "陈列宽度",
                                             "node_label": "WIDTH",
                                             "node_label_route": (
                                                 "MUSEUM/-/CATALOG/-/"
@@ -639,7 +639,7 @@ def _fictional_request() -> dict[str, Any]:
     return {
         "schema_version": "intent-request.v1",
         "requirement_text": (
-            "For an imaginary museum catalog, capture display height."
+            "为虚构博物馆藏品目录记录陈列高度。"
         ),
         "proposed_parent_node_id": "fictional-dimensions",
         "node_kind_hint": "PROPERTY",
@@ -651,15 +651,15 @@ def _fictional_request() -> dict[str, Any]:
 def _fictional_intent_model_output() -> dict[str, Any]:
     return {
         "schema_version": "change-intent-model-output.v1",
-        "subject": "Display height",
-        "role": "Catalog measurement",
-        "scenario": "Imaginary exhibition",
-        "lifecycle": "Catalog lifetime",
+        "subject": "陈列高度",
+        "role": "藏品尺寸测量",
+        "scenario": "虚构展览",
+        "lifecycle": "目录使用期",
         "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
         "node_kind": "PROPERTY",
         "value_type": "float",
         "cardinality": "SINGLE",
-        "confirmed_facts": ["A fictional display height is requested."],
+        "confirmed_facts": ["需要记录完全虚构的陈列高度。"],
         "assumptions": [],
         "evidence_gaps": [],
         "clarification_question": None,
@@ -684,7 +684,7 @@ def _fictional_semantic_model_output(
                 if index == 1
                 else "NOT_EQUIVALENT"
             ),
-            "reason": "A fictional candidate was compared.",
+            "reason": "已比较一个虚构候选。",
         }
         for index, _ in enumerate(candidates[:8], start=1)
     ]
@@ -693,7 +693,7 @@ def _fictional_semantic_model_output(
         "candidate_assessments": assessments,
         "recommended_action": "USE_EXISTING_NODE",
         "selected_candidate_ref": "C001",
-        "rationale": "One fictional candidate matches the confirmed intent.",
+        "rationale": "一个虚构候选与已确认意图匹配。",
         "uncertainties": [],
         "evidence_gaps": [],
         "clarification_question": None,

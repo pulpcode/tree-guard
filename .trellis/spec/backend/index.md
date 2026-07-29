@@ -28,8 +28,8 @@
 
 ### 当前仓库事实
 
-- 当前实现是标准库运行时的 Python 包，通过文件、百炼 Provider 和 loopback
-  暂定开发仿真集成；
+- 当前确定性核心主要使用标准库；应用边界另外使用 FastAPI/Uvicorn 提供
+  loopback 只读 Workbench API，通过文件、百炼 Provider 和暂定开发仿真集成；
 - 当前没有数据库层、生产 Patch writer、日志框架或完整工程质量工具链；
 - “当前事实”随源码演进重新核对，不能自动升级为永久产品政策。
 
@@ -44,6 +44,7 @@
 | [错误处理](./error-handling.md) | 增加校验、错误码、异常转换或退出行为 |
 | [CLI 输出与诊断](./cli-output-and-diagnostics.md) | 修改 stdout、报告、敏感输出或模型执行 |
 | [新增需求意图、候选召回与语义推荐](./governance-intake-and-retrieval.md) | 修改 ChangeIntent、人工确认、全树召回、语义建议或治理 CLI |
+| [只读 Workbench API](./workbench-api.md) | 修改 FastAPI、树视图 DTO、前端代理或工作台启动入口 |
 | [质量规范](./quality-guidelines.md) | 每次实施与审查 |
 
 ## 开发前检查

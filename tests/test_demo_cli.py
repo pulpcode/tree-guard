@@ -91,7 +91,7 @@ class GovernanceDemoCLITests(unittest.TestCase):
 
             aggregate = json.dumps(reports, sort_keys=True)
             self.assertNotIn("fictional-height", aggregate)
-            self.assertNotIn("Display height", aggregate)
+            self.assertNotIn("陈列高度", aggregate)
             self.assertNotIn(directory_name, aggregate)
             self.assertIsNone(re.search(r"\b[0-9a-f]{64}\b", aggregate))
 

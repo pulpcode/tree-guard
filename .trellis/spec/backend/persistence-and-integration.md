@@ -2,8 +2,9 @@
 
 ## 当前实现
 
-TreeGuard 当前没有数据库代码、ORM、repository、migration、transaction、入站
-HTTP 服务或 Spring Boot/MongoDB 连接器。已实现的持久化模型只有：
+TreeGuard 当前没有数据库代码、ORM、migration、transaction 或
+Spring Boot/MongoDB 连接器。除既有 CLI/file 边界外，已实现一个只监听 loopback
+的只读 FastAPI Workbench API。已实现的持久化模型只有：
 
 - 输入树导出和已解码 API response envelope；
 - 可选的私有 AI review bundle；
@@ -14,10 +15,10 @@ HTTP 服务或 Spring Boot/MongoDB 连接器。已实现的持久化模型只有
 - 一键虚构演示的全新 `0700` 运行目录、`0600` 中间工件和完成标志；
 - 从冻结源工件做确定性回放。
 
-已实现的网络路径只有显式启用的百炼 `POST /chat/completions`，以及只监听
-loopback 的暂定开发仿真服务/客户端。后者不是生产入站 API、生产 repository
-或真实内网合同。MongoDB、搜索、Overlay 和 Patch 发布的设计文档不能被写成已
-存在层的代码规范。
+已实现的网络路径包括显式启用的百炼 `POST /chat/completions`、只监听 loopback
+的暂定开发仿真服务/客户端，以及读取该客户端的 loopback Workbench API。后两者
+都不是生产入站 API、生产 repository 或真实内网合同。MongoDB、搜索、Overlay
+和 Patch 发布的设计文档不能被写成已存在层的代码规范。
 
 ## 永久职责边界
 

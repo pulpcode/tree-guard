@@ -157,8 +157,8 @@ class FictionalTreeTests(unittest.TestCase):
         new_nodes = {node.node_id: node for node in new.tree.nodes}
 
         self.assertEqual(set(old_nodes), set(new_nodes))
-        self.assertEqual(old_nodes["fictional-height"].name, "Exhibit height")
-        self.assertEqual(new_nodes["fictional-height"].name, "Display height")
+        self.assertEqual(old_nodes["fictional-height"].name, "展品高度")
+        self.assertEqual(new_nodes["fictional-height"].name, "陈列高度")
         self.assertNotEqual(old.tree.snapshot_hash, new.tree.snapshot_hash)
 
 

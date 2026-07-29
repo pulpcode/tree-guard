@@ -97,15 +97,13 @@ def build_fictional_tree(
     root_id = "fictional-museum-root"
     catalog_id = "fictional-catalog"
     dimensions_id = "fictional-dimensions"
-    height_name = (
-        "Exhibit height" if version == "SIM-V1" else "Display height"
-    )
+    height_name = "展品高度" if version == "SIM-V1" else "陈列高度"
     catalog_subnodes: dict[str, Any] = {
         "DIMENSIONS": {
             "metadata": _property_metadata(
                 node_id=dimensions_id,
                 parent_node_id=catalog_id,
-                name="Dimensions",
+                name="展品尺寸",
                 label="DIMENSIONS",
                 route="MUSEUM/-/CATALOG/-/DIMENSIONS",
                 order=1,
@@ -129,7 +127,7 @@ def build_fictional_tree(
                     "metadata": _property_metadata(
                         node_id="fictional-width",
                         parent_node_id=dimensions_id,
-                        name="Display width",
+                        name="陈列宽度",
                         label="WIDTH",
                         route=(
                             "MUSEUM/-/CATALOG/-/DIMENSIONS/-/WIDTH"
@@ -147,7 +145,7 @@ def build_fictional_tree(
             "metadata": _property_metadata(
                 node_id=f"fictional-field-{index:05d}",
                 parent_node_id=catalog_id,
-                name=f"Synthetic catalog field {index:05d}",
+                name=f"模拟藏品字段 {index:05d}",
                 label=label,
                 route=f"MUSEUM/-/CATALOG/-/{label}",
                 order=index + 1,
@@ -160,7 +158,7 @@ def build_fictional_tree(
             "id": f"fictional-record-{version.lower()}",
             "map_id": SIMULATOR_TREE_ID,
             "map_type": "resource",
-            "map_name": "Imaginary Museum Catalog",
+            "map_name": "虚构博物馆藏品目录",
             "version": version,
             "category_id": SIMULATOR_CATEGORY_ID,
             "concurrent_version": 1 if version == "SIM-V1" else 2,
@@ -170,7 +168,7 @@ def build_fictional_tree(
                 "metadata": {
                     "node_id": root_id,
                     "node_type": "concept",
-                    "node_name": "Museum",
+                    "node_name": "虚构博物馆",
                     "node_label": "MUSEUM",
                     "node_label_route": "MUSEUM",
                     "node_order": 1,
@@ -181,7 +179,7 @@ def build_fictional_tree(
                             "node_id": catalog_id,
                             "parent_node_id": root_id,
                             "node_type": "concept",
-                            "node_name": "Catalog",
+                            "node_name": "藏品目录",
                             "node_label": "CATALOG",
                             "node_label_route": "MUSEUM/-/CATALOG",
                             "node_order": 1,
@@ -471,26 +469,26 @@ def _model_output(
     if schema_version == "change-intent-model-output.v1":
         is_clarification = "clarification_input" in user_payload
         question = (
-            "Which fictional measurement unit should be used?"
+            "应使用哪一种虚构计量单位？"
             if clarification and not is_clarification
             else None
         )
         return {
             "schema_version": schema_version,
-            "subject": "Synthetic display height",
-            "role": "Imaginary catalog measurement",
-            "scenario": "Fictional exhibition",
-            "lifecycle": "Catalog lifetime",
+            "subject": "陈列高度",
+            "role": "藏品尺寸测量",
+            "scenario": "虚构展览",
+            "lifecycle": "目录使用期",
             "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
             "node_kind": "PROPERTY",
             "value_type": "float",
             "cardinality": "SINGLE",
             "confirmed_facts": [
-                "A completely fictional display height is requested."
+                "需要记录完全虚构的陈列高度。"
             ],
             "assumptions": [],
             "evidence_gaps": (
-                ["A fictional measurement unit is not specified."]
+                ["尚未说明虚构计量单位。"]
                 if question is not None
                 else []
             ),
@@ -517,7 +515,7 @@ def _model_output(
                     if index == 0
                     else "NOT_EQUIVALENT"
                 ),
-                "reason": "A deterministic fictional candidate was compared.",
+                "reason": "已比较一个确定性的虚构候选。",
             }
             for index, ref in enumerate(refs)
         ]
@@ -528,7 +526,7 @@ def _model_output(
                 "USE_EXISTING_NODE" if refs else "ABSTAIN"
             ),
             "selected_candidate_ref": refs[0] if refs else None,
-            "rationale": "The simulator returned a fixed contract-valid result.",
+            "rationale": "仿真器返回固定且符合合同的结果。",
             "uncertainties": [],
             "evidence_gaps": [],
             "clarification_question": None,
@@ -541,13 +539,13 @@ def _category_response() -> dict[str, Any]:
         {
             "category_id": "fictional-root-category",
             "parent_id": None,
-            "name": "Imaginary Collections",
+            "name": "虚构资料库",
             "order": 1,
         },
         {
             "category_id": SIMULATOR_CATEGORY_ID,
             "parent_id": "fictional-root-category",
-            "name": "Imaginary Catalogs",
+            "name": "虚构藏品目录",
             "order": 1,
         },
     ]
@@ -569,7 +567,7 @@ def _resource_response(
             {
                 "resource_id": SIMULATOR_RESOURCE_ID,
                 "category_id": SIMULATOR_CATEGORY_ID,
-                "name": "Imaginary Museum Catalog",
+                "name": "虚构博物馆藏品目录",
                 "head_version": SIMULATOR_HEAD_VERSION,
                 "head_version_record_id": "fictional-record-sim-v2",
             }
@@ -596,7 +594,7 @@ def _version_response() -> dict[str, Any]:
             "position": 1,
             "version": "SIM-V2",
             "version_record_id": "fictional-record-sim-v2",
-            "description": "Synthetic display wording update.",
+            "description": "模拟陈列用语更新。",
             "is_head": True,
         },
     ]

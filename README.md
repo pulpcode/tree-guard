@@ -83,7 +83,8 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 
 当前代码覆盖确定性 Diff、两类版本审查、模型安全投影、AI 初审、专家审查，以及
 新增需求意图确认、一次受约束澄清、无 embedding 的全树词法/结构召回、受约束
-候选语义建议和人工复核；尚不包含 Web、数据库连接、向量检索、语义 Gold 或
+候选语义建议和人工复核。另有一个只连接 Clean-room 仿真仓库的 FastAPI + React
+只读工作台纵切；尚不包含治理流程 Web 操作、数据库连接、向量检索、语义 Gold 或
 Patch 发布：
 
 - `contracts/tree-snapshot.v1.schema.json`：Canonical Tree JSON Schema；
@@ -137,10 +138,17 @@ Patch 发布：
 - `src/treeguard/simulator_server.py`：只监听 loopback 的标准库 HTTP 开发壳；
 - `src/treeguard/repository_client.py`：严格验证暂定四类只读仓库响应的最小客户端；
 - `src/treeguard/simulator_cli.py`：启动仿真服务和验证仓库读取的聚合 CLI；
+- `src/treeguard/workbench.py`：目录查询与浏览器树视图正向允许列表投影；
+- `src/treeguard/web.py`：只读 FastAPI Workbench API、固定错误合同和 no-store
+  响应边界；
+- `src/treeguard/workbench_cli.py`：只监听 loopback、关闭访问日志的工作台 API
+  启动入口；
+- `web/`：React、TypeScript、Vite、Ant Design Tree 和 TanStack Query 工作台；
 - `src/treeguard/json_utils.py`：拒绝重复键、非有限数和超长整数的严格 JSON 解析；
 - `src/treeguard/cli.py`：不输出名称、ID、路径和 VALUE 的聚合式 Conformance CLI；
 - `tests/fixtures/fictional/`：完全虚构的递归复合属性样例；
-- `tests/`：标准库单元测试，无运行时第三方依赖；
+- `tests/`：以标准库 `unittest` 为主的 Python 测试，Workbench API 聚焦测试使用
+  开发依赖 HTTPX；
 - `uv.lock`：可复现 Python 环境锁。
 
 运行测试：
@@ -163,6 +171,47 @@ PYTHONPATH=src python3 -B -m treeguard /path/to/transcript.txt --allow-curl-tran
 ```
 
 真实格式样本目录 `tree-schema/` 已加入 `.gitignore`，不得提交。
+
+## 只读可视化工作台
+
+工作台当前只验证分类、资源、版本和 2,000+ 节点信息树浏览，不提供 AI 治理操作，
+不写 sidecar，也没有生产写权限。三个终端依次启动：
+
+```bash
+# 终端 1：完全虚构的 2,001 节点仓库
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
+  treeguard-contract-simulator serve \
+  --port 8765 \
+  --node-count 2001 \
+  --model-scenario ready
+
+# 终端 2：只读 Workbench API
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
+  treeguard-workbench --port 8000
+
+# 终端 3：前端开发服务器
+cd web
+npm ci
+npm run dev
+```
+
+然后访问 `http://127.0.0.1:5173/`。若 8000 端口被其他本地服务占用，可以让 API
+使用其他端口，并在启动 Vite 时设置仅供开发代理读取的
+`TREEGUARD_WEB_API_URL=http://127.0.0.1:<PORT>`。
+
+浏览器只连接 FastAPI；仓库地址和凭据不能由页面提交。树接口使用独立允许列表，
+不返回稳定 `node_id`、VALUE、未知 metadata、extension、source route、快照哈希
+或文件路径。前端搜索 2,001 节点时只渲染命中路径，Ant Design Tree 继续使用虚拟
+滚动。
+
+前端验证：
+
+```bash
+cd web
+npm ci
+npm test
+npm run build
+```
 
 离线构造一次“业务版本审查 + EvidencePack”，不会调用模型：
 

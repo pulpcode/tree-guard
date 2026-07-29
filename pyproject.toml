@@ -7,7 +7,10 @@ name = "treeguard"
 version = "0.1.0"
 description = "Constrained semantic governance for versioned information trees"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "fastapi>=0.116,<1",
+    "uvicorn>=0.35,<1",
+]
 
 [project.scripts]
 treeguard = "treeguard.cli:main"
@@ -16,9 +19,15 @@ treeguard-expert-review = "treeguard.expert_cli:main"
 treeguard-governance = "treeguard.governance_cli:main"
 treeguard-governance-demo = "treeguard.demo_cli:main"
 treeguard-contract-simulator = "treeguard.simulator_cli:main"
+treeguard-workbench = "treeguard.workbench_cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28,<1",
+]

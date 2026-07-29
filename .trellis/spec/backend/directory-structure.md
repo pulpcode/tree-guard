@@ -11,11 +11,13 @@ TreeGuard 是采用 `src` 布局的单一 Python 包：
 ├── src/treeguard/           # Python 核心与 CLI 应用边界
 ├── tests/
 │   └── fixtures/fictional/  # 完全虚构的源格式样例
-├── pyproject.toml           # 包元数据和六个 CLI 入口
-└── uv.lock                  # 可复现开发环境
+├── web/                     # React + TypeScript 只读工作台
+├── pyproject.toml           # 包元数据和七个 CLI 入口
+├── uv.lock                  # 可复现 Python 环境
+└── web/package-lock.json    # 可复现前端环境
 ```
 
-`pyproject.toml` 声明 Python 3.10+、当前无运行时依赖，以及：
+`pyproject.toml` 声明 Python 3.10+、Workbench 应用边界依赖，以及：
 
 - `treeguard` → `treeguard.cli:main`
 - `treeguard-ai-review` → `treeguard.ai_cli:main`
@@ -23,9 +25,11 @@ TreeGuard 是采用 `src` 布局的单一 Python 包：
 - `treeguard-governance` → `treeguard.governance_cli:main`
 - `treeguard-governance-demo` → `treeguard.demo_cli:main`
 - `treeguard-contract-simulator` → `treeguard.simulator_cli:main`
+- `treeguard-workbench` → `treeguard.workbench_cli:main`
 
-当前没有 Web 应用、入站 HTTP API、数据库驱动、ORM、repository、migration、
-worker、queue、vector index 或生产 Patch publisher。
+当前已有 loopback 只读 FastAPI API 和 React 工作台；没有数据库驱动、ORM、
+migration、worker、queue、vector index、真实 Spring repository 或生产 Patch
+publisher。
 
 ## 模块所有权
 
@@ -74,7 +78,14 @@ Provider 可以执行网络 IO；返回 JSON 必须通过本地字段、枚举�
 - `simulator_server.py`：只监听 loopback 的有界标准库 HTTP 壳；
 - `repository_client.py`：只接受 loopback 的暂定仓库合同客户端；
 - `simulator_cli.py`：启动服务和四类仓库聚合验证；
+- `workbench.py`：只读目录应用服务和浏览器树视图允许列表；
+- `web.py`：FastAPI DTO、路由、固定错误和响应加固；
+- `workbench_cli.py`：只监听 loopback 的 Workbench API 入口；
 - `__main__.py`：分派基础一致性 CLI。
+
+前端职责位于 `web/`：`api.ts` 只理解 Workbench DTO，`tree-model.ts` 负责确定性
+树构建、搜索和路径过滤，`App.tsx` 负责 Ant Design 交互。前端不得导入或复制
+Python 领域策略。
 
 CLI 只负责参数、编排、预期异常转换和获批准 IO。新的领域策略必须进入所属
 核心模块，不能塞进 CLI 分支。

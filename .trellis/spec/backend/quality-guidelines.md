@@ -3,10 +3,13 @@
 ## 当前工具链
 
 - Python 3.10+；
-- 当前运行时只用标准库（`pyproject.toml` 中 `dependencies = []`）；
+- 确定性核心继续优先使用标准库；Workbench 应用边界使用 FastAPI/Uvicorn；
 - setuptools + `src` 布局；
 - 标准库 `unittest`；
+- React 19 + TypeScript + Vite + Ant Design 的 `web/` 前端，使用 Vitest 做聚焦
+  纯函数测试；
 - 提交的 `uv.lock` 提供可复现开发环境。
+- `web/package-lock.json` 提供可复现前端环境。
 
 当前没有 Ruff、Black、mypy、pytest、coverage、pre-commit、CI 或第三方 JSON
 Schema validator，不得报告为已通过。新增运行时依赖必须有具体需求、内网/离线
@@ -137,6 +140,9 @@ unit suite 不发 live network。清空环境配置的测试必须在临时目�
 UV_CACHE_DIR=/tmp/treeguard-uv-cache uv sync --frozen
 UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
   python -B -m unittest discover -s tests -v
+cd web && npm ci
+cd web && npm test
+cd web && npm run build
 git diff --check
 ```
 

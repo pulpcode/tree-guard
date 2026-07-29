@@ -85,6 +85,29 @@ evaluation
 
 MVP 不引入 Elasticsearch、图数据库、Kafka 或多微服务编排。
 
+### 3.1 已实现的只读工作台纵切
+
+当前已经实现其中最小的只读浏览纵切：
+
+```text
+React + Ant Design Tree
+  → Vite development proxy
+  → loopback FastAPI Workbench API
+  → WorkbenchService 正向允许列表
+  → ProvisionalRepositoryClient
+  → Clean-room Simulator
+  → CanonicalTree
+```
+
+FastAPI 只提供分类、资源、版本和树视图读取。树视图用一次性 `N000001` 形式引用
+替换稳定节点 ID，只包含名称、label、kind、类型、基数、顺序、子引用和派生名称
+面包屑；不返回 VALUE、未知 metadata、extension、source route、哈希或文件路径。
+浏览器不直连仓库或模型，API 关闭访问日志并对响应设置 `no-store`。
+
+该纵切尚未把意图、候选、AI 建议、专家审查和回放接入 Web，也没有数据库、认证、
+队列或生产写能力。它只证明 2,001 节点虚构树的前后端协议、搜索定位和可视化基础
+可以运行。
+
 ## 4. 版本化合同
 
 所有跨模块和跨区合同都应有独立 JSON Schema 版本，不能只依赖 Pydantic 类。

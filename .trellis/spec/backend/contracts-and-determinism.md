@@ -26,6 +26,16 @@ workflow 版本，同样是缺陷。
   `contracts/business-version-review.v1.schema.json`
 - `LLMEvidencePack` ↔ `contracts/llm-evidence-pack.v1.schema.json`
 - `ExpertReviewSession` ↔ `contracts/expert-review-session.v1.schema.json`
+- `SemanticCandidateProjection` ↔
+  `contracts/semantic-recommendation-model-input.v1.schema.json`
+- `SemanticRecommendationDraft` ↔
+  `contracts/semantic-recommendation-draft.v1.schema.json`
+- `SemanticRecommendationContent` ↔
+  `contracts/semantic-recommendation-content.v1.schema.json`
+- `RecommendationReviewAction` ↔
+  `contracts/recommendation-review-action.v1.schema.json`
+- `RecommendationRecord` ↔
+  `contracts/recommendation-record.v1.schema.json`
 
 当前没有运行时 `jsonschema` 依赖。JSON Schema 是跨边界合同，Python 自己做
 精确字段与语义校验；现有测试只验证 Schema 可解析和必填字段与序列化对象
@@ -42,6 +52,7 @@ workflow 版本，同样是缺陷。
 - `src/treeguard/history.py`
 - `src/treeguard/evidence.py`
 - `src/treeguard/expert_review.py`
+- `src/treeguard/semantic_recommendation.py`
 
 私有、短生命周期 builder（如 `adapter._NodeDraft`）可以可变。不得把调用方的
 `dict`/`list` 直接放入 frozen dataclass；测试必须覆盖修改原始输入和修改
@@ -98,6 +109,10 @@ parser。
 - `verify_business_version_review_against_snapshots()`
 - `ExpertReviewSession.from_dict()` /
   `verify_expert_review_session_against_sources()`
+- `SemanticRecommendationDraft.from_dict()`：从确认、Top-20 候选和快照重建 Top-8
+  投影；
+- `RecommendationRecord.from_dict()`：从建议草稿、人工 action、确认、候选集和
+  快照重建完整记录。
 
 不可信生产者即使重新计算外层 hash，也不能让篡改工件变可信。
 
@@ -126,7 +141,12 @@ parser。
 - 真实字段名仍需严格脱敏；临时 ID 替换不能解决字段语义泄漏。
 
 参考：`evidence.py`、`ai_review.py`、`expert_synthesis.py`、
-`expert_review.py`。
+`expert_review.py`、`semantic_recommendation.py`。
+
+语义建议模型输入使用 Top-8 的 `C001`—`C008` 引用。虽然 `C` 前缀也用于其他
+一次性 EvidencePack，但引用作用域仅限各自工件，禁止跨 pack/投影复用。模型必须
+按投影顺序返回每个候选一次；本地代码校验正向动作与关系匹配。人工修订复用同一
+语义政策，不能通过人工 action 绕过模型输出门禁。
 
 ## 合同变更最低测试
 

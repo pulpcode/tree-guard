@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/semantic-recommendation-model-input.v1.schema.json",
+  "title": "TreeGuard Bounded Semantic Recommendation Model Input v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "projection_version",
+    "intent",
+    "candidate_status",
+    "candidates"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "semantic-recommendation-model-input.v1"
+    },
+    "projection_version": {
+      "const": "treeguard.semantic-candidate-projection.v1"
+    },
+    "intent": {
+      "$ref": "change-intent-model-output.v1.schema.json#/$defs/intentContent"
+    },
+    "candidate_status": {
+      "enum": [
+        "CANDIDATES_READY",
+        "NO_CANDIDATES",
+        "INSUFFICIENT_SIGNAL"
+      ]
+    },
+    "candidates": {
+      "type": "array",
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/candidate"}
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "candidate_status": {"const": "CANDIDATES_READY"}
+        }
+      },
+      "then": {
+        "properties": {
+          "candidates": {"minItems": 1}
+        }
+      },
+      "else": {
+        "properties": {
+          "candidates": {"maxItems": 0}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_ref",
+        "rank",
+        "kind",
+        "label",
+        "name",
+        "path_labels",
+        "value_type",
+        "cardinality",
+        "parent_relation"
+      ],
+      "properties": {
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^C00[1-8]$"
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        },
+        "kind": {
+          "enum": ["CONCEPT", "PROPERTY"]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "path_labels": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "value_type": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "cardinality": {
+          "enum": ["SINGLE", "MULTIPLE", null]
+        },
+        "parent_relation": {
+          "enum": [
+            "NONE",
+            "PROPOSED_PARENT",
+            "DIRECT_CHILD",
+            "SAME_BRANCH"
+          ]
+        }
+      }
+    }
+  }
+}

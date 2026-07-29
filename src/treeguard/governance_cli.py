@@ -1,4 +1,4 @@
-"""File-only CLI for change-intent drafting, confirmation, and retrieval."""
+"""File-only CLI for intent, retrieval, semantic advice, and human review."""
 
 from __future__ import annotations
 
@@ -11,9 +11,11 @@ from typing import Any
 from treeguard.adapter import TreeFormatError, adapt_tree_document
 from treeguard.ai_review import (
     INTENT_PROMPT_VERSION,
+    SEMANTIC_PROMPT_VERSION,
     BailianConfig,
     BailianIntentDraftProvider,
     BailianProviderError,
+    BailianSemanticRecommendationProvider,
 )
 from treeguard.change_intent import (
     ChangeIntentDraft,
@@ -32,7 +34,15 @@ from treeguard.private_io import (
 from treeguard.retrieval import (
     DEFAULT_MAX_CANDIDATES,
     CandidateRetrievalError,
+    CandidateSet,
     build_candidate_set,
+)
+from treeguard.semantic_recommendation import (
+    RecommendationRecord,
+    RecommendationReviewAction,
+    SemanticRecommendationDraft,
+    SemanticRecommendationError,
+    apply_recommendation_review,
 )
 
 
@@ -92,6 +102,41 @@ def build_parser() -> argparse.ArgumentParser:
         default=DEFAULT_MAX_CANDIDATES,
     )
     search_parser.add_argument("--internal-output", type=Path, required=True)
+
+    recommend_parser = subparsers.add_parser(
+        "recommend",
+        help="validate a semantic model output or call Bailian on Top-8 candidates",
+    )
+    _add_semantic_sources(recommend_parser)
+    recommend_source = recommend_parser.add_mutually_exclusive_group(
+        required=True
+    )
+    recommend_source.add_argument("--model-output-file", type=Path)
+    recommend_source.add_argument("--live", action="store_true")
+    recommend_parser.add_argument(
+        "--external-data-approved",
+        action="store_true",
+        help="confirm live inputs are fictional or explicitly approved for transfer",
+    )
+    recommend_parser.add_argument("--internal-output", type=Path, required=True)
+
+    review_parser = subparsers.add_parser(
+        "review-recommendation",
+        help="confirm, revise, or reject one semantic recommendation",
+    )
+    _add_semantic_sources(review_parser)
+    review_parser.add_argument("recommendation_draft_file", type=Path)
+    review_parser.add_argument("recommendation_action_file", type=Path)
+    review_parser.add_argument("--internal-output", type=Path, required=True)
+
+    replay_parser = subparsers.add_parser(
+        "replay-recommendation",
+        help="replay one recommendation record from all trusted file sources",
+    )
+    _add_semantic_sources(replay_parser)
+    replay_parser.add_argument("recommendation_draft_file", type=Path)
+    replay_parser.add_argument("recommendation_action_file", type=Path)
+    replay_parser.add_argument("recommendation_record_file", type=Path)
     return parser
 
 
@@ -102,10 +147,16 @@ def _add_confirmation_sources(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("action_file", type=Path)
 
 
+def _add_semantic_sources(parser: argparse.ArgumentParser) -> None:
+    _add_confirmation_sources(parser)
+    parser.add_argument("confirmation_file", type=Path)
+    parser.add_argument("candidate_file", type=Path)
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if (
-        args.command == "draft"
+        args.command in {"draft", "recommend"}
         and args.live
         and not args.external_data_approved
     ):
@@ -228,6 +279,146 @@ def main(argv: Sequence[str] | None = None) -> int:
             action,
             tree,
         )
+        if args.command != "search":
+            candidate_set = CandidateSet.from_dict(
+                read_private_json(
+                    args.candidate_file,
+                    max_bytes=_MAX_ARTIFACT_BYTES,
+                ),
+                confirmation,
+                tree,
+            )
+            if args.command == "recommend":
+                _preflight_output(args.internal_output)
+                if args.live:
+                    provider = BailianSemanticRecommendationProvider(
+                        BailianConfig.from_env()
+                    )
+                    try:
+                        recommendation_draft = provider.recommend(
+                            confirmation,
+                            candidate_set,
+                            tree,
+                        )
+                        ai_called = True
+                    except BailianProviderError as exc:
+                        ai_called = exc.code not in _MODEL_PREFLIGHT_ERROR_CODES
+                        raise
+                    ai_report = {
+                        "called": True,
+                        "status": "COMPLETED",
+                        "provider": provider.provider_name,
+                        "capability": provider.capability,
+                        "model": provider.config.model,
+                    }
+                else:
+                    assert args.model_output_file is not None
+                    recommendation_draft = (
+                        SemanticRecommendationDraft.from_model_dict(
+                            read_private_json(
+                                args.model_output_file,
+                                max_bytes=_MAX_MODEL_OUTPUT_BYTES,
+                            ),
+                            confirmation,
+                            candidate_set,
+                            tree,
+                            model_provider="UNVERIFIED_MODEL_OUTPUT_FILE",
+                            model_capability="JSON_OBJECT",
+                            model_name="unverified-file",
+                            prompt_version=SEMANTIC_PROMPT_VERSION,
+                        )
+                    )
+                    ai_report = {
+                        "called": False,
+                        "status": "MODEL_OUTPUT_FILE_VALIDATED",
+                    }
+                if not write_private_json(
+                    args.internal_output,
+                    recommendation_draft.to_dict(),
+                ):
+                    _print_error(
+                        "INTERNAL_OUTPUT_WRITE_FAILED",
+                        ai_called=ai_called,
+                    )
+                    return 2
+                print(
+                    json.dumps(
+                        {
+                            "report_version": (
+                                "governance-semantic-aggregate.v1"
+                            ),
+                            "valid": True,
+                            "operation": "RECOMMEND",
+                            "status": "READY_FOR_HUMAN_REVIEW",
+                            "recommended_action": (
+                                recommendation_draft.recommended_action
+                            ),
+                            "semantic_approval": False,
+                            "patch_eligible": False,
+                            "ai": ai_report,
+                        },
+                        ensure_ascii=False,
+                        sort_keys=True,
+                    )
+                )
+                return 0
+
+            recommendation_draft = SemanticRecommendationDraft.from_dict(
+                read_private_json(
+                    args.recommendation_draft_file,
+                    max_bytes=_MAX_ARTIFACT_BYTES,
+                ),
+                confirmation,
+                candidate_set,
+                tree,
+            )
+            recommendation_action = RecommendationReviewAction.from_dict(
+                read_private_json(
+                    args.recommendation_action_file,
+                    max_bytes=_MAX_ARTIFACT_BYTES,
+                ),
+                confirmation,
+                candidate_set,
+                tree,
+            )
+            if args.command == "review-recommendation":
+                record = apply_recommendation_review(
+                    recommendation_draft,
+                    recommendation_action,
+                    confirmation,
+                    candidate_set,
+                    tree,
+                )
+                _preflight_output(args.internal_output)
+                if not write_private_json(
+                    args.internal_output,
+                    record.to_dict(),
+                ):
+                    _print_error("INTERNAL_OUTPUT_WRITE_FAILED")
+                    return 2
+                report = record.aggregate_report()
+                report["operation"] = "REVIEW_RECOMMENDATION"
+                report["ai"] = {"called": False, "status": "NOT_CALLED"}
+                print(json.dumps(report, ensure_ascii=False, sort_keys=True))
+                return 0
+
+            record = RecommendationRecord.from_dict(
+                read_private_json(
+                    args.recommendation_record_file,
+                    max_bytes=_MAX_ARTIFACT_BYTES,
+                ),
+                recommendation_draft,
+                recommendation_action,
+                confirmation,
+                candidate_set,
+                tree,
+            )
+            report = record.aggregate_report()
+            report["operation"] = "REPLAY_RECOMMENDATION"
+            report["ai"] = {"called": False, "status": "NOT_CALLED"}
+            print(json.dumps(report, ensure_ascii=False, sort_keys=True))
+            return 0
+
         candidate_set = build_candidate_set(
             confirmation,
             tree,
@@ -251,7 +442,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 2
         _print_error(exc.code, ai_called=ai_called)
         return 3
-    except (IntentValidationError, CandidateRetrievalError) as exc:
+    except (
+        IntentValidationError,
+        CandidateRetrievalError,
+        SemanticRecommendationError,
+    ) as exc:
         _print_error(exc.code)
         return 2
     except TreeFormatError:

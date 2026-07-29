@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/semantic-recommendation-draft.v1.schema.json",
+  "title": "TreeGuard Non-executable Semantic Recommendation Draft v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "model_provider",
+    "model_capability",
+    "model_name",
+    "prompt_version",
+    "model_provenance_status",
+    "semantic_approval",
+    "patch_eligible",
+    "source_confirmation_hash",
+    "source_candidate_set_hash",
+    "source_snapshot_hash",
+    "source_projection_hash",
+    "candidate_assessments",
+    "recommended_action",
+    "selected_candidate_ref",
+    "rationale",
+    "uncertainties",
+    "evidence_gaps",
+    "clarification_question",
+    "draft_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "semantic-recommendation-draft.v1"},
+    "model_provider": {"$ref": "#/$defs/text"},
+    "model_capability": {"$ref": "#/$defs/text"},
+    "model_name": {"$ref": "#/$defs/text"},
+    "prompt_version": {"$ref": "#/$defs/text"},
+    "model_provenance_status": {"const": "UNVERIFIED_FILE_ASSERTION"},
+    "semantic_approval": {"const": false},
+    "patch_eligible": {"const": false},
+    "source_confirmation_hash": {"$ref": "#/$defs/digest"},
+    "source_candidate_set_hash": {"$ref": "#/$defs/digest"},
+    "source_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "source_projection_hash": {"$ref": "#/$defs/digest"},
+    "candidate_assessments": {
+      "$ref": "semantic-recommendation-model-output.v1.schema.json#/properties/candidate_assessments"
+    },
+    "recommended_action": {
+      "$ref": "semantic-recommendation-model-output.v1.schema.json#/$defs/recommendedAction"
+    },
+    "selected_candidate_ref": {
+      "$ref": "semantic-recommendation-model-output.v1.schema.json#/$defs/nullableCandidateRef"
+    },
+    "rationale": {"$ref": "#/$defs/text"},
+    "uncertainties": {"$ref": "#/$defs/textArray"},
+    "evidence_gaps": {"$ref": "#/$defs/textArray"},
+    "clarification_question": {"$ref": "#/$defs/nullableText"},
+    "draft_hash": {"$ref": "#/$defs/digest"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "recommended_action": {
+            "enum": [
+              "USE_EXISTING_NODE",
+              "ADD_NODE_FROM_CONTRACT",
+              "ADD_CONTEXT_FIELD"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "selected_candidate_ref": {
+            "type": "string",
+            "pattern": "^C00[1-8]$"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "selected_candidate_ref": {"const": null}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "recommended_action": {"const": "NEED_CLARIFICATION"}
+        }
+      },
+      "then": {
+        "properties": {
+          "clarification_question": {"$ref": "#/$defs/text"}
+        }
+      },
+      "else": {
+        "properties": {
+          "clarification_question": {"const": null}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "recommended_action": {"const": "NEED_EVIDENCE"}
+        }
+      },
+      "then": {
+        "properties": {
+          "evidence_gaps": {"minItems": 1}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "nullableText": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "textArray": {
+      "type": "array",
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/text"}
+    }
+  }
+}

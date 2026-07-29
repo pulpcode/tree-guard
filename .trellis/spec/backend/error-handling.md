@@ -26,9 +26,11 @@
 - `ExpertReviewError`
 - `IntentValidationError`
 - `CandidateRetrievalError`
+- `SemanticRecommendationError`
 
 code 使用大写 snake case，通常以领域开头，如 `EVIDENCE_*`、`AI_REVIEW_*`、
-`BAILIAN_*`、`EXPERT_*`；`BAILIAN_HTTP_<status>` 是明确允许的动态 code family。
+`BAILIAN_*`、`EXPERT_*`、`SEMANTIC_*`、`RECOMMENDATION_*`；
+`BAILIAN_HTTP_<status>` 是明确允许的动态 code family。
 
 message 不是公开诊断合同，可能含进程内调试细节，不能跨安全 CLI 边界输出。
 
@@ -60,8 +62,13 @@ constructor/`__post_init__()` 在代码尝试创建内部不一致工件时抛 `
 已处理失败输出版本化聚合 JSON，不输出异常 message 或 stack trace：
 
 - exit 2：输入、preflight、确定性 gate、配置或私有写入拒绝；
-- AI 能力 CLI 的 exit 3：已经尝试外部模型调用，但失败或 abstain；
+- AI 能力 CLI 的 exit 3：已经尝试外部模型调用，但传输、响应或输出校验失败；
 - exit 0：请求操作完成，包括合法空结果/无 case。
+
+选择性动作中的 `ABSTAIN` 是通过合同校验的业务建议，不是 Provider 失败；
+`treeguard-governance recommend` 应以 exit 0 保存该草稿。历史
+`treeguard-ai-review` 的 `AI_REVIEW_ABSTAIN` 仍按其既有命令合同返回 exit 3，
+不能据此类推新命令。
 
 详见 [CLI 输出与诊断](./cli-output-and-diagnostics.md)。`ai.called` 必须与网络
 执行是否真正开始一致；当前已知偏差需由独立缺陷任务修复。

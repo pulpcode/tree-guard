@@ -9,6 +9,7 @@ HTTP 服务或 Spring Boot/MongoDB 连接器。已实现的持久化模型只有
 - 可选的私有 AI review bundle；
 - 不可变 expert action/session/approval JSON；
 - 不可变 intent request/draft/action/confirmation/candidate JSON；
+- 不可变 semantic recommendation draft/review action/record JSON；
 - 从冻结源工件做确定性回放。
 
 唯一实现的网络路径是显式启用的百炼 `POST /chat/completions`。MongoDB、搜索、
@@ -23,6 +24,9 @@ Overlay 和 Patch 发布的设计文档不能被写成已存在层的代码规�
 - `business_review.py`
 - `evidence.py`
 - `expert_review.py`
+- `change_intent.py`
+- `retrieval.py`
+- `semantic_recommendation.py`
 
 它们不得读取环境变量、打开文件、调用 HTTP 或获取数据库凭据。副作用只能在
 Adapter、Provider 或 CLI 边界发生。

@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/recommendation-record.v1.schema.json",
+  "title": "TreeGuard Non-executable Recommendation Record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_semantics",
+    "identity_status",
+    "status",
+    "semantic_approval",
+    "patch_eligible",
+    "gold_eligible",
+    "source_confirmation_hash",
+    "source_candidate_set_hash",
+    "source_snapshot_hash",
+    "source_draft_hash",
+    "source_action_hash",
+    "reviewer_ref",
+    "recorded_at",
+    "reviewer_reasoning",
+    "effective_recommendation",
+    "record_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "recommendation-record.v1"},
+    "record_semantics": {"const": "OPERATIONAL_FEEDBACK_ONLY"},
+    "identity_status": {"const": "UNVERIFIED_FILE_ASSERTION"},
+    "status": {"enum": ["CONFIRMED", "REVISED", "REJECTED"]},
+    "semantic_approval": {"const": false},
+    "patch_eligible": {"const": false},
+    "gold_eligible": {"const": false},
+    "source_confirmation_hash": {"$ref": "#/$defs/digest"},
+    "source_candidate_set_hash": {"$ref": "#/$defs/digest"},
+    "source_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "source_draft_hash": {"$ref": "#/$defs/digest"},
+    "source_action_hash": {"$ref": "#/$defs/digest"},
+    "reviewer_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "minLength": 20,
+      "maxLength": 35
+    },
+    "reviewer_reasoning": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 8000
+    },
+    "effective_recommendation": {
+      "oneOf": [
+        {"$ref": "semantic-recommendation-content.v1.schema.json"},
+        {"type": "null"}
+      ]
+    },
+    "record_hash": {"$ref": "#/$defs/digest"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {"enum": ["CONFIRMED", "REVISED"]}
+        }
+      },
+      "then": {
+        "properties": {
+          "effective_recommendation": {
+            "$ref": "semantic-recommendation-content.v1.schema.json"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "effective_recommendation": {"const": null}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

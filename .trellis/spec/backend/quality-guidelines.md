@@ -64,8 +64,12 @@ tests/test_business_review.py
 tests/test_evidence.py
 tests/test_ai_review.py
 tests/test_expert_review.py
+tests/test_change_intent.py
+tests/test_retrieval.py
+tests/test_semantic_recommendation.py
 tests/test_ai_cli.py
 tests/test_expert_cli.py
+tests/test_governance_cli.py
 tests/test_contract.py
 ```
 

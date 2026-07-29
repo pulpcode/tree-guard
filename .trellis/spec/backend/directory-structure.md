@@ -47,6 +47,8 @@ worker、queue、vector index 或生产 Patch publisher。
 - `expert_review.py`：纯内存专家审查状态机与事件回放。
 - `change_intent.py`：新增需求、模型草稿、人工确认与可信来源回放；
 - `retrieval.py`：确认意图上的确定性全树候选评分、截断和回放。
+- `semantic_recommendation.py`：有界候选投影、关系—动作政策、人工建议复核和可信
+  记录回放。
 
 这些模块必须保持确定性，不得自行发起网络或文件系统副作用。
 
@@ -63,7 +65,7 @@ Provider 可以执行网络 IO；返回 JSON 必须通过本地字段、枚举�
 - `cli.py`：聚合一致性命令；
 - `ai_cli.py`：单个业务版本审查案例、可选 AI 调用和私有 bundle 输出；
 - `expert_cli.py`：`apply`、`prepare-approval`、`replay` 私有文件工作流；
-- `governance_cli.py`：`draft`、`confirm`、`search` 私有旁路工作流；
+- `governance_cli.py`：意图、召回、语义建议、人工复核和回放的私有旁路工作流；
 - `__main__.py`：分派基础一致性 CLI。
 
 CLI 只负责参数、编排、预期异常转换和获批准 IO。新的领域策略必须进入所属
@@ -84,9 +86,11 @@ validation → adapter → diff → history → business_review → evidence
 
 models / hashing ─────────────→ change_intent ──→ retrieval
 models / lexical ───────────────────────────────→ retrieval
-evidence / change_intent / models ─────────────→ ai_review
-adapter / ai_review / change_intent / retrieval / private_io
-                                                └→ governance_cli
+change_intent / retrieval / models ──────→ semantic_recommendation
+evidence / change_intent / semantic_recommendation / models
+                                           └────→ ai_review
+adapter / ai_review / change_intent / retrieval /
+semantic_recommendation / private_io ──────────→ governance_cli
 ```
 
 核心模块不得反向导入 CLI。以下跨模块私有导入是当前技术债，不得继续扩散：
@@ -121,4 +125,4 @@ adapter / ai_review / change_intent / retrieval / private_io
   `treeguard.snapshot-diff.v1`。
 
 参考实现：`src/treeguard/models.py`、`diff.py`、`evidence.py`、
-`ai_cli.py`、`expert_review.py`。
+`semantic_recommendation.py`、`ai_cli.py`、`expert_review.py`。

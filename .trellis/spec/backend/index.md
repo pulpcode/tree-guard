@@ -42,7 +42,7 @@
 | [持久化与集成](./persistence-and-integration.md) | 增加文件、HTTP、数据库或环境访问 |
 | [错误处理](./error-handling.md) | 增加校验、错误码、异常转换或退出行为 |
 | [CLI 输出与诊断](./cli-output-and-diagnostics.md) | 修改 stdout、报告、敏感输出或模型执行 |
-| [新增需求意图与候选召回](./governance-intake-and-retrieval.md) | 修改 ChangeIntent、人工确认、全树召回或治理 CLI |
+| [新增需求意图、候选召回与语义推荐](./governance-intake-and-retrieval.md) | 修改 ChangeIntent、人工确认、全树召回、语义建议或治理 CLI |
 | [质量规范](./quality-guidelines.md) | 每次实施与审查 |
 
 ## 开发前检查

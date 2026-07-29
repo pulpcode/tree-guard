@@ -35,6 +35,7 @@
 - `models.py` 的 `ImportResult.conformance_report()`
 - `business_review.py` 的 `BusinessVersionReviewRun.aggregate_report()`
 - `expert_review.py` 的 `ExpertReviewSession.aggregate_report()`
+- `semantic_recommendation.py` 的 `RecommendationRecord.aggregate_report()`
 - `ai_cli.py` / `expert_cli.py` 的 `_print_error()`
 
 扩展报告时从正向允许列表构造，不能先构造内部 payload 再删除少数敏感 key。
@@ -46,7 +47,7 @@
 | `treeguard` | 一致性有效 | 格式/一致性拒绝 | 不使用 |
 | `treeguard-ai-review` | 离线 evidence、无 case 或 AI 审查完成 | 输入、批准、Provider preflight、确定性 gate、私有写入拒绝 | 已尝试模型，但网络/响应/输出校验失败 |
 | `treeguard-expert-review` | apply、replay 或 approval preparation 完成 | 输入、批准、Provider preflight、状态/完整性、私有写入拒绝 | 已尝试外部 synthesis 且失败 |
-| `treeguard-governance` | draft、confirm 或 search 完成，包括合法无候选/信号不足 | 输入、确认、来源、Provider preflight 或私有 IO 拒绝 | 已尝试外部意图草稿调用且失败 |
+| `treeguard-governance` | draft、confirm、search、recommend、review-recommendation 或 replay-recommendation 完成，包括合法无候选、信号不足或 `ABSTAIN` | 输入、确认、来源、语义政策、Provider preflight 或私有 IO 拒绝 | 已尝试外部意图/语义模型调用且失败 |
 
 preflight 失败保持 `ai.called=false`。新增 Provider error 时，必须同步所有 AI 能力 CLI
 的 preflight code 分类和测试。

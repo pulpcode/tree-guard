@@ -305,6 +305,20 @@ IntentConfirmation → CandidateSet`。AI 只整理主体、角色、场景、�
 boost，不裁剪全树。零候选和信号不足都保持 `allows_addition=false`。后续是否增加
 embedding 和 reranker 由内网冻结案例的分层召回结果决定。
 
+### D-043：语义建议使用有界候选、选择性动作和非 Gold 人工反馈
+
+语义比较固定从可信 Top-20 候选投影前 8 个，使用一次性 `C001`—`C008` 引用，
+不把稳定节点 ID、哈希、VALUE 或未知字段交给模型。模型必须逐项判断候选关系，并
+只输出一个受本地关系—动作政策约束的建议；没有合格候选或证据不足时只能追问、
+请求证据或拒答，不能把“未找到”解释成新增许可。
+
+人工可以确认、按相同政策修订或拒绝 AI 建议，但文件身份只是
+`UNVERIFIED_FILE_ASSERTION`。生成的 `RecommendationRecord` 固定为
+`OPERATIONAL_FEEDBACK_ONLY`，并保持 `semantic_approval=false`、
+`patch_eligible=false`、`gold_eligible=false`。它用于回放和后续产品观察，不直接
+训练、评测或发布。Gold 定义、召回率口径、样本量和专家复核规则继续作为独立、暂定
+评测任务推敲。
+
 ## 6. 仍需内网核实的事实
 
 以下问题不能由外网假设替代：

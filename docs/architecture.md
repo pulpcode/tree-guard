@@ -200,7 +200,59 @@ JSON Schema、运行时不变量和无密钥哈希只验证制品内部自洽，
 不能只信任外层哈希。文件声明的 reviewer 身份仍为
 `UNVERIFIED_FILE_ASSERTION`。
 
-### 4.7 `SemanticOverlay`
+### 4.7 `SemanticRecommendationDraft` 与 `RecommendationRecord`
+
+当前文件型实现从可信 `CandidateSet` 固定投影 Top-8，并使用一次性
+`C001`—`C008` 引用交给模型。模型视图保留候选名称、label、路径、节点类型、
+值类型、基数和检索原因，但排除稳定节点 ID、快照/候选哈希、原始 VALUE 和未知
+字段。规范 JSON 总长限制为 48,000 字符；超限直接拒绝，不依赖模型截断。
+投影及其哈希由本地代码从确认意图、Top-20 候选和当前快照重算。
+
+模型必须按投影顺序完整评估每个候选，关系仅允许：
+
+```text
+SEMANTICALLY_EQUIVALENT
+REUSES_CONTRACT
+CONTEXTUALLY_RELATED
+NOT_EQUIVALENT
+NEED_EVIDENCE
+```
+
+一次调用只产生一个选择性动作：
+
+```text
+USE_EXISTING_NODE
+ADD_NODE_FROM_CONTRACT
+ADD_CONTEXT_FIELD
+NEED_CLARIFICATION
+NEED_EVIDENCE
+ABSTAIN
+```
+
+前三个正向动作必须选择候选，且候选关系分别为
+`SEMANTICALLY_EQUIVALENT`、`REUSES_CONTRACT`、`CONTEXTUALLY_RELATED`。
+`ADD_CONTEXT_FIELD` 在 Shadow MVP 中还要求确认意图含非空场景和至少一项
+`confirmed_facts`；这是待内网效果验证的临时证据下限，不是长期领域真理。
+澄清动作必须且只能携带一个问题；证据动作必须列出证据缺口；零候选、全为
+`NEED_EVIDENCE` 或来源漂移时不能产生正向动作。
+
+`SemanticRecommendationDraft v1` 绑定确认、候选集、快照、投影及模型来源。人工
+通过独立 `RecommendationReviewAction v1` 确认、按相同本地政策修订或拒绝。
+`RecommendationRecord v1` 从全部可信来源重放产生，固定：
+
+```text
+record_semantics=OPERATIONAL_FEEDBACK_ONLY
+identity_status=UNVERIFIED_FILE_ASSERTION
+semantic_approval=false
+patch_eligible=false
+gold_eligible=false
+```
+
+因此“人工确认模型建议”只形成可追溯的运营反馈，不等于领域语义审批、评测 Gold
+或可执行 Patch。完整 reasoning 留在内网私有 sidecar，聚合回放不输出文本、引用、
+节点信息或哈希。
+
+### 4.8 `SemanticOverlay`
 
 至少包含：
 
@@ -229,7 +281,7 @@ STALE
 
 只有 `EXPERT_APPROVED` 的补充语义可以进入在线判断。基础节点修改后，如果 `base_node_hash` 不再匹配，Overlay 自动变为 `STALE`。
 
-### 4.8 `DeliberationRecord`
+### 4.9 `DeliberationRecord`
 
 当前落地合同名为 `ExpertReviewSession v1`，是单案例、文件型、追加式事件账本，
 不实现聊天系统、Web、数据库或 Patch。会话在创建时绑定：
@@ -284,7 +336,7 @@ Patch；`APPROVED` 只代表领域语义裁决完成，仍然
 由受控服务选择 head、拒绝陈旧提交并记录 supersession。在此之前，“完整性有效”
 不能解释成“该分支已被选为权威结果”。
 
-### 4.9 `SchemaPatch`
+### 4.10 `SchemaPatch`
 
 至少包含：
 
@@ -303,7 +355,7 @@ status
 
 MVP Patch 是声明式文件，不包含数据库连接和执行代码。
 
-### 4.10 `UsageManifest`
+### 4.11 `UsageManifest`
 
 至少包含：
 
@@ -321,7 +373,7 @@ manifest_hash
 
 邮件系统保持引用关系的事实来源。TreeGuard 周期性导入 Manifest，建立只读反向索引。
 
-### 4.11 `WorkflowTrace`
+### 4.12 `WorkflowTrace`
 
 至少记录：
 
@@ -406,18 +458,27 @@ REJECTED
 
 ### 6.2 局部精排
 
-使用轻量模型或确定性特征将候选缩小到 5–8 个，再交给 Qwen 比较。输入必须包含候选的完整路径、主体、角色、场景、类型、基数、Overlay 和已知依赖。
+当前实现先使用确定性召回分数取得 Top-20，再固定投影其中 Top-8 交给 Qwen
+逐项比较；尚未实现独立的学习型 reranker。模型只能使用临时候选引用，必须评估
+全部投影候选并输出一个受本地关系—动作政策约束的建议。模型输出通过本地精确
+字段、枚举、引用、顺序、来源和跨字段校验后，才生成
+`SemanticRecommendationDraft`。
+
+后续是否增加 embedding 或学习型 reranker，必须由内网冻结案例证明它改善候选
+覆盖或排序，且不能破坏 Top-20 来源绑定、临时引用和确定性回放。
 
 ### 6.3 分层评测
 
-分别测量：
+以下只是待推敲的评测问题分类，不是当前数据合同、Gold 生成规则或已实现指标：
 
 1. 召回是否找到了正确候选；
 2. 精排是否把候选放进 Top-5；
 3. 语义决策是否选择了正确动作；
 4. 风险门是否在证据不足时正确拒答。
 
-不能用最终准确率掩盖检索漏召回。
+不能用最终准确率掩盖检索漏召回；但在 2,000+ 节点上没有穷举 Gold 时，也不能把
+候选池命中率误称为全树召回率。评测合同、样本量、双人复核和专家补充漏召回的
+处理方式，需要在后续独立任务中结合模拟树与内网试点重新确定。
 
 ## 7. Semantic Overlay
 

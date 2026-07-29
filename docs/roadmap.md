@@ -73,17 +73,21 @@
   - `USE_EXISTING_NODE`；
   - `ADD_NODE_FROM_CONTRACT`；
   - `ADD_CONTEXT_FIELD`；
-  - `ADD_ALIAS_OVERLAY`；
   - `NEED_CLARIFICATION`；
   - `NEED_EVIDENCE`；
   - `ABSTAIN`。
 - 实现非法 JSON、未知节点、超时和版本漂移门禁。
 
-当前已完成其中一个文件型纵切：`IntentRequest → ChangeIntentDraft →
-IntentConfirmation → CandidateSet`。它支持百炼或私有模型输出文件、显式人工确认、
-可信来源回放，以及无 embedding 的全树词法/结构 Top-20 基线。该确认只授权检索，
-不构成语义审批；候选集也不输出最终动作或新增许可。内网 Qwen 直连、混合召回、
-候选语义比较和选择性动作仍待后续实现。
+当前已完成文件型纵切：`IntentRequest → ChangeIntentDraft →
+IntentConfirmation → CandidateSet → SemanticRecommendationDraft →
+RecommendationRecord`。它支持百炼或私有模型输出文件、显式人工确认、可信来源
+回放、无 embedding 的全树词法/结构 Top-20 基线，以及固定 Top-8 候选的逐项语义
+比较和单一选择性动作。本地政策约束动作与候选关系一致，零候选或证据不足不能产生
+正向建议；专家可以确认、按相同政策修订或拒绝。
+
+当前人工建议记录只作 `OPERATIONAL_FEEDBACK_ONLY`，不构成语义审批、Gold 或 Patch
+资格。内网 Qwen HTTP 直连、embedding/混合召回、学习型 reranker、
+`ADD_ALIAS_OVERLAY` 和正式效果评测仍待后续实现。
 
 验收：
 

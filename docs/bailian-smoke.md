@@ -152,6 +152,39 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance draft 
 
 该路径只验证模型输出与后续确认/召回合同，不证明内网 Qwen 的 HTTP 适配已经完成。
 
+候选语义比较使用独立 Prompt 和合同。先完成 `confirm` 与 `search`，再对固定
+Top-8 模型投影执行：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance recommend \
+  /path/to/fictional-tree.json \
+  /approved/internal/intent-request.json \
+  /approved/internal/intent-draft.json \
+  /approved/internal/intent-action.json \
+  /approved/internal/intent-confirmation.json \
+  /approved/internal/candidate-set.json \
+  --live \
+  --external-data-approved \
+  --internal-output /approved/internal/recommendation-draft.json
+```
+
+live 前置批准在读取输入和联网前检查。发送内容排除稳定节点 ID、内部哈希、VALUE
+和未知字段，但仍包含需求语义、候选名称和路径，因此真实材料默认只能在内网 Qwen
+执行。百炼仅用于完全虚构或最终外发字节已获批的样本。
+
+如果内网 Qwen 暂时只方便导出 JSON，可把符合
+`semantic-recommendation-model-output.v1` 的原始输出保存为 `0600` 私有文件，
+将上面的 `--live --external-data-approved` 替换为：
+
+```bash
+--model-output-file /approved/internal/qwen-semantic-model-output.json
+```
+
+本地校验要求模型按顺序评估所有投影候选，并约束正向动作与候选关系一致。
+`ABSTAIN`、`NEED_CLARIFICATION` 和 `NEED_EVIDENCE` 是合法的选择性建议，不表示
+传输失败。输出草稿仍需经过独立人工 action 和 `review-recommendation` 才形成
+`RecommendationRecord`；该记录固定不能成为 Gold、语义审批或 Patch。
+
 ## 5. 专家思考 AI 整理冒烟
 
 先用上一节的 `treeguard-ai-review --live --external-data-approved

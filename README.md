@@ -101,6 +101,12 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - `contracts/intent-review-action.v1.schema.json`：人工确认、修订或拒绝草稿的输入合同；
 - `contracts/intent-confirmation.v1.schema.json`：只允许进入检索的确认制品；
 - `contracts/candidate-set.v1.schema.json`：确定性全树候选与可解释评分合同；
+- `contracts/semantic-recommendation-model-input.v1.schema.json`：不含稳定 ID 和哈希的 Top-8 模型投影合同；
+- `contracts/semantic-recommendation-model-output.v1.schema.json`：候选逐项关系与单一选择性建议合同；
+- `contracts/semantic-recommendation-draft.v1.schema.json`：绑定确认、候选集、快照和模型来源的建议草稿；
+- `contracts/semantic-recommendation-content.v1.schema.json`：人工修订建议的本地约束合同；
+- `contracts/recommendation-review-action.v1.schema.json`：确认、修订或拒绝建议的人工 action；
+- `contracts/recommendation-record.v1.schema.json`：只作运营反馈、可可信回放的审查记录；
 - `src/treeguard/adapter.py`：直接导出和 API 响应的递归适配器；
 - `src/treeguard/hashing.py`：排除 VALUE 和审计字段的稳定 Schema 哈希；
 - `src/treeguard/diff.py`：只按稳定 `node_id` 匹配的保存修订/业务版本 Diff；
@@ -115,8 +121,9 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - `src/treeguard/change_intent.py`：需求、AI 草稿、人工确认和可信来源回放；
 - `src/treeguard/lexical.py`：历史 Evidence 与在线召回共享的确定性词法切分；
 - `src/treeguard/retrieval.py`：全树词法/结构召回、父位置 boost、确定性排序和候选回放；
+- `src/treeguard/semantic_recommendation.py`：Top-8 候选投影、语义关系/动作门禁、人工复核记录和可信回放；
 - `src/treeguard/private_io.py`：敏感 JSON 的有界私有读取和不可覆盖原子发布；
-- `src/treeguard/governance_cli.py`：`draft`、`confirm`、`search` 三步旁路工作流；
+- `src/treeguard/governance_cli.py`：意图、召回、语义建议、人工复核和回放的文件型旁路工作流；
 - `src/treeguard/json_utils.py`：拒绝重复键、非有限数和超长整数的严格 JSON 解析；
 - `src/treeguard/cli.py`：不输出名称、ID、路径和 VALUE 的聚合式 Conformance CLI；
 - `tests/fixtures/fictional/`：完全虚构的递归复合属性样例；
@@ -177,13 +184,16 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-ai-review \
 
 ## AI 辅助新增需求治理
 
-`treeguard-governance` 将新需求处理拆成三个不可变步骤：
+`treeguard-governance` 将新需求处理拆成可回放的文件步骤：
 
 ```text
 私有 IntentRequest
 → AI ChangeIntentDraft
 → 建设人员 CONFIRM_FOR_RETRIEVAL / REJECT_DRAFT
 → 确定性全树 CandidateSet
+→ AI Top-8 SemanticRecommendationDraft
+→ 人工 CONFIRM / REVISE / REJECT
+→ RecommendationRecord
 ```
 
 所有树、需求、模型输出、草稿、action、确认和候选文件必须为不宽于 `0600` 的普通文件。
@@ -226,6 +236,60 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance search
 可解释分项；拟挂载位置只 boost，不裁剪全树。零候选和信号不足均保持
 `allows_addition=false`。外部百炼 live 草稿仍必须显式添加 `--live` 和
 `--external-data-approved`；真实需求默认只在内网处理。
+
+语义建议固定从可信 Top-20 `CandidateSet` 投影前 8 个候选，以一次性
+`C001`—`C008` 引用交给模型。投影排除稳定节点 ID、哈希、VALUE 和未知字段，
+并限制规范 JSON 总长不超过 48,000 字符。
+先用冻结模型输出验证合同：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance recommend \
+  /approved/internal/current-tree.json \
+  /approved/internal/intent-request.json \
+  /approved/internal/intent-draft.json \
+  /approved/internal/intent-action.json \
+  /approved/internal/intent-confirmation.json \
+  /approved/internal/candidate-set.json \
+  --model-output-file /approved/internal/semantic-model-output.json \
+  --internal-output /approved/internal/recommendation-draft.json
+```
+
+模型必须按顺序逐项判断候选关系，并且只给一个
+`USE_EXISTING_NODE`、`ADD_NODE_FROM_CONTRACT`、`ADD_CONTEXT_FIELD`、
+`NEED_CLARIFICATION`、`NEED_EVIDENCE` 或 `ABSTAIN`。正向动作必须引用具有匹配
+关系的候选；零候选、证据不足或越权字段均不能产生正向动作。
+
+审查人员把实际查看的 `draft_hash` 写入
+`recommendation-review-action.v1`，再执行：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance review-recommendation \
+  /approved/internal/current-tree.json \
+  /approved/internal/intent-request.json \
+  /approved/internal/intent-draft.json \
+  /approved/internal/intent-action.json \
+  /approved/internal/intent-confirmation.json \
+  /approved/internal/candidate-set.json \
+  /approved/internal/recommendation-draft.json \
+  /approved/internal/recommendation-action.json \
+  --internal-output /approved/internal/recommendation-record.json
+
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance replay-recommendation \
+  /approved/internal/current-tree.json \
+  /approved/internal/intent-request.json \
+  /approved/internal/intent-draft.json \
+  /approved/internal/intent-action.json \
+  /approved/internal/intent-confirmation.json \
+  /approved/internal/candidate-set.json \
+  /approved/internal/recommendation-draft.json \
+  /approved/internal/recommendation-action.json \
+  /approved/internal/recommendation-record.json
+```
+
+`RecommendationRecord` 固定为 `OPERATIONAL_FEEDBACK_ONLY`，即使人工确认也保持
+`semantic_approval=false`、`patch_eligible=false`、`gold_eligible=false`。
+详细 reviewer reasoning 只保存在私有工件；回放 stdout 只给固定状态和门禁。
+评测 Gold、召回指标和效果报告不属于本纵切，仍是待验证的后续设计。
 
 ## AI 辅助专家审查
 

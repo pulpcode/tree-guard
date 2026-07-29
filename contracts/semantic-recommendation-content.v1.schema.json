@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/semantic-recommendation-content.v1.schema.json",
+  "title": "TreeGuard Validated Semantic Recommendation Content v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_assessments",
+    "recommended_action",
+    "selected_candidate_ref",
+    "rationale",
+    "uncertainties",
+    "evidence_gaps",
+    "clarification_question"
+  ],
+  "properties": {
+    "schema_version": {"const": "semantic-recommendation-content.v1"},
+    "candidate_assessments": {
+      "$ref": "semantic-recommendation-model-output.v1.schema.json#/properties/candidate_assessments"
+    },
+    "recommended_action": {
+      "$ref": "semantic-recommendation-model-output.v1.schema.json#/$defs/recommendedAction"
+    },
+    "selected_candidate_ref": {
+      "$ref": "semantic-recommendation-model-output.v1.schema.json#/$defs/nullableCandidateRef"
+    },
+    "rationale": {"$ref": "#/$defs/text"},
+    "uncertainties": {"$ref": "#/$defs/textArray"},
+    "evidence_gaps": {"$ref": "#/$defs/textArray"},
+    "clarification_question": {"$ref": "#/$defs/nullableText"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "recommended_action": {
+            "enum": [
+              "USE_EXISTING_NODE",
+              "ADD_NODE_FROM_CONTRACT",
+              "ADD_CONTEXT_FIELD"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "selected_candidate_ref": {
+            "type": "string",
+            "pattern": "^C00[1-8]$"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "selected_candidate_ref": {"const": null}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "recommended_action": {"const": "NEED_CLARIFICATION"}
+        }
+      },
+      "then": {
+        "properties": {
+          "clarification_question": {"$ref": "#/$defs/text"}
+        }
+      },
+      "else": {
+        "properties": {
+          "clarification_question": {"const": null}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "recommended_action": {"const": "NEED_EVIDENCE"}
+        }
+      },
+      "then": {
+        "properties": {
+          "evidence_gaps": {"minItems": 1}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "nullableText": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "textArray": {
+      "type": "array",
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/text"}
+    }
+  }
+}

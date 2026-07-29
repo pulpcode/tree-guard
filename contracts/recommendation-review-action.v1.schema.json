@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/recommendation-review-action.v1.schema.json",
+  "title": "TreeGuard Recommendation Review Action v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "identity_status",
+    "expected_draft_hash",
+    "decision",
+    "reviewer_ref",
+    "recorded_at",
+    "reviewer_reasoning",
+    "revised_recommendation"
+  ],
+  "properties": {
+    "schema_version": {"const": "recommendation-review-action.v1"},
+    "identity_status": {"const": "UNVERIFIED_FILE_ASSERTION"},
+    "expected_draft_hash": {"$ref": "#/$defs/digest"},
+    "decision": {
+      "enum": [
+        "CONFIRM_RECOMMENDATION",
+        "REVISE_RECOMMENDATION",
+        "REJECT_RECOMMENDATION"
+      ]
+    },
+    "reviewer_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "minLength": 20,
+      "maxLength": 35
+    },
+    "reviewer_reasoning": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 8000
+    },
+    "revised_recommendation": {
+      "oneOf": [
+        {"$ref": "semantic-recommendation-content.v1.schema.json"},
+        {"type": "null"}
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "decision": {"const": "REVISE_RECOMMENDATION"}
+        }
+      },
+      "then": {
+        "properties": {
+          "revised_recommendation": {
+            "$ref": "semantic-recommendation-content.v1.schema.json"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "revised_recommendation": {"const": null}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

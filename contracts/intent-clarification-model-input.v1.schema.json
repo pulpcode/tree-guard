@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/intent-clarification-model-input.v1.schema.json",
+  "title": "TreeGuard Intent Clarification Model Input v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "intent_request",
+    "initial_intent",
+    "clarification"
+  ],
+  "properties": {
+    "schema_version": {"const": "intent-clarification-model-input.v1"},
+    "intent_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirement_text", "hints", "proposed_parent"],
+      "properties": {
+        "requirement_text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000
+        },
+        "hints": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["node_kind", "value_type", "cardinality"],
+          "properties": {
+            "node_kind": {
+              "enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]
+            },
+            "value_type": {
+              "oneOf": [
+                {"type": "string", "minLength": 1, "maxLength": 1000},
+                {"type": "null"}
+              ]
+            },
+            "cardinality": {
+              "enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]
+            }
+          }
+        },
+        "proposed_parent": {
+          "oneOf": [
+            {"$ref": "#/$defs/nodeView"},
+            {"type": "null"}
+          ]
+        }
+      }
+    },
+    "initial_intent": {
+      "$ref": "change-intent-model-output.v1.schema.json#/$defs/intentContent"
+    },
+    "clarification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["question", "answer"],
+      "properties": {
+        "question": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "answer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000
+        }
+      }
+    }
+  },
+  "$defs": {
+    "nodeView": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "label",
+        "name",
+        "path",
+        "value_type",
+        "cardinality",
+        "has_constraints"
+      ],
+      "properties": {
+        "kind": {"enum": ["CONCEPT", "PROPERTY"]},
+        "label": {"type": "string"},
+        "name": {"type": "string"},
+        "path": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "value_type": {
+          "oneOf": [{"type": "string"}, {"type": "null"}]
+        },
+        "cardinality": {
+          "oneOf": [
+            {"enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]},
+            {"type": "null"}
+          ]
+        },
+        "has_constraints": {"type": "boolean"}
+      }
+    }
+  }
+}

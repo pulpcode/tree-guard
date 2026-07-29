@@ -81,8 +81,9 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 ## 当前实现
 
 当前代码覆盖确定性 Diff、两类版本审查、模型安全投影、AI 初审、专家审查，以及
-新增需求意图确认、无 embedding 的全树词法/结构召回、受约束候选语义建议和人工
-复核；尚不包含 Web、数据库连接、向量检索、语义 Gold 或 Patch 发布：
+新增需求意图确认、一次受约束澄清、无 embedding 的全树词法/结构召回、受约束
+候选语义建议和人工复核；尚不包含 Web、数据库连接、向量检索、语义 Gold 或
+Patch 发布：
 
 - `contracts/tree-snapshot.v1.schema.json`：Canonical Tree JSON Schema；
 - `contracts/tree-diff.v1.schema.json`：字段级 Snapshot Diff JSON Schema；
@@ -99,6 +100,9 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - `contracts/intent-request.v1.schema.json`：私有新增需求输入合同；
 - `contracts/change-intent-model-output.v1.schema.json`：不含 ID、审批或动作的模型意图输出合同；
 - `contracts/change-intent-draft.v1.schema.json`：绑定需求与快照的 AI 意图草稿；
+- `contracts/intent-clarification-answer.v1.schema.json`：绑定待澄清草稿的单轮用户回答；
+- `contracts/intent-clarification-model-input.v1.schema.json`：不含稳定 ID 的有界澄清模型投影；
+- `contracts/intent-clarification-round.v1.schema.json`：绑定初始草稿、回答和修订意图的单轮制品；
 - `contracts/intent-review-action.v1.schema.json`：人工确认、修订或拒绝草稿的输入合同；
 - `contracts/intent-confirmation.v1.schema.json`：只允许进入检索的确认制品；
 - `contracts/candidate-set.v1.schema.json`：确定性全树候选与可解释评分合同；
@@ -119,7 +123,7 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - `src/treeguard/expert_synthesis.py`：专家原文 AI 整理、本地来源绑定和外部载荷授权门；
 - `src/treeguard/expert_review.py`：专家思考、AI 整理、暂定状态和最终裁决的确定性状态机与回放；
 - `src/treeguard/expert_cli.py`：单动作追加与只读回放 CLI，完整会话使用 `0600` 新文件保存；
-- `src/treeguard/change_intent.py`：需求、AI 草稿、人工确认和可信来源回放；
+- `src/treeguard/change_intent.py`：需求、AI 草稿、单轮澄清、人工确认和可信来源回放；
 - `src/treeguard/lexical.py`：历史 Evidence 与在线召回共享的确定性词法切分；
 - `src/treeguard/retrieval.py`：全树词法/结构召回、父位置 boost、确定性排序和候选回放；
 - `src/treeguard/semantic_recommendation.py`：Top-8 候选投影、语义关系/动作门禁、人工复核记录和可信回放；
@@ -217,7 +221,9 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
 ```
 
 该 live 命令只证明外部协议链路和本地合同可以贯通，不代表真实领域质量、内网
-Qwen 效果或专家审批已经验证。
+Qwen 效果或专家审批已经验证。如果意图模型返回 `NEEDS_CLARIFICATION`，一键演示
+会在保存私有草稿后以 `INTENT_CLARIFICATION_REQUIRED` 安全停止，不会自动确认；
+回答和重新编译应使用下面的分步工作流。
 
 ### 手工文件工作流
 
@@ -226,6 +232,7 @@ Qwen 效果或专家审批已经验证。
 ```text
 私有 IntentRequest
 → AI ChangeIntentDraft
+→ （需要时）用户回答一次 → AI IntentClarificationRound
 → 建设人员 CONFIRM_FOR_RETRIEVAL / REJECT_DRAFT
 → 确定性全树 CandidateSet
 → AI Top-8 SemanticRecommendationDraft
@@ -237,6 +244,9 @@ Qwen 效果或专家审批已经验证。
 完整文本、节点 ID、路径和候选只进入显式 `--internal-output`；stdout 只包含固定状态
 与聚合计数。人工确认只允许进入候选检索，固定
 `semantic_approval=false`、`patch_eligible=false`，不等同于专家语义审批。
+初始草稿为 `NEEDS_CLARIFICATION` 时不能直接确认；MVP 每份草稿最多一个问题，
+最多执行一轮澄清。澄清后仍有问题时固定
+`CLARIFICATION_LIMIT_REACHED`，只能拒绝或转人工调查。
 
 先用冻结模型输出完成无网络验证：
 
@@ -248,8 +258,28 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance draft 
   --internal-output /approved/internal/intent-draft.json
 ```
 
+如果草稿状态是 `NEEDS_CLARIFICATION`，建设人员查看草稿中的唯一问题，另存一份
+符合 `intent-clarification-answer.v1` 的私有回答文件。回答必须用
+`expected_draft_hash` 绑定实际查看的初始草稿。然后使用冻结模型输出重新编译：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance clarify \
+  /approved/internal/current-tree.json \
+  /approved/internal/intent-request.json \
+  /approved/internal/intent-draft.json \
+  /approved/internal/clarification-answer.json \
+  --model-output-file /approved/internal/clarified-model-output.json \
+  --internal-output /approved/internal/clarification-round.json
+```
+
+受控外部百炼改用 `--live --external-data-approved`，不再提供
+`--model-output-file`。澄清路径最多发生三段顺序模型调用：初次意图编译、回答后
+重新编译、候选语义建议；无澄清路径仍最多两段。后续 confirm/search/recommend
+命令中的 `<draft_file>` 使用最新的 `clarification-round.json`。
+
 建设人员复制并修订草稿中的 `intent`，写入符合
-`intent-review-action.v1` 的 action；`expected_draft_hash` 必须来自实际查看的草稿。
+`intent-review-action.v1` 的 action；无澄清时绑定 `draft_hash`，澄清后绑定
+`round_hash`。
 然后确认并检索：
 
 ```bash

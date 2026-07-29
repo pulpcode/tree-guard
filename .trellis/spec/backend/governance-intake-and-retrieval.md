@@ -25,6 +25,12 @@ treeguard-governance draft \
   [--external-data-approved] \
   --internal-output <new_file>
 
+treeguard-governance clarify \
+  <tree_file> <request_file> <initial_draft_file> <answer_file> \
+  (--model-output-file <file> | --live) \
+  [--external-data-approved] \
+  --internal-output <new_file>
+
 treeguard-governance confirm \
   <tree_file> <request_file> <draft_file> <action_file> \
   --internal-output <new_file>
@@ -61,12 +67,24 @@ treeguard-governance-demo \
   [--external-data-approved]
 ```
 
+`confirm` 及其所有下游命令的 `<draft_file>` 接受原始
+`change-intent-draft.v1`，或已经过一次回答的
+`intent-clarification-round.v1`。人工 action 的 `expected_draft_hash` 相应绑定
+`draft_hash` 或 `round_hash`；不得把初始草稿和澄清轮次混用。
+
 核心签名：
 
 ```python
 IntentRequest.from_dict(payload, tree)
 ChangeIntentDraft.from_model_dict(payload, request, tree, ...)
 ChangeIntentDraft.from_dict(payload, request, tree)
+IntentClarificationAnswer.from_dict(payload)
+build_intent_clarification_model_input(request, initial_draft, answer, tree)
+IntentClarificationRound.from_model_dict(
+    payload, request, initial_draft, answer, tree, ...
+)
+IntentClarificationRound.from_dict(payload, request, tree)
+reviewable_intent_draft_from_dict(payload, request, tree)
 apply_intent_review(request, draft, action, tree)
 IntentConfirmation.from_dict(payload, request, draft, action, tree)
 build_candidate_set(confirmation, tree, max_candidates=20)
@@ -86,6 +104,9 @@ RecommendationRecord.from_dict(payload, draft, action, confirmation, candidate_s
 | 需求 | `intent-request.v1` | 原文、可选拟挂载 ID、类型/基数提示 |
 | 模型输出 | `change-intent-model-output.v1` | 不含 ID、状态、审批、动作或 Patch |
 | 草稿 | `change-intent-draft.v1` | 绑定需求哈希、快照哈希和模型来源声明 |
+| 澄清回答 | `intent-clarification-answer.v1` | 绑定初始草稿哈希、一次回答原文和未认证回答者声明 |
+| 澄清模型输入 | `intent-clarification-model-input.v1` | 原需求、初始意图、唯一问题和回答的 48,000 字符允许列表投影 |
+| 澄清轮次 | `intent-clarification-round.v1` | 内嵌并绑定初始草稿、回答、模型来源和修订意图；固定第一轮 |
 | 人工 action | `intent-review-action.v1` | 绑定实际草稿哈希，可确认、修订或拒绝 |
 | 确认 | `intent-confirmation.v1` | `semantic_approval=false`、`patch_eligible=false` |
 | 候选集 | `candidate-set.v1` | 绑定确认/快照，`embedding_used=false`、`allows_addition=false` |
@@ -99,6 +120,18 @@ RecommendationRecord.from_dict(payload, draft, action, confirmation, candidate_s
 模型投影只包含需求、提示和不带稳定 ID 的拟挂载节点视图。完整模型投影仍可能含
 真实语义，外部百炼调用必须有 `--live --external-data-approved`。没有新增环境键；
 复用 `BAILIAN_API_KEY`、`TREEGUARD_LLM_BASE_URL` 和 `TREEGUARD_LLM_MODEL`。
+
+初始草稿只有在 `review_status=NEEDS_CLARIFICATION` 时才能进入 `clarify`。回答以
+`expected_draft_hash` 绑定实际初始草稿；回答文本不得包含已知或常见伪造内部 ID。
+澄清投影不会新增结构化稳定 ID 或哈希，但原始需求文本仍必须遵守外传审批边界。
+澄清模型仍返回 `change-intent-model-output.v1` 的完整意图字段，本地
+再构造 `IntentClarificationRound v1`。修订意图无追问时状态为
+`READY_FOR_HUMAN_REVIEW`；仍有追问时状态固定为
+`CLARIFICATION_LIMIT_REACHED`，不得再次自动澄清或确认进入检索。人工拒绝仍允许。
+`treeguard.change-intent-clarification.zh.v2` Prompt 要求已经由回答明确解决的事实
+不得同时保留为假设、证据缺口或再次追问；剩余追问只能选择一个原子问题，不能拼接
+多个问题。这是模型质量约束，本地确定性门禁仍只依据合同字段和状态安全停止。
+无澄清路径最多发生意图与语义建议两段顺序模型调用；单轮澄清路径最多三段。
 
 第一版 `CandidateSet` 算法版本为
 `treeguard.lexical-structural-retrieval.v1`。评分分项固定包含名称重叠、路径重叠、
@@ -130,6 +163,14 @@ Top-20 策略生成的 `CandidateSet`，并固定取前 8 个候选映射为 `C0
 | 拟挂载节点未知或 unsupported | `INTENT_PARENT_UNKNOWN` |
 | 模型多字段、越权字段或非法版本 | `INTENT_MODEL_FIELDS_INVALID` / `INTENT_MODEL_VERSION_INVALID` |
 | 模型文本包含已知节点 ID 或常见伪造内部 ID 形态 | `INTENT_MODEL_INTERNAL_ID_FORBIDDEN` |
+| 无追问草稿尝试澄清 | `INTENT_CLARIFICATION_NOT_REQUIRED` |
+| 回答未绑定当前初始草稿 | `INTENT_CLARIFICATION_ANSWER_STALE` |
+| 回答字段/版本/值非法 | `INTENT_CLARIFICATION_ANSWER_*` |
+| 回答含内部 ID 或投影超限 | `INTENT_CLARIFICATION_INTERNAL_ID_FORBIDDEN` / `INTENT_CLARIFICATION_PROJECTION_TOO_LARGE` |
+| 澄清轮次字段、版本、完整性或来源非法 | `INTENT_CLARIFICATION_ROUND_*` |
+| 初始草稿仍需澄清却尝试确认 | `INTENT_CLARIFICATION_REQUIRED` |
+| 单轮后仍需澄清却尝试确认 | `INTENT_CLARIFICATION_LIMIT_REACHED` |
+| 人工确认内容仍携带追问 | `INTENT_ACTION_CLARIFICATION_UNRESOLVED` |
 | action 未绑定当前草稿 | `INTENT_ACTION_STALE` |
 | 草稿/确认与可信来源不一致 | `INTENT_DRAFT_SOURCE_MISMATCH` / `INTENT_CONFIRMATION_SOURCE_MISMATCH` |
 | 被拒绝或未确认意图进入召回 | `CANDIDATE_INTENT_NOT_CONFIRMED` |
@@ -154,7 +195,9 @@ Top-20 策略生成的 `CandidateSet`，并固定取前 8 个候选映射为 `C0
 
 演示入口只生成与真实领域无关的固定虚构输入，并依次调用六个正式治理命令。它不
 复制召回、哈希、模型校验或回放策略。`--review-decision` 必须显式提供；首段意图
-确认固定只授权检索，不是语义审批。offline 输出应在不同新目录间字节级确定；
+确认固定只授权检索，不是语义审批。若 live 意图返回 `NEEDS_CLARIFICATION`，演示
+必须在保存私有草稿后以 `failed_step=CLARIFY` 安全停止，不能创建意图 action、
+确认或完成标志。offline 输出应在不同新目录间字节级确定；
 bailian-live 缺批准时必须在创建目录、生成输入和网络调用前失败。成功目录为
 `0700`、工件为 `0600`，只有完整回放后存在 `12-demo-completion.json`。
 
@@ -164,9 +207,15 @@ bailian-live 缺批准时必须在创建目录、生成输入和网络调用前�
   排在局部弱匹配之前。
 - Good：Top-8 中存在语义等价候选，模型逐项比较并建议
   `USE_EXISTING_NODE`；人工确认后记录仍明确为运营反馈且可从全部来源重放。
+- Good：初始意图只提出一个问题，回答绑定该草稿；一次重新编译后问题消失，人工
+  action 绑定 `round_hash` 并进入全树检索。
 - Base：完全离线读取两份私有模型输出文件，生成意图草稿、确认、Top-20 候选、
   Top-8 建议和人工记录；不需要 embedding 或网络。
+- Base：父节点为 `null`、节点类型和基数为 `UNKNOWN`、值类型为 `null`，只使用
+  自然语言需求完成初次意图编译。
 - Base：模型合法 `ABSTAIN`，命令成功保存草稿，不把选择性拒答当作传输失败。
+- Bad：初始或单轮修订意图仍携带追问，却由 CLI/demo 自动生成
+  `CONFIRM_FOR_RETRIEVAL`。
 - Bad：把 `NO_CANDIDATES` 解释为“允许新增”，或让拟挂载位置把全树候选过滤掉。
 - Bad：只验证 `confirmation_hash` 自洽，不从需求、草稿、action 和快照重放。
 - Bad：人工点击确认后把 `RecommendationRecord` 标为 Gold、语义批准或可发布。
@@ -174,6 +223,10 @@ bailian-live 缺批准时必须在创建目录、生成输入和网络调用前�
 ### 6. Tests Required
 
 - 合同字段：Schema `required` 与 `to_dict()` 精确一致；
+- 澄清合同：回答/轮次精确字段、第一轮限制、状态—追问一致、输入输出容器脱离、
+  哈希域和重算哈希篡改覆盖；
+- 澄清门禁：无需澄清、陈旧回答、内部 ID、超限投影、直接确认、单轮耗尽和人工
+  confirmed intent 残留问题均使用精确错误码失败；
 - 模型边界：额外字段、审批字段、已知/常见伪造节点 ID、超限文本和非法 JSON
   拒绝；
 - 来源绑定：错误需求、陈旧草稿、重算哈希后的确认篡改仍拒绝；
@@ -186,9 +239,10 @@ bailian-live 缺批准时必须在创建目录、生成输入和网络调用前�
 - 反馈边界：所有记录保持非 Gold/非审批/非 Patch，reasoning 不进入聚合 stdout；
 - 文件边界：`0600`、symlink/FIFO/公开权限/覆盖拒绝和部分发布清理；
 - CLI 泄漏：stdout 不含需求文本、节点 ID/路径、hash、模型内容或凭据；
-- Provider：两个 Prompt 均为 JSON Object、最多两次、批准前零网络、失败时准确
-  `ai.called`。
-- 演示：confirm/reject 均可回放、离线字节确定、live Mock 双调用、输出目录
+- Provider：意图、澄清和语义建议 Prompt 均为 JSON Object、每段最多两次尝试、
+  批准前零网络、失败时准确 `ai.called`。
+- 演示：confirm/reject 均可回放、离线字节确定、live Mock 双调用、澄清安全停止、
+  输出目录
   existing/symlink/公开权限拒绝、失败无完成标志、聚合无路径/ID/文本/hash/凭据。
 
 ### 7. Wrong vs Correct
@@ -241,4 +295,23 @@ payload = record.to_dict()
 assert payload["semantic_approval"] is False
 assert payload["gold_eligible"] is False
 assert payload["patch_eligible"] is False
+```
+
+#### Wrong
+
+```python
+if draft.review_status == "NEEDS_CLARIFICATION":
+    confirmation = apply_intent_review(request, draft, generated_action, tree)
+```
+
+#### Correct
+
+```python
+if draft.review_status == "NEEDS_CLARIFICATION":
+    clarification = provider.clarify(request, draft, answer, tree)
+    if clarification.review_status != "READY_FOR_HUMAN_REVIEW":
+        raise IntentValidationError(
+            "INTENT_CLARIFICATION_LIMIT_REACHED",
+            "single clarification round did not resolve the intent",
+        )
 ```

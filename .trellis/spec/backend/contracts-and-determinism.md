@@ -26,6 +26,12 @@ workflow 版本，同样是缺陷。
   `contracts/business-version-review.v1.schema.json`
 - `LLMEvidencePack` ↔ `contracts/llm-evidence-pack.v1.schema.json`
 - `ExpertReviewSession` ↔ `contracts/expert-review-session.v1.schema.json`
+- `IntentClarificationAnswer` ↔
+  `contracts/intent-clarification-answer.v1.schema.json`
+- `build_intent_clarification_model_input()` ↔
+  `contracts/intent-clarification-model-input.v1.schema.json`
+- `IntentClarificationRound` ↔
+  `contracts/intent-clarification-round.v1.schema.json`
 - `SemanticCandidateProjection` ↔
   `contracts/semantic-recommendation-model-input.v1.schema.json`
 - `SemanticRecommendationDraft` ↔
@@ -113,6 +119,11 @@ parser。
   投影；
 - `RecommendationRecord.from_dict()`：从建议草稿、人工 action、确认、候选集和
   快照重建完整记录。
+
+单轮澄清的 `IntentClarificationRound` 内嵌初始草稿和回答，并分别绑定
+`source_initial_draft_hash`、`source_answer_hash`；后续人工 action 必须绑定实际
+查看的 `round_hash`。因此对内嵌来源重新哈希篡改后，完整确认回放仍必须因 action
+陈旧而拒绝。哈希只提供链路完整性，不认证回答者或模型身份。
 
 不可信生产者即使重新计算外层 hash，也不能让篡改工件变可信。
 

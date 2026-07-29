@@ -43,6 +43,15 @@ def _model_payload() -> dict:
     }
 
 
+def _question_model_payload() -> dict:
+    payload = _model_payload()
+    payload["evidence_gaps"] = ["The imaginary catalog unit is unknown."]
+    payload["clarification_question"] = (
+        "Which imaginary catalog unit should be used?"
+    )
+    return payload
+
+
 def _prepare_inputs(directory: Path):
     tree = directory / "tree.json"
     shutil.copyfile(FIXTURE_PATH, tree)
@@ -160,6 +169,42 @@ def _semantic_model_payload(candidate_path: Path) -> dict:
         "evidence_gaps": [],
         "clarification_question": None,
     }
+
+
+def _prepare_clarification_sources(directory: Path):
+    tree, request, model = _prepare_inputs(directory)
+    _write_private(model, _question_model_payload())
+    initial_draft = directory / "initial-draft.json"
+    draft_code, _ = _run(
+        [
+            "draft",
+            str(tree),
+            str(request),
+            "--model-output-file",
+            str(model),
+            "--internal-output",
+            str(initial_draft),
+        ]
+    )
+    assert draft_code == 0
+    initial_payload = json.loads(initial_draft.read_text(encoding="utf-8"))
+    answer = directory / "clarification-answer.json"
+    _write_private(
+        answer,
+        {
+            "schema_version": "intent-clarification-answer.v1",
+            "identity_status": "UNVERIFIED_FILE_ASSERTION",
+            "expected_draft_hash": initial_payload["draft_hash"],
+            "answer_text": (
+                "private-answer-canary: use imaginary catalog units."
+            ),
+            "answered_by_ref": "fictional-steward",
+            "recorded_at": "2030-01-02T03:04:05Z",
+        },
+    )
+    resolved_model = directory / "resolved-model.json"
+    _write_private(resolved_model, _model_payload())
+    return tree, request, initial_draft, answer, resolved_model
 
 
 class GovernanceCLITests(unittest.TestCase):
@@ -289,6 +334,269 @@ class GovernanceCLITests(unittest.TestCase):
             "EXTERNAL_DATA_APPROVAL_REQUIRED",
         )
         self.assertFalse(report["ai"]["called"])
+
+    def test_clarification_file_workflow_blocks_then_replays_privately(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as directory_name:
+            directory = Path(directory_name)
+            (
+                tree,
+                request,
+                initial_draft,
+                answer,
+                resolved_model,
+            ) = _prepare_clarification_sources(directory)
+            initial_payload = json.loads(
+                initial_draft.read_text(encoding="utf-8")
+            )
+            premature_action = directory / "premature-action.json"
+            _write_private(
+                premature_action,
+                {
+                    "schema_version": "intent-review-action.v1",
+                    "expected_draft_hash": initial_payload["draft_hash"],
+                    "decision": "CONFIRM_FOR_RETRIEVAL",
+                    "reviewer_ref": "fictional-steward",
+                    "recorded_at": "2030-01-02T03:04:05Z",
+                    "confirmed_intent": initial_payload["intent"],
+                },
+            )
+            premature_output = directory / "premature-confirmation.json"
+            premature_code, premature_report = _run(
+                [
+                    "confirm",
+                    str(tree),
+                    str(request),
+                    str(initial_draft),
+                    str(premature_action),
+                    "--internal-output",
+                    str(premature_output),
+                ]
+            )
+
+            answer.chmod(0o644)
+            public_answer_output = directory / "public-answer-round.json"
+            public_answer_code, public_answer_report = _run(
+                [
+                    "clarify",
+                    str(tree),
+                    str(request),
+                    str(initial_draft),
+                    str(answer),
+                    "--model-output-file",
+                    str(resolved_model),
+                    "--internal-output",
+                    str(public_answer_output),
+                ]
+            )
+            public_answer_exists = public_answer_output.exists()
+            answer.chmod(0o600)
+
+            clarification_round = directory / "clarification-round.json"
+            clarify_code, clarify_report = _run(
+                [
+                    "clarify",
+                    str(tree),
+                    str(request),
+                    str(initial_draft),
+                    str(answer),
+                    "--model-output-file",
+                    str(resolved_model),
+                    "--internal-output",
+                    str(clarification_round),
+                ]
+            )
+            round_payload = json.loads(
+                clarification_round.read_text(encoding="utf-8")
+            )
+            action = directory / "clarified-action.json"
+            _write_private(
+                action,
+                {
+                    "schema_version": "intent-review-action.v1",
+                    "expected_draft_hash": round_payload["round_hash"],
+                    "decision": "CONFIRM_FOR_RETRIEVAL",
+                    "reviewer_ref": "fictional-steward",
+                    "recorded_at": "2030-01-02T03:04:05Z",
+                    "confirmed_intent": round_payload["intent"],
+                },
+            )
+            confirmation = directory / "clarified-confirmation.json"
+            confirm_code, confirm_report = _run(
+                [
+                    "confirm",
+                    str(tree),
+                    str(request),
+                    str(clarification_round),
+                    str(action),
+                    "--internal-output",
+                    str(confirmation),
+                ]
+            )
+            candidates = directory / "clarified-candidates.json"
+            search_code, search_report = _run(
+                [
+                    "search",
+                    str(tree),
+                    str(request),
+                    str(clarification_round),
+                    str(action),
+                    str(confirmation),
+                    "--internal-output",
+                    str(candidates),
+                ]
+            )
+            modes = {
+                stat.S_IMODE(path.stat().st_mode)
+                for path in (
+                    clarification_round,
+                    confirmation,
+                    candidates,
+                )
+            }
+            premature_exists = premature_output.exists()
+
+        self.assertEqual(premature_code, 2)
+        self.assertEqual(
+            premature_report["error_code"],
+            "INTENT_CLARIFICATION_REQUIRED",
+        )
+        self.assertFalse(premature_exists)
+        self.assertEqual(public_answer_code, 2)
+        self.assertEqual(
+            public_answer_report["error_code"],
+            "GOVERNANCE_INPUT_INVALID",
+        )
+        self.assertFalse(public_answer_exists)
+        self.assertEqual(clarify_code, 0)
+        self.assertFalse(clarify_report["ai"]["called"])
+        self.assertEqual(
+            clarify_report["status"],
+            "READY_FOR_HUMAN_REVIEW",
+        )
+        self.assertEqual(confirm_code, 0)
+        self.assertEqual(
+            confirm_report["status"],
+            "CONFIRMED_FOR_RETRIEVAL",
+        )
+        self.assertEqual(search_code, 0)
+        self.assertEqual(search_report["status"], "CANDIDATES_READY")
+        self.assertEqual(modes, {0o600})
+        aggregate = json.dumps(
+            [
+                premature_report,
+                clarify_report,
+                confirm_report,
+                search_report,
+            ],
+            sort_keys=True,
+        )
+        self.assertNotIn("private-answer-canary", aggregate)
+        self.assertNotIn("node-008", aggregate)
+        self.assertNotIn("round_hash", aggregate)
+
+    def test_clarification_live_requires_approval_before_reading_inputs(
+        self,
+    ) -> None:
+        code, report = _run(
+            [
+                "clarify",
+                "missing-tree.json",
+                "missing-request.json",
+                "missing-draft.json",
+                "missing-answer.json",
+                "--live",
+                "--internal-output",
+                "not-created.json",
+            ]
+        )
+
+        self.assertEqual(code, 2)
+        self.assertEqual(
+            report["error_code"],
+            "EXTERNAL_DATA_APPROVAL_REQUIRED",
+        )
+        self.assertFalse(report["ai"]["called"])
+
+    def test_clarification_live_failure_and_preflight_preserve_call_truth(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as directory_name:
+            directory = Path(directory_name)
+            (
+                tree,
+                request,
+                initial_draft,
+                answer,
+                _,
+            ) = _prepare_clarification_sources(directory)
+            existing = directory / "existing-clarification.json"
+            existing.write_text("keep", encoding="utf-8")
+            with patch(
+                "treeguard.governance_cli.BailianIntentDraftProvider.clarify"
+            ) as provider_call:
+                preflight_code, preflight_report = _run(
+                    [
+                        "clarify",
+                        str(tree),
+                        str(request),
+                        str(initial_draft),
+                        str(answer),
+                        "--live",
+                        "--external-data-approved",
+                        "--internal-output",
+                        str(existing),
+                    ]
+                )
+            output = directory / "live-clarification.json"
+            with (
+                patch(
+                    "treeguard.governance_cli.BailianConfig.from_env",
+                    return_value=BailianConfig(api_key="fixture-key"),
+                ),
+                patch(
+                    (
+                        "treeguard.governance_cli."
+                        "BailianIntentDraftProvider.clarify"
+                    ),
+                    side_effect=BailianProviderError(
+                        "BAILIAN_CONNECTION_FAILED",
+                        "fictional connection failure",
+                    ),
+                ),
+            ):
+                failure_code, failure_report = _run(
+                    [
+                        "clarify",
+                        str(tree),
+                        str(request),
+                        str(initial_draft),
+                        str(answer),
+                        "--live",
+                        "--external-data-approved",
+                        "--internal-output",
+                        str(output),
+                    ]
+                )
+            existing_content = existing.read_text(encoding="utf-8")
+            failure_output_exists = output.exists()
+
+        self.assertEqual(preflight_code, 2)
+        self.assertEqual(
+            preflight_report["error_code"],
+            "INTERNAL_OUTPUT_WRITE_FAILED",
+        )
+        self.assertFalse(preflight_report["ai"]["called"])
+        provider_call.assert_not_called()
+        self.assertEqual(existing_content, "keep")
+        self.assertEqual(failure_code, 3)
+        self.assertEqual(
+            failure_report["error_code"],
+            "BAILIAN_CONNECTION_FAILED",
+        )
+        self.assertTrue(failure_report["ai"]["called"])
+        self.assertFalse(failure_output_exists)
 
     def test_private_input_and_exact_model_fields_fail_closed(self) -> None:
         with tempfile.TemporaryDirectory() as directory_name:

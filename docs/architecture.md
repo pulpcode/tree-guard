@@ -187,17 +187,25 @@ JSON Schema、运行时不变量和无密钥哈希只验证制品内部自洽，
 
 ### 4.6 `ChangeIntent`
 
-当前文件型实现把它拆成四个边界：
+当前文件型实现把它拆成七个边界：
 
 1. `IntentRequest v1` 保存原始需求、拟挂载节点和类型/基数提示；
 2. 模型只返回主体、角色、场景、生命周期、属性归属、类型、基数、事实、假设、
    证据缺口和至多一个追问，禁止 ID、审批、动作和 Patch；
 3. `ChangeIntentDraft v1` 由本地代码绑定需求哈希、基础快照和模型来源声明；
-4. `IntentConfirmation v1` 由独立 action 绑定实际查看的草稿，只能进入检索，
+4. `IntentClarificationAnswer v1` 以初始草稿哈希绑定一次用户自由文本回答；
+5. `IntentClarificationRound v1` 使用不含稳定 ID、最大 48,000 字符的允许列表投影，
+   把原需求、初始意图、唯一问题和回答交给模型，并绑定修订后的完整意图；
+6. 初始草稿为 `NEEDS_CLARIFICATION` 时禁止直接确认；MVP 最多澄清一轮，修订意图
+   仍有问题时固定为 `CLARIFICATION_LIMIT_REACHED`，不得进入检索；
+7. `IntentConfirmation v1` 由独立 action 绑定实际查看的初始草稿或澄清轮次，只能进入检索，
    固定 `semantic_approval=false`、`patch_eligible=false`。
 
-草稿、action 和确认均为私有 sidecar。读取时从需求、快照、草稿和 action 重放，
-不能只信任外层哈希。文件声明的 reviewer 身份仍为
+草稿、回答、澄清轮次、action 和确认均为私有 sidecar。读取时从需求、快照、
+内嵌初始草稿、回答、当前意图来源和 action 重放，不能只信任外层哈希。每轮只问
+一个问题与“整个产品永远只问一次”是不同边界；多轮能力需要后续新合同。直接路径
+最多发生两段顺序模型调用，单轮澄清路径最多三段。文件声明的 reviewer/answerer
+身份仍为
 `UNVERIFIED_FILE_ASSERTION`。
 
 ### 4.7 `SemanticRecommendationDraft` 与 `RecommendationRecord`
@@ -429,7 +437,7 @@ REJECTED
 
 - 每个步骤只能调用白名单能力；
 - LLM 只能引用检索工具返回的候选 ID；
-- 在线最多两次顺序模型调用；
+- 无澄清路径最多两次、单轮澄清路径最多三次顺序模型调用；
 - 每次模型输出必须通过 JSON Schema 校验；
 - 超时、非法 JSON、未知 ID、索引异常或版本漂移均 fail-closed；
 - 任何基础树、Overlay、索引或 Usage Manifest 版本变化都使未审批建议进入 `STALE`；

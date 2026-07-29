@@ -185,6 +185,14 @@ def _run_demo(
     step_reports["DRAFT"] = _run_step("DRAFT", draft_arguments)
 
     intent_draft = _read_artifact(paths["intent_draft"])
+    if step_reports["DRAFT"]["status"] == "NEEDS_CLARIFICATION":
+        raise DemoError(
+            "INTENT_CLARIFICATION_REQUIRED",
+            failed_step="CLARIFY",
+            ai_called=(
+                step_reports["DRAFT"].get("ai", {}).get("called") is True
+            ),
+        )
     intent = intent_draft.get("intent")
     draft_hash = intent_draft.get("draft_hash")
     if not isinstance(intent, dict) or not isinstance(draft_hash, str):
@@ -457,6 +465,7 @@ def _print_error(
     failed_step: str,
     ai_called: bool = False,
 ) -> None:
+    clarification_required = code == "INTENT_CLARIFICATION_REQUIRED"
     print(
         json.dumps(
             {
@@ -464,7 +473,11 @@ def _print_error(
                 "valid": False,
                 "completed": False,
                 "fictional_demo": True,
-                "status": "REJECTED",
+                "status": (
+                    "NEEDS_CLARIFICATION"
+                    if clarification_required
+                    else "REJECTED"
+                ),
                 "failed_step": failed_step,
                 "error_code": code,
                 "semantic_approval": False,
@@ -472,7 +485,11 @@ def _print_error(
                 "gold_eligible": False,
                 "ai": {
                     "called": ai_called,
-                    "status": "ABSTAIN" if ai_called else "NOT_CALLED",
+                    "status": (
+                        "COMPLETED"
+                        if clarification_required and ai_called
+                        else "ABSTAIN" if ai_called else "NOT_CALLED"
+                    ),
                 },
             },
             ensure_ascii=False,

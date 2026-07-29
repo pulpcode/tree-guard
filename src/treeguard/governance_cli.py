@@ -11,6 +11,7 @@ from typing import Any
 from treeguard.adapter import TreeFormatError, adapt_tree_document
 from treeguard.ai_review import (
     INTENT_PROMPT_VERSION,
+    INTENT_CLARIFICATION_PROMPT_VERSION,
     SEMANTIC_PROMPT_VERSION,
     BailianConfig,
     BailianIntentDraftProvider,
@@ -19,11 +20,14 @@ from treeguard.ai_review import (
 )
 from treeguard.change_intent import (
     ChangeIntentDraft,
+    IntentClarificationAnswer,
+    IntentClarificationRound,
     IntentConfirmation,
     IntentRequest,
     IntentReviewAction,
     IntentValidationError,
     apply_intent_review,
+    reviewable_intent_draft_from_dict,
 )
 from treeguard.json_utils import StrictJSONError
 from treeguard.private_io import (
@@ -82,6 +86,24 @@ def build_parser() -> argparse.ArgumentParser:
         help="confirm live inputs are fictional or explicitly approved for transfer",
     )
     draft_parser.add_argument("--internal-output", type=Path, required=True)
+
+    clarify_parser = subparsers.add_parser(
+        "clarify",
+        help="apply one answer and recompile an intent exactly once",
+    )
+    clarify_parser.add_argument("tree_file", type=Path)
+    clarify_parser.add_argument("request_file", type=Path)
+    clarify_parser.add_argument("initial_draft_file", type=Path)
+    clarify_parser.add_argument("answer_file", type=Path)
+    clarify_source = clarify_parser.add_mutually_exclusive_group(required=True)
+    clarify_source.add_argument("--model-output-file", type=Path)
+    clarify_source.add_argument("--live", action="store_true")
+    clarify_parser.add_argument(
+        "--external-data-approved",
+        action="store_true",
+        help="confirm live inputs are fictional or explicitly approved for transfer",
+    )
+    clarify_parser.add_argument("--internal-output", type=Path, required=True)
 
     confirm_parser = subparsers.add_parser(
         "confirm",
@@ -156,7 +178,7 @@ def _add_semantic_sources(parser: argparse.ArgumentParser) -> None:
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if (
-        args.command in {"draft", "recommend"}
+        args.command in {"draft", "clarify", "recommend"}
         and args.live
         and not args.external_data_approved
     ):
@@ -229,7 +251,96 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
             return 0
 
-        draft = ChangeIntentDraft.from_dict(
+        if args.command == "clarify":
+            initial_draft = ChangeIntentDraft.from_dict(
+                read_private_json(
+                    args.initial_draft_file,
+                    max_bytes=_MAX_ARTIFACT_BYTES,
+                ),
+                request,
+                tree,
+            )
+            answer = IntentClarificationAnswer.from_dict(
+                read_private_json(
+                    args.answer_file,
+                    max_bytes=_MAX_REQUEST_BYTES,
+                )
+            )
+            _preflight_output(args.internal_output)
+            if args.live:
+                provider = BailianIntentDraftProvider(
+                    BailianConfig.from_env()
+                )
+                try:
+                    clarification_round = provider.clarify(
+                        request,
+                        initial_draft,
+                        answer,
+                        tree,
+                    )
+                    ai_called = True
+                except BailianProviderError as exc:
+                    ai_called = exc.code not in _MODEL_PREFLIGHT_ERROR_CODES
+                    raise
+                ai_report = {
+                    "called": True,
+                    "status": "COMPLETED",
+                    "provider": provider.provider_name,
+                    "capability": provider.capability,
+                    "model": provider.config.model,
+                }
+            else:
+                assert args.model_output_file is not None
+                clarification_round = (
+                    IntentClarificationRound.from_model_dict(
+                        read_private_json(
+                            args.model_output_file,
+                            max_bytes=_MAX_MODEL_OUTPUT_BYTES,
+                        ),
+                        request,
+                        initial_draft,
+                        answer,
+                        tree,
+                        model_provider="UNVERIFIED_MODEL_OUTPUT_FILE",
+                        model_capability="JSON_OBJECT",
+                        model_name="unverified-file",
+                        prompt_version=(
+                            INTENT_CLARIFICATION_PROMPT_VERSION
+                        ),
+                    )
+                )
+                ai_report = {
+                    "called": False,
+                    "status": "MODEL_OUTPUT_FILE_VALIDATED",
+                }
+            if not write_private_json(
+                args.internal_output,
+                clarification_round.to_dict(),
+            ):
+                _print_error(
+                    "INTERNAL_OUTPUT_WRITE_FAILED",
+                    ai_called=ai_called,
+                )
+                return 2
+            print(
+                json.dumps(
+                    {
+                        "report_version": (
+                            "governance-intake-aggregate.v1"
+                        ),
+                        "valid": True,
+                        "operation": "CLARIFY",
+                        "status": clarification_round.review_status,
+                        "clarification_round": 1,
+                        "ai": ai_report,
+                    },
+                    ensure_ascii=False,
+                    sort_keys=True,
+                )
+            )
+            return 0
+
+        draft = reviewable_intent_draft_from_dict(
             read_private_json(
                 args.draft_file,
                 max_bytes=_MAX_ARTIFACT_BYTES,

@@ -46,7 +46,7 @@ worker、queue、vector index 或生产 Patch publisher。
 - `business_review.py`：使用显式顺序的业务版本端点审查；
 - `evidence.py`：允许列表化、有界、带临时引用的模型投影；
 - `expert_review.py`：纯内存专家审查状态机与事件回放。
-- `change_intent.py`：新增需求、模型草稿、人工确认与可信来源回放；
+- `change_intent.py`：新增需求、模型草稿、单轮澄清、人工确认与可信来源回放；
 - `retrieval.py`：确认意图上的确定性全树候选评分、截断和回放。
 - `semantic_recommendation.py`：有界候选投影、关系—动作政策、人工建议复核和可信
   记录回放。

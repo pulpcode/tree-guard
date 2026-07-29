@@ -79,11 +79,12 @@
 - 实现非法 JSON、未知节点、超时和版本漂移门禁。
 
 当前已完成文件型纵切：`IntentRequest → ChangeIntentDraft →
-IntentConfirmation → CandidateSet → SemanticRecommendationDraft →
-RecommendationRecord`。它支持百炼或私有模型输出文件、显式人工确认、可信来源
-回放、无 embedding 的全树词法/结构 Top-20 基线，以及固定 Top-8 候选的逐项语义
-比较和单一选择性动作。本地政策约束动作与候选关系一致，零候选或证据不足不能产生
-正向建议；专家可以确认、按相同政策修订或拒绝。
+可选单轮 IntentClarificationRound → IntentConfirmation → CandidateSet →
+SemanticRecommendationDraft → RecommendationRecord`。它支持百炼或私有模型
+输出文件、一次受约束澄清、显式人工确认、可信来源回放、无 embedding 的全树
+词法/结构 Top-20 基线，以及固定 Top-8 候选的逐项语义比较和单一选择性动作。
+本地政策禁止未解决的澄清意图进入检索，并约束动作与候选关系一致；零候选或证据
+不足不能产生正向建议，专家可以确认、按相同政策修订或拒绝。
 
 当前人工建议记录只作 `OPERATIONAL_FEEDBACK_ONLY`，不构成语义审批、Gold 或 Patch
 资格。内网 Qwen HTTP 直连、embedding/混合召回、学习型 reranker、
@@ -92,7 +93,7 @@ RecommendationRecord`。它支持百炼或私有模型输出文件、显式人�
 验收：
 
 - 内网 Qwen 可以稳定调用；
-- 在线最多两次顺序模型调用；
+- 无澄清路径在线最多两次、单轮澄清路径最多三次顺序模型调用；
 - 所有模型输出通过 JSON Schema；
 - 模型编造 ID、越权动作或格式异常全部 fail-closed；
 - 任何异常都不会产生正式写操作。

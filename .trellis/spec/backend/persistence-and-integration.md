@@ -9,6 +9,7 @@ HTTP 服务或 Spring Boot/MongoDB 连接器。已实现的持久化模型只有
 - 可选的私有 AI review bundle；
 - 不可变 expert action/session/approval JSON；
 - 不可变 intent request/draft/action/confirmation/candidate JSON；
+- 不可变 intent clarification answer/round JSON；
 - 不可变 semantic recommendation draft/review action/record JSON；
 - 一键虚构演示的全新 `0700` 运行目录、`0600` 中间工件和完成标志；
 - 从冻结源工件做确定性回放。
@@ -75,8 +76,9 @@ expert workflow 的树输入使用更强 profile。该函数当前不校验 owne
 
 `treeguard-governance-demo` 只接受尚不存在的最终运行目录，并以 `0700` 创建。
 目录中的每个 JSON 仍通过 `write_private_json()` 以 `0600` 不可覆盖发布；只有
-六个正式步骤全部成功并完成回放后才写 `12-demo-completion.json`。失败可能保留
-私有的已完成前序工件，但不能写完成标志。
+六个正式步骤全部成功并完成回放后才写 `12-demo-completion.json`。live 意图需要
+澄清时，在私有发布草稿后安全停止，不生成自动确认或完成标志。失败可能保留私有的
+已完成前序工件，但不能写完成标志。
 
 `private_io.preflight_private_output()` 用于在 live 模型调用前确认目标尚不存在且
 目录可创建私有文件。最终发布仍必须调用 `write_private_json()`，不能把 preflight

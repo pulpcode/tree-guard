@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass
 from datetime import datetime
@@ -14,6 +15,11 @@ from treeguard.models import CanonicalNode, CanonicalTree
 REQUEST_SCHEMA_VERSION = "intent-request.v1"
 MODEL_OUTPUT_SCHEMA_VERSION = "change-intent-model-output.v1"
 DRAFT_SCHEMA_VERSION = "change-intent-draft.v1"
+CLARIFICATION_ANSWER_SCHEMA_VERSION = "intent-clarification-answer.v1"
+CLARIFICATION_ROUND_SCHEMA_VERSION = "intent-clarification-round.v1"
+CLARIFICATION_MODEL_INPUT_SCHEMA_VERSION = (
+    "intent-clarification-model-input.v1"
+)
 ACTION_SCHEMA_VERSION = "intent-review-action.v1"
 CONFIRMATION_SCHEMA_VERSION = "intent-confirmation.v1"
 MODEL_PROVENANCE_STATUS = "UNVERIFIED_FILE_ASSERTION"
@@ -64,6 +70,32 @@ _DRAFT_KEYS = {
     "intent",
     "draft_hash",
 }
+_CLARIFICATION_ANSWER_KEYS = {
+    "schema_version",
+    "identity_status",
+    "expected_draft_hash",
+    "answer_text",
+    "answered_by_ref",
+    "recorded_at",
+}
+_CLARIFICATION_ROUND_KEYS = {
+    "schema_version",
+    "round_index",
+    "initial_draft",
+    "answer",
+    "model_provider",
+    "model_capability",
+    "model_name",
+    "prompt_version",
+    "model_provenance_status",
+    "source_request_hash",
+    "source_snapshot_hash",
+    "source_initial_draft_hash",
+    "source_answer_hash",
+    "review_status",
+    "intent",
+    "round_hash",
+}
 _ACTION_KEYS = {
     "schema_version",
     "expected_draft_hash",
@@ -108,6 +140,7 @@ _FABRICATED_INTERNAL_ID = re.compile(
 _MAX_REQUIREMENT_CHARS = 8_000
 _MAX_TEXT_CHARS = 1_000
 _MAX_LIST_ITEMS = 20
+MAX_CLARIFICATION_MODEL_INPUT_CHARS = 48_000
 
 
 class IntentValidationError(ValueError):
@@ -523,6 +556,321 @@ class ChangeIntentDraft:
 
 
 @dataclass(frozen=True, slots=True)
+class IntentClarificationAnswer:
+    expected_draft_hash: str
+    answer_text: str
+    answered_by_ref: str
+    recorded_at: str
+
+    def __post_init__(self) -> None:
+        _validate_digest(self.expected_draft_hash, "expected_draft_hash")
+        _required_text(
+            self.answer_text,
+            "answer_text",
+            max_chars=_MAX_REQUIREMENT_CHARS,
+        )
+        _identifier(self.answered_by_ref, "answered_by_ref")
+        _timestamp(self.recorded_at)
+
+    @classmethod
+    def from_dict(cls, payload: Any) -> "IntentClarificationAnswer":
+        if (
+            not isinstance(payload, dict)
+            or set(payload) != _CLARIFICATION_ANSWER_KEYS
+        ):
+            raise IntentValidationError(
+                "INTENT_CLARIFICATION_ANSWER_FIELDS_INVALID",
+                "clarification answer must use the exact contract fields",
+            )
+        if payload["schema_version"] != CLARIFICATION_ANSWER_SCHEMA_VERSION:
+            raise IntentValidationError(
+                "INTENT_CLARIFICATION_ANSWER_VERSION_INVALID",
+                "unsupported clarification answer schema_version",
+            )
+        if payload["identity_status"] != "UNVERIFIED_FILE_ASSERTION":
+            raise IntentValidationError(
+                "INTENT_CLARIFICATION_ANSWER_POLICY_INVALID",
+                "clarification answer identity status is unsupported",
+            )
+        try:
+            return cls(
+                expected_draft_hash=_digest(
+                    payload["expected_draft_hash"],
+                    "expected_draft_hash",
+                ),
+                answer_text=_required_text(
+                    payload["answer_text"],
+                    "answer_text",
+                    max_chars=_MAX_REQUIREMENT_CHARS,
+                ),
+                answered_by_ref=_identifier(
+                    payload["answered_by_ref"],
+                    "answered_by_ref",
+                ),
+                recorded_at=_timestamp(payload["recorded_at"]),
+            )
+        except ValueError:
+            raise IntentValidationError(
+                "INTENT_CLARIFICATION_ANSWER_VALUE_INVALID",
+                "clarification answer failed local validation",
+            ) from None
+
+    @property
+    def answer_hash(self) -> str:
+        return canonical_digest(self.to_dict())
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schema_version": CLARIFICATION_ANSWER_SCHEMA_VERSION,
+            "identity_status": "UNVERIFIED_FILE_ASSERTION",
+            "expected_draft_hash": self.expected_draft_hash,
+            "answer_text": self.answer_text,
+            "answered_by_ref": self.answered_by_ref,
+            "recorded_at": self.recorded_at,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class IntentClarificationRound:
+    round_index: int
+    initial_draft: ChangeIntentDraft
+    answer: IntentClarificationAnswer
+    model_provider: str
+    model_capability: str
+    model_name: str
+    prompt_version: str
+    source_request_hash: str
+    source_snapshot_hash: str
+    source_initial_draft_hash: str
+    source_answer_hash: str
+    review_status: str
+    intent: IntentContent
+    round_hash: str
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.round_index, int)
+            or isinstance(self.round_index, bool)
+            or self.round_index != 1
+        ):
+            raise ValueError("clarification round_index must be exactly one")
+        if not isinstance(self.initial_draft, ChangeIntentDraft):
+            raise ValueError("clarification round requires an initial draft")
+        if self.initial_draft.review_status != "NEEDS_CLARIFICATION":
+            raise ValueError("initial draft does not require clarification")
+        if not isinstance(self.answer, IntentClarificationAnswer):
+            raise ValueError("clarification round requires one answer")
+        if self.answer.expected_draft_hash != self.initial_draft.draft_hash:
+            raise ValueError("clarification answer does not bind the initial draft")
+        for field_name in (
+            "model_provider",
+            "model_capability",
+            "model_name",
+            "prompt_version",
+        ):
+            _required_text(getattr(self, field_name), field_name)
+        for field_name in (
+            "source_request_hash",
+            "source_snapshot_hash",
+            "source_initial_draft_hash",
+            "source_answer_hash",
+        ):
+            _validate_digest(getattr(self, field_name), field_name)
+        if self.source_initial_draft_hash != self.initial_draft.draft_hash:
+            raise ValueError("source_initial_draft_hash does not match")
+        if self.source_answer_hash != self.answer.answer_hash:
+            raise ValueError("source_answer_hash does not match")
+        if not isinstance(self.intent, IntentContent):
+            raise ValueError("clarification round requires IntentContent")
+        expected_status = (
+            "CLARIFICATION_LIMIT_REACHED"
+            if self.intent.clarification_question is not None
+            else "READY_FOR_HUMAN_REVIEW"
+        )
+        if self.review_status != expected_status:
+            raise ValueError("clarification review_status does not match intent")
+        _validate_digest(self.round_hash, "round_hash")
+        if self.round_hash != canonical_digest(self._payload()):
+            raise ValueError("round_hash does not match its payload")
+
+    @property
+    def draft_hash(self) -> str:
+        return self.round_hash
+
+    @classmethod
+    def from_model_dict(
+        cls,
+        payload: Any,
+        request: IntentRequest,
+        initial_draft: ChangeIntentDraft,
+        answer: IntentClarificationAnswer,
+        tree: CanonicalTree,
+        *,
+        model_provider: str,
+        model_capability: str,
+        model_name: str,
+        prompt_version: str,
+    ) -> "IntentClarificationRound":
+        build_intent_clarification_model_input(
+            request,
+            initial_draft,
+            answer,
+            tree,
+        )
+        if not isinstance(payload, dict) or set(payload) != _MODEL_OUTPUT_KEYS:
+            raise IntentValidationError(
+                "INTENT_CLARIFICATION_MODEL_FIELDS_INVALID",
+                "clarified model output must use the exact contract fields",
+            )
+        if payload["schema_version"] != MODEL_OUTPUT_SCHEMA_VERSION:
+            raise IntentValidationError(
+                "INTENT_CLARIFICATION_MODEL_VERSION_INVALID",
+                "unsupported clarified model output schema_version",
+            )
+        intent = IntentContent.from_dict(
+            {key: payload[key] for key in _CONTENT_KEYS},
+            error_code="INTENT_CLARIFICATION_MODEL_CONTENT_INVALID",
+        )
+        _reject_internal_ids(intent, tree)
+        review_status = (
+            "CLARIFICATION_LIMIT_REACHED"
+            if intent.clarification_question is not None
+            else "READY_FOR_HUMAN_REVIEW"
+        )
+        round_payload = {
+            "schema_version": CLARIFICATION_ROUND_SCHEMA_VERSION,
+            "round_index": 1,
+            "initial_draft": initial_draft.to_dict(),
+            "answer": answer.to_dict(),
+            "model_provider": _required_text(
+                model_provider,
+                "model_provider",
+            ),
+            "model_capability": _required_text(
+                model_capability,
+                "model_capability",
+            ),
+            "model_name": _required_text(model_name, "model_name"),
+            "prompt_version": _required_text(prompt_version, "prompt_version"),
+            "model_provenance_status": MODEL_PROVENANCE_STATUS,
+            "source_request_hash": request.request_hash,
+            "source_snapshot_hash": tree.snapshot_hash,
+            "source_initial_draft_hash": initial_draft.draft_hash,
+            "source_answer_hash": answer.answer_hash,
+            "review_status": review_status,
+            "intent": intent.to_dict(),
+        }
+        return cls(
+            round_index=1,
+            initial_draft=initial_draft,
+            answer=answer,
+            model_provider=round_payload["model_provider"],
+            model_capability=round_payload["model_capability"],
+            model_name=round_payload["model_name"],
+            prompt_version=round_payload["prompt_version"],
+            source_request_hash=request.request_hash,
+            source_snapshot_hash=tree.snapshot_hash,
+            source_initial_draft_hash=initial_draft.draft_hash,
+            source_answer_hash=answer.answer_hash,
+            review_status=review_status,
+            intent=intent,
+            round_hash=canonical_digest(round_payload),
+        )
+
+    @classmethod
+    def from_dict(
+        cls,
+        payload: Any,
+        request: IntentRequest,
+        tree: CanonicalTree,
+    ) -> "IntentClarificationRound":
+        if (
+            not isinstance(payload, dict)
+            or set(payload) != _CLARIFICATION_ROUND_KEYS
+        ):
+            raise IntentValidationError(
+                "INTENT_CLARIFICATION_ROUND_FIELDS_INVALID",
+                "stored clarification round must use exact contract fields",
+            )
+        if (
+            payload["schema_version"] != CLARIFICATION_ROUND_SCHEMA_VERSION
+            or payload["model_provenance_status"] != MODEL_PROVENANCE_STATUS
+        ):
+            raise IntentValidationError(
+                "INTENT_CLARIFICATION_ROUND_VERSION_INVALID",
+                "stored clarification round version or provenance is unsupported",
+            )
+        initial_draft = ChangeIntentDraft.from_dict(
+            payload["initial_draft"],
+            request,
+            tree,
+        )
+        answer = IntentClarificationAnswer.from_dict(payload["answer"])
+        intent = IntentContent.from_dict(
+            payload["intent"],
+            error_code="INTENT_CLARIFICATION_ROUND_CONTENT_INVALID",
+        )
+        _reject_internal_ids(intent, tree)
+        try:
+            round_artifact = cls(
+                round_index=payload["round_index"],
+                initial_draft=initial_draft,
+                answer=answer,
+                model_provider=payload["model_provider"],
+                model_capability=payload["model_capability"],
+                model_name=payload["model_name"],
+                prompt_version=payload["prompt_version"],
+                source_request_hash=payload["source_request_hash"],
+                source_snapshot_hash=payload["source_snapshot_hash"],
+                source_initial_draft_hash=payload[
+                    "source_initial_draft_hash"
+                ],
+                source_answer_hash=payload["source_answer_hash"],
+                review_status=payload["review_status"],
+                intent=intent,
+                round_hash=payload["round_hash"],
+            )
+        except (TypeError, ValueError):
+            raise IntentValidationError(
+                "INTENT_CLARIFICATION_ROUND_INVALID",
+                "stored clarification round failed integrity validation",
+            ) from None
+        verify_intent_clarification_round_against_sources(
+            round_artifact,
+            request,
+            tree,
+        )
+        return round_artifact
+
+    def _payload(self) -> dict[str, Any]:
+        return {
+            "schema_version": CLARIFICATION_ROUND_SCHEMA_VERSION,
+            "round_index": self.round_index,
+            "initial_draft": self.initial_draft.to_dict(),
+            "answer": self.answer.to_dict(),
+            "model_provider": self.model_provider,
+            "model_capability": self.model_capability,
+            "model_name": self.model_name,
+            "prompt_version": self.prompt_version,
+            "model_provenance_status": MODEL_PROVENANCE_STATUS,
+            "source_request_hash": self.source_request_hash,
+            "source_snapshot_hash": self.source_snapshot_hash,
+            "source_initial_draft_hash": self.source_initial_draft_hash,
+            "source_answer_hash": self.source_answer_hash,
+            "review_status": self.review_status,
+            "intent": self.intent.to_dict(),
+        }
+
+    def to_dict(self) -> dict[str, Any]:
+        payload = self._payload()
+        payload["round_hash"] = self.round_hash
+        return payload
+
+
+ReviewableIntentDraft = ChangeIntentDraft | IntentClarificationRound
+
+
+@dataclass(frozen=True, slots=True)
 class IntentReviewAction:
     expected_draft_hash: str
     decision: str
@@ -661,7 +1009,7 @@ class IntentConfirmation:
         cls,
         payload: Any,
         request: IntentRequest,
-        draft: ChangeIntentDraft,
+        draft: ReviewableIntentDraft,
         action: IntentReviewAction,
         tree: CanonicalTree,
     ) -> "IntentConfirmation":
@@ -740,20 +1088,38 @@ class IntentConfirmation:
 
 def apply_intent_review(
     request: IntentRequest,
-    draft: ChangeIntentDraft,
+    draft: ReviewableIntentDraft,
     action: IntentReviewAction,
     tree: CanonicalTree,
 ) -> IntentConfirmation:
     """Create one retrieval-only confirmation from trusted source artifacts."""
 
-    verify_intent_draft_against_sources(draft, request, tree)
+    verify_reviewable_intent_draft_against_sources(draft, request, tree)
     if action.expected_draft_hash != draft.draft_hash:
         raise IntentValidationError(
             "INTENT_ACTION_STALE",
             "intent action does not bind the current draft",
         )
+    if (
+        action.decision == "CONFIRM_FOR_RETRIEVAL"
+        and draft.review_status != "READY_FOR_HUMAN_REVIEW"
+    ):
+        code = (
+            "INTENT_CLARIFICATION_LIMIT_REACHED"
+            if isinstance(draft, IntentClarificationRound)
+            else "INTENT_CLARIFICATION_REQUIRED"
+        )
+        raise IntentValidationError(
+            code,
+            "intent draft is not ready for retrieval confirmation",
+        )
     if action.confirmed_intent is not None:
         _reject_internal_ids(action.confirmed_intent, tree)
+        if action.confirmed_intent.clarification_question is not None:
+            raise IntentValidationError(
+                "INTENT_ACTION_CLARIFICATION_UNRESOLVED",
+                "confirmed intent cannot retain a clarification question",
+            )
     status = (
         "CONFIRMED_FOR_RETRIEVAL"
         if action.decision == "CONFIRM_FOR_RETRIEVAL"
@@ -809,10 +1175,129 @@ def verify_intent_draft_against_sources(
     _reject_internal_ids(draft.intent, tree)
 
 
+def build_intent_clarification_model_input(
+    request: IntentRequest,
+    initial_draft: ChangeIntentDraft,
+    answer: IntentClarificationAnswer,
+    tree: CanonicalTree,
+) -> dict[str, Any]:
+    verify_intent_draft_against_sources(initial_draft, request, tree)
+    if initial_draft.review_status != "NEEDS_CLARIFICATION":
+        raise IntentValidationError(
+            "INTENT_CLARIFICATION_NOT_REQUIRED",
+            "initial draft does not require clarification",
+        )
+    if answer.expected_draft_hash != initial_draft.draft_hash:
+        raise IntentValidationError(
+            "INTENT_CLARIFICATION_ANSWER_STALE",
+            "clarification answer does not bind the initial draft",
+        )
+    _reject_internal_id_texts(
+        (answer.answer_text,),
+        tree,
+        code="INTENT_CLARIFICATION_INTERNAL_ID_FORBIDDEN",
+    )
+    projection = {
+        "schema_version": CLARIFICATION_MODEL_INPUT_SCHEMA_VERSION,
+        "intent_request": request.to_model_dict(tree),
+        "initial_intent": initial_draft.intent.to_dict(),
+        "clarification": {
+            "question": initial_draft.intent.clarification_question,
+            "answer": answer.answer_text,
+        },
+    }
+    encoded = json.dumps(
+        projection,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    if len(encoded) > MAX_CLARIFICATION_MODEL_INPUT_CHARS:
+        raise IntentValidationError(
+            "INTENT_CLARIFICATION_PROJECTION_TOO_LARGE",
+            "clarification model input exceeds the configured bound",
+        )
+    return projection
+
+
+def reviewable_intent_draft_from_dict(
+    payload: Any,
+    request: IntentRequest,
+    tree: CanonicalTree,
+) -> ReviewableIntentDraft:
+    if not isinstance(payload, dict):
+        raise IntentValidationError(
+            "INTENT_DRAFT_FIELDS_INVALID",
+            "stored intent source must be an object",
+        )
+    schema_version = payload.get("schema_version")
+    if schema_version == DRAFT_SCHEMA_VERSION:
+        return ChangeIntentDraft.from_dict(payload, request, tree)
+    if schema_version == CLARIFICATION_ROUND_SCHEMA_VERSION:
+        return IntentClarificationRound.from_dict(payload, request, tree)
+    raise IntentValidationError(
+        "INTENT_DRAFT_VERSION_INVALID",
+        "stored intent source schema_version is unsupported",
+    )
+
+
+def verify_intent_clarification_round_against_sources(
+    round_artifact: IntentClarificationRound,
+    request: IntentRequest,
+    tree: CanonicalTree,
+) -> None:
+    _require_resource_tree(tree)
+    verify_intent_draft_against_sources(
+        round_artifact.initial_draft,
+        request,
+        tree,
+    )
+    build_intent_clarification_model_input(
+        request,
+        round_artifact.initial_draft,
+        round_artifact.answer,
+        tree,
+    )
+    if (
+        round_artifact.source_request_hash != request.request_hash
+        or round_artifact.source_snapshot_hash != tree.snapshot_hash
+        or round_artifact.source_initial_draft_hash
+        != round_artifact.initial_draft.draft_hash
+        or round_artifact.source_answer_hash
+        != round_artifact.answer.answer_hash
+    ):
+        raise IntentValidationError(
+            "INTENT_CLARIFICATION_ROUND_SOURCE_MISMATCH",
+            "clarification round does not match trusted sources",
+        )
+    _reject_internal_ids(round_artifact.intent, tree)
+
+
+def verify_reviewable_intent_draft_against_sources(
+    draft: ReviewableIntentDraft,
+    request: IntentRequest,
+    tree: CanonicalTree,
+) -> None:
+    if isinstance(draft, ChangeIntentDraft):
+        verify_intent_draft_against_sources(draft, request, tree)
+        return
+    if isinstance(draft, IntentClarificationRound):
+        verify_intent_clarification_round_against_sources(
+            draft,
+            request,
+            tree,
+        )
+        return
+    raise IntentValidationError(
+        "INTENT_DRAFT_INVALID",
+        "unsupported intent draft source",
+    )
+
+
 def verify_intent_confirmation_against_sources(
     confirmation: IntentConfirmation,
     request: IntentRequest,
-    draft: ChangeIntentDraft,
+    draft: ReviewableIntentDraft,
     action: IntentReviewAction,
     tree: CanonicalTree,
 ) -> None:
@@ -846,10 +1331,22 @@ def _node_model_view(node: CanonicalNode) -> dict[str, Any]:
 
 
 def _reject_internal_ids(intent: IntentContent, tree: CanonicalTree) -> None:
-    text_values = intent.all_text()
+    _reject_internal_id_texts(
+        intent.all_text(),
+        tree,
+        code="INTENT_MODEL_INTERNAL_ID_FORBIDDEN",
+    )
+
+
+def _reject_internal_id_texts(
+    text_values: tuple[str, ...],
+    tree: CanonicalTree,
+    *,
+    code: str,
+) -> None:
     if any(_FABRICATED_INTERNAL_ID.search(text) for text in text_values):
         raise IntentValidationError(
-            "INTENT_MODEL_INTERNAL_ID_FORBIDDEN",
+            code,
             "intent content must not contain identifier-like values",
         )
     for node in tree.nodes:
@@ -861,7 +1358,7 @@ def _reject_internal_ids(intent: IntentContent, tree: CanonicalTree) -> None:
             for text in text_values
         ):
             raise IntentValidationError(
-                "INTENT_MODEL_INTERNAL_ID_FORBIDDEN",
+                code,
                 "intent content must not contain internal node identifiers",
             )
 
@@ -952,9 +1449,14 @@ def _timestamp(value: Any) -> str:
 __all__ = [
     "ACTION_SCHEMA_VERSION",
     "CARDINALITIES",
+    "CLARIFICATION_ANSWER_SCHEMA_VERSION",
+    "CLARIFICATION_MODEL_INPUT_SCHEMA_VERSION",
+    "CLARIFICATION_ROUND_SCHEMA_VERSION",
     "CONFIRMATION_SCHEMA_VERSION",
     "ChangeIntentDraft",
     "DRAFT_SCHEMA_VERSION",
+    "IntentClarificationAnswer",
+    "IntentClarificationRound",
     "IntentConfirmation",
     "IntentContent",
     "IntentRequest",
@@ -962,11 +1464,16 @@ __all__ = [
     "IntentValidationError",
     "MODEL_OUTPUT_SCHEMA_VERSION",
     "MODEL_PROVENANCE_STATUS",
+    "MAX_CLARIFICATION_MODEL_INPUT_CHARS",
     "NODE_KINDS",
     "OWNERSHIP_CLASSES",
     "REQUEST_SCHEMA_VERSION",
     "REVIEW_DECISIONS",
     "apply_intent_review",
+    "build_intent_clarification_model_input",
+    "reviewable_intent_draft_from_dict",
+    "verify_intent_clarification_round_against_sources",
     "verify_intent_confirmation_against_sources",
     "verify_intent_draft_against_sources",
+    "verify_reviewable_intent_draft_against_sources",
 ]

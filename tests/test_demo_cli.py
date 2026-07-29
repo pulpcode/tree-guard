@@ -234,6 +234,64 @@ class GovernanceDemoCLITests(unittest.TestCase):
         self.assertFalse((live / "03-intent-model-output.json").exists())
         self.assertFalse((live / "08-semantic-model-output.json").exists())
 
+    def test_live_clarification_stops_before_automatic_confirmation(
+        self,
+    ) -> None:
+        intent_payload = _fictional_intent_model_output()
+        intent_payload["evidence_gaps"] = [
+            "The fictional measurement unit is unknown."
+        ]
+        intent_payload["clarification_question"] = (
+            "Which fictional measurement unit should be used?"
+        )
+        with tempfile.TemporaryDirectory() as directory_name:
+            output = Path(directory_name) / "live"
+            with (
+                patch(
+                    "treeguard.governance_cli.BailianConfig.from_env",
+                    return_value=BailianConfig(api_key="fictional-key"),
+                ),
+                patch(
+                    (
+                        "treeguard.ai_review."
+                        "BailianAIReviewProvider._post_json"
+                    ),
+                    return_value=_provider_response(intent_payload),
+                ) as transport,
+            ):
+                code, report = _run(
+                    [
+                        "--output-dir",
+                        str(output),
+                        "--review-decision",
+                        "confirm",
+                        "--mode",
+                        "bailian-live",
+                        "--external-data-approved",
+                    ]
+                )
+            draft_exists = (output / "04-intent-draft.json").exists()
+            action_exists = (
+                output / "05-intent-review-action.json"
+            ).exists()
+            completion_exists = (
+                output / "12-demo-completion.json"
+            ).exists()
+
+        self.assertEqual(code, 2)
+        self.assertEqual(
+            report["error_code"],
+            "INTENT_CLARIFICATION_REQUIRED",
+        )
+        self.assertEqual(report["failed_step"], "CLARIFY")
+        self.assertEqual(report["status"], "NEEDS_CLARIFICATION")
+        self.assertTrue(report["ai"]["called"])
+        self.assertEqual(report["ai"]["status"], "COMPLETED")
+        self.assertEqual(transport.call_count, 1)
+        self.assertTrue(draft_exists)
+        self.assertFalse(action_exists)
+        self.assertFalse(completion_exists)
+
     def test_live_semantic_failure_preserves_call_truth_and_no_completion(
         self,
     ) -> None:

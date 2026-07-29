@@ -114,7 +114,9 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
 
 缺少 `--external-data-approved` 时，命令会在创建输出目录、生成输入和调用网络前
 拒绝。单元测试只使用 Mock transport；上面的命令才是实际外部网络冒烟。虚构演示
-结果固定不是 Gold、语义审批或 Patch，也不证明内网 Qwen 效果。
+结果固定不是 Gold、语义审批或 Patch，也不证明内网 Qwen 效果。如果真实模型返回
+`NEEDS_CLARIFICATION`，演示会保留私有意图草稿并在 `CLARIFY` 步骤安全停止，不会
+自动生成确认或完成标志；这是正常门禁，不是模型传输失败。
 
 ### 4.2 分步验证
 
@@ -168,8 +170,28 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance draft 
 
 模型输入排除稳定节点 ID、树版本、哈希和 VALUE，但保留需求文本以及拟挂载节点的
 名称、label 和路径，因此白名单投影仍不等于允许出域。缺少
-`--external-data-approved` 时，命令在读取文件和调用网络前拒绝。模型只能返回
-意图字段；本地校验拒绝额外审批/动作字段、已知节点 ID 和常见伪造内部 ID 形态。
+`--external-data-approved` 会在读取这些文件前拒绝。
+
+草稿为 `NEEDS_CLARIFICATION` 时，先在私有文件中保存一次回答，再重新调用意图
+模型：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen treeguard-governance clarify \
+  /path/to/fictional-tree.json \
+  /path/to/fictional-intent-request.json \
+  /approved/internal/intent-draft.json \
+  /approved/internal/clarification-answer.json \
+  --live \
+  --external-data-approved \
+  --internal-output /approved/internal/clarification-round.json
+```
+
+回答文件绑定实际查看的初始 `draft_hash`；模型投影只发送原需求、初始意图、唯一
+问题、回答和不带稳定 ID 的可选父节点视图，总长最多 48,000 字符。MVP 只允许一轮：
+输出为 `READY_FOR_HUMAN_REVIEW` 时才可确认；输出为
+`CLARIFICATION_LIMIT_REACHED` 时必须停止并转人工调查。澄清路径最多发生三段顺序
+模型调用，分别是初次意图编译、澄清后重新编译和候选语义建议。
+模型只能返回意图字段；本地校验拒绝额外审批/动作字段、已知节点 ID 和常见伪造内部 ID 形态。
 完整草稿使用 `0600` 独占创建，stdout 不显示需求、路径、ID 或哈希。
 
 内网 Qwen Provider 尚未直连时，可先把其 `json_object` 输出保存为私有文件并执行

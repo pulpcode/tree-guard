@@ -1,0 +1,486 @@
+{
+  "map_topology": {
+    "STAR_BAY_FIRE": {
+      "metadata": {
+        "node_id": "ffv-root",
+        "node_label": "STAR_BAY_FIRE",
+        "node_label_route": "STAR_BAY_FIRE",
+        "node_name": "虚构星湾焰安体系",
+        "node_order": 1,
+        "node_type": "concept"
+      },
+      "subnodes": {
+        "ALERT": {
+          "metadata": {
+            "node_id": "ffv-branch-alert",
+            "node_label": "ALERT",
+            "node_label_route": "STAR_BAY_FIRE/-/ALERT",
+            "node_name": "虚构星湾鸣镜告警",
+            "node_order": 2,
+            "node_type": "concept",
+            "parent_node_id": "ffv-root"
+          },
+          "subnodes": {
+            "ECHO_ORDER": {
+              "metadata": {
+                "is_list": true,
+                "node_id": "ffv-core-007",
+                "node_label": "ECHO_ORDER",
+                "node_label_route": "STAR_BAY_FIRE/-/ALERT/-/ECHO_ORDER",
+                "node_name": "虚构回声联络序列",
+                "node_order": 3,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-alert",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "GLOW_SIGNAL": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-006",
+                "node_label": "GLOW_SIGNAL",
+                "node_label_route": "STAR_BAY_FIRE/-/ALERT/-/GLOW_SIGNAL",
+                "node_name": "虚构辉纹告警状态",
+                "node_order": 2,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-alert",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "MIRROR_TONE": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-005",
+                "node_label": "MIRROR_TONE",
+                "node_label_route": "STAR_BAY_FIRE/-/ALERT/-/MIRROR_TONE",
+                "node_name": "虚构鸣镜提示音阶",
+                "node_order": 1,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-alert",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "integer"
+              }
+            },
+            "NIGHT_BEACON": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-008",
+                "node_label": "NIGHT_BEACON",
+                "node_label_route": "STAR_BAY_FIRE/-/ALERT/-/NIGHT_BEACON",
+                "node_name": "虚构夜航信标方位",
+                "node_order": 4,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-alert",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            }
+          }
+        },
+        "EQUIPMENT": {
+          "metadata": {
+            "node_id": "ffv-branch-equipment",
+            "node_label": "EQUIPMENT",
+            "node_label_route": "STAR_BAY_FIRE/-/EQUIPMENT",
+            "node_name": "虚构星湾泉幕器备",
+            "node_order": 4,
+            "node_type": "concept",
+            "parent_node_id": "ffv-root"
+          },
+          "subnodes": {
+            "FOAM_CASE": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-014",
+                "node_label": "FOAM_CASE",
+                "node_label_route": "STAR_BAY_FIRE/-/EQUIPMENT/-/FOAM_CASE",
+                "node_name": "虚构云沫器箱状态",
+                "node_order": 2,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-equipment",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "SPRING_LEVEL": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-013",
+                "node_label": "SPRING_LEVEL",
+                "node_label_route": "STAR_BAY_FIRE/-/EQUIPMENT/-/SPRING_LEVEL",
+                "node_name": "虚构泉幕储量刻度",
+                "node_order": 1,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-equipment",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "float"
+              }
+            },
+            "TOOL_ROSTER": {
+              "metadata": {
+                "is_list": true,
+                "node_id": "ffv-core-016",
+                "node_label": "TOOL_ROSTER",
+                "node_label_route": "STAR_BAY_FIRE/-/EQUIPMENT/-/TOOL_ROSTER",
+                "node_name": "虚构破障器备清单",
+                "node_order": 4,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-equipment",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "VEIL_PRESSURE": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-015",
+                "node_label": "VEIL_PRESSURE",
+                "node_label_route": "STAR_BAY_FIRE/-/EQUIPMENT/-/VEIL_PRESSURE",
+                "node_name": "虚构雾帘推力刻度",
+                "node_order": 3,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-equipment",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "float"
+              }
+            }
+          }
+        },
+        "FORECAST": {
+          "metadata": {
+            "node_id": "ffv-branch-forecast",
+            "node_label": "FORECAST",
+            "node_label_route": "STAR_BAY_FIRE/-/FORECAST",
+            "node_name": "虚构星湾焰安预见",
+            "node_order": 1,
+            "node_type": "concept",
+            "parent_node_id": "ffv-root"
+          },
+          "subnodes": {
+            "EMBER_ZONE": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-003",
+                "node_label": "EMBER_ZONE",
+                "node_label_route": "STAR_BAY_FIRE/-/FORECAST/-/EMBER_ZONE",
+                "node_name": "虚构隐烬区位标识",
+                "node_order": 3,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-forecast",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "HAZE_MARK": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-002",
+                "node_label": "HAZE_MARK",
+                "node_label_route": "STAR_BAY_FIRE/-/FORECAST/-/HAZE_MARK",
+                "node_name": "虚构微烟映记状态",
+                "node_order": 2,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-forecast",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "QUIET_CHECK": {
+              "metadata": {
+                "is_list": true,
+                "node_id": "ffv-core-004",
+                "node_label": "QUIET_CHECK",
+                "node_label_route": "STAR_BAY_FIRE/-/FORECAST/-/QUIET_CHECK",
+                "node_name": "虚构静焰复核清单",
+                "node_order": 4,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-forecast",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "WATCH_PULSE": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-001",
+                "node_label": "WATCH_PULSE",
+                "node_label_route": "STAR_BAY_FIRE/-/FORECAST/-/WATCH_PULSE",
+                "node_name": "虚构余温巡望节拍",
+                "node_order": 1,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-forecast",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "integer"
+              }
+            }
+          }
+        },
+        "GUIDANCE": {
+          "metadata": {
+            "node_id": "ffv-branch-guidance",
+            "node_label": "GUIDANCE",
+            "node_label_route": "STAR_BAY_FIRE/-/GUIDANCE",
+            "node_name": "虚构星湾雾径引导",
+            "node_order": 3,
+            "node_type": "concept",
+            "parent_node_id": "ffv-root"
+          },
+          "subnodes": {
+            "GATE_CLEAR": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-010",
+                "node_label": "GATE_CLEAR",
+                "node_label_route": "STAR_BAY_FIRE/-/GUIDANCE/-/GATE_CLEAR",
+                "node_name": "虚构云门畅行状态",
+                "node_order": 2,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-guidance",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "LANTERN_PATH": {
+              "metadata": {
+                "is_list": true,
+                "node_id": "ffv-core-011",
+                "node_label": "LANTERN_PATH",
+                "node_label_route": "STAR_BAY_FIRE/-/GUIDANCE/-/LANTERN_PATH",
+                "node_name": "虚构星灯引导序列",
+                "node_order": 3,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-guidance",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "MIST_ROUTE": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-009",
+                "node_label": "MIST_ROUTE",
+                "node_label_route": "STAR_BAY_FIRE/-/GUIDANCE/-/MIST_ROUTE",
+                "node_name": "虚构雾径导向标记",
+                "node_order": 1,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-guidance",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "SHELTER_COUNT": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-012",
+                "node_label": "SHELTER_COUNT",
+                "node_label_route": "STAR_BAY_FIRE/-/GUIDANCE/-/SHELTER_COUNT",
+                "node_name": "虚构静湾候行数量",
+                "node_order": 4,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-guidance",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "integer"
+              }
+            }
+          }
+        },
+        "RESPONSE": {
+          "metadata": {
+            "node_id": "ffv-branch-response",
+            "node_label": "RESPONSE",
+            "node_label_route": "STAR_BAY_FIRE/-/RESPONSE",
+            "node_name": "虚构星湾初焰协同",
+            "node_order": 6,
+            "node_type": "concept",
+            "parent_node_id": "ffv-root"
+          },
+          "subnodes": {
+            "CALL_CHAIN": {
+              "metadata": {
+                "is_list": true,
+                "node_id": "ffv-core-022",
+                "node_label": "CALL_CHAIN",
+                "node_label_route": "STAR_BAY_FIRE/-/RESPONSE/-/CALL_CHAIN",
+                "node_name": "虚构回声通联次序",
+                "node_order": 2,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-response",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "FIRST_ACTION": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-021",
+                "node_label": "FIRST_ACTION",
+                "node_label_route": "STAR_BAY_FIRE/-/RESPONSE/-/FIRST_ACTION",
+                "node_name": "虚构初焰处置方式",
+                "node_order": 1,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-response",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "WATER_GUIDE": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-024",
+                "node_label": "WATER_GUIDE",
+                "node_label_route": "STAR_BAY_FIRE/-/RESPONSE/-/WATER_GUIDE",
+                "node_name": "虚构泉源引导方位",
+                "node_order": 4,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-response",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "ZONE_GUARD": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-023",
+                "node_label": "ZONE_GUARD",
+                "node_label_route": "STAR_BAY_FIRE/-/RESPONSE/-/ZONE_GUARD",
+                "node_name": "虚构星界守望状态",
+                "node_order": 3,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-response",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            }
+          }
+        },
+        "TRAINING": {
+          "metadata": {
+            "node_id": "ffv-branch-training",
+            "node_label": "TRAINING",
+            "node_label_route": "STAR_BAY_FIRE/-/TRAINING",
+            "node_name": "虚构星湾练航值守",
+            "node_order": 5,
+            "node_type": "concept",
+            "parent_node_id": "ffv-root"
+          },
+          "subnodes": {
+            "DRILL_STAGE": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-018",
+                "node_label": "DRILL_STAGE",
+                "node_label_route": "STAR_BAY_FIRE/-/TRAINING/-/DRILL_STAGE",
+                "node_name": "虚构练航演练阶段",
+                "node_order": 2,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-training",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "DUTY_RHYTHM": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-017",
+                "node_label": "DUTY_RHYTHM",
+                "node_label_route": "STAR_BAY_FIRE/-/TRAINING/-/DUTY_RHYTHM",
+                "node_name": "虚构值守轮换节拍",
+                "node_order": 1,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-training",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "integer"
+              }
+            },
+            "GUIDE_ROLE": {
+              "metadata": {
+                "is_list": true,
+                "node_id": "ffv-core-019",
+                "node_label": "GUIDE_ROLE",
+                "node_label_route": "STAR_BAY_FIRE/-/TRAINING/-/GUIDE_ROLE",
+                "node_name": "虚构引航协同角色",
+                "node_order": 3,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-training",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "string"
+              }
+            },
+            "REVIEW_TIME": {
+              "metadata": {
+                "is_list": false,
+                "node_id": "ffv-core-020",
+                "node_label": "REVIEW_TIME",
+                "node_label_route": "STAR_BAY_FIRE/-/TRAINING/-/REVIEW_TIME",
+                "node_name": "虚构复盘记录时刻",
+                "node_order": 4,
+                "node_type": "property",
+                "parent_node_id": "ffv-branch-training",
+                "value_constraints": {
+                  "raw_constraints": {}
+                },
+                "value_type": "time_code"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "concurrent_version": 1,
+    "id": "ffv-record-small-v1",
+    "map_id": "ffv-map-small",
+    "map_name": "虚构星湾焰安small验证树",
+    "map_type": "resource",
+    "version": "FFV-SMALL-V1"
+  }
+}

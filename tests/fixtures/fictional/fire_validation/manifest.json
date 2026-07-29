@@ -1,0 +1,178 @@
+{
+  "dataset_id": "fictional-starbay-fire-validation",
+  "fictional": true,
+  "gold_eligible": false,
+  "limitations": [
+    "不代表真实消防信息树、工程规范或生产分布。",
+    "大型档只用于规模、确定性和有界输出验证。",
+    "oracle 是合同预期或可接受集合，不是生产 Gold。"
+  ],
+  "model_fault_oracles": [
+    {
+      "expected_attempts": 2,
+      "expected_error_code": "INTENT_MODEL_RESPONSE_INVALID",
+      "fault": "invalid-json",
+      "final_status": "FAILED",
+      "public_view_must_exclude": [
+        "authorization",
+        "api_key",
+        "internal_path",
+        "stable_node_id",
+        "full_tree",
+        "raw_trace_canary"
+      ],
+      "stage": "INTENT_MODEL"
+    },
+    {
+      "expected_attempts": 2,
+      "expected_error_code": "INTENT_MODEL_FIELDS_INVALID",
+      "fault": "extra-field",
+      "final_status": "FAILED",
+      "public_view_must_exclude": [
+        "authorization",
+        "api_key",
+        "internal_path",
+        "stable_node_id",
+        "full_tree",
+        "raw_trace_canary"
+      ],
+      "stage": "INTENT_MODEL"
+    },
+    {
+      "expected_attempts": 2,
+      "expected_error_code": "INTENT_MODEL_FIELDS_INVALID",
+      "fault": "missing-field",
+      "final_status": "FAILED",
+      "public_view_must_exclude": [
+        "authorization",
+        "api_key",
+        "internal_path",
+        "stable_node_id",
+        "full_tree",
+        "raw_trace_canary"
+      ],
+      "stage": "INTENT_MODEL"
+    },
+    {
+      "expected_attempts": 1,
+      "expected_error_code": "SIMULATOR_MODEL_HTTP_429",
+      "fault": "http-429",
+      "final_status": "FAILED",
+      "public_view_must_exclude": [
+        "authorization",
+        "api_key",
+        "internal_path",
+        "stable_node_id",
+        "full_tree",
+        "raw_trace_canary"
+      ],
+      "stage": "INTENT_MODEL"
+    },
+    {
+      "expected_attempts": 1,
+      "expected_error_code": "SIMULATOR_MODEL_HTTP_500",
+      "fault": "http-500",
+      "final_status": "FAILED",
+      "public_view_must_exclude": [
+        "authorization",
+        "api_key",
+        "internal_path",
+        "stable_node_id",
+        "full_tree",
+        "raw_trace_canary"
+      ],
+      "stage": "INTENT_MODEL"
+    },
+    {
+      "expected_attempts": 1,
+      "expected_error_code": "SIMULATOR_MODEL_CONNECTION_FAILED",
+      "fault": "timeout",
+      "final_status": "FAILED",
+      "public_view_must_exclude": [
+        "authorization",
+        "api_key",
+        "internal_path",
+        "stable_node_id",
+        "full_tree",
+        "raw_trace_canary"
+      ],
+      "stage": "INTENT_MODEL"
+    },
+    {
+      "expected_attempts": 1,
+      "expected_error_code": "SIMULATOR_MODEL_RESPONSE_TOO_LARGE",
+      "fault": "response-too-large",
+      "final_status": "FAILED",
+      "public_view_must_exclude": [
+        "authorization",
+        "api_key",
+        "internal_path",
+        "stable_node_id",
+        "full_tree",
+        "raw_trace_canary"
+      ],
+      "stage": "INTENT_MODEL"
+    },
+    {
+      "expected_attempts": 2,
+      "expected_error_code": null,
+      "fault": "retry-then-valid",
+      "final_status": "SUCCEEDED",
+      "public_view_must_exclude": [
+        "authorization",
+        "api_key",
+        "internal_path",
+        "stable_node_id",
+        "full_tree",
+        "raw_trace_canary"
+      ],
+      "stage": "INTENT_MODEL"
+    },
+    {
+      "expected_attempts": 1,
+      "expected_error_code": "FORBIDDEN_IN_PUBLIC_VIEW",
+      "fault": "trace-canary",
+      "final_status": "REDACTED",
+      "public_view_must_exclude": [
+        "authorization",
+        "api_key",
+        "internal_path",
+        "stable_node_id",
+        "full_tree",
+        "raw_trace_canary"
+      ],
+      "stage": "INTENT_MODEL"
+    }
+  ],
+  "patch_eligible": false,
+  "schema_version": "fictional-fire-validation-dataset.v1",
+  "semantic_approval": false,
+  "source_policy": "PUBLIC_CATEGORY_CLEAN_ROOM",
+  "tiers": [
+    {
+      "benchmark_role": "precision_contract",
+      "node_count": 31,
+      "scenario_count": 8,
+      "scenarios_file": "scenarios-small.json",
+      "tier": "small",
+      "tree_file": "tree-small.json"
+    },
+    {
+      "benchmark_role": "semantic_interference",
+      "node_count": 401,
+      "scenario_count": 16,
+      "scenarios_file": "scenarios-medium.json",
+      "tier": "medium",
+      "tree_file": "tree-medium.json"
+    },
+    {
+      "benchmark_role": "scale_stability",
+      "node_count": 2001,
+      "scenario_count": 24,
+      "scenarios_file": "scenarios-large.json",
+      "tier": "large",
+      "tree_file": "tree-large.json"
+    }
+  ],
+  "title": "虚构星湾消防功能形状验证数据"
+}

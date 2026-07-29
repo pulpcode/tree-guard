@@ -78,8 +78,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--mode",
-        choices=("offline", "bailian-live"),
+        choices=("offline", "simulator-live", "bailian-live"),
         default="offline",
+    )
+    parser.add_argument(
+        "--simulator-base-url",
+        help="loopback OpenAI-compatible base URL ending in /v1",
     )
     parser.add_argument(
         "--external-data-approved",
@@ -100,6 +104,24 @@ def main(argv: Sequence[str] | None = None) -> int:
             failed_step="PREFLIGHT",
         )
         return 2
+    if (
+        args.mode == "simulator-live"
+        and args.simulator_base_url is None
+    ):
+        _print_error(
+            "SIMULATOR_MODEL_BASE_URL_REQUIRED",
+            failed_step="PREFLIGHT",
+        )
+        return 2
+    if (
+        args.mode != "simulator-live"
+        and args.simulator_base_url is not None
+    ):
+        _print_error(
+            "SIMULATOR_MODEL_BASE_URL_UNEXPECTED",
+            failed_step="PREFLIGHT",
+        )
+        return 2
 
     try:
         _create_private_run_directory(args.output_dir)
@@ -108,6 +130,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             mode=args.mode,
             review_decision=args.review_decision,
             external_data_approved=args.external_data_approved,
+            simulator_base_url=args.simulator_base_url,
         )
         completion_file = args.output_dir / "12-demo-completion.json"
         if not write_private_json(completion_file, report):
@@ -146,6 +169,7 @@ def _run_demo(
     mode: str,
     review_decision: str,
     external_data_approved: bool,
+    simulator_base_url: str | None,
 ) -> dict[str, Any]:
     paths = {
         "tree": directory / "01-fictional-tree.json",
@@ -177,8 +201,13 @@ def _run_demo(
         draft_arguments.extend(
             ["--model-output-file", str(paths["intent_model"])]
         )
-    else:
+    elif mode == "bailian-live":
         draft_arguments.extend(["--live", "--external-data-approved"])
+    else:
+        assert simulator_base_url is not None
+        draft_arguments.extend(
+            ["--simulator-base-url", simulator_base_url]
+        )
     draft_arguments.extend(
         ["--internal-output", str(paths["intent_draft"])]
     )
@@ -252,13 +281,18 @@ def _run_demo(
         recommend_arguments.extend(
             ["--model-output-file", str(paths["semantic_model"])]
         )
-    else:
+    elif mode == "bailian-live":
         if not external_data_approved:
             raise DemoError(
                 "EXTERNAL_DATA_APPROVAL_REQUIRED",
                 failed_step="RECOMMEND",
             )
         recommend_arguments.extend(["--live", "--external-data-approved"])
+    else:
+        assert simulator_base_url is not None
+        recommend_arguments.extend(
+            ["--simulator-base-url", simulator_base_url]
+        )
     recommend_arguments.extend(
         ["--internal-output", str(paths["recommendation_draft"])]
     )

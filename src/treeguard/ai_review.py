@@ -26,6 +26,7 @@ from treeguard.change_intent import (
     build_intent_clarification_model_input,
 )
 from treeguard.evidence import LLMEvidencePack
+from treeguard.http_utils import build_isolated_opener
 from treeguard.json_utils import StrictJSONError, strict_json_loads
 from treeguard.models import CanonicalTree
 from treeguard.retrieval import CandidateSet
@@ -52,6 +53,7 @@ INTENT_CLARIFICATION_PROMPT_VERSION = (
 SEMANTIC_PROMPT_VERSION = "treeguard.semantic-recommendation.zh.v1"
 DEFAULT_MODEL = "qwen3.6-35b-a3b"
 DEFAULT_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+SIMULATOR_PROVIDER_NAME = "TREEGUARD_OPENAI_SIMULATOR"
 
 DISPOSITIONS = {
     "ACCEPT_AS_PATTERN",
@@ -449,19 +451,102 @@ class BailianConfig:
         )
 
 
+@dataclass(frozen=True, slots=True)
+class LoopbackSimulatorConfig:
+    """Strict OpenAI-compatible configuration for the local development mock."""
+
+    api_key: str = field(repr=False)
+    base_url: str
+    model: str = "treeguard-simulator-model"
+    timeout_seconds: float = 0.5
+    max_attempts: int = 1
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.api_key, str)
+            or not self.api_key
+            or len(self.api_key) > 512
+            or not self.api_key.isascii()
+            or any(
+                ord(character) < 33 or ord(character) > 126
+                for character in self.api_key
+            )
+        ):
+            raise BailianProviderError(
+                "SIMULATOR_MODEL_API_KEY_INVALID",
+                "simulator API key must be a printable ASCII token",
+            )
+        if not isinstance(self.base_url, str):
+            raise BailianProviderError(
+                "SIMULATOR_MODEL_BASE_URL_INVALID",
+                "simulator base_url must use loopback HTTP",
+            )
+        parsed = urllib.parse.urlparse(self.base_url)
+        try:
+            port = parsed.port
+        except ValueError as exc:
+            raise BailianProviderError(
+                "SIMULATOR_MODEL_BASE_URL_INVALID",
+                "simulator base_url is malformed",
+            ) from exc
+        if (
+            parsed.scheme != "http"
+            or parsed.hostname not in {"127.0.0.1", "localhost"}
+            or parsed.username is not None
+            or parsed.password is not None
+            or port is None
+            or parsed.path.rstrip("/") != "/v1"
+            or parsed.params
+            or parsed.query
+            or parsed.fragment
+        ):
+            raise BailianProviderError(
+                "SIMULATOR_MODEL_BASE_URL_INVALID",
+                "simulator base_url must use an explicit loopback HTTP port and /v1",
+            )
+        if (
+            not isinstance(self.model, str)
+            or _MODEL_ID.fullmatch(self.model) is None
+        ):
+            raise BailianProviderError(
+                "SIMULATOR_MODEL_ID_INVALID",
+                "simulator model must be a simple printable identifier",
+            )
+        if (
+            not isinstance(self.timeout_seconds, (int, float))
+            or isinstance(self.timeout_seconds, bool)
+            or self.timeout_seconds <= 0
+            or self.timeout_seconds > 60
+        ):
+            raise BailianProviderError(
+                "SIMULATOR_MODEL_TIMEOUT_INVALID",
+                "simulator timeout must be between zero and 60 seconds",
+            )
+        if (
+            not isinstance(self.max_attempts, int)
+            or isinstance(self.max_attempts, bool)
+            or self.max_attempts not in {1, 2}
+        ):
+            raise BailianProviderError(
+                "SIMULATOR_MODEL_ATTEMPTS_INVALID",
+                "simulator max_attempts must be one or two",
+            )
+
+
 class BailianAIReviewProvider:
     """Call Bailian JSON Mode and reject output that fails the local contract."""
 
     provider_name = PROVIDER_NAME
+    provider_label = "Bailian"
     capability = PROVIDER_CAPABILITY
     prompt_version = PROMPT_VERSION
 
-    def __init__(self, config: BailianConfig) -> None:
+    def __init__(
+        self,
+        config: BailianConfig | LoopbackSimulatorConfig,
+    ) -> None:
         self.config = config
-        self._opener = urllib.request.build_opener(
-            urllib.request.ProxyHandler({}),
-            _NoRedirectHandler(),
-        )
+        self._opener = build_isolated_opener()
 
     def review(self, evidence_pack: LLMEvidencePack) -> AIReviewDraft:
         try:
@@ -494,7 +579,7 @@ class BailianAIReviewProvider:
                 last_code = "AI_REVIEW_RESPONSE_INVALID"
         raise BailianProviderError(
             last_code,
-            "Bailian output failed the local AI review contract",
+            f"{self.provider_label} output failed the local AI review contract",
         )
 
     def _request_body(
@@ -566,6 +651,19 @@ class BailianAIReviewProvider:
         }
 
     def _post_json(self, body: dict[str, Any]) -> Any:
+        return self._post_json_with_prefix(
+            body,
+            error_prefix="BAILIAN",
+            provider_label="Bailian",
+        )
+
+    def _post_json_with_prefix(
+        self,
+        body: dict[str, Any],
+        *,
+        error_prefix: str,
+        provider_label: str,
+    ) -> Any:
         endpoint = self.config.base_url.rstrip("/") + "/chat/completions"
         try:
             request = urllib.request.Request(
@@ -579,8 +677,8 @@ class BailianAIReviewProvider:
             )
         except (TypeError, ValueError, UnicodeError):
             raise BailianProviderError(
-                "BAILIAN_REQUEST_INVALID",
-                "Bailian request could not be encoded safely",
+                f"{error_prefix}_REQUEST_INVALID",
+                f"{provider_label} request could not be encoded safely",
             ) from None
         try:
             with self._opener.open(
@@ -590,8 +688,8 @@ class BailianAIReviewProvider:
                 raw = response.read(_MAX_RESPONSE_BYTES + 1)
         except urllib.error.HTTPError as exc:
             raise BailianProviderError(
-                f"BAILIAN_HTTP_{exc.code}",
-                "Bailian returned an HTTP error",
+                f"{error_prefix}_HTTP_{exc.code}",
+                f"{provider_label} returned an HTTP error",
             ) from exc
         except (
             urllib.error.URLError,
@@ -599,13 +697,13 @@ class BailianAIReviewProvider:
             ValueError,
         ) as exc:
             raise BailianProviderError(
-                "BAILIAN_CONNECTION_FAILED",
-                "Bailian connection failed or timed out",
+                f"{error_prefix}_CONNECTION_FAILED",
+                f"{provider_label} connection failed or timed out",
             ) from exc
         if len(raw) > _MAX_RESPONSE_BYTES:
             raise BailianProviderError(
-                "BAILIAN_RESPONSE_TOO_LARGE",
-                "Bailian response exceeded the configured size limit",
+                f"{error_prefix}_RESPONSE_TOO_LARGE",
+                f"{provider_label} response exceeded the configured size limit",
             )
         try:
             return strict_json_loads(raw)
@@ -616,8 +714,8 @@ class BailianAIReviewProvider:
             UnicodeDecodeError,
         ) as exc:
             raise BailianProviderError(
-                "BAILIAN_RESPONSE_NOT_JSON",
-                "Bailian response envelope was not JSON",
+                f"{error_prefix}_RESPONSE_NOT_JSON",
+                f"{provider_label} response envelope was not JSON",
             ) from exc
 
 
@@ -664,7 +762,10 @@ class BailianIntentDraftProvider(BailianAIReviewProvider):
                 last_code = "INTENT_MODEL_RESPONSE_INVALID"
         raise BailianProviderError(
             last_code,
-            "Bailian output failed the local change-intent contract",
+            (
+                f"{self.provider_label} output failed the local "
+                "change-intent contract"
+            ),
         )
 
     def _intent_request_body(
@@ -780,7 +881,10 @@ class BailianIntentDraftProvider(BailianAIReviewProvider):
                 last_code = "INTENT_CLARIFICATION_MODEL_RESPONSE_INVALID"
         raise BailianProviderError(
             last_code,
-            "Bailian output failed the local clarification contract",
+            (
+                f"{self.provider_label} output failed the local "
+                "clarification contract"
+            ),
         )
 
     def _clarification_request_body(
@@ -902,7 +1006,10 @@ class BailianSemanticRecommendationProvider(BailianAIReviewProvider):
                 last_code = "SEMANTIC_MODEL_RESPONSE_INVALID"
         raise BailianProviderError(
             last_code,
-            "Bailian output failed the local semantic recommendation contract",
+            (
+                f"{self.provider_label} output failed the local semantic "
+                "recommendation contract"
+            ),
         )
 
     def _semantic_request_body(
@@ -987,19 +1094,34 @@ class BailianSemanticRecommendationProvider(BailianAIReviewProvider):
         }
 
 
-class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
-    """Fail closed so Authorization is never forwarded to a redirect target."""
+class LoopbackSimulatorIntentDraftProvider(BailianIntentDraftProvider):
+    """Run the intent contract against the deterministic loopback mock."""
 
-    def redirect_request(
-        self,
-        request: urllib.request.Request,
-        file_pointer: Any,
-        code: int,
-        message: str,
-        headers: Any,
-        new_url: str,
-    ) -> None:
-        return None
+    provider_name = SIMULATOR_PROVIDER_NAME
+    provider_label = "OpenAI simulator"
+
+    def _post_json(self, body: dict[str, Any]) -> Any:
+        return self._post_json_with_prefix(
+            body,
+            error_prefix="SIMULATOR_MODEL",
+            provider_label="OpenAI simulator",
+        )
+
+
+class LoopbackSimulatorSemanticRecommendationProvider(
+    BailianSemanticRecommendationProvider
+):
+    """Run semantic advice against the deterministic loopback mock."""
+
+    provider_name = SIMULATOR_PROVIDER_NAME
+    provider_label = "OpenAI simulator"
+
+    def _post_json(self, body: dict[str, Any]) -> Any:
+        return self._post_json_with_prefix(
+            body,
+            error_prefix="SIMULATOR_MODEL",
+            provider_label="OpenAI simulator",
+        )
 
 
 def _load_private_local_env(path: str = ".env") -> dict[str, str]:
@@ -1306,6 +1428,9 @@ __all__ = [
     "BailianIntentDraftProvider",
     "BailianSemanticRecommendationProvider",
     "BailianProviderError",
+    "LoopbackSimulatorConfig",
+    "LoopbackSimulatorIntentDraftProvider",
+    "LoopbackSimulatorSemanticRecommendationProvider",
     "CANDIDATE_RELATIONS",
     "DEFAULT_BASE_URL",
     "DEFAULT_MODEL",
@@ -1314,6 +1439,7 @@ __all__ = [
     "INTENT_PROMPT_VERSION",
     "INTENT_CLARIFICATION_PROMPT_VERSION",
     "SEMANTIC_PROMPT_VERSION",
+    "SIMULATOR_PROVIDER_NAME",
     "PLACEMENT_STATUSES",
     "PROMPT_VERSION",
     "PROVIDER_CAPABILITY",

@@ -11,7 +11,7 @@ TreeGuard 是采用 `src` 布局的单一 Python 包：
 ├── src/treeguard/           # Python 核心与 CLI 应用边界
 ├── tests/
 │   └── fixtures/fictional/  # 完全虚构的源格式样例
-├── pyproject.toml           # 包元数据和五个 CLI 入口
+├── pyproject.toml           # 包元数据和六个 CLI 入口
 └── uv.lock                  # 可复现开发环境
 ```
 
@@ -22,6 +22,7 @@ TreeGuard 是采用 `src` 布局的单一 Python 包：
 - `treeguard-expert-review` → `treeguard.expert_cli:main`
 - `treeguard-governance` → `treeguard.governance_cli:main`
 - `treeguard-governance-demo` → `treeguard.demo_cli:main`
+- `treeguard-contract-simulator` → `treeguard.simulator_cli:main`
 
 当前没有 Web 应用、入站 HTTP API、数据库驱动、ORM、repository、migration、
 worker、queue、vector index 或生产 Patch publisher。
@@ -56,6 +57,7 @@ worker、queue、vector index 或生产 Patch publisher。
 ### 不可信模型边界
 
 - `ai_review.py`：AI 审查合同、本地校验、百炼配置与 OpenAI-compatible 传输；
+- `http_utils.py`：禁用 proxy 和 redirect 的共享 `urllib` opener；
 - `expert_synthesis.py`：受约束的专家思路综合和精确外部请求计划绑定。
 
 Provider 可以执行网络 IO；返回 JSON 必须通过本地字段、枚举、引用、来源、
@@ -68,6 +70,10 @@ Provider 可以执行网络 IO；返回 JSON 必须通过本地字段、枚举�
 - `expert_cli.py`：`apply`、`prepare-approval`、`replay` 私有文件工作流；
 - `governance_cli.py`：意图、召回、语义建议、人工复核和回放的私有旁路工作流；
 - `demo_cli.py`：内置完全虚构输入，并编排正式治理 CLI 的一键演示边界；
+- `simulator.py`：完全虚构树、暂定四类仓库路由和 Mock 模型故障场景；
+- `simulator_server.py`：只监听 loopback 的有界标准库 HTTP 壳；
+- `repository_client.py`：只接受 loopback 的暂定仓库合同客户端；
+- `simulator_cli.py`：启动服务和四类仓库聚合验证；
 - `__main__.py`：分派基础一致性 CLI。
 
 CLI 只负责参数、编排、预期异常转换和获批准 IO。新的领域策略必须进入所属
@@ -94,6 +100,8 @@ evidence / change_intent / semantic_recommendation / models
 adapter / ai_review / change_intent / retrieval /
 semantic_recommendation / private_io ──────────→ governance_cli
 governance_cli / private_io ──────────────────→ demo_cli
+simulator ─────────────→ simulator_server / repository_client
+repository_client / simulator_server ─────────→ simulator_cli
 ```
 
 核心模块不得反向导入 CLI。以下跨模块私有导入是当前技术债，不得继续扩散：

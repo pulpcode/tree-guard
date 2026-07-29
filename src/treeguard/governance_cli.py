@@ -17,6 +17,9 @@ from treeguard.ai_review import (
     BailianIntentDraftProvider,
     BailianProviderError,
     BailianSemanticRecommendationProvider,
+    LoopbackSimulatorConfig,
+    LoopbackSimulatorIntentDraftProvider,
+    LoopbackSimulatorSemanticRecommendationProvider,
 )
 from treeguard.change_intent import (
     ChangeIntentDraft,
@@ -48,6 +51,7 @@ from treeguard.semantic_recommendation import (
     SemanticRecommendationError,
     apply_recommendation_review,
 )
+from treeguard.simulator import SIMULATOR_BEARER_TOKEN
 
 
 _MAX_TREE_BYTES = 64_000_000
@@ -64,6 +68,12 @@ _MODEL_PREFLIGHT_ERROR_CODES = {
     "BAILIAN_MODEL_INVALID",
     "BAILIAN_REQUEST_INVALID",
     "BAILIAN_TIMEOUT_INVALID",
+    "SIMULATOR_MODEL_API_KEY_INVALID",
+    "SIMULATOR_MODEL_ATTEMPTS_INVALID",
+    "SIMULATOR_MODEL_BASE_URL_INVALID",
+    "SIMULATOR_MODEL_ID_INVALID",
+    "SIMULATOR_MODEL_REQUEST_INVALID",
+    "SIMULATOR_MODEL_TIMEOUT_INVALID",
 }
 
 
@@ -80,6 +90,7 @@ def build_parser() -> argparse.ArgumentParser:
     draft_source = draft_parser.add_mutually_exclusive_group(required=True)
     draft_source.add_argument("--model-output-file", type=Path)
     draft_source.add_argument("--live", action="store_true")
+    draft_source.add_argument("--simulator-base-url")
     draft_parser.add_argument(
         "--external-data-approved",
         action="store_true",
@@ -98,6 +109,7 @@ def build_parser() -> argparse.ArgumentParser:
     clarify_source = clarify_parser.add_mutually_exclusive_group(required=True)
     clarify_source.add_argument("--model-output-file", type=Path)
     clarify_source.add_argument("--live", action="store_true")
+    clarify_source.add_argument("--simulator-base-url")
     clarify_parser.add_argument(
         "--external-data-approved",
         action="store_true",
@@ -135,6 +147,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     recommend_source.add_argument("--model-output-file", type=Path)
     recommend_source.add_argument("--live", action="store_true")
+    recommend_source.add_argument("--simulator-base-url")
     recommend_parser.add_argument(
         "--external-data-approved",
         action="store_true",
@@ -175,6 +188,34 @@ def _add_semantic_sources(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("candidate_file", type=Path)
 
 
+def _intent_provider(
+    args: argparse.Namespace,
+) -> BailianIntentDraftProvider:
+    if args.live:
+        return BailianIntentDraftProvider(BailianConfig.from_env())
+    return LoopbackSimulatorIntentDraftProvider(
+        LoopbackSimulatorConfig(
+            api_key=SIMULATOR_BEARER_TOKEN,
+            base_url=args.simulator_base_url,
+        )
+    )
+
+
+def _semantic_provider(
+    args: argparse.Namespace,
+) -> BailianSemanticRecommendationProvider:
+    if args.live:
+        return BailianSemanticRecommendationProvider(
+            BailianConfig.from_env()
+        )
+    return LoopbackSimulatorSemanticRecommendationProvider(
+        LoopbackSimulatorConfig(
+            api_key=SIMULATOR_BEARER_TOKEN,
+            base_url=args.simulator_base_url,
+        )
+    )
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if (
@@ -197,8 +238,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         if args.command == "draft":
             _preflight_output(args.internal_output)
-            if args.live:
-                provider = BailianIntentDraftProvider(BailianConfig.from_env())
+            if args.live or args.simulator_base_url is not None:
+                provider = _intent_provider(args)
                 try:
                     draft = provider.draft(request, tree)
                     ai_called = True
@@ -267,10 +308,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                 )
             )
             _preflight_output(args.internal_output)
-            if args.live:
-                provider = BailianIntentDraftProvider(
-                    BailianConfig.from_env()
-                )
+            if args.live or args.simulator_base_url is not None:
+                provider = _intent_provider(args)
                 try:
                     clarification_round = provider.clarify(
                         request,
@@ -401,10 +440,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
             if args.command == "recommend":
                 _preflight_output(args.internal_output)
-                if args.live:
-                    provider = BailianSemanticRecommendationProvider(
-                        BailianConfig.from_env()
-                    )
+                if args.live or args.simulator_base_url is not None:
+                    provider = _semantic_provider(args)
                     try:
                         recommendation_draft = provider.recommend(
                             confirmation,

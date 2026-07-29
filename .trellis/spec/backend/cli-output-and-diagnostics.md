@@ -49,9 +49,14 @@
 | `treeguard-expert-review` | apply、replay 或 approval preparation 完成 | 输入、批准、Provider preflight、状态/完整性、私有写入拒绝 | 已尝试外部 synthesis 且失败 |
 | `treeguard-governance` | draft、clarify、confirm、search、recommend、review-recommendation 或 replay-recommendation 完成，包括单轮澄清耗尽、合法无候选、信号不足或 `ABSTAIN` | 输入、澄清/确认、来源、语义政策、Provider preflight 或私有 IO 拒绝 | 已尝试外部意图/澄清/语义模型调用且失败 |
 | `treeguard-governance-demo` | 六个正式治理步骤完成且完成标志已私有发布 | 参数、目录、澄清门禁、正式步骤、工件或完成标志拒绝 | live 模式已尝试外部意图/语义模型调用且失败 |
+| `treeguard-contract-simulator` | 服务启动后正常结束，或四类仓库验证完成 | 配置、监听、连接或暂定合同校验拒绝 | 不使用 |
 
 preflight 失败保持 `ai.called=false`。新增 Provider error 时，必须同步所有 AI 能力 CLI
 的 preflight code 分类和测试。
+
+`simulator-live` 是真实 loopback HTTP 模型调用；连接或响应失败使用 exit 3，但
+不代表发生外部出域。`bailian-live` 才需要 `--external-data-approved`。两者的
+stdout 都不得包含模型请求/响应、节点或私有工件内容。
 
 ### 已知偏差
 

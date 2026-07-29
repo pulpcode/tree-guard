@@ -77,6 +77,7 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - [决策记录与待核实事项](docs/decision-log.md)
 - [实际源格式分析](docs/source-format-findings.md)
 - [百炼开发冒烟指南](docs/bailian-smoke.md)
+- [协议级开发仿真](docs/contract-simulator.md)
 
 ## 当前实现
 
@@ -112,6 +113,8 @@ Patch 发布：
 - `contracts/semantic-recommendation-content.v1.schema.json`：人工修订建议的本地约束合同；
 - `contracts/recommendation-review-action.v1.schema.json`：确认、修订或拒绝建议的人工 action；
 - `contracts/recommendation-record.v1.schema.json`：只作运营反馈、可可信回放的审查记录；
+- `contracts/provisional-simulator-response.v1.schema.json`：明确标记为暂定的
+  Clean-room 仓库仿真响应合同；
 - `src/treeguard/adapter.py`：直接导出和 API 响应的递归适配器；
 - `src/treeguard/hashing.py`：排除 VALUE 和审计字段的稳定 Schema 哈希；
 - `src/treeguard/diff.py`：只按稳定 `node_id` 匹配的保存修订/业务版本 Diff；
@@ -130,6 +133,10 @@ Patch 发布：
 - `src/treeguard/private_io.py`：敏感 JSON 的有界私有读取和不可覆盖原子发布；
 - `src/treeguard/governance_cli.py`：意图、召回、语义建议、人工复核和回放的文件型旁路工作流；
 - `src/treeguard/demo_cli.py`：使用内置完全虚构数据编排正式六步治理命令的一键演示；
+- `src/treeguard/simulator.py`：确定性虚构树、四类仓库路由和受控模型故障场景；
+- `src/treeguard/simulator_server.py`：只监听 loopback 的标准库 HTTP 开发壳；
+- `src/treeguard/repository_client.py`：严格验证暂定四类只读仓库响应的最小客户端；
+- `src/treeguard/simulator_cli.py`：启动仿真服务和验证仓库读取的聚合 CLI；
 - `src/treeguard/json_utils.py`：拒绝重复键、非有限数和超长整数的严格 JSON 解析；
 - `src/treeguard/cli.py`：不输出名称、ID、路径和 VALUE 的聚合式 Conformance CLI；
 - `tests/fixtures/fictional/`：完全虚构的递归复合属性样例；
@@ -224,6 +231,43 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
 Qwen 效果或专家审批已经验证。如果意图模型返回 `NEEDS_CLARIFICATION`，一键演示
 会在保存私有草稿后以 `INTENT_CLARIFICATION_REQUIRED` 安全停止，不会自动确认；
 回答和重新编译应使用下面的分步工作流。
+
+### 协议级仿真与双模型源
+
+真实内网接口样例尚未到达时，可启动只监听 loopback 的 Clean-room Simulator。
+它同时提供四类暂定仓库接口和 OpenAI-compatible 模型接口：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
+  treeguard-contract-simulator serve \
+  --port 8765 \
+  --node-count 2001 \
+  --model-scenario ready
+```
+
+保持服务运行，在另一个终端验证四类仓库读取：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
+  treeguard-contract-simulator verify-repository \
+  --base-url http://127.0.0.1:8765
+```
+
+也可让完整治理演示真实调用本地 Mock 模型：
+
+```bash
+UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
+  treeguard-governance-demo \
+  --output-dir /tmp/treeguard-fictional-simulator-demo \
+  --review-decision confirm \
+  --mode simulator-live \
+  --simulator-base-url http://127.0.0.1:8765/v1
+```
+
+`simulator-live` 用于确定性回归；上面的 `bailian-live` 仍会调用真实百炼，用于观察
+真实模型对同一完全虚构场景的处理结果。二者产出都只是待人工复核的 sidecar 建议，
+不是 Gold、审批或 Patch。暂定接口和限制详见
+[协议级开发仿真](docs/contract-simulator.md)。
 
 ### 手工文件工作流
 

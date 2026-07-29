@@ -14,8 +14,10 @@ HTTP 服务或 Spring Boot/MongoDB 连接器。已实现的持久化模型只有
 - 一键虚构演示的全新 `0700` 运行目录、`0600` 中间工件和完成标志；
 - 从冻结源工件做确定性回放。
 
-唯一实现的网络路径是显式启用的百炼 `POST /chat/completions`。MongoDB、搜索、
-Overlay 和 Patch 发布的设计文档不能被写成已存在层的代码规范。
+已实现的网络路径只有显式启用的百炼 `POST /chat/completions`，以及只监听
+loopback 的暂定开发仿真服务/客户端。后者不是生产入站 API、生产 repository
+或真实内网合同。MongoDB、搜索、Overlay 和 Patch 发布的设计文档不能被写成已
+存在层的代码规范。
 
 ## 永久职责边界
 
@@ -112,6 +114,95 @@ Provider transport 必须显式启用并 fail-closed：
 
 模型投影不等于外传权限。去掉内部 ID 和 `VALUE` 后，真实字段名、路径和结构
 仍可能敏感；必须遵守开发数据边界。
+
+## Scenario：协议级 Clean-room 仿真
+
+### 1. Scope / Trigger
+
+真实内网 Qwen 与四类仓库接口样例尚未到达时，开发只能使用完全虚构数据和明确标记
+的暂定合同。该场景用于协议编排、确定性回归和故障注入，不能用于声明生产兼容性或
+模型效果。
+
+### 2. Signatures
+
+- `treeguard-contract-simulator serve --port PORT --node-count N
+  --model-scenario SCENARIO [--delay-seconds SECONDS]`
+- `treeguard-contract-simulator verify-repository --base-url
+  http://127.0.0.1:PORT`
+- `treeguard-governance {draft|clarify|recommend} ... --simulator-base-url
+  http://127.0.0.1:PORT/v1`
+- `treeguard-governance-demo ... --mode simulator-live
+  --simulator-base-url http://127.0.0.1:PORT/v1`
+
+`--model-output-file`、`--live` 与 `--simulator-base-url` 互斥。
+`bailian-live` 继续调用真实百炼并要求 `--external-data-approved`；
+`simulator-live` 只允许 loopback，不要求外部出域批准。
+
+### 3. Contracts
+
+- 仿真仓库响应必须携带
+  `contract_status=PROVISIONAL_SIMULATOR_CONTRACT`；
+- 四类只读能力是分类平铺列表、分类资源 HEAD、显式最旧到最新业务版本列表、
+  `version` 或 `version_record_id` 二选一的全树；
+- `ContractSimulator.handle()` 是确定性唯一事实来源，HTTP Server 只负责有界
+  协议转换；
+- `ProvisionalRepositoryClient` 严格验证信封、字段集、顺序、HEAD、版本身份，
+  再把全树交给 `adapt_tree_document()`；
+- `LoopbackSimulatorConfig` 只接受 `http://127.0.0.1|localhost:PORT/v1`，
+  禁止 URL credential、query、fragment、redirect 和继承 proxy；
+- 仿真模型与百炼共享意图/语义输出合同，但 Provider 名称、地址门禁和错误码分离；
+- 百炼真实响应只进入私有 sidecar，不得成为 fixture、Git 工件或确定性断言。
+
+### 4. Validation & Error Matrix
+
+| 条件 | 结果 |
+|---|---|
+| 非 loopback 仿真 URL、无显式端口或路径不是 `/v1` | `SIMULATOR_MODEL_BASE_URL_INVALID` |
+| 仓库客户端目标不是显式 loopback HTTP 端口 | `REPOSITORY_SIMULATOR_BASE_URL_INVALID` |
+| 仿真请求缺少固定 Bearer token | HTTP 401 / `SIMULATOR_AUTH_REQUIRED` |
+| 未知路径、方法或查询字段 | 固定 4xx 与 `SIMULATOR_*` 错误码 |
+| 模型非法 JSON、额外字段、429/500、延迟 | Provider 或本地输出合同失败关闭 |
+| 仓库响应字段、顺序、HEAD 或身份不一致 | `RepositoryClientError`，不返回部分结果 |
+| `bailian-live` 缺少出域批准 | 网络和私有输出前 exit 2 |
+
+### 5. Good/Base/Bad Cases
+
+- Good：2,001 节点虚构树经四类接口读取，两个版本均通过 Adapter，模型源可在
+  `simulator-live` 与 `bailian-live` 间显式切换。
+- Base：`offline` 使用冻结模型输出文件，不启动服务、不发网络请求。
+- Bad：把仿真字段写成真实内网 API 事实，或因 Mock 通过就宣称 Qwen/百炼语义准确。
+
+### 6. Tests Required
+
+- 生成器：同配置字节稳定，2,000+ 节点可适配，跨版本 `node_id` 稳定且快照变化；
+- 纯路由：认证、路径、查询、方法和所有模型故障场景；
+- 客户端：四步读取、显式顺序、HEAD、selector、版本和树身份；
+- 双模型源 CLI：`simulator-live` 真实进入两段 Provider，本地输出仍非 Gold/
+  非 Patch；`bailian-live` 的既有批准门禁继续通过回归；
+- 自动化测试使用进程内纯路由，不打开 socket、不使用凭据、不访问真实网络。
+  真实 loopback HTTP 只作为获准的本地冒烟步骤。
+
+### 7. Wrong vs Correct
+
+Wrong：
+
+```python
+BailianConfig(api_key=token, base_url="http://127.0.0.1:8765/v1")
+```
+
+这会混淆外部百炼允许列表与本地 Mock 身份。
+
+Correct：
+
+```python
+LoopbackSimulatorConfig(
+    api_key=SIMULATOR_BEARER_TOKEN,
+    base_url="http://127.0.0.1:8765/v1",
+)
+```
+
+真实内网样例到达后新增薄 Adapter/Provider 配置，不删除暂定标记，也不让生产系统
+适配 Mock。
 
 ## Shadow MVP 旁路规则
 

@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **活动文件**：`journal-1.md`
-- **会话总数**：2
+- **会话总数**：3
 - **最近活动**：2026-07-29
 <!-- @@@/auto:current-status -->
 
@@ -17,7 +17,7 @@
 <!-- @@@auto:active-documents -->
 | 文件 | 行数 | 状态 |
 |---|---:|---|
-| `journal-1.md` | ~68 | 活动 |
+| `journal-1.md` | ~102 | 活动 |
 <!-- @@@/auto:active-documents -->
 
 ## 会话历史
@@ -25,6 +25,7 @@
 <!-- @@@auto:session-history -->
 | # | 日期 | 标题 | 提交 | 分支 |
 |---|------|-------|---------|--------|
+| 3 | 2026-07-29 | 完成候选语义比较与人工复核回放 | `f5b551c` | `main` |
 | 2 | 2026-07-29 | 完成 AI 辅助子树治理 Shadow MVP | `6b5fdc2` | `main` |
 | 1 | 2026-07-28 | 完成 TreeGuard 开发规范初始化 | `7829632` | `main` |
 <!-- @@@/auto:session-history -->

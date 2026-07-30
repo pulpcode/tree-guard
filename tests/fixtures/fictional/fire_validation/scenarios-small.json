@@ -1,6 +1,6 @@
 {
   "benchmark_role": "precision_contract",
-  "dataset_id": "fictional-starbay-fire-validation",
+  "dataset_id": "fictional-fire-governance-validation",
   "fictional": true,
   "gold_eligible": false,
   "items": [
@@ -12,16 +12,16 @@
         "cardinality": "SINGLE",
         "clarification_question": null,
         "confirmed_facts": [
-          "需要记录虚构余温巡望节拍。"
+          "需要记录现场负责人所属单位。"
         ],
         "evidence_gaps": [],
-        "lifecycle": "单次虚构演练周期",
+        "lifecycle": "单次审查周期",
         "node_kind": "PROPERTY",
         "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
-        "role": "虚构星湾演练信息",
-        "scenario": "完全虚构的星湾演练",
+        "role": "人员与组织",
+        "scenario": "完全虚构的字段归属审查",
         "schema_version": "change-intent-model-output.v1",
-        "subject": "虚构余温巡望节拍",
+        "subject": "现场负责人所属单位",
         "value_type": "string"
       },
       "oracle": {
@@ -33,7 +33,7 @@
         "gold_eligible": false,
         "patch_eligible": false,
         "recommendation_status": "CONFIRMED",
-        "required_first_candidate_id": "ffv-core-001",
+        "required_first_candidate_id": "ffv-core-010",
         "semantic_approval": false,
         "semantic_error_code": null,
         "semantic_projection_limit": 8
@@ -42,8 +42,8 @@
       "request": {
         "cardinality_hint": "SINGLE",
         "node_kind_hint": "PROPERTY",
-        "proposed_parent_node_id": "ffv-branch-forecast",
-        "requirement_text": "为完全虚构的星湾演练记录 clear-intent 信息。",
+        "proposed_parent_node_id": "ffv-branch-people",
+        "requirement_text": "在完全虚构的消防任务治理演练中，需要记录现场负责人所属单位。",
         "schema_version": "intent-request.v1",
         "value_type_hint": "string"
       },
@@ -54,48 +54,48 @@
           "candidate_assessments": [
             {
               "candidate_ref": "C001",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "SEMANTICALLY_EQUIVALENT"
             },
             {
               "candidate_ref": "C002",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             },
             {
               "candidate_ref": "C003",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             },
             {
               "candidate_ref": "C004",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             },
             {
               "candidate_ref": "C005",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             },
             {
               "candidate_ref": "C006",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             },
             {
               "candidate_ref": "C007",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             },
             {
               "candidate_ref": "C008",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             }
           ],
           "clarification_question": null,
           "evidence_gaps": [],
-          "rationale": "首个虚构候选与确认意图等价。",
+          "rationale": "首个候选与虚构需求中的字段名称和业务上下文一致。",
           "recommended_action": "USE_EXISTING_NODE",
           "schema_version": "semantic-recommendation-model-output.v1",
           "selected_candidate_ref": "C001",
@@ -112,16 +112,16 @@
         "cardinality": "SINGLE",
         "clarification_question": null,
         "confirmed_facts": [
-          "需要记录虚构余温巡望节拍。"
+          "需要记录现场负责人所属单位。"
         ],
         "evidence_gaps": [],
-        "lifecycle": "单次虚构演练周期",
+        "lifecycle": "单次审查周期",
         "node_kind": "PROPERTY",
         "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
-        "role": "虚构星湾演练信息",
-        "scenario": "完全虚构的星湾演练",
+        "role": "人员与组织",
+        "scenario": "完全虚构的字段归属审查",
         "schema_version": "change-intent-model-output.v1",
-        "subject": "虚构余温巡望节拍",
+        "subject": "现场负责人所属单位",
         "value_type": "string"
       },
       "oracle": {
@@ -133,7 +133,7 @@
         "gold_eligible": false,
         "patch_eligible": false,
         "recommendation_status": "REJECTED",
-        "required_first_candidate_id": "ffv-core-001",
+        "required_first_candidate_id": "ffv-core-010",
         "semantic_approval": false,
         "semantic_error_code": null,
         "semantic_projection_limit": 8
@@ -142,8 +142,8 @@
       "request": {
         "cardinality_hint": "SINGLE",
         "node_kind_hint": "PROPERTY",
-        "proposed_parent_node_id": "ffv-branch-equipment",
-        "requirement_text": "为完全虚构的星湾演练记录 global-over-local 信息。",
+        "proposed_parent_node_id": "ffv-branch-special",
+        "requirement_text": "该字段属于人员长期共享信息，不应因本次特殊任务重复新增，需要记录现场负责人所属单位。",
         "schema_version": "intent-request.v1",
         "value_type_hint": "string"
       },
@@ -154,48 +154,48 @@
           "candidate_assessments": [
             {
               "candidate_ref": "C001",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "SEMANTICALLY_EQUIVALENT"
             },
             {
               "candidate_ref": "C002",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             },
             {
               "candidate_ref": "C003",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             },
             {
               "candidate_ref": "C004",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             },
             {
               "candidate_ref": "C005",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             },
             {
               "candidate_ref": "C006",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             },
             {
               "candidate_ref": "C007",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             },
             {
               "candidate_ref": "C008",
-              "reason": "已比较完全虚构的星湾候选。",
+              "reason": "已比较虚构需求与候选字段的业务对象和归属。",
               "relation": "NOT_EQUIVALENT"
             }
           ],
           "clarification_question": null,
           "evidence_gaps": [],
-          "rationale": "首个虚构候选与确认意图等价。",
+          "rationale": "首个候选与虚构需求中的字段名称和业务上下文一致。",
           "recommended_action": "USE_EXISTING_NODE",
           "schema_version": "semantic-recommendation-model-output.v1",
           "selected_candidate_ref": "C001",
@@ -212,16 +212,16 @@
         "cardinality": "SINGLE",
         "clarification_question": null,
         "confirmed_facts": [
-          "需要记录虚构泉幕储量刻度。"
+          "需要记录参与人员数量。"
         ],
         "evidence_gaps": [],
-        "lifecycle": "单次虚构演练周期",
+        "lifecycle": "单次审查周期",
         "node_kind": "PROPERTY",
         "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
-        "role": "虚构星湾演练信息",
-        "scenario": "完全虚构的星湾演练",
+        "role": "人员与组织",
+        "scenario": "完全虚构的字段归属审查",
         "schema_version": "change-intent-model-output.v1",
-        "subject": "虚构泉幕储量刻度",
+        "subject": "参与人员数量",
         "value_type": "string"
       },
       "oracle": {
@@ -233,7 +233,7 @@
         "gold_eligible": false,
         "patch_eligible": false,
         "recommendation_status": null,
-        "required_first_candidate_id": "ffv-core-013",
+        "required_first_candidate_id": "ffv-core-012",
         "semantic_approval": false,
         "semantic_error_code": null,
         "semantic_projection_limit": 8
@@ -242,8 +242,8 @@
       "request": {
         "cardinality_hint": "SINGLE",
         "node_kind_hint": "PROPERTY",
-        "proposed_parent_node_id": "ffv-branch-equipment",
-        "requirement_text": "为完全虚构的星湾演练记录 type-conflict 信息。",
+        "proposed_parent_node_id": "ffv-branch-people",
+        "requirement_text": "用户暂时把数量描述成文本，但业务对象明确，需要记录参与人员数量。",
         "schema_version": "intent-request.v1",
         "value_type_hint": "string"
       },
@@ -266,7 +266,7 @@
         "role": null,
         "scenario": null,
         "schema_version": "change-intent-model-output.v1",
-        "subject": "quasarflux",
+        "subject": "OUT_OF_SCOPE_DRONE_BATTERY_CODE",
         "value_type": null
       },
       "oracle": {
@@ -288,7 +288,7 @@
         "cardinality_hint": "UNKNOWN",
         "node_kind_hint": "UNKNOWN",
         "proposed_parent_node_id": null,
-        "requirement_text": "为完全虚构的星湾演练记录 no-candidates 信息。",
+        "requirement_text": "为验证无候选分支，提出树中不存在的技术占位字段，需要记录 OUT_OF_SCOPE_DRONE_BATTERY_CODE。",
         "schema_version": "intent-request.v1",
         "value_type_hint": null
       },
@@ -333,7 +333,7 @@
         "cardinality_hint": "UNKNOWN",
         "node_kind_hint": "UNKNOWN",
         "proposed_parent_node_id": null,
-        "requirement_text": "为完全虚构的星湾演练记录 insufficient-signal 信息。",
+        "requirement_text": "希望补充一项信息，但尚未说明具体对象、所属子树或字段类型。",
         "schema_version": "intent-request.v1",
         "value_type_hint": null
       },
@@ -343,43 +343,43 @@
     },
     {
       "clarification": {
-        "answer_text": "本次虚构验证使用星纹表现形式。",
+        "answer_text": "只在本次完全虚构的高空救援演练中使用，应作为特殊任务扩展字段。",
         "model_output": {
           "assumptions": [],
-          "cardinality": "SINGLE",
+          "cardinality": "MULTIPLE",
           "clarification_question": null,
           "confirmed_facts": [
-            "需要记录虚构雾径导向标记。"
+            "需要记录特殊任务人员资质要求。"
           ],
           "evidence_gaps": [],
-          "lifecycle": "单次虚构演练周期",
+          "lifecycle": "单次审查周期",
           "node_kind": "PROPERTY",
           "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
-          "role": "虚构星湾演练信息",
-          "scenario": "完全虚构的星湾演练",
+          "role": "特殊任务扩展",
+          "scenario": "完全虚构的字段归属审查",
           "schema_version": "change-intent-model-output.v1",
-          "subject": "虚构雾径导向标记",
+          "subject": "特殊任务人员资质要求",
           "value_type": "string"
         }
       },
       "flow": "CLARIFY",
       "initial_model_output": {
         "assumptions": [],
-        "cardinality": "SINGLE",
-        "clarification_question": "虚构引导标记采用哪一种表现形式？",
+        "cardinality": "MULTIPLE",
+        "clarification_question": "该资质是人员长期属性，还是只在本次特殊任务中使用？",
         "confirmed_facts": [
-          "需要记录虚构雾径导向标记。"
+          "需要记录特殊任务人员资质要求。"
         ],
         "evidence_gaps": [
-          "尚未说明完全虚构的表现形式。"
+          "尚未说明适用范围和跨任务复用规则。"
         ],
-        "lifecycle": "单次虚构演练周期",
+        "lifecycle": "单次审查周期",
         "node_kind": "PROPERTY",
         "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
-        "role": "虚构星湾演练信息",
-        "scenario": "完全虚构的星湾演练",
+        "role": "特殊任务扩展",
+        "scenario": "完全虚构的字段归属审查",
         "schema_version": "change-intent-model-output.v1",
-        "subject": "虚构雾径导向标记",
+        "subject": "特殊任务人员资质要求",
         "value_type": "string"
       },
       "oracle": {
@@ -391,17 +391,17 @@
         "gold_eligible": false,
         "patch_eligible": false,
         "recommendation_status": null,
-        "required_first_candidate_id": "ffv-core-009",
+        "required_first_candidate_id": "ffv-core-022",
         "semantic_approval": false,
         "semantic_error_code": null,
         "semantic_projection_limit": 8
       },
       "purpose": "CLARIFICATION_RESOLVES",
       "request": {
-        "cardinality_hint": "SINGLE",
+        "cardinality_hint": "MULTIPLE",
         "node_kind_hint": "PROPERTY",
-        "proposed_parent_node_id": "ffv-branch-guidance",
-        "requirement_text": "为完全虚构的星湾演练记录 clarify-resolves 信息。",
+        "proposed_parent_node_id": "ffv-branch-special",
+        "requirement_text": "特殊任务中的人员需要增加资质信息，但尚不确定它应属于通用人员信息还是本次任务扩展。",
         "schema_version": "intent-request.v1",
         "value_type_hint": "string"
       },
@@ -411,45 +411,45 @@
     },
     {
       "clarification": {
-        "answer_text": "本次虚构验证使用星纹表现形式。",
+        "answer_text": "专家暂时无法判断，需要补充适用范围和跨任务复用规则。",
         "model_output": {
           "assumptions": [],
-          "cardinality": "SINGLE",
-          "clarification_question": "仍需确认虚构引导标记的表现形式吗？",
+          "cardinality": "MULTIPLE",
+          "clarification_question": "该资质应属于人员主干还是特殊任务扩展？",
           "confirmed_facts": [
-            "需要记录虚构雾径导向标记。"
+            "需要记录特殊任务人员资质要求。"
           ],
           "evidence_gaps": [
-            "仍缺少一个完全虚构的表现形式。"
+            "仍缺少适用范围和跨任务复用规则。"
           ],
-          "lifecycle": "单次虚构演练周期",
+          "lifecycle": "单次审查周期",
           "node_kind": "PROPERTY",
           "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
-          "role": "虚构星湾演练信息",
-          "scenario": "完全虚构的星湾演练",
+          "role": "特殊任务扩展",
+          "scenario": "完全虚构的字段归属审查",
           "schema_version": "change-intent-model-output.v1",
-          "subject": "虚构雾径导向标记",
+          "subject": "特殊任务人员资质要求",
           "value_type": "string"
         }
       },
       "flow": "CLARIFY",
       "initial_model_output": {
         "assumptions": [],
-        "cardinality": "SINGLE",
-        "clarification_question": "虚构引导标记采用哪一种表现形式？",
+        "cardinality": "MULTIPLE",
+        "clarification_question": "该资质是人员长期属性，还是只在本次特殊任务中使用？",
         "confirmed_facts": [
-          "需要记录虚构雾径导向标记。"
+          "需要记录特殊任务人员资质要求。"
         ],
         "evidence_gaps": [
-          "尚未说明完全虚构的表现形式。"
+          "尚未说明适用范围和跨任务复用规则。"
         ],
-        "lifecycle": "单次虚构演练周期",
+        "lifecycle": "单次审查周期",
         "node_kind": "PROPERTY",
         "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
-        "role": "虚构星湾演练信息",
-        "scenario": "完全虚构的星湾演练",
+        "role": "特殊任务扩展",
+        "scenario": "完全虚构的字段归属审查",
         "schema_version": "change-intent-model-output.v1",
-        "subject": "虚构雾径导向标记",
+        "subject": "特殊任务人员资质要求",
         "value_type": "string"
       },
       "oracle": {
@@ -468,10 +468,10 @@
       },
       "purpose": "CLARIFICATION_LIMIT",
       "request": {
-        "cardinality_hint": "SINGLE",
+        "cardinality_hint": "MULTIPLE",
         "node_kind_hint": "PROPERTY",
-        "proposed_parent_node_id": "ffv-branch-guidance",
-        "requirement_text": "为完全虚构的星湾演练记录 clarify-stops 信息。",
+        "proposed_parent_node_id": "ffv-branch-special",
+        "requirement_text": "特殊任务中的人员需要增加资质信息，但尚不确定它应属于通用人员信息还是本次任务扩展。",
         "schema_version": "intent-request.v1",
         "value_type_hint": "string"
       },
@@ -487,16 +487,16 @@
         "cardinality": "SINGLE",
         "clarification_question": null,
         "confirmed_facts": [
-          "需要记录虚构初焰处置方式。"
+          "需要记录主要处置措施。"
         ],
         "evidence_gaps": [],
-        "lifecycle": "单次虚构演练周期",
+        "lifecycle": "单次审查周期",
         "node_kind": "PROPERTY",
         "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
-        "role": "虚构星湾演练信息",
-        "scenario": "完全虚构的星湾演练",
+        "role": "处置过程",
+        "scenario": "完全虚构的字段归属审查",
         "schema_version": "change-intent-model-output.v1",
-        "subject": "虚构初焰处置方式",
+        "subject": "主要处置措施",
         "value_type": "string"
       },
       "oracle": {
@@ -517,8 +517,8 @@
       "request": {
         "cardinality_hint": "SINGLE",
         "node_kind_hint": "PROPERTY",
-        "proposed_parent_node_id": "ffv-branch-response",
-        "requirement_text": "为完全虚构的星湾演练记录 human-rejects 信息。",
+        "proposed_parent_node_id": "ffv-branch-actions",
+        "requirement_text": "需求只提到要补充处置内容，但没有说明范围和复用边界，需要记录主要处置措施。",
         "schema_version": "intent-request.v1",
         "value_type_hint": "string"
       },

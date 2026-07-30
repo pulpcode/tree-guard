@@ -67,7 +67,7 @@ def _run_scenario(item, tree):
                 "identity_status": "UNVERIFIED_FILE_ASSERTION",
                 "expected_draft_hash": draft.draft_hash,
                 "answer_text": item["clarification"]["answer_text"],
-                "answered_by_ref": "fictional-starbay-reviewer",
+                "answered_by_ref": "fictional-fire-reviewer",
                 "recorded_at": "2035-01-02T03:04:05Z",
             }
         )
@@ -89,7 +89,7 @@ def _run_scenario(item, tree):
             "schema_version": "intent-review-action.v1",
             "expected_draft_hash": current.draft_hash,
             "decision": item["review_decision"],
-            "reviewer_ref": "fictional-starbay-reviewer",
+            "reviewer_ref": "fictional-fire-reviewer",
             "recorded_at": "2035-01-02T03:04:05Z",
             "confirmed_intent": (
                 current.intent.to_dict()
@@ -304,9 +304,9 @@ class FictionalFireDatasetTests(unittest.TestCase):
                 "identity_status": "UNVERIFIED_FILE_ASSERTION",
                 "expected_draft_hash": draft.draft_hash,
                 "decision": semantic["review_decision"],
-                "reviewer_ref": "fictional-starbay-reviewer",
+                "reviewer_ref": "fictional-fire-reviewer",
                 "recorded_at": "2035-01-02T03:04:05Z",
-                "reviewer_reasoning": "完全虚构的星湾复核说明。",
+                "reviewer_reasoning": "完全虚构的消防任务治理复核说明。",
                 "revised_recommendation": None,
             },
             confirmation,
@@ -405,6 +405,105 @@ class FictionalFireDatasetTests(unittest.TestCase):
                 item["public_view_must_exclude"],
             )
 
+    def test_names_and_requirements_are_domain_coherent(self) -> None:
+        small = build_fictional_fire_tree("small")
+        root = small["map_topology"]["FICTIONAL_FIRE_TASK"]
+        branches = root["subnodes"]
+
+        self.assertEqual(
+            [branch["metadata"]["node_name"] for branch in branches.values()],
+            [
+                "任务基本信息",
+                "现场态势",
+                "人员与组织",
+                "救援力量与装备",
+                "处置过程",
+                "特殊任务扩展",
+            ],
+        )
+        people = branches["PEOPLE"]["subnodes"]
+        special = branches["SPECIAL"]["subnodes"]
+        self.assertEqual(
+            people["COMMANDER_ORG"]["metadata"]["node_name"],
+            "现场负责人所属单位",
+        )
+        self.assertEqual(
+            special["SPECIAL_PERSONNEL_QUALIFICATION"]["metadata"][
+                "node_name"
+            ],
+            "特殊任务人员资质要求",
+        )
+
+        for tier in TIER_SPECS:
+            scenarios = build_fictional_fire_scenarios(tier)["items"]
+            for item in scenarios:
+                with self.subTest(tier=tier, scenario=item["scenario_ref"]):
+                    requirement = item["request"]["requirement_text"]
+                    self.assertNotIn(item["scenario_ref"], requirement)
+                    self.assertNotIn("generated-", requirement)
+
+    def test_generated_properties_keep_branch_semantics_and_value_types(
+        self,
+    ) -> None:
+        medium = build_fictional_fire_tree("medium")
+        root = medium["map_topology"]["FICTIONAL_FIRE_TASK"]
+        branches = root["subnodes"]
+
+        task_sample = branches["TASK"]["subnodes"]["SYNTHETIC_0001"]
+        situation_sample = branches["SITUATION"]["subnodes"][
+            "SYNTHETIC_0002"
+        ]
+        people_sample = branches["PEOPLE"]["subnodes"]["SYNTHETIC_0003"]
+
+        self.assertEqual(
+            task_sample["metadata"]["node_name"],
+            "报警信息名称",
+        )
+        self.assertEqual(
+            situation_sample["metadata"]["node_name"],
+            "事发区域名称",
+        )
+        self.assertEqual(
+            people_sample["metadata"]["node_name"],
+            "现场负责人名称",
+        )
+        self.assertEqual(
+            task_sample["metadata"]["value_type"],
+            "string",
+        )
+
+        names: list[str] = []
+        for branch in branches.values():
+            for node in branch["subnodes"].values():
+                metadata = node["metadata"]
+                names.append(metadata["node_name"])
+                if not metadata["node_label"].startswith("SYNTHETIC_"):
+                    continue
+                name = metadata["node_name"]
+                if name.endswith(("数量", "风险等级", "优先级")):
+                    expected_type = "integer"
+                elif name.endswith(("发生时间", "更新时间")):
+                    expected_type = "time_code"
+                elif name.endswith("是否已确认"):
+                    expected_type = "boolean"
+                else:
+                    expected_type = "string"
+                self.assertEqual(metadata["value_type"], expected_type)
+                self.assertEqual(
+                    metadata["is_list"],
+                    name.endswith(("信息来源", "处置要求")),
+                )
+        self.assertEqual(len(names), len(set(names)))
+        for tier in TIER_SPECS:
+            tree = adapt_tree_document(build_fictional_fire_tree(tier)).tree
+            self.assertIsNotNone(tree)
+            tier_names = [node.name for node in tree.nodes]
+            self.assertEqual(
+                len(tier_names),
+                len(set(tier_names)),
+                tier,
+            )
+
     def test_files_contain_no_values_real_examples_or_foreign_assets(self) -> None:
         encoded = json.dumps(
             {
@@ -432,6 +531,12 @@ class FictionalFireDatasetTests(unittest.TestCase):
             "微型消防站",
             "/Users/",
             "Authorization:",
+            "鸣镜",
+            "辉纹",
+            "雾径",
+            "泉幕",
+            "焰安",
+            "练航",
         ):
             with self.subTest(forbidden=forbidden):
                 self.assertNotIn(forbidden, encoded)

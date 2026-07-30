@@ -700,7 +700,7 @@ def _fire_resource_response() -> dict[str, Any]:
         {
             "resource_id": FIRE_VALIDATION_RESOURCE_IDS[tier],
             "category_id": FIRE_VALIDATION_CATEGORY_ID,
-            "name": f"虚构星湾消防验证树 · {tier}",
+            "name": f"虚构消防任务治理验证树 · {tier}",
             "head_version": fire_validation_version(tier),
             "head_version_record_id": fire_validation_record_id(tier),
         }

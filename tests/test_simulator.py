@@ -152,8 +152,8 @@ def _validation_intent_chat_body() -> bytes:
                             },
                             "intent_request": {
                                 "requirement_text": (
-                                    "为完全虚构的星湾演练记录 "
-                                    "clear-intent 信息。"
+                                    "在完全虚构的消防任务治理演练中，"
+                                    "需要记录现场负责人所属单位。"
                                 ),
                                 "hints": {
                                     "node_kind": "PROPERTY",
@@ -227,7 +227,7 @@ class PureSimulatorTests(unittest.TestCase):
         output = strict_json_loads(
             envelope["choices"][0]["message"]["content"]
         )
-        self.assertEqual(output["subject"], "clear-intent 信息")
+        self.assertEqual(output["subject"], "现场负责人所属单位")
         self.assertIsNone(output["role"])
         self.assertIsNone(output["scenario"])
         self.assertIsNone(output["lifecycle"])
@@ -236,7 +236,7 @@ class PureSimulatorTests(unittest.TestCase):
         self.assertEqual(output["value_type"], "string")
         self.assertEqual(output["cardinality"], "SINGLE")
         self.assertNotIn("陈列高度", json.dumps(output, ensure_ascii=False))
-        self.assertNotIn("消防", json.dumps(output, ensure_ascii=False))
+        self.assertNotIn("鸣镜", json.dumps(output, ensure_ascii=False))
 
     def test_auth_and_query_fail_closed(self) -> None:
         simulator = ContractSimulator()

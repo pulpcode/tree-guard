@@ -1,9 +1,10 @@
 {
-  "dataset_id": "fictional-starbay-fire-validation",
+  "dataset_id": "fictional-fire-governance-validation",
   "fictional": true,
   "gold_eligible": false,
   "limitations": [
     "不代表真实消防信息树、工程规范或生产分布。",
+    "仅使用外网独立构造的常识级概念，不声明行业标准完整性。",
     "大型档只用于规模、确定性和有界输出验证。",
     "oracle 是合同预期或可接受集合，不是生产 Gold。"
   ],
@@ -174,5 +175,5 @@
       "tree_file": "tree-large.json"
     }
   ],
-  "title": "虚构星湾消防功能形状验证数据"
+  "title": "虚构消防任务治理验证数据"
 }

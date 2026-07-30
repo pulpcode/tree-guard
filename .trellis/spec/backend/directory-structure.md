@@ -27,9 +27,9 @@ TreeGuard 是采用 `src` 布局的单一 Python 包：
 - `treeguard-contract-simulator` → `treeguard.simulator_cli:main`
 - `treeguard-workbench` → `treeguard.workbench_cli:main`
 
-当前已有 loopback 只读 FastAPI API 和 React 工作台；没有数据库驱动、ORM、
-migration、worker、queue、vector index、真实 Spring repository 或生产 Patch
-publisher。
+当前已有 loopback 只读 FastAPI API 和 React 工作台，也有受保护环境使用的真实
+仓库只读 HTTP Adapter 与内网 Qwen Provider；没有数据库驱动、ORM、migration、
+worker、queue、vector index、Spring/MongoDB 直连或生产 Patch publisher。
 
 ## 模块所有权
 
@@ -60,8 +60,10 @@ publisher。
 
 ### 不可信模型边界
 
-- `ai_review.py`：AI 审查合同、本地校验、百炼配置与 OpenAI-compatible 传输；
-- `http_utils.py`：禁用 proxy 和 redirect 的共享 `urllib` opener；
+- `ai_review.py`：AI 审查合同、本地校验，以及百炼、仿真和内网 Qwen 的独立
+  OpenAI-compatible 配置/传输；
+- `http_utils.py`：禁用 proxy/redirect 的共享 `urllib` opener 和受保护环境
+  主机名门禁；
 - `expert_synthesis.py`：受约束的专家思路综合和精确外部请求计划绑定。
 
 Provider 可以执行网络 IO；返回 JSON 必须通过本地字段、枚举、引用、来源、
@@ -77,6 +79,8 @@ Provider 可以执行网络 IO；返回 JSON 必须通过本地字段、枚举�
 - `simulator.py`：完全虚构树、暂定四类仓库路由和 Mock 模型故障场景；
 - `simulator_server.py`：只监听 loopback 的有界标准库 HTTP 壳；
 - `repository_client.py`：只接受 loopback 的暂定仓库合同客户端；
+- `internal_repository.py`：真实四接口只读 Adapter、分页、业务版本排序和跨接口
+  ID 一致性校验；
 - `simulator_cli.py`：启动服务和四类仓库聚合验证；
 - `workbench.py`：只读目录应用服务和浏览器树视图允许列表；
 - `workbench_governance.py`：Web case/operation、Core/Provider 编排和私有
@@ -115,6 +119,7 @@ semantic_recommendation / private_io ──────────→ governanc
 governance_cli / private_io ──────────────────→ demo_cli
 simulator ─────────────→ simulator_server / repository_client
 repository_client / simulator_server ─────────→ simulator_cli
+http_utils / adapter / repository_client ─────→ internal_repository
 ```
 
 核心模块不得反向导入 CLI。以下跨模块私有导入是当前技术债，不得继续扩散：

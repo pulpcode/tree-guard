@@ -94,12 +94,12 @@ React + Ant Design Tree
   → Vite development proxy
   → loopback FastAPI Workbench API
       ├→ WorkbenchService 正向允许列表
-      │   → ProvisionalRepositoryClient
-      │   → Clean-room Simulator
+      │   → ProvisionalRepositoryClient / InternalRepositoryClient
+      │   → Clean-room Simulator / 真实四接口只读仓库
       │   → CanonicalTree
       └→ WorkbenchGovernanceService
           → Intent / Retrieval / Semantic Core
-          → loopback Simulator 或显式批准的百炼 Provider
+          → loopback Simulator、显式批准的百炼或内网 Qwen Provider
           → private sidecar
 ```
 
@@ -217,7 +217,8 @@ JSON Schema、运行时不变量和无密钥哈希只验证制品内部自洽，
 与 AI 草稿分离，专家可以提交自由文本思路和不确定性，不会被强迫归入单一 N 分类。
 
 外部百炼只允许完全虚构或获批脱敏样本。真实 EvidencePack 和 AIReviewDraft 仍是
-内网敏感制品；内网 Qwen 复用相同合同但使用独立 Provider。
+内网敏感制品；内网 Qwen 已通过独立无认证 Provider 复用相同合同，使用嵌套
+`chat_template_kwargs.enable_thinking=false`，不复用百炼批准或自动回退。
 
 ### 4.6 `ChangeIntent`
 

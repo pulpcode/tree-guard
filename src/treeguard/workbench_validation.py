@@ -18,7 +18,7 @@ from treeguard.workbench import (
 DATASET_CATALOG_VERSION = "validation-dataset-catalog.v1"
 SCENARIOS_VERSION = "validation-scenarios.v1"
 COMPARISON_VERSION = "validation-comparison.v1"
-_MODEL_MODES = {"SIMULATOR_LIVE", "BAILIAN_LIVE"}
+_MODEL_MODES = {"SIMULATOR_LIVE", "BAILIAN_LIVE", "QWEN_LIVE"}
 _TERMINAL_CASE_STATUSES = {
     "CLARIFICATION_LIMIT_REACHED",
     "COMPLETED",

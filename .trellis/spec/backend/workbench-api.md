@@ -5,8 +5,8 @@
 ### 1. Scope / Trigger
 
 修改 `workbench.py`、`web.py`、`workbench_cli.py`、`web/`，或新增浏览器可见树
-字段时适用。本场景只允许读取暂定 loopback 仿真仓库并展示信息树，不获得治理
-状态迁移、sidecar 写入、模型调用或生产写权限。
+字段时适用。本场景允许读取暂定 loopback 仿真仓库，或在受保护环境显式读取真实
+四接口只读 Adapter；两者都不获得治理状态迁移、生产写权限或数据库直连。
 
 治理操作属于独立的 [Workbench 治理 API](./workbench-governance-api.md) 场景；
 不得为了治理而扩大本文件定义的树读取 DTO。
@@ -33,10 +33,17 @@ GET /api/v1/resources/{resource_id}/tree?version=<version>
 
 ```text
 TREEGUARD_WORKBENCH_REPOSITORY_URL
+TREEGUARD_WORKBENCH_REPOSITORY_MODE   # SIMULATOR | INTERNAL
 ```
 
-该环境项只在服务端读取，默认 `http://127.0.0.1:8765`，并继续受
-`RepositoryClientConfig` 的显式 loopback HTTP 端口门禁约束。前端开发代理可使用
+两个环境项只在服务端读取。模式默认 `SIMULATOR`，URL 默认
+`http://127.0.0.1:8765`，并受 `RepositoryClientConfig` 的显式 loopback HTTP
+端口门禁约束。`INTERNAL` 使用 `InternalRepositoryConfig`，只允许受保护环境地址，
+四类真实接口的分页、版本排序和 ID 一致性由 `InternalRepositoryClient` 负责。
+响应中的历史字段 `head_version/is_head` 表示仓库当前/默认版本指针；该指针可以
+指向历史版本。最新版本只能由版本列表最大 `position` 判定，前端必须分别显示
+“默认”和“最新”。
+前端开发代理可使用
 `TREEGUARD_WEB_API_URL` 指向本机 Workbench API；它不是浏览器运行时配置，也不能
 控制后端仓库目标。
 
@@ -85,10 +92,11 @@ FastAPI docs/OpenAPI 在该本地 Shadow 入口关闭。Uvicorn 固定监听
 | 条件 | HTTP / error code |
 |---|---|
 | query 缺失、空值或超长 | 422 / `WORKBENCH_REQUEST_INVALID` |
-| 暂定仓库 HTTP、合同、身份或连接失败 | 502 / 原固定 `REPOSITORY_*` code |
+| 仓库 HTTP、合同、身份或连接失败 | 502 / 原固定 `REPOSITORY_*` 或 `INTERNAL_REPOSITORY_*` code |
 | CanonicalTree 为空或不合格 | 409 / `WORKBENCH_TREE_NOT_AVAILABLE` |
 | 树存在环、缺失父子引用或不可达节点 | 409 / `WORKBENCH_TREE_RELATION_INVALID` |
 | 仓库地址不是显式 loopback HTTP 端口 | 启动失败 / `REPOSITORY_SIMULATOR_BASE_URL_INVALID` |
+| 仓库模式未知或 INTERNAL 地址不合格 | 启动失败 / `WORKBENCH_REPOSITORY_MODE_INVALID` 或 `INTERNAL_REPOSITORY_BASE_URL_INVALID` |
 
 错误响应只包含：
 

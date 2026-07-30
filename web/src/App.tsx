@@ -41,6 +41,10 @@ import {
   searchTree,
   type WorkbenchTreeNode,
 } from "./tree-model";
+import {
+  buildVersionOptions,
+  findCurrentVersion,
+} from "./version-model";
 
 const { Header, Content } = Layout;
 
@@ -102,10 +106,10 @@ function App() {
 
   useEffect(() => {
     if (!version && versions.data?.length) {
-      const head =
-        versions.data.find((item) => item.is_head) ??
-        versions.data[versions.data.length - 1];
-      setVersion(head.version);
+      const current = findCurrentVersion(versions.data);
+      if (current) {
+        setVersion(current.version);
+      }
     }
   }, [version, versions.data]);
 
@@ -255,10 +259,7 @@ function App() {
               <Select
                 value={version}
                 loading={versions.isLoading}
-                options={(versions.data ?? []).map((item) => ({
-                  value: item.version,
-                  label: `${item.version}${item.is_head ? " · HEAD" : ""}`,
-                }))}
+                options={buildVersionOptions(versions.data ?? [])}
                 onChange={(nextVersion) => {
                   setVersion(nextVersion);
                   setSearchTerm("");
@@ -361,7 +362,7 @@ function App() {
               </Typography.Paragraph>
               <div className="metric-row">
                 <Statistic
-                  title="当前版本"
+                  title="已选版本"
                   value={tree.data?.tree_version ?? "—"}
                 />
                 <Statistic

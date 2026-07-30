@@ -2,8 +2,17 @@
 
 from __future__ import annotations
 
+import ipaddress
+import re
 import urllib.request
 from typing import Any
+
+
+_HOSTNAME = re.compile(
+    r"^(?=.{1,253}\.?$)"
+    r"(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)*"
+    r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.?$"
+)
 
 
 class NoRedirectHandler(urllib.request.HTTPRedirectHandler):
@@ -30,4 +39,26 @@ def build_isolated_opener() -> urllib.request.OpenerDirector:
     )
 
 
-__all__ = ["NoRedirectHandler", "build_isolated_opener"]
+def is_protected_environment_host(hostname: str) -> bool:
+    """Accept private IPs and explicit internal-only DNS naming forms."""
+
+    normalized = hostname.rstrip(".").lower()
+    try:
+        address = ipaddress.ip_address(normalized)
+    except ValueError:
+        return (
+            _HOSTNAME.fullmatch(hostname) is not None
+            and (
+                normalized == "localhost"
+                or "." not in normalized
+                or normalized.endswith((".internal", ".local", ".lan"))
+            )
+        )
+    return address.is_private or address.is_loopback
+
+
+__all__ = [
+    "NoRedirectHandler",
+    "build_isolated_opener",
+    "is_protected_environment_host",
+]

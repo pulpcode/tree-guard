@@ -60,7 +60,10 @@ export class WorkbenchAPIError extends Error {
   }
 }
 
-export type GovernanceModelMode = "SIMULATOR_LIVE" | "BAILIAN_LIVE";
+export type GovernanceModelMode =
+  | "SIMULATOR_LIVE"
+  | "BAILIAN_LIVE"
+  | "QWEN_LIVE";
 
 export interface GovernanceOperation {
   schema_version: "workbench-operation-view.v1";

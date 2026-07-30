@@ -17,6 +17,10 @@ from treeguard.change_intent import IntentValidationError
 from treeguard.fire_validation_dataset import (
     FictionalFireValidationDataset,
 )
+from treeguard.internal_repository import (
+    InternalRepositoryClient,
+    InternalRepositoryConfig,
+)
 from treeguard.repository_client import (
     ProvisionalRepositoryClient,
     RepositoryClientConfig,
@@ -136,7 +140,11 @@ class GovernanceCaseCreate(BaseModel):
         max_length=128,
     )
     cardinality_hint: Literal["SINGLE", "MULTIPLE", "UNKNOWN"] = "UNKNOWN"
-    model_mode: Literal["SIMULATOR_LIVE", "BAILIAN_LIVE"] = "SIMULATOR_LIVE"
+    model_mode: Literal[
+        "SIMULATOR_LIVE",
+        "BAILIAN_LIVE",
+        "QWEN_LIVE",
+    ] = "SIMULATOR_LIVE"
     external_data_approved: bool = False
 
 
@@ -309,7 +317,11 @@ class GovernanceModelTraceResponse(BaseModel):
 
     schema_version: Literal["workbench-model-trace-view.v1"]
     case_ref: str
-    model_mode: Literal["SIMULATOR_LIVE", "BAILIAN_LIVE"]
+    model_mode: Literal[
+        "SIMULATOR_LIVE",
+        "BAILIAN_LIVE",
+        "QWEN_LIVE",
+    ]
     thinking_status: Literal["DISABLED"]
     items: list[GovernanceModelTraceAttempt] = Field(max_length=8)
 
@@ -411,7 +423,11 @@ class ValidationRunCreate(BaseModel):
         max_length=128,
         pattern=r"^[A-Za-z0-9][A-Za-z0-9._:-]*$",
     )
-    model_mode: Literal["SIMULATOR_LIVE", "BAILIAN_LIVE"]
+    model_mode: Literal[
+        "SIMULATOR_LIVE",
+        "BAILIAN_LIVE",
+        "QWEN_LIVE",
+    ]
     external_data_approved: bool = False
 
 
@@ -445,13 +461,27 @@ def _services_from_environment() -> tuple[
     WorkbenchGovernanceService,
     ValidationWorkbenchService,
 ]:
+    repository_mode = os.environ.get(
+        "TREEGUARD_WORKBENCH_REPOSITORY_MODE",
+        "SIMULATOR",
+    )
     base_url = os.environ.get(
         "TREEGUARD_WORKBENCH_REPOSITORY_URL",
         DEFAULT_REPOSITORY_BASE_URL,
     )
-    repository = ProvisionalRepositoryClient(
-        RepositoryClientConfig(base_url=base_url)
-    )
+    if repository_mode == "SIMULATOR":
+        repository = ProvisionalRepositoryClient(
+            RepositoryClientConfig(base_url=base_url)
+        )
+    elif repository_mode == "INTERNAL":
+        repository = InternalRepositoryClient(
+            InternalRepositoryConfig(base_url=base_url)
+        )
+    else:
+        raise RepositoryClientError(
+            "WORKBENCH_REPOSITORY_MODE_INVALID",
+            "unsupported workbench repository mode",
+        )
     workbench = WorkbenchService(repository=repository)
     governance = WorkbenchGovernanceService(
         repository=repository,

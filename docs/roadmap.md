@@ -87,7 +87,8 @@ SemanticRecommendationDraft → RecommendationRecord`。它支持百炼或私有
 不足不能产生正向建议，专家可以确认、按相同政策修订或拒绝。
 
 当前人工建议记录只作 `OPERATIONAL_FEEDBACK_ONLY`，不构成语义审批、Gold 或 Patch
-资格。内网 Qwen HTTP 直连、embedding/混合召回、学习型 reranker、
+资格。内网 Qwen HTTP 直连的 Provider/工作台模式已经实现合同适配；真实可达性与
+效果仍需内网冒烟。embedding/混合召回、学习型 reranker、
 `ADD_ALIAS_OVERLAY` 和正式效果评测仍待后续实现。
 
 验收：

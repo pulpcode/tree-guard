@@ -14,6 +14,8 @@ from treeguard.ai_review import (
     BailianAIReviewProvider,
     BailianConfig,
     BailianProviderError,
+    INTERNAL_QWEN_PROVIDER_NAME,
+    InternalQwenTransportMixin,
     PROVIDER_CAPABILITY,
     PROVIDER_NAME,
     _extract_content_json,
@@ -243,6 +245,7 @@ class BailianExpertSynthesisProvider(BailianAIReviewProvider):
     provider_name = PROVIDER_NAME
     capability = PROVIDER_CAPABILITY
     prompt_version = PROMPT_VERSION
+    provider_label = "Bailian"
 
     def approval_payload_hash(
         self,
@@ -276,17 +279,10 @@ class BailianExpertSynthesisProvider(BailianAIReviewProvider):
             expert_thoughts,
         )
         expected_approval = self._approval_digest(user_payload)
-        if (
-            not isinstance(approved_external_payload_hash, str)
-            or not hmac.compare_digest(
-                approved_external_payload_hash,
-                expected_approval,
-            )
-        ):
-            raise BailianProviderError(
-                "EXTERNAL_EXPERT_PAYLOAD_APPROVAL_REQUIRED",
-                "the exact expert-synthesis data payload has not been approved",
-            )
+        self._validate_transport_approval(
+            expected_approval,
+            approved_external_payload_hash,
+        )
         thought_refs = tuple(item[0] for item in expert_thoughts)
         last_code = "EXPERT_SYNTHESIS_OUTPUT_INVALID"
         for attempt in range(1, self.config.max_attempts + 1):
@@ -315,8 +311,25 @@ class BailianExpertSynthesisProvider(BailianAIReviewProvider):
                 last_code = "EXPERT_SYNTHESIS_RESPONSE_INVALID"
         raise BailianProviderError(
             last_code,
-            "Bailian output failed the local expert-synthesis contract",
+            f"{self.provider_label} output failed the local expert-synthesis contract",
         )
+
+    def _validate_transport_approval(
+        self,
+        expected_approval: str,
+        approved_external_payload_hash: str | None,
+    ) -> None:
+        if (
+            not isinstance(approved_external_payload_hash, str)
+            or not hmac.compare_digest(
+                approved_external_payload_hash,
+                expected_approval,
+            )
+        ):
+            raise BailianProviderError(
+                "EXTERNAL_EXPERT_PAYLOAD_APPROVAL_REQUIRED",
+                "the exact expert-synthesis data payload has not been approved",
+            )
 
     def _user_payload(
         self,
@@ -396,10 +409,7 @@ class BailianExpertSynthesisProvider(BailianAIReviewProvider):
                     ),
                 },
             ],
-            "response_format": {"type": "json_object"},
-            "enable_thinking": False,
-            "temperature": 0,
-            "stream": False,
+            **self._completion_options(),
         }
 
     def _approval_digest(self, user_payload: dict[str, Any]) -> str:
@@ -418,6 +428,23 @@ class BailianExpertSynthesisProvider(BailianAIReviewProvider):
                 "request_bodies": request_bodies,
             }
         )
+
+
+class InternalQwenExpertSynthesisProvider(
+    InternalQwenTransportMixin,
+    BailianExpertSynthesisProvider,
+):
+    """Organize expert thoughts inside the protected Qwen trust boundary."""
+
+    provider_name = INTERNAL_QWEN_PROVIDER_NAME
+    provider_label = "internal Qwen"
+
+    def _validate_transport_approval(
+        self,
+        expected_approval: str,
+        approved_external_payload_hash: str | None,
+    ) -> None:
+        return None
 
 
 def expected_bailian_approval_payload_hash(
@@ -639,6 +666,7 @@ __all__ = [
     "BailianExpertSynthesisProvider",
     "ExpertSynthesisDraft",
     "ExpertSynthesisValidationError",
+    "InternalQwenExpertSynthesisProvider",
     "MODEL_OUTPUT_SCHEMA_VERSION",
     "PROMPT_VERSION",
     "SCHEMA_VERSION",

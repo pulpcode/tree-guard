@@ -26,7 +26,10 @@ from treeguard.change_intent import (
     build_intent_clarification_model_input,
 )
 from treeguard.evidence import LLMEvidencePack
-from treeguard.http_utils import build_isolated_opener
+from treeguard.http_utils import (
+    build_isolated_opener,
+    is_protected_environment_host,
+)
 from treeguard.json_utils import StrictJSONError, strict_json_loads
 from treeguard.models import CanonicalTree
 from treeguard.retrieval import CandidateSet
@@ -54,6 +57,7 @@ SEMANTIC_PROMPT_VERSION = "treeguard.semantic-recommendation.zh.v1"
 DEFAULT_MODEL = "qwen3.6-35b-a3b"
 DEFAULT_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 SIMULATOR_PROVIDER_NAME = "TREEGUARD_OPENAI_SIMULATOR"
+INTERNAL_QWEN_PROVIDER_NAME = "INTERNAL_QWEN_OPENAI_COMPATIBLE"
 
 DISPOSITIONS = {
     "ACCEPT_AS_PATTERN",
@@ -117,6 +121,8 @@ _LOCAL_ENV_KEYS = {
     "DASHSCOPE_API_KEY",
     "TREEGUARD_LLM_BASE_URL",
     "TREEGUARD_LLM_MODEL",
+    "TREEGUARD_QWEN_BASE_URL",
+    "TREEGUARD_QWEN_MODEL",
 }
 _ENV_KEY = re.compile(r"^[A-Z][A-Z0-9_]*$")
 _INTENT_MODEL_OUTPUT_TEMPLATE = {
@@ -523,6 +529,104 @@ class BailianConfig:
 
 
 @dataclass(frozen=True, slots=True)
+class InternalQwenConfig:
+    """OpenAI-compatible configuration for the protected Qwen service."""
+
+    base_url: str
+    model: str = "qwen3.6"
+    timeout_seconds: float = 90.0
+    max_attempts: int = 2
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.base_url, str):
+            raise BailianProviderError(
+                "QWEN_BASE_URL_INVALID",
+                "Qwen base_url is invalid",
+            )
+        parsed = urllib.parse.urlparse(self.base_url)
+        try:
+            port = parsed.port
+        except ValueError as exc:
+            raise BailianProviderError(
+                "QWEN_BASE_URL_INVALID",
+                "Qwen base_url is malformed",
+            ) from exc
+        if (
+            parsed.scheme not in {"http", "https"}
+            or not parsed.hostname
+            or not is_protected_environment_host(parsed.hostname)
+            or parsed.username is not None
+            or parsed.password is not None
+            or parsed.path.rstrip("/") != "/v1"
+            or parsed.params
+            or parsed.query
+            or parsed.fragment
+            or (parsed.scheme == "http" and port is None)
+        ):
+            raise BailianProviderError(
+                "QWEN_BASE_URL_INVALID",
+                "Qwen base_url must use an explicit protected-environment /v1 endpoint",
+            )
+        if (
+            not isinstance(self.model, str)
+            or _MODEL_ID.fullmatch(self.model) is None
+        ):
+            raise BailianProviderError(
+                "QWEN_MODEL_INVALID",
+                "Qwen model must be a simple printable model identifier",
+            )
+        if (
+            not isinstance(self.timeout_seconds, (int, float))
+            or isinstance(self.timeout_seconds, bool)
+            or self.timeout_seconds <= 0
+            or self.timeout_seconds > 300
+        ):
+            raise BailianProviderError(
+                "QWEN_TIMEOUT_INVALID",
+                "Qwen timeout must be between zero and 300 seconds",
+            )
+        if (
+            not isinstance(self.max_attempts, int)
+            or isinstance(self.max_attempts, bool)
+            or self.max_attempts not in {1, 2}
+        ):
+            raise BailianProviderError(
+                "QWEN_ATTEMPTS_INVALID",
+                "Qwen max_attempts must be one or two",
+            )
+
+    @classmethod
+    def from_env(cls) -> "InternalQwenConfig":
+        local_env: dict[str, str] | None = None
+
+        def setting(name: str) -> str | None:
+            nonlocal local_env
+            if name in os.environ:
+                return os.environ[name]
+            if local_env is None:
+                try:
+                    local_env = _load_private_local_env()
+                except BailianProviderError as exc:
+                    code = exc.code.replace("BAILIAN_", "QWEN_", 1)
+                    raise BailianProviderError(
+                        code,
+                        "Qwen local .env could not be loaded safely",
+                    ) from None
+            return local_env.get(name)
+
+        base_url = setting("TREEGUARD_QWEN_BASE_URL")
+        if not base_url:
+            raise BailianProviderError(
+                "QWEN_BASE_URL_MISSING",
+                "set TREEGUARD_QWEN_BASE_URL",
+            )
+        return cls(
+            base_url=base_url,
+            model=setting("TREEGUARD_QWEN_MODEL") or "qwen3.6",
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class LoopbackSimulatorConfig:
     """Strict OpenAI-compatible configuration for the local development mock."""
 
@@ -614,7 +718,7 @@ class BailianAIReviewProvider:
 
     def __init__(
         self,
-        config: BailianConfig | LoopbackSimulatorConfig,
+        config: BailianConfig | InternalQwenConfig | LoopbackSimulatorConfig,
         trace_sink: ModelTraceSink | None = None,
     ) -> None:
         self.config = config
@@ -771,10 +875,21 @@ class BailianAIReviewProvider:
                     ),
                 },
             ],
+            **self._completion_options(),
+        }
+
+    def _completion_options(self) -> dict[str, Any]:
+        return {
             "response_format": {"type": "json_object"},
             "enable_thinking": False,
             "temperature": 0,
             "stream": False,
+        }
+
+    def _request_headers(self) -> dict[str, str]:
+        return {
+            "Authorization": f"Bearer {self.config.api_key}",
+            "Content-Type": "application/json",
         }
 
     def _post_json(self, body: dict[str, Any]) -> Any:
@@ -796,10 +911,7 @@ class BailianAIReviewProvider:
             request = urllib.request.Request(
                 endpoint,
                 data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
-                headers={
-                    "Authorization": f"Bearer {self.config.api_key}",
-                    "Content-Type": "application/json",
-                },
+                headers=self._request_headers(),
                 method="POST",
             )
         except (TypeError, ValueError, UnicodeError):
@@ -1026,10 +1138,7 @@ class BailianIntentDraftProvider(BailianAIReviewProvider):
                     ),
                 },
             ],
-            "response_format": {"type": "json_object"},
-            "enable_thinking": False,
-            "temperature": 0,
-            "stream": False,
+            **self._completion_options(),
         }
 
     def clarify(
@@ -1190,10 +1299,7 @@ class BailianIntentDraftProvider(BailianAIReviewProvider):
                     ),
                 },
             ],
-            "response_format": {"type": "json_object"},
-            "enable_thinking": False,
-            "temperature": 0,
-            "stream": False,
+            **self._completion_options(),
         }
 
 
@@ -1367,11 +1473,54 @@ class BailianSemanticRecommendationProvider(BailianAIReviewProvider):
                     ),
                 },
             ],
+            **self._completion_options(),
+        }
+
+
+class InternalQwenTransportMixin:
+    """Shared transport overrides for Qwen providers with local contracts."""
+
+    provider_name = INTERNAL_QWEN_PROVIDER_NAME
+    provider_label = "internal Qwen"
+
+    def _completion_options(self) -> dict[str, Any]:
+        return {
             "response_format": {"type": "json_object"},
-            "enable_thinking": False,
+            "chat_template_kwargs": {"enable_thinking": False},
             "temperature": 0,
             "stream": False,
         }
+
+    def _request_headers(self) -> dict[str, str]:
+        return {"Content-Type": "application/json"}
+
+    def _post_json(self, body: dict[str, Any]) -> Any:
+        return self._post_json_with_prefix(
+            body,
+            error_prefix="QWEN",
+            provider_label="internal Qwen",
+        )
+
+
+class InternalQwenAIReviewProvider(
+    InternalQwenTransportMixin,
+    BailianAIReviewProvider,
+):
+    """Run the AI review contract against the protected Qwen service."""
+
+
+class InternalQwenIntentDraftProvider(
+    InternalQwenTransportMixin,
+    BailianIntentDraftProvider,
+):
+    """Run the intent and clarification contracts against internal Qwen."""
+
+
+class InternalQwenSemanticRecommendationProvider(
+    InternalQwenTransportMixin,
+    BailianSemanticRecommendationProvider,
+):
+    """Run bounded semantic comparison against internal Qwen."""
 
 
 class LoopbackSimulatorIntentDraftProvider(BailianIntentDraftProvider):
@@ -1746,6 +1895,11 @@ __all__ = [
     "BailianIntentDraftProvider",
     "BailianSemanticRecommendationProvider",
     "BailianProviderError",
+    "InternalQwenAIReviewProvider",
+    "InternalQwenConfig",
+    "InternalQwenIntentDraftProvider",
+    "InternalQwenSemanticRecommendationProvider",
+    "InternalQwenTransportMixin",
     "LoopbackSimulatorConfig",
     "LoopbackSimulatorIntentDraftProvider",
     "LoopbackSimulatorSemanticRecommendationProvider",
@@ -1759,6 +1913,7 @@ __all__ = [
     "MODEL_OUTPUT_SCHEMA_VERSION",
     "INTENT_PROMPT_VERSION",
     "INTENT_CLARIFICATION_PROMPT_VERSION",
+    "INTERNAL_QWEN_PROVIDER_NAME",
     "SEMANTIC_PROMPT_VERSION",
     "SIMULATOR_PROVIDER_NAME",
     "PLACEMENT_STATUSES",

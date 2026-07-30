@@ -78,15 +78,16 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - [实际源格式分析](docs/source-format-findings.md)
 - [百炼开发冒烟指南](docs/bailian-smoke.md)
 - [协议级开发仿真](docs/contract-simulator.md)
+- [内网仓库与 Qwen 适配](docs/internal-adapters.md)
 - [消防主题三档虚构验证数据](docs/fire-validation-data.md)
 
 ## 当前实现
 
 当前代码覆盖确定性 Diff、两类版本审查、模型安全投影、AI 初审、专家审查，以及
 新增需求意图确认、一次受约束澄清、无 embedding 的全树词法/结构召回、受约束
-候选语义建议和人工复核。另有一个只连接 Clean-room 仿真仓库的 FastAPI + React
-工作台，已支持治理流程 Web 操作和消防虚构场景合同对照；尚不包含生产数据库
-连接、向量检索、语义 Gold 或 Patch 发布：
+候选语义建议和人工复核。FastAPI + React 工作台默认连接 Clean-room 仿真仓库，
+也可在受保护环境显式切换到真实只读仓库 Adapter 和无 API Key 的内网 Qwen；
+尚不包含生产写接口、MongoDB 直连、向量检索、语义 Gold 或 Patch 发布：
 
 - `contracts/tree-snapshot.v1.schema.json`：Canonical Tree JSON Schema；
 - `contracts/tree-diff.v1.schema.json`：字段级 Snapshot Diff JSON Schema；
@@ -243,6 +244,12 @@ TREEGUARD_WORKBENCH_SIDECAR_DIR=/absolute/private/path \
 调用前失败关闭。该批准只绑定当前 case，重新发起或切换信息树版本后必须重新勾选。
 完整需求、AI 结果和专家理由不会进入 API 错误、stdout 或普通访问日志。
 
+受保护环境可配置 `TREEGUARD_WORKBENCH_REPOSITORY_MODE=INTERNAL`，并在页面选择
+“内网 Qwen 真实模型”。Qwen 使用独立的 `TREEGUARD_QWEN_BASE_URL` 和
+`TREEGUARD_QWEN_MODEL`，不需要 API Key、不要求百炼出域批准，也不会失败后自动
+回退。四类只读接口、版本排序和内网冒烟边界见
+[内网仓库与 Qwen 适配](docs/internal-adapters.md)。
+
 本地开发排查 Prompt 或模型合同失败时，可以显式开启模型交互诊断：
 
 ```bash
@@ -253,7 +260,8 @@ TREEGUARD_WORKBENCH_MODEL_DIAGNOSTICS=1 \
 
 开启后，治理页面底部出现默认折叠的“模型交互诊断”，按每次 attempt 展示实际
 system/user 消息、原始 `message.content`、Prompt 版本、本地校验结果和 Provider
-明确返回的 token 用量。当前调用固定 `enable_thinking=false`，因此页面只显示
+明确返回的 token 用量。百炼/仿真固定顶层 `enable_thinking=false`，内网 Qwen
+固定 `chat_template_kwargs.enable_thinking=false`，因此页面只显示
 `Thinking: DISABLED`，不会生成或推测隐藏思考。
 
 该开关缺省为 `0`，且只适用于受保护的本机开发环境。Trace 只保存在 Workbench

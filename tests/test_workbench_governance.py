@@ -568,6 +568,34 @@ class WorkbenchGovernanceServiceTests(unittest.TestCase):
 
             self.assertFalse(root.exists())
 
+    def test_internal_qwen_does_not_use_bailian_external_approval_gate(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "sidecars"
+            service = WorkbenchGovernanceService(
+                repository=FakeRepository(_result()),
+                sidecar_root=root,
+                provider_factory=FictionalProviderFactory(),
+                executor=InlineExecutor(),
+                id_factory=_id_factory(),
+            )
+
+            operation = service.create_case(
+                resource_id="fictional-museum-resource",
+                version="SIM-V2",
+                requirement_text="记录一个完全虚构字段。",
+                proposed_parent_ref=None,
+                node_kind_hint="UNKNOWN",
+                value_type_hint=None,
+                cardinality_hint="UNKNOWN",
+                model_mode="QWEN_LIVE",
+                external_data_approved=False,
+            )
+
+            self.assertEqual(operation["status"], "SUCCEEDED")
+            self.assertTrue(root.exists())
+
     def test_polling_completed_operation_does_not_repeat_model_call(self) -> None:
         intent_provider = CountingIntentProvider()
         with tempfile.TemporaryDirectory() as temporary:

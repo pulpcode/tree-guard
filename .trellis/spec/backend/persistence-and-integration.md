@@ -18,10 +18,11 @@ Spring Boot/MongoDB 连接器。除既有 CLI/file 边界外，已实现一个�
 - 从冻结源工件做确定性回放。
 
 已实现的网络路径包括显式启用的百炼 `POST /chat/completions`、只监听 loopback
-的暂定开发仿真服务/客户端，以及读取该客户端并编排既有治理 Core/Provider 的
-loopback Workbench API。后两者都不是生产入站 API、生产 repository 或真实内网
-合同。MongoDB、搜索、持久化 operation registry 和 Patch 发布的设计文档不能被
-写成已存在层的代码规范。
+的暂定开发仿真服务/客户端、受保护环境中的真实四接口只读仓库 Adapter、无 API
+Key 的内网 Qwen `POST /chat/completions`，以及编排既有治理 Core/Provider 的
+loopback Workbench API。真实 Adapter 仍不是 MongoDB/Spring 直连或生产写
+repository。搜索、持久化 operation registry 和 Patch 发布的设计文档不能被写成
+已存在层的代码规范。
 
 ## 永久职责边界
 
@@ -98,8 +99,8 @@ Workbench Web 治理使用 `TREEGUARD_WORKBENCH_SIDECAR_DIR` 指定服务端私�
 
 ## 本地配置
 
-`BailianConfig.from_env()` 先读取 process environment，再读取 cwd 中私有
-`.env`，设置项采用显式允许列表：
+`BailianConfig.from_env()` 与 `InternalQwenConfig.from_env()` 先读取 process
+environment，再读取 cwd 中私有 `.env`，设置项采用显式允许列表：
 
 - 真实 `.env` 保持 Git ignore，并必须是当前用户拥有、无 group/other 权限的
   普通文件；
@@ -122,6 +123,11 @@ Provider transport 必须显式启用并 fail-closed：
 - 读取/发送选定文件前取得明确数据批准；
 - expert text 还必须绑定精确批准的 request-plan manifest。
 
+上述官方 HTTPS host、Authorization 和精确外发批准约束适用于百炼。内网 Qwen
+使用独立 `QWEN_*` 错误族、受保护环境 `/v1` 地址和
+`chat_template_kwargs.enable_thinking=false`，不发送 Authorization、不要求百炼
+出域批准，也不得自动回退。它仍禁用 proxy/redirect、限制响应大小并严格校验输出。
+
 模型投影不等于外传权限。去掉内部 ID 和 `VALUE` 后，真实字段名、路径和结构
 仍可能敏感；必须遵守开发数据边界。
 
@@ -129,9 +135,9 @@ Provider transport 必须显式启用并 fail-closed：
 
 ### 1. Scope / Trigger
 
-真实内网 Qwen 与四类仓库接口样例尚未到达时，开发只能使用完全虚构数据和明确标记
-的暂定合同。该场景用于协议编排、确定性回归和故障注入，不能用于声明生产兼容性或
-模型效果。
+无法在外网连接真实内网 Qwen 与四类仓库时，开发只能使用完全虚构数据和明确标记
+的暂定/脱敏合同。该场景用于协议编排、确定性回归和故障注入，不能用于声明生产
+兼容性或模型效果。
 
 ### 2. Signatures
 
@@ -211,8 +217,42 @@ LoopbackSimulatorConfig(
 )
 ```
 
-真实内网样例到达后新增薄 Adapter/Provider 配置，不删除暂定标记，也不让生产系统
-适配 Mock。
+真实内网合同使用独立 `InternalRepositoryClient` / `InternalQwenConfig`，
+不删除仿真合同的暂定标记，也不让生产系统适配 Mock。
+
+## Scenario：受保护环境只读仓库与 Qwen
+
+### 1. Scope / Trigger
+
+修改 `internal_repository.py`、`InternalQwen*`、`QWEN_LIVE` 或真实仓库工作台
+配置时适用。该场景只允许读取四类接口和调用内网模型，不得新增生产写操作。
+
+### 2. Contracts
+
+- 仓库精确路径为 `/api/v1/category/query-list`、`/api/v1/resource/list`、
+  `/api/v1/resource/version-info`、`/api/v1/resource/tree`；
+- 资源分页使用保守 `page_size=50` 和 `metadata.total`，拒绝空页、重复页、总数
+  漂移、重复身份和越界；
+- `resource_id/map_id` 跨版本稳定，`id` 唯一标识一个版本；对当前/默认版本，
+  已读取来源之间
+  `resource/list.id == version-info.id == tree.metadata.id`；
+- 版本响应顺序不可信。对 `V0.0.0.0J0.1.0` 形式分别比较中间字母前后的数字段，
+  数字排序键歧义时失败关闭；
+- `resource/list` 表示当前/默认版本，可指向历史版本；最大排序位置才表示最新
+  版本。兼容字段 `head_version/is_head` 不得被解释为最新；
+- 完整树支持 `resource_id + version` 或已确认的直接 `id` 查询参数；
+- 无关上游字段在 Adapter 允许列表处丢弃，全树只交给
+  `adapt_tree_document()`，不把原始 DTO 送入模型；
+- Qwen 不发送 Authorization；请求固定非流式 JSON object，并使用嵌套
+  `chat_template_kwargs={"enable_thinking": false}`；
+- simulator、百炼、Qwen 三种模式显式选择且禁止自动回退。
+
+### 3. Tests Required
+
+- 完全虚构四接口响应覆盖分类、分页、无序版本、两种 selector 和跨接口 ID；
+- Qwen 虚构 transport 断言无 Authorization、嵌套关闭思考字段和独立 Provider；
+- `QWEN_LIVE` 不触发百炼批准门禁，`BAILIAN_LIVE` 既有门禁不回归；
+- 自动化测试不得连接真实内网；真实可达性与模型 JSON Mode 只在受保护环境冒烟。
 
 ## Shadow MVP 旁路规则
 

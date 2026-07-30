@@ -32,14 +32,18 @@
 
 code 使用大写 snake case，通常以领域开头，如 `EVIDENCE_*`、`AI_REVIEW_*`、
 `BAILIAN_*`、`EXPERT_*`、`SEMANTIC_*`、`RECOMMENDATION_*`、
-`SIMULATOR_*`、`REPOSITORY_*`；`BAILIAN_HTTP_<status>`、
+`SIMULATOR_*`、`QWEN_*`、`REPOSITORY_*`、`INTERNAL_REPOSITORY_*`；
+`BAILIAN_HTTP_<status>`、`QWEN_HTTP_<status>`、
 `SIMULATOR_MODEL_HTTP_<status>` 和
-`REPOSITORY_SIMULATOR_HTTP_<status>` 是明确允许的动态 code family。
+`REPOSITORY_SIMULATOR_HTTP_<status>`、`INTERNAL_REPOSITORY_HTTP_<status>`
+是明确允许的动态 code family。
 
 本地 OpenAI Simulator Provider 暂时复用 `BailianProviderError` 作为共同传输
 失败类型，但必须使用 `SIMULATOR_MODEL_*` code 和独立 Provider 名称；不能用
 `BAILIAN_*` 伪装本地故障。仿真配置/纯路由使用 `SimulatorValidationError`，
-暂定仓库客户端使用 `RepositoryClientError`。
+暂定和真实只读仓库客户端使用 `RepositoryClientError`。内网 Qwen 暂时也复用
+`BailianProviderError` 作为共同传输失败类型，但必须使用 `QWEN_*` code、独立
+Provider 名称且不得发送百炼 Authorization。
 
 message 不是公开诊断合同，可能含进程内调试细节，不能跨安全 CLI 边界输出。
 

@@ -97,6 +97,7 @@ class ResourceHead:
     resource_id: str
     category_id: str
     name: str
+    # HEAD is the repository's current/default pointer, not necessarily latest.
     head_version: str
     head_version_record_id: str
 
@@ -107,6 +108,7 @@ class VersionRef:
     version: str
     version_record_id: str
     description: str | None
+    # Historical API name: True marks the current/default version.
     is_head: bool
 
 

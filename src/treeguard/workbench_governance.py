@@ -17,6 +17,9 @@ from treeguard.ai_review import (
     BailianConfig,
     BailianIntentDraftProvider,
     BailianSemanticRecommendationProvider,
+    InternalQwenConfig,
+    InternalQwenIntentDraftProvider,
+    InternalQwenSemanticRecommendationProvider,
     LoopbackSimulatorConfig,
     LoopbackSimulatorIntentDraftProvider,
     LoopbackSimulatorSemanticRecommendationProvider,
@@ -54,7 +57,7 @@ from treeguard.workbench import (
 GOVERNANCE_CASE_VIEW_VERSION = "workbench-governance-case-view.v1"
 GOVERNANCE_OPERATION_VIEW_VERSION = "workbench-operation-view.v1"
 MODEL_TRACE_VIEW_VERSION = "workbench-model-trace-view.v1"
-MODEL_MODES = {"SIMULATOR_LIVE", "BAILIAN_LIVE"}
+MODEL_MODES = {"SIMULATOR_LIVE", "BAILIAN_LIVE", "QWEN_LIVE"}
 _MAX_MODEL_TRACE_ATTEMPTS = 8
 
 
@@ -123,6 +126,11 @@ class DefaultProviderFactory:
                 BailianConfig.from_env(),
                 trace_sink=trace_sink,
             )
+        if mode == "QWEN_LIVE":
+            return InternalQwenIntentDraftProvider(
+                InternalQwenConfig.from_env(),
+                trace_sink=trace_sink,
+            )
         return LoopbackSimulatorIntentDraftProvider(
             LoopbackSimulatorConfig(
                 api_key=SIMULATOR_BEARER_TOKEN,
@@ -139,6 +147,11 @@ class DefaultProviderFactory:
         if mode == "BAILIAN_LIVE":
             return BailianSemanticRecommendationProvider(
                 BailianConfig.from_env(),
+                trace_sink=trace_sink,
+            )
+        if mode == "QWEN_LIVE":
+            return InternalQwenSemanticRecommendationProvider(
+                InternalQwenConfig.from_env(),
                 trace_sink=trace_sink,
             )
         return LoopbackSimulatorSemanticRecommendationProvider(

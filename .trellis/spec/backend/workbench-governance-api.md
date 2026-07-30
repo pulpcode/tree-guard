@@ -28,11 +28,14 @@ POST /api/v1/governance/cases/{case_ref}/recommendation-review
 TREEGUARD_WORKBENCH_SIDECAR_DIR
 TREEGUARD_WORKBENCH_SIMULATOR_MODEL_URL
 TREEGUARD_WORKBENCH_MODEL_DIAGNOSTICS   # 0 | 1；缺省为 0
+TREEGUARD_QWEN_BASE_URL
+TREEGUARD_QWEN_MODEL
 ```
 
 sidecar 目录未配置时使用当前用户专属的操作系统临时目录；显式配置必须是绝对
 路径。仿真模型 URL 继续受 `LoopbackSimulatorConfig` 门禁约束。百炼配置继续由
-`BailianConfig.from_env()` 读取，浏览器不能提交 base URL、model 或 key。
+`BailianConfig.from_env()` 读取；内网 Qwen 使用无 API Key 的
+`InternalQwenConfig.from_env()`。浏览器不能提交 base URL、model 或 key。
 
 ### 3. Contracts
 
@@ -46,7 +49,7 @@ proposed_parent_ref?       # N000001 形式临时引用
 node_kind_hint
 value_type_hint?
 cardinality_hint
-model_mode                # SIMULATOR_LIVE | BAILIAN_LIVE
+model_mode                # SIMULATOR_LIVE | BAILIAN_LIVE | QWEN_LIVE
 external_data_approved
 ```
 
@@ -91,7 +94,8 @@ operation registry 当前是单进程内存实现。页面可把随机 `case_ref
 `operation_ref` 放入 localhost URL 以支持刷新；不得把树、需求、节点或模型内容
 写入 URL、localStorage 或第三方服务。重复 GET 只读同一 operation，不得重新调用
 模型。百炼出域批准只绑定当前 case；重新发起或切换树版本时必须清除浏览器勾选，
-不得把批准状态写入 URL、localStorage 或自动沿用到下一次需求。
+不得把批准状态写入 URL、localStorage 或自动沿用到下一次需求。`QWEN_LIVE`
+属于受保护环境，不要求百炼出域批准，配置/调用失败也不得回退到其他 Provider。
 
 模型交互诊断是独立的开发合同，不属于普通 case 视图或正式旁路工件。只有服务端
 设置 `TREEGUARD_WORKBENCH_MODEL_DIAGNOSTICS=1` 时，`model-traces` 才返回
@@ -99,7 +103,7 @@ operation registry 当前是单进程内存实现。页面可把随机 `case_ref
 
 ```text
 case_ref
-model_mode               # SIMULATOR_LIVE | BAILIAN_LIVE
+model_mode               # SIMULATOR_LIVE | BAILIAN_LIVE | QWEN_LIVE
 thinking_status = DISABLED
 items[]:
   stage                   # INTENT_DRAFT | INTENT_CLARIFICATION |
@@ -124,7 +128,8 @@ Provider 必须从实际 request body 投影 system/user 消息，并在本地�
 localStorage 或下载文件。正向允许列表不得包含 API key、Authorization、headers、
 base URL、完整响应 envelope、内部路径、稳定节点 ID、hash 或完整信息树。
 
-当前 Provider 明确发送 `enable_thinking=false`；因此只能显示
+百炼/仿真发送顶层 `enable_thinking=false`，内网 Qwen 发送
+`chat_template_kwargs.enable_thinking=false`；因此只能显示
 `thinking_status=DISABLED`。模型输出中的 `rationale`、`assumptions`、
 `uncertainties` 和 `evidence_gaps` 是结构化结论，不得标成隐藏思考链。
 
@@ -154,6 +159,8 @@ base URL、完整响应 envelope、内部路径、稳定节点 ID、hash 或完�
   候选路径，AI 建议复用 `C001`，人工接受后得到非 Gold 的可回放记录。
 - Good：百炼模式只有显式批准后才在后台 operation 中调用，并继续经过相同本地
   输出合同。
+- Good：Qwen 模式不发送 Authorization、不使用百炼批准状态，并继续经过相同本地
+  输出合同。
 - Base：用户不选择拟挂载节点，也不给类型和基数提示；以 `UNKNOWN` 完成意图整理。
 - Base：AI 提出一个问题；用户可提交判断、思路或不确定原因，一轮后仍不明确则
   安全停止。
@@ -172,6 +179,7 @@ base URL、完整响应 envelope、内部路径、稳定节点 ID、hash 或完�
 - 仿真完整闭环发布预期 `0700/0600` 文件，最终记录可从可信来源重放；
 - 一轮澄清的 resolved 和 limit-reached 两条路径；
 - 百炼未批准时 Provider 调用数为零且 sidecar 根目录不存在；
+- Qwen 模式无百炼批准也可创建 case，且工厂只选择 Qwen Provider；
 - 重复 operation GET 不改变状态、不新增文件、不重复 Provider；
 - case/API JSON canary 不含稳定 ID、hash、reasoning、路径和凭据；
 - 诊断默认关闭；启用时按 attempt 返回实际消息、原始 content、固定校验结果和
@@ -241,7 +249,7 @@ GET  /api/v1/validation/runs/{case_ref}/comparison
 dataset_ref
 variant_ref
 scenario_ref
-model_mode                # SIMULATOR_LIVE | BAILIAN_LIVE
+model_mode                # SIMULATOR_LIVE | BAILIAN_LIVE | QWEN_LIVE
 external_data_approved
 ```
 

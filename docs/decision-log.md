@@ -212,10 +212,13 @@ HistoryReview v1 只接受同一 `tree_id + tree_version + version_record_id` �
 ### D-034：首期以业务版本为审查单位
 
 当前接口只能稳定列出业务版本，MongoDB 中间保存副本没有公开读取接口。首期因此
-比较 `version-info` 顺序中的相邻业务版本，不阻塞于小版本采集。顺序暂由调用方
-显式声明并标为 `UNVERIFIED_EXPLICIT_SEQUENCE`，不解析版本字符串；
-`concurrent_version` 可以跨业务版本重置，不能用于判断业务版本先后。拿到脱敏的
-`version-info` 合同后，再把位置和 `version_record_id` 绑定到可重放清单。
+比较 `version-info` 中的相邻业务版本，不阻塞于小版本采集。D-045 已确认真实接口
+的版本格式排序规则，因此真实仓库 Adapter 负责生成显式 oldest-first 位置；
+领域核心仍不自行解析版本字符串，其他来源继续由调用方显式声明并标为
+`UNVERIFIED_EXPLICIT_SEQUENCE`。
+`concurrent_version` 可以跨业务版本重置，不能用于判断业务版本先后。真实
+`version-info` Adapter 已把排序位置与 `version_record_id` 绑定；可回放业务审查
+仍需冻结实际返回的版本清单。
 
 BusinessVersionReview 只表示两个发布端点的净变化，复用确定性结构分簇和 VALUE
 门禁，但不恢复发布过程、修改原因或专家意图。后续拿到小版本只会增加证据精度，
@@ -332,6 +335,24 @@ embedding 和 reranker 由内网冻结案例的分层召回结果决定。
 无澄清路径仍最多两段模型调用；澄清路径最多三段。该能力运行在独立文件型旁路中，
 不要求先改造现有信息树右键维护页面，拟挂载位置和类型/基数提示均可未知。
 
+### D-045：真实内网集成采用独立只读 Adapter 和 Qwen Provider
+
+真实仓库已经确认四类精确路径，以及 `resource_id/map_id` 跨业务版本稳定、`id`
+唯一标识一个版本。版本接口顺序不保证；对类似 `V0.0.0.0J0.1.0` 的字符串，
+忽略前缀和中间字母后分别比较前后数字段。TreeGuard 用独立
+`InternalRepositoryClient` 适配并校验分页、当前/默认版本、版本和完整树身份。
+`resource/list` 的当前/默认版本可以切换到历史版本，与排序后的最新版本是两个
+独立概念；兼容字段 `head_version/is_head` 只表示当前/默认指针。完整树直接版本
+记录选择器已确认为查询参数 `id`。真实适配器不修改或伪装暂定
+`ProvisionalRepositoryClient`，也不增加任何生产写操作。
+
+内网 Qwen 已确认使用无 API Key 的 OpenAI-compatible `/v1/chat/completions`，
+模型 ID 为 `qwen3.6`，关闭思考使用
+`chat_template_kwargs={"enable_thinking": false}`。它使用独立
+`QWEN_LIVE`/Provider 身份，不复用百炼出域批准、不发送 Authorization，也不在
+失败时回退。模型输出继续经过与百炼/仿真相同的本地意图、语义和专家整理合同。
+外网虚构 transport 通过只证明适配合同，不证明内网可达性或语义效果。
+
 ## 6. 仍需内网核实的事实
 
 以下问题不能由外网假设替代：
@@ -348,12 +369,13 @@ embedding 和 reranker 由内网冻结案例的分层召回结果决定。
 10. 是否存在 Schema-only 接口或排除 VALUE 的查询参数；
 11. 邮件模板中的节点引用是否全部为稳定 `node_id`；
 12. Usage Manifest 能否包含模板版本、状态和最后更新时间；
-13. 当前 Qwen 的接口协议、最大上下文、并发、超时和结构化输出能力；
+13. 当前 Qwen 的最大上下文、并发、超时、`json_object` 稳定性和错误信封；
 14. 首个试点消防子树的具体范围；
 15. 30 条冻结案例需要多少专家工时；
 16. 内网允许使用的 Python、向量库、MongoDB 和前端依赖版本；
 17. 内网离线依赖扫描和许可证审批流程；
 18. Trace 的权限、加密和保留期限。
+19. 完整树直接按版本记录查询时，查询参数是否精确为 `id`。
 
 
 ## 7. 暂缓事项

@@ -335,10 +335,20 @@ function GovernancePanel({
         </Space>
       }
       extra={
-        <Tag color={displayedModelMode === "BAILIAN_LIVE" ? "blue" : "green"}>
+        <Tag
+          color={
+            displayedModelMode === "BAILIAN_LIVE"
+              ? "blue"
+              : displayedModelMode === "QWEN_LIVE"
+                ? "purple"
+                : "green"
+          }
+        >
           {displayedModelMode === "BAILIAN_LIVE"
             ? "百炼真实模型"
-            : "本地模型仿真"}
+            : displayedModelMode === "QWEN_LIVE"
+              ? "内网 Qwen"
+              : "本地模型仿真"}
         </Tag>
       }
     >
@@ -950,6 +960,10 @@ function IntakeForm(props: IntakeFormProps) {
               {
                 value: "BAILIAN_LIVE",
                 label: "百炼真实模型",
+              },
+              {
+                value: "QWEN_LIVE",
+                label: "内网 Qwen 真实模型",
               },
             ]}
           />

@@ -29,6 +29,7 @@ from treeguard.workbench_governance import (
     WorkbenchGovernanceError,
     WorkbenchGovernanceService,
     default_sidecar_root,
+    model_diagnostics_enabled_from_env,
 )
 
 
@@ -256,6 +257,56 @@ class GovernanceCaseResponse(BaseModel):
     record: GovernanceRecordView | None
 
 
+class GovernanceModelTraceMessage(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    role: Literal["system", "user"]
+    content: str = Field(max_length=64_000)
+    content_truncated: bool
+
+
+class GovernanceModelTraceUsage(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    prompt_tokens: int | None = Field(default=None, ge=0)
+    completion_tokens: int | None = Field(default=None, ge=0)
+    total_tokens: int | None = Field(default=None, ge=0)
+
+
+class GovernanceModelTraceAttempt(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    stage: Literal[
+        "INTENT_DRAFT",
+        "INTENT_CLARIFICATION",
+        "SEMANTIC_RECOMMENDATION",
+    ]
+    attempt: int = Field(ge=1, le=2)
+    provider: str = Field(min_length=1, max_length=128)
+    model: str = Field(min_length=1, max_length=128)
+    prompt_version: str = Field(min_length=1, max_length=256)
+    thinking_status: Literal["DISABLED"]
+    request_messages: list[GovernanceModelTraceMessage] = Field(
+        min_length=1,
+        max_length=2,
+    )
+    response_content: str | None = Field(default=None, max_length=64_000)
+    response_content_truncated: bool
+    validation_status: Literal["PASSED", "FAILED"]
+    validation_error_code: str | None
+    usage: GovernanceModelTraceUsage | None
+
+
+class GovernanceModelTraceResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    schema_version: Literal["workbench-model-trace-view.v1"]
+    case_ref: str
+    model_mode: Literal["SIMULATOR_LIVE", "BAILIAN_LIVE"]
+    thinking_status: Literal["DISABLED"]
+    items: list[GovernanceModelTraceAttempt] = Field(max_length=8)
+
+
 def _services_from_environment() -> tuple[
     WorkbenchService,
     WorkbenchGovernanceService,
@@ -277,6 +328,7 @@ def _services_from_environment() -> tuple[
                 DEFAULT_SIMULATOR_MODEL_BASE_URL,
             )
         ),
+        diagnostics_enabled=model_diagnostics_enabled_from_env(),
     )
     return workbench, governance
 
@@ -341,7 +393,10 @@ def create_app(
         request: Request,
         exc: WorkbenchGovernanceError,
     ) -> JSONResponse:
-        if exc.code.endswith("_NOT_FOUND"):
+        if (
+            exc.code.endswith("_NOT_FOUND")
+            or exc.code == "WORKBENCH_DIAGNOSTICS_DISABLED"
+        ):
             status_code = 404
         elif exc.code in {
             "WORKBENCH_CASE_STATE_INVALID",
@@ -454,6 +509,19 @@ def create_app(
         ],
     ) -> dict[str, Any]:
         return _governance(request).case_view(case_ref)
+
+    @application.get(
+        "/api/v1/governance/cases/{case_ref}/model-traces",
+        response_model=GovernanceModelTraceResponse,
+    )
+    async def governance_model_traces(
+        request: Request,
+        case_ref: Annotated[
+            str,
+            APIPath(min_length=1, max_length=128),
+        ],
+    ) -> dict[str, Any]:
+        return _governance(request).model_trace_view(case_ref)
 
     @application.get(
         "/api/v1/governance/operations/{operation_ref}",

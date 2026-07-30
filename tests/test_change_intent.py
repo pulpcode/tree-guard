@@ -602,6 +602,7 @@ class ChangeIntentTests(unittest.TestCase):
         tree = _tree()
         request = IntentRequest.from_dict(_request_payload(), tree)
         rejected_marker = "fictional-rejected-response-marker"
+        traces = []
 
         class RecordingProvider(BailianIntentDraftProvider):
             def __init__(self):
@@ -609,7 +610,8 @@ class ChangeIntentTests(unittest.TestCase):
                     BailianConfig(
                         api_key="fixture-key",
                         max_attempts=2,
-                    )
+                    ),
+                    trace_sink=traces.append,
                 )
                 self.bodies = []
 
@@ -629,7 +631,13 @@ class ChangeIntentTests(unittest.TestCase):
                             "finish_reason": "stop",
                             "message": {"content": json.dumps(payload)},
                         }
-                    ]
+                    ],
+                    "usage": {
+                        "prompt_tokens": 40,
+                        "completion_tokens": 20,
+                        "total_tokens": 60,
+                        "provider_private_counter": 999,
+                    },
                 }
 
         provider = RecordingProvider()
@@ -687,12 +695,41 @@ class ChangeIntentTests(unittest.TestCase):
         self.assertNotIn(rejected_marker, json.dumps(provider.bodies[1]))
         self.assertNotIn("node-002", encoded)
         self.assertNotIn("tree-fictional-museum", encoded)
+        self.assertEqual(len(traces), 2)
+        self.assertEqual(traces[0].stage, "INTENT_DRAFT")
+        self.assertEqual(
+            traces[0].validation_error_code,
+            "INTENT_MODEL_FIELDS_INVALID",
+        )
+        self.assertEqual(traces[1].validation_status, "PASSED")
+        self.assertEqual(traces[1].thinking_status, "DISABLED")
+        self.assertEqual(
+            traces[0].request_messages[0].content,
+            provider.bodies[0]["messages"][0]["content"],
+        )
+        self.assertIn(rejected_marker, traces[0].response_content)
+        self.assertEqual(
+            dict(traces[1].usage),
+            {
+                "prompt_tokens": 40,
+                "completion_tokens": 20,
+                "total_tokens": 60,
+            },
+        )
+        encoded_trace = json.dumps(
+            [trace.to_dict() for trace in traces],
+            ensure_ascii=False,
+        )
+        self.assertNotIn("fixture-key", encoded_trace)
+        self.assertNotIn("dashscope.aliyuncs.com", encoded_trace)
+        self.assertNotIn("provider_private_counter", encoded_trace)
 
     def test_provider_clarifies_with_json_mode_and_bounded_projection(self) -> None:
         tree = _tree()
         request = IntentRequest.from_dict(_request_payload(), tree)
         initial_draft = _question_draft(request, tree)
         answer = _answer(initial_draft)
+        traces = []
 
         class RecordingProvider(BailianIntentDraftProvider):
             def __init__(self):
@@ -700,7 +737,8 @@ class ChangeIntentTests(unittest.TestCase):
                     BailianConfig(
                         api_key="fixture-key",
                         max_attempts=2,
-                    )
+                    ),
+                    trace_sink=traces.append,
                 )
                 self.bodies = []
 
@@ -746,6 +784,15 @@ class ChangeIntentTests(unittest.TestCase):
         self.assertIn("不得拼接两个问题", system_prompt)
         self.assertIn("必须返回 JSON null", system_prompt)
         self.assertIn("必须返回空数组", system_prompt)
+        self.assertEqual(len(traces), 2)
+        self.assertEqual(
+            {trace.stage for trace in traces},
+            {"INTENT_CLARIFICATION"},
+        )
+        self.assertEqual(
+            [trace.validation_status for trace in traces],
+            ["FAILED", "PASSED"],
+        )
 
 
 if __name__ == "__main__":

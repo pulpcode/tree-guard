@@ -15,6 +15,7 @@
 ```text
 POST /api/v1/governance/cases
 GET  /api/v1/governance/cases/{case_ref}
+GET  /api/v1/governance/cases/{case_ref}/model-traces
 GET  /api/v1/governance/operations/{operation_ref}
 POST /api/v1/governance/cases/{case_ref}/clarification
 POST /api/v1/governance/cases/{case_ref}/intent-review
@@ -26,6 +27,7 @@ POST /api/v1/governance/cases/{case_ref}/recommendation-review
 ```text
 TREEGUARD_WORKBENCH_SIDECAR_DIR
 TREEGUARD_WORKBENCH_SIMULATOR_MODEL_URL
+TREEGUARD_WORKBENCH_MODEL_DIAGNOSTICS   # 0 | 1；缺省为 0
 ```
 
 sidecar 目录未配置时使用当前用户专属的操作系统临时目录；显式配置必须是绝对
@@ -86,6 +88,41 @@ operation registry 当前是单进程内存实现。页面可把随机 `case_ref
 模型。百炼出域批准只绑定当前 case；重新发起或切换树版本时必须清除浏览器勾选，
 不得把批准状态写入 URL、localStorage 或自动沿用到下一次需求。
 
+模型交互诊断是独立的开发合同，不属于普通 case 视图或正式旁路工件。只有服务端
+设置 `TREEGUARD_WORKBENCH_MODEL_DIAGNOSTICS=1` 时，`model-traces` 才返回
+`workbench-model-trace-view.v1`：
+
+```text
+case_ref
+model_mode               # SIMULATOR_LIVE | BAILIAN_LIVE
+thinking_status = DISABLED
+items[]:
+  stage                   # INTENT_DRAFT | INTENT_CLARIFICATION |
+                          # SEMANTIC_RECOMMENDATION
+  attempt
+  provider
+  model
+  prompt_version
+  thinking_status = DISABLED
+  request_messages[]      # role/content/content_truncated
+  response_content?
+  response_content_truncated
+  validation_status       # PASSED | FAILED
+  validation_error_code?
+  usage?                  # prompt/completion/total token 计数
+```
+
+Provider 必须从实际 request body 投影 system/user 消息，并在本地合同校验后记录
+每次 attempt。trace sink 是可选依赖；未提供时 Provider 行为不变。Trace 最多保存
+当前 case 的 8 次尝试，单段文本最多 64,000 字符，只驻留
+`WorkbenchGovernanceService` 当前进程内存。不得写入 sidecar、普通日志、URL、
+localStorage 或下载文件。正向允许列表不得包含 API key、Authorization、headers、
+base URL、完整响应 envelope、内部路径、稳定节点 ID、hash 或完整信息树。
+
+当前 Provider 明确发送 `enable_thinking=false`；因此只能显示
+`thinking_status=DISABLED`。模型输出中的 `rationale`、`assumptions`、
+`uncertainties` 和 `evidence_gaps` 是结构化结论，不得标成隐藏思考链。
+
 ### 4. Validation & Error Matrix
 
 | 条件 | HTTP / operation 结果 |
@@ -94,6 +131,8 @@ operation registry 当前是单进程内存实现。页面可把随机 `case_ref
 | 临时父引用不属于当前树 | 422 / `WORKBENCH_PARENT_REF_INVALID` |
 | 百炼模式未显式批准 | 422 / `EXTERNAL_DATA_APPROVAL_REQUIRED`，无目录、无网络 |
 | case 或 operation 不存在 | 404 / `WORKBENCH_*_NOT_FOUND` |
+| 模型诊断未启用 | 404 / `WORKBENCH_DIAGNOSTICS_DISABLED` |
+| 模型诊断环境值不是 `0`/`1` | 服务启动拒绝 / `WORKBENCH_DIAGNOSTICS_CONFIG_INVALID` |
 | 人工动作与当前 case 状态不符 | 409 / `WORKBENCH_CASE_STATE_INVALID` |
 | sidecar 不是绝对、安全私有目录 | 409 / `WORKBENCH_SIDECAR_DIRECTORY_UNSAFE` |
 | 私有工件发布失败 | operation `FAILED` / `WORKBENCH_SIDECAR_WRITE_FAILED` |
@@ -113,9 +152,14 @@ operation registry 当前是单进程内存实现。页面可把随机 `case_ref
 - Base：用户不选择拟挂载节点，也不给类型和基数提示；以 `UNKNOWN` 完成意图整理。
 - Base：AI 提出一个问题；用户可提交判断、思路或不确定原因，一轮后仍不明确则
   安全停止。
+- Good：开发开关启用后，可查看失败 attempt 的原始 content 和固定合同错误码；
+  正式 case JSON 与 sidecar 文件集合不发生变化。
+- Base：开关缺省关闭，前端隐藏诊断区域，独立接口返回固定 404。
 - Bad：FastAPI 通过 subprocess 调治理 CLI，浏览器持有完整 `to_dict()`，或把
   `NO_CANDIDATES` 解释成允许新增。
 - Bad：刷新页面重新 POST create/review，或把 reviewer reasoning 放进 case GET。
+- Bad：把模型 trace 加入正式 case GET、sidecar、访问日志或下载功能；展示
+  `reasoning_content`，或在 `enable_thinking=false` 时推测模型思考。
 
 ### 6. Tests Required
 
@@ -125,6 +169,9 @@ operation registry 当前是单进程内存实现。页面可把随机 `case_ref
 - 百炼未批准时 Provider 调用数为零且 sidecar 根目录不存在；
 - 重复 operation GET 不改变状态、不新增文件、不重复 Provider；
 - case/API JSON canary 不含稳定 ID、hash、reasoning、路径和凭据；
+- 诊断默认关闭；启用时按 attempt 返回实际消息、原始 content、固定校验结果和
+  usage 允许列表，且不新增 sidecar 文件；
+- Provider 重试 trace 包含失败与成功两次记录，禁止 key、base URL 和未知 usage；
 - API 请求字段、固定错误、`no-store` 和 `nosniff`；
 - 前端构建与聚焦测试；浏览器冒烟覆盖 2,001 节点、中文候选路径、人工完成状态和
   刷新恢复。
@@ -148,3 +195,19 @@ candidate_set = build_candidate_set(confirmation, tree)
 ```
 
 应用服务直接编排公共 Core/Provider API；FastAPI 只返回独立正向允许列表视图。
+
+诊断场景中的 Wrong：
+
+```python
+case_view["model_trace"] = provider_response
+write_private_json(case_dir / "model-trace.json", provider_response)
+```
+
+诊断场景中的 Correct：
+
+```python
+provider = factory.intent_provider(mode, runtime_trace_sink)
+trace_view = governance.model_trace_view(case_ref)  # 仅显式开发开关
+```
+
+诊断使用独立的有界内存通道；正式 case 和可回放 sidecar 合同保持不变。

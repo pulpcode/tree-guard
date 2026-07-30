@@ -109,3 +109,89 @@
 **Consequences**：可以端到端展示真实 AI 建议和人工复核，并保持旁路、可回放与
 失败隔离；首版 operation 只保证单进程生命周期，服务重启恢复、多 worker 协调和
 生产队列留待后续任务。
+
+## Extension：模型交互诊断面板
+
+### Goal
+
+在本地 Web 工作台中查看当前 case 实际交给模型的受控消息、模型返回内容和调用
+诊断，帮助定位 Prompt、字段合同和模型质量问题，同时不把凭据、HTTP 头、内部路径
+或生产数据扩大暴露到普通专家界面。
+
+### What I already know
+
+- 当前所有正式 Provider 都设置 `enable_thinking=false`，因此没有可展示的模型
+  思考链；现有 `rationale`、`assumptions`、`uncertainties` 和
+  `evidence_gaps` 是结构化输出，不等于隐藏思考过程。
+- 当前 case API 明确禁止返回需求原文、模型 envelope 和 reviewer reasoning；
+  浏览器也没有登录鉴权，直接开放完整模型 trace 会改变既有安全边界。
+- Provider 当前只向应用服务返回本地校验后的领域对象；原始模型 content 和每次
+  重试请求没有作为正式旁路工件持久化。
+- 初始意图不会发送全树；语义建议只发送前 8 个临时候选投影。诊断面板应忠实展示
+  实际阶段输入，不能误称为全量信息树。
+
+### Assumptions (temporary)
+
+- 无。
+
+### Feasible Approaches
+
+**A. 开发诊断模式（推荐）**
+
+- 服务端开关默认关闭；启用后，折叠面板展示每次调用的 system/user 消息、模型
+  content、Prompt 版本、尝试次数、固定校验结果和可用 usage。
+- 不展示 Authorization、API key、完整 HTTP envelope、base URL、内部 ID 或路径；
+  原始模型 content 仅驻留当前内存，非法输出也能在当前 case 中诊断。
+- 安全边界清晰，适合当前无登录、loopback-only 的开发工作台。
+
+**B. 普通专家界面的合同视图**
+
+- 始终只展示已校验的意图/建议对象和输入字段摘要，不展示原始模型 content。
+- 风险较低，但无法解释 `INTENT_MODEL_FIELDS_INVALID` 这类原始字段漂移。
+
+**C. 完整 HTTP/推理 Trace**
+
+- 展示请求 envelope、原始响应、隐藏推理或传输信息。
+- 与当前数据边界和无鉴权架构冲突，不纳入本任务。
+
+### Requirements
+
+- 采用方案 A，仅在显式服务端开发开关启用时提供模型诊断；默认行为和既有 case
+  API 字段保持不变。
+- 覆盖初始意图、一次澄清和语义建议三类模型调用；每次调用按 attempt 独立记录。
+- 展示 Provider 实际发送的 system/user 消息、模型原始 content、Prompt 版本、
+  模型模式、固定本地校验结果以及响应中明确提供的 usage。
+- Trace 只存在当前 `WorkbenchGovernanceService` 进程内存中，按 case 绑定，服务
+  重启即丢失；不写正式 sidecar、日志、URL、localStorage 或下载文件。
+- 不展示 Authorization、API key、HTTP headers、base URL、内部路径、稳定节点
+  ID、hash 或完整信息树；诊断 API 继续使用独立正向允许列表。
+- 原始 content 必须设大小上限；非 JSON、字段非法和重试失败也只能以有界文本和
+  固定错误码显示，不能返回异常或服务端 traceback。
+- 页面使用默认折叠的“模型交互诊断”区域，按阶段和 attempt 展开；明确区分
+  “原始模型输出”和“本地校验后的结构化结果”。
+- 当前保持 `enable_thinking=false`；页面显示 `Thinking: DISABLED`。结构化
+  `rationale`、`assumptions`、`uncertainties` 和 `evidence_gaps` 可以展示，但
+  不称作思考链。
+- MVP 不提供 Trace 下载/导出，不支持普通专家模式，不恢复服务重启前的 Trace。
+
+### Decision (diagnostics ADR-lite)
+
+**Context**：真实模型的字段漂移只有固定错误码时难以定位，但当前 Web 无登录鉴权，
+完整模型 trace 又可能包含需求和节点语义。
+
+**Decision**：增加默认关闭、loopback-only 的内存诊断通道。Provider 通过显式
+可选 trace sink 上报受限事件；应用服务按 case 保存有界记录；独立诊断 API 只在
+服务端开关启用时返回；前端折叠展示。正式领域工件和 sidecar 合同不增加 trace。
+
+**Consequences**：开发者可定位实际 Prompt、原始输出与重试错误，同时保持生产默认
+面和回放工件不变；无鉴权普通专家界面、持久化 trace、下载导出及隐藏思考链留在
+范围外。
+
+### Acceptance Criteria
+
+- [x] 默认配置下诊断 API 不可用，既有 case 响应字段不变化。
+- [x] 显式开发开关下可按调用阶段查看准确的消息与原始模型 content。
+- [x] 重试按 attempt 分开展示，并标出固定本地校验结果。
+- [x] 页面明确显示 `thinking=DISABLED/UNAVAILABLE`，不把结构化理由称作思考链。
+- [x] Trace 不含凭据、HTTP 头、内部路径、稳定节点 ID 或完整信息树。
+- [x] Trace 不写入正式 sidecar、日志、URL 或 localStorage。

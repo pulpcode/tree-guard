@@ -10,7 +10,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Callable
 
 from treeguard.change_intent import (
     CARDINALITIES as INTENT_CARDINALITIES,
@@ -93,6 +93,7 @@ _CLAIM_KEYS = {"statement", "evidence_refs"}
 _CANDIDATE_KEYS = {"candidate_ref", "relation", "reason"}
 _PLACEMENT_KEYS = {"status", "reason", "evidence_refs"}
 _MAX_RESPONSE_BYTES = 2_000_000
+_MAX_TRACE_TEXT_CHARS = 64_000
 _SHARED_BAILIAN_HOSTS = {
     "dashscope.aliyuncs.com",
     "dashscope-intl.aliyuncs.com",
@@ -149,6 +150,61 @@ class BailianProviderError(RuntimeError):
     def __init__(self, code: str, message: str) -> None:
         self.code = code
         super().__init__(message)
+
+
+@dataclass(frozen=True, slots=True)
+class ModelTraceMessage:
+    """One exact model message retained only by an optional runtime trace sink."""
+
+    role: str
+    content: str
+    content_truncated: bool
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "role": self.role,
+            "content": self.content,
+            "content_truncated": self.content_truncated,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class ModelTraceAttempt:
+    """A bounded, credential-free projection of one provider attempt."""
+
+    stage: str
+    attempt: int
+    provider: str
+    model: str
+    prompt_version: str
+    thinking_status: str
+    request_messages: tuple[ModelTraceMessage, ...]
+    response_content: str | None
+    response_content_truncated: bool
+    validation_status: str
+    validation_error_code: str | None
+    usage: tuple[tuple[str, int], ...]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "stage": self.stage,
+            "attempt": self.attempt,
+            "provider": self.provider,
+            "model": self.model,
+            "prompt_version": self.prompt_version,
+            "thinking_status": self.thinking_status,
+            "request_messages": [
+                message.to_dict() for message in self.request_messages
+            ],
+            "response_content": self.response_content,
+            "response_content_truncated": self.response_content_truncated,
+            "validation_status": self.validation_status,
+            "validation_error_code": self.validation_error_code,
+            "usage": dict(self.usage) if self.usage else None,
+        }
+
+
+ModelTraceSink = Callable[[ModelTraceAttempt], None]
 
 
 @dataclass(frozen=True, slots=True)
@@ -559,9 +615,65 @@ class BailianAIReviewProvider:
     def __init__(
         self,
         config: BailianConfig | LoopbackSimulatorConfig,
+        trace_sink: ModelTraceSink | None = None,
     ) -> None:
         self.config = config
+        self._trace_sink = trace_sink
         self._opener = build_isolated_opener()
+
+    def _emit_model_trace(
+        self,
+        *,
+        stage: str,
+        attempt: int,
+        prompt_version: str,
+        request_body: dict[str, Any],
+        response: Any,
+        validation_status: str,
+        validation_error_code: str | None,
+    ) -> None:
+        if self._trace_sink is None:
+            return
+        messages: list[ModelTraceMessage] = []
+        request_messages = request_body.get("messages")
+        if isinstance(request_messages, list):
+            for item in request_messages:
+                if not isinstance(item, dict):
+                    continue
+                role = item.get("role")
+                content = item.get("content")
+                if not isinstance(role, str) or not isinstance(content, str):
+                    continue
+                bounded, truncated = _bounded_trace_text(content)
+                messages.append(
+                    ModelTraceMessage(
+                        role=role,
+                        content=bounded,
+                        content_truncated=truncated,
+                    )
+                )
+        response_content, response_truncated = _trace_response_content(
+            response
+        )
+        trace = ModelTraceAttempt(
+            stage=stage,
+            attempt=attempt,
+            provider=self.provider_name,
+            model=self.config.model,
+            prompt_version=prompt_version,
+            thinking_status="DISABLED",
+            request_messages=tuple(messages),
+            response_content=response_content,
+            response_content_truncated=response_truncated,
+            validation_status=validation_status,
+            validation_error_code=validation_error_code,
+            usage=_trace_usage(response),
+        )
+        try:
+            self._trace_sink(trace)
+        except Exception:
+            # Developer diagnostics must never change the provider outcome.
+            return
 
     def review(self, evidence_pack: LLMEvidencePack) -> AIReviewDraft:
         try:
@@ -747,15 +859,26 @@ class BailianIntentDraftProvider(BailianAIReviewProvider):
         model_input = request.to_model_dict(tree)
         last_code = "INTENT_MODEL_OUTPUT_INVALID"
         for attempt in range(1, self.config.max_attempts + 1):
-            response = self._post_json(
-                self._intent_request_body(
-                    model_input,
-                    retry_code=last_code if attempt > 1 else None,
-                )
+            request_body = self._intent_request_body(
+                model_input,
+                retry_code=last_code if attempt > 1 else None,
             )
             try:
+                response = self._post_json(request_body)
+            except BailianProviderError as exc:
+                self._emit_model_trace(
+                    stage="INTENT_DRAFT",
+                    attempt=attempt,
+                    prompt_version=self.prompt_version,
+                    request_body=request_body,
+                    response=None,
+                    validation_status="FAILED",
+                    validation_error_code=exc.code,
+                )
+                raise
+            try:
                 payload = _extract_content_json(response)
-                return ChangeIntentDraft.from_model_dict(
+                draft = ChangeIntentDraft.from_model_dict(
                     payload,
                     request,
                     tree,
@@ -766,6 +889,15 @@ class BailianIntentDraftProvider(BailianAIReviewProvider):
                 )
             except IntentValidationError as exc:
                 last_code = exc.code
+                self._emit_model_trace(
+                    stage="INTENT_DRAFT",
+                    attempt=attempt,
+                    prompt_version=self.prompt_version,
+                    request_body=request_body,
+                    response=response,
+                    validation_status="FAILED",
+                    validation_error_code=last_code,
+                )
             except (
                 StrictJSONError,
                 KeyError,
@@ -775,6 +907,26 @@ class BailianIntentDraftProvider(BailianAIReviewProvider):
                 json.JSONDecodeError,
             ):
                 last_code = "INTENT_MODEL_RESPONSE_INVALID"
+                self._emit_model_trace(
+                    stage="INTENT_DRAFT",
+                    attempt=attempt,
+                    prompt_version=self.prompt_version,
+                    request_body=request_body,
+                    response=response,
+                    validation_status="FAILED",
+                    validation_error_code=last_code,
+                )
+            else:
+                self._emit_model_trace(
+                    stage="INTENT_DRAFT",
+                    attempt=attempt,
+                    prompt_version=self.prompt_version,
+                    request_body=request_body,
+                    response=response,
+                    validation_status="PASSED",
+                    validation_error_code=None,
+                )
+                return draft
         raise BailianProviderError(
             last_code,
             (
@@ -895,15 +1047,26 @@ class BailianIntentDraftProvider(BailianAIReviewProvider):
         )
         last_code = "INTENT_CLARIFICATION_MODEL_OUTPUT_INVALID"
         for attempt in range(1, self.config.max_attempts + 1):
-            response = self._post_json(
-                self._clarification_request_body(
-                    model_input,
-                    retry=attempt > 1,
-                )
+            request_body = self._clarification_request_body(
+                model_input,
+                retry=attempt > 1,
             )
             try:
+                response = self._post_json(request_body)
+            except BailianProviderError as exc:
+                self._emit_model_trace(
+                    stage="INTENT_CLARIFICATION",
+                    attempt=attempt,
+                    prompt_version=INTENT_CLARIFICATION_PROMPT_VERSION,
+                    request_body=request_body,
+                    response=None,
+                    validation_status="FAILED",
+                    validation_error_code=exc.code,
+                )
+                raise
+            try:
                 payload = _extract_content_json(response)
-                return IntentClarificationRound.from_model_dict(
+                clarification = IntentClarificationRound.from_model_dict(
                     payload,
                     request,
                     initial_draft,
@@ -916,6 +1079,15 @@ class BailianIntentDraftProvider(BailianAIReviewProvider):
                 )
             except IntentValidationError as exc:
                 last_code = exc.code
+                self._emit_model_trace(
+                    stage="INTENT_CLARIFICATION",
+                    attempt=attempt,
+                    prompt_version=INTENT_CLARIFICATION_PROMPT_VERSION,
+                    request_body=request_body,
+                    response=response,
+                    validation_status="FAILED",
+                    validation_error_code=last_code,
+                )
             except (
                 StrictJSONError,
                 KeyError,
@@ -925,6 +1097,26 @@ class BailianIntentDraftProvider(BailianAIReviewProvider):
                 json.JSONDecodeError,
             ):
                 last_code = "INTENT_CLARIFICATION_MODEL_RESPONSE_INVALID"
+                self._emit_model_trace(
+                    stage="INTENT_CLARIFICATION",
+                    attempt=attempt,
+                    prompt_version=INTENT_CLARIFICATION_PROMPT_VERSION,
+                    request_body=request_body,
+                    response=response,
+                    validation_status="FAILED",
+                    validation_error_code=last_code,
+                )
+            else:
+                self._emit_model_trace(
+                    stage="INTENT_CLARIFICATION",
+                    attempt=attempt,
+                    prompt_version=INTENT_CLARIFICATION_PROMPT_VERSION,
+                    request_body=request_body,
+                    response=response,
+                    validation_status="PASSED",
+                    validation_error_code=None,
+                )
+                return clarification
         raise BailianProviderError(
             last_code,
             (
@@ -1023,15 +1215,26 @@ class BailianSemanticRecommendationProvider(BailianAIReviewProvider):
         )
         last_code = "SEMANTIC_MODEL_OUTPUT_INVALID"
         for attempt in range(1, self.config.max_attempts + 1):
-            response = self._post_json(
-                self._semantic_request_body(
-                    projection,
-                    retry=attempt > 1,
-                )
+            request_body = self._semantic_request_body(
+                projection,
+                retry=attempt > 1,
             )
             try:
+                response = self._post_json(request_body)
+            except BailianProviderError as exc:
+                self._emit_model_trace(
+                    stage="SEMANTIC_RECOMMENDATION",
+                    attempt=attempt,
+                    prompt_version=self.prompt_version,
+                    request_body=request_body,
+                    response=None,
+                    validation_status="FAILED",
+                    validation_error_code=exc.code,
+                )
+                raise
+            try:
                 payload = _extract_content_json(response)
-                return SemanticRecommendationDraft.from_model_dict(
+                recommendation = SemanticRecommendationDraft.from_model_dict(
                     payload,
                     confirmation,
                     candidate_set,
@@ -1043,6 +1246,15 @@ class BailianSemanticRecommendationProvider(BailianAIReviewProvider):
                 )
             except SemanticRecommendationError as exc:
                 last_code = exc.code
+                self._emit_model_trace(
+                    stage="SEMANTIC_RECOMMENDATION",
+                    attempt=attempt,
+                    prompt_version=self.prompt_version,
+                    request_body=request_body,
+                    response=response,
+                    validation_status="FAILED",
+                    validation_error_code=last_code,
+                )
             except (
                 StrictJSONError,
                 KeyError,
@@ -1052,6 +1264,26 @@ class BailianSemanticRecommendationProvider(BailianAIReviewProvider):
                 json.JSONDecodeError,
             ):
                 last_code = "SEMANTIC_MODEL_RESPONSE_INVALID"
+                self._emit_model_trace(
+                    stage="SEMANTIC_RECOMMENDATION",
+                    attempt=attempt,
+                    prompt_version=self.prompt_version,
+                    request_body=request_body,
+                    response=response,
+                    validation_status="FAILED",
+                    validation_error_code=last_code,
+                )
+            else:
+                self._emit_model_trace(
+                    stage="SEMANTIC_RECOMMENDATION",
+                    attempt=attempt,
+                    prompt_version=self.prompt_version,
+                    request_body=request_body,
+                    response=response,
+                    validation_status="PASSED",
+                    validation_error_code=None,
+                )
+                return recommendation
         raise BailianProviderError(
             last_code,
             (
@@ -1299,6 +1531,44 @@ def _extract_content_json(response: Any) -> Any:
     return strict_json_loads(content)
 
 
+def _bounded_trace_text(value: str) -> tuple[str, bool]:
+    if len(value) <= _MAX_TRACE_TEXT_CHARS:
+        return value, False
+    return value[:_MAX_TRACE_TEXT_CHARS], True
+
+
+def _trace_response_content(response: Any) -> tuple[str | None, bool]:
+    if not isinstance(response, dict):
+        return None, False
+    choices = response.get("choices")
+    if not isinstance(choices, list) or not choices:
+        return None, False
+    choice = choices[0]
+    if not isinstance(choice, dict):
+        return None, False
+    message = choice.get("message")
+    if not isinstance(message, dict):
+        return None, False
+    content = message.get("content")
+    if not isinstance(content, str):
+        return None, False
+    return _bounded_trace_text(content)
+
+
+def _trace_usage(response: Any) -> tuple[tuple[str, int], ...]:
+    if not isinstance(response, dict):
+        return ()
+    usage = response.get("usage")
+    if not isinstance(usage, dict):
+        return ()
+    values: list[tuple[str, int]] = []
+    for name in ("prompt_tokens", "completion_tokens", "total_tokens"):
+        value = usage.get(name)
+        if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
+            values.append((name, value))
+    return tuple(values)
+
+
 def _validate_cross_field_policy(
     disposition: str,
     assessments: tuple[CandidateAssessment, ...],
@@ -1479,6 +1749,9 @@ __all__ = [
     "LoopbackSimulatorConfig",
     "LoopbackSimulatorIntentDraftProvider",
     "LoopbackSimulatorSemanticRecommendationProvider",
+    "ModelTraceAttempt",
+    "ModelTraceMessage",
+    "ModelTraceSink",
     "CANDIDATE_RELATIONS",
     "DEFAULT_BASE_URL",
     "DEFAULT_MODEL",

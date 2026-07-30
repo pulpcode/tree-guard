@@ -20,6 +20,8 @@ from treeguard.ai_review import (
     LoopbackSimulatorConfig,
     LoopbackSimulatorIntentDraftProvider,
     LoopbackSimulatorSemanticRecommendationProvider,
+    ModelTraceAttempt,
+    ModelTraceSink,
 )
 from treeguard.change_intent import (
     ChangeIntentDraft,
@@ -51,7 +53,9 @@ from treeguard.workbench import (
 
 GOVERNANCE_CASE_VIEW_VERSION = "workbench-governance-case-view.v1"
 GOVERNANCE_OPERATION_VIEW_VERSION = "workbench-operation-view.v1"
+MODEL_TRACE_VIEW_VERSION = "workbench-model-trace-view.v1"
 MODEL_MODES = {"SIMULATOR_LIVE", "BAILIAN_LIVE"}
+_MAX_MODEL_TRACE_ATTEMPTS = 8
 
 
 class WorkbenchGovernanceError(RuntimeError):
@@ -88,9 +92,17 @@ class SemanticProvider(Protocol):
 
 
 class ProviderFactory(Protocol):
-    def intent_provider(self, mode: str) -> IntentProvider: ...
+    def intent_provider(
+        self,
+        mode: str,
+        trace_sink: ModelTraceSink | None = None,
+    ) -> IntentProvider: ...
 
-    def semantic_provider(self, mode: str) -> SemanticProvider: ...
+    def semantic_provider(
+        self,
+        mode: str,
+        trace_sink: ModelTraceSink | None = None,
+    ) -> SemanticProvider: ...
 
 
 class OperationExecutor(Protocol):
@@ -101,26 +113,40 @@ class OperationExecutor(Protocol):
 class DefaultProviderFactory:
     simulator_base_url: str
 
-    def intent_provider(self, mode: str) -> IntentProvider:
+    def intent_provider(
+        self,
+        mode: str,
+        trace_sink: ModelTraceSink | None = None,
+    ) -> IntentProvider:
         if mode == "BAILIAN_LIVE":
-            return BailianIntentDraftProvider(BailianConfig.from_env())
+            return BailianIntentDraftProvider(
+                BailianConfig.from_env(),
+                trace_sink=trace_sink,
+            )
         return LoopbackSimulatorIntentDraftProvider(
             LoopbackSimulatorConfig(
                 api_key=SIMULATOR_BEARER_TOKEN,
                 base_url=self.simulator_base_url,
-            )
+            ),
+            trace_sink=trace_sink,
         )
 
-    def semantic_provider(self, mode: str) -> SemanticProvider:
+    def semantic_provider(
+        self,
+        mode: str,
+        trace_sink: ModelTraceSink | None = None,
+    ) -> SemanticProvider:
         if mode == "BAILIAN_LIVE":
             return BailianSemanticRecommendationProvider(
-                BailianConfig.from_env()
+                BailianConfig.from_env(),
+                trace_sink=trace_sink,
             )
         return LoopbackSimulatorSemanticRecommendationProvider(
             LoopbackSimulatorConfig(
                 api_key=SIMULATOR_BEARER_TOKEN,
                 base_url=self.simulator_base_url,
-            )
+            ),
+            trace_sink=trace_sink,
         )
 
 
@@ -138,6 +164,7 @@ class _GovernanceCase:
     candidate_set: CandidateSet | None = None
     recommendation_draft: SemanticRecommendationDraft | None = None
     record: RecommendationRecord | None = None
+    model_traces: list[ModelTraceAttempt] = field(default_factory=list)
 
 
 @dataclass(slots=True)
@@ -156,6 +183,7 @@ class WorkbenchGovernanceService:
     repository: ReadOnlyTreeRepository
     sidecar_root: Path
     provider_factory: ProviderFactory
+    diagnostics_enabled: bool = False
     executor: OperationExecutor = field(
         default_factory=lambda: ThreadPoolExecutor(
             max_workers=2,
@@ -427,13 +455,32 @@ class WorkbenchGovernanceService:
                 "case_status": case.status,
             }
 
+    def model_trace_view(self, case_ref: str) -> dict[str, Any]:
+        if not self.diagnostics_enabled:
+            raise WorkbenchGovernanceError(
+                "WORKBENCH_DIAGNOSTICS_DISABLED",
+                "model diagnostics are disabled",
+            )
+        with self._lock:
+            case = self._require_case(case_ref)
+            return {
+                "schema_version": MODEL_TRACE_VIEW_VERSION,
+                "case_ref": case.case_ref,
+                "model_mode": case.model_mode,
+                "thinking_status": "DISABLED",
+                "items": [trace.to_dict() for trace in case.model_traces],
+            }
+
     def _run_draft(self, case_ref: str) -> None:
         with self._lock:
             case = self._require_case(case_ref)
             request = case.request
             tree = case.tree
             mode = case.model_mode
-        draft = self.provider_factory.intent_provider(mode).draft(request, tree)
+        draft = self.provider_factory.intent_provider(
+            mode,
+            self._model_trace_sink(case_ref),
+        ).draft(request, tree)
         with self._lock:
             case = self._require_case(case_ref)
             self._publish(
@@ -461,7 +508,10 @@ class WorkbenchGovernanceService:
             initial_draft = case.initial_draft
             tree = case.tree
             mode = case.model_mode
-        clarification = self.provider_factory.intent_provider(mode).clarify(
+        clarification = self.provider_factory.intent_provider(
+            mode,
+            self._model_trace_sink(case_ref),
+        ).clarify(
             request,
             initial_draft,
             answer,
@@ -523,7 +573,8 @@ class WorkbenchGovernanceService:
                 return
         candidate_set = build_candidate_set(confirmation, tree)
         recommendation = self.provider_factory.semantic_provider(
-            case.model_mode
+            case.model_mode,
+            self._model_trace_sink(case_ref),
         ).recommend(confirmation, candidate_set, tree)
         with self._lock:
             case = self._require_case(case_ref)
@@ -654,6 +705,18 @@ class WorkbenchGovernanceService:
             "could not allocate a unique runtime reference",
         )
 
+    def _model_trace_sink(self, case_ref: str) -> ModelTraceSink | None:
+        if not self.diagnostics_enabled:
+            return None
+
+        def append(trace: ModelTraceAttempt) -> None:
+            with self._lock:
+                case = self._require_case(case_ref)
+                if len(case.model_traces) < _MAX_MODEL_TRACE_ATTEMPTS:
+                    case.model_traces.append(trace)
+
+        return append
+
     def _require_case(self, case_ref: str) -> _GovernanceCase:
         case = self._cases.get(case_ref)
         if case is None:
@@ -686,6 +749,18 @@ def default_sidecar_root() -> Path:
     return (
         Path(tempfile.gettempdir())
         / f"treeguard-workbench-sidecars-{user_suffix}"
+    )
+
+
+def model_diagnostics_enabled_from_env() -> bool:
+    value = os.environ.get("TREEGUARD_WORKBENCH_MODEL_DIAGNOSTICS")
+    if value in {None, "", "0"}:
+        return False
+    if value == "1":
+        return True
+    raise WorkbenchGovernanceError(
+        "WORKBENCH_DIAGNOSTICS_CONFIG_INVALID",
+        "model diagnostics flag must be zero or one",
     )
 
 
@@ -772,8 +847,10 @@ __all__ = [
     "DefaultProviderFactory",
     "GOVERNANCE_CASE_VIEW_VERSION",
     "GOVERNANCE_OPERATION_VIEW_VERSION",
+    "MODEL_TRACE_VIEW_VERSION",
     "MODEL_MODES",
     "WorkbenchGovernanceError",
     "WorkbenchGovernanceService",
     "default_sidecar_root",
+    "model_diagnostics_enabled_from_env",
 ]

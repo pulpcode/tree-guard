@@ -7,6 +7,7 @@ import unittest
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from unittest.mock import patch
 
 import httpx
 
@@ -14,6 +15,9 @@ from treeguard.adapter import adapt_tree_document
 from treeguard.ai_review import (
     INTENT_CLARIFICATION_PROMPT_VERSION,
     INTENT_PROMPT_VERSION,
+    ModelTraceAttempt,
+    ModelTraceMessage,
+    ModelTraceSink,
     SEMANTIC_PROMPT_VERSION,
 )
 from treeguard.change_intent import (
@@ -33,7 +37,10 @@ from treeguard.semantic_recommendation import (
 from treeguard.simulator import build_fictional_tree
 from treeguard.web import create_app
 from treeguard.workbench import WorkbenchService
-from treeguard.workbench_governance import WorkbenchGovernanceService
+from treeguard.workbench_governance import (
+    WorkbenchGovernanceService,
+    model_diagnostics_enabled_from_env,
+)
 
 
 @dataclass
@@ -208,11 +215,65 @@ class FictionalProviderFactory:
     intent: FictionalIntentProvider = FictionalIntentProvider()
     semantic: FictionalSemanticProvider = FictionalSemanticProvider()
 
-    def intent_provider(self, mode: str) -> FictionalIntentProvider:
+    def intent_provider(
+        self,
+        mode: str,
+        trace_sink: ModelTraceSink | None = None,
+    ) -> FictionalIntentProvider:
+        if trace_sink is not None:
+            trace_sink(
+                _model_trace(
+                    stage="INTENT_DRAFT",
+                    prompt_version=INTENT_PROMPT_VERSION,
+                )
+            )
         return self.intent
 
-    def semantic_provider(self, mode: str) -> FictionalSemanticProvider:
+    def semantic_provider(
+        self,
+        mode: str,
+        trace_sink: ModelTraceSink | None = None,
+    ) -> FictionalSemanticProvider:
+        if trace_sink is not None:
+            trace_sink(
+                _model_trace(
+                    stage="SEMANTIC_RECOMMENDATION",
+                    prompt_version=SEMANTIC_PROMPT_VERSION,
+                )
+            )
         return self.semantic
+
+
+def _model_trace(*, stage: str, prompt_version: str) -> ModelTraceAttempt:
+    return ModelTraceAttempt(
+        stage=stage,
+        attempt=1,
+        provider="FICTIONAL_TEST_PROVIDER",
+        model="fictional-test-model",
+        prompt_version=prompt_version,
+        thinking_status="DISABLED",
+        request_messages=(
+            ModelTraceMessage(
+                role="system",
+                content="只处理完全虚构的测试输入。",
+                content_truncated=False,
+            ),
+            ModelTraceMessage(
+                role="user",
+                content='{"fictional_requirement":"陈列高度"}',
+                content_truncated=False,
+            ),
+        ),
+        response_content='{"fictional_result":"合同有效"}',
+        response_content_truncated=False,
+        validation_status="PASSED",
+        validation_error_code=None,
+        usage=(
+            ("prompt_tokens", 20),
+            ("completion_tokens", 10),
+            ("total_tokens", 30),
+        ),
+    )
 
 
 def _intent_payload(
@@ -247,6 +308,91 @@ def _id_factory() -> Any:
 
 
 class WorkbenchGovernanceServiceTests(unittest.TestCase):
+    def test_model_diagnostics_environment_is_strict(self) -> None:
+        with patch.dict(
+            "os.environ",
+            {"TREEGUARD_WORKBENCH_MODEL_DIAGNOSTICS": "1"},
+            clear=False,
+        ):
+            self.assertTrue(model_diagnostics_enabled_from_env())
+        with patch.dict(
+            "os.environ",
+            {"TREEGUARD_WORKBENCH_MODEL_DIAGNOSTICS": "yes"},
+            clear=False,
+        ):
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "flag must be zero or one",
+            ):
+                model_diagnostics_enabled_from_env()
+
+    def test_model_diagnostics_are_opt_in_and_memory_only(self) -> None:
+        repository = FakeRepository(_result())
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "sidecars"
+            disabled = WorkbenchGovernanceService(
+                repository=repository,
+                sidecar_root=root,
+                provider_factory=FictionalProviderFactory(),
+                executor=InlineExecutor(),
+                id_factory=_id_factory(),
+            )
+            operation = disabled.create_case(
+                resource_id="fictional-museum-resource",
+                version="SIM-V2",
+                requirement_text="记录虚构藏品的陈列高度。",
+                proposed_parent_ref=None,
+                node_kind_hint="UNKNOWN",
+                value_type_hint=None,
+                cardinality_hint="UNKNOWN",
+                model_mode="SIMULATOR_LIVE",
+                external_data_approved=False,
+            )
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "model diagnostics are disabled",
+            ):
+                disabled.model_trace_view(operation["case_ref"])
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "sidecars"
+            enabled = WorkbenchGovernanceService(
+                repository=repository,
+                sidecar_root=root,
+                provider_factory=FictionalProviderFactory(),
+                diagnostics_enabled=True,
+                executor=InlineExecutor(),
+                id_factory=_id_factory(),
+            )
+            operation = enabled.create_case(
+                resource_id="fictional-museum-resource",
+                version="SIM-V2",
+                requirement_text="记录虚构藏品的陈列高度。",
+                proposed_parent_ref=None,
+                node_kind_hint="UNKNOWN",
+                value_type_hint=None,
+                cardinality_hint="UNKNOWN",
+                model_mode="SIMULATOR_LIVE",
+                external_data_approved=False,
+            )
+            trace = enabled.model_trace_view(operation["case_ref"])
+
+            self.assertEqual(
+                trace["schema_version"],
+                "workbench-model-trace-view.v1",
+            )
+            self.assertEqual(trace["model_mode"], "SIMULATOR_LIVE")
+            self.assertEqual(trace["thinking_status"], "DISABLED")
+            self.assertEqual(len(trace["items"]), 1)
+            self.assertEqual(
+                trace["items"][0]["request_messages"][1]["content"],
+                '{"fictional_requirement":"陈列高度"}',
+            )
+            self.assertEqual(
+                {path.name for path in (root / operation["case_ref"]).iterdir()},
+                {"01-intent-request.json", "02-intent-draft.json"},
+            )
+
     def test_complete_case_is_private_replayable_sidecar(self) -> None:
         repository = FakeRepository(_result())
         with tempfile.TemporaryDirectory() as temporary:
@@ -515,6 +661,9 @@ class WorkbenchGovernanceAPITests(unittest.IsolatedAsyncioTestCase):
                 case = await client.get(
                     f"/api/v1/governance/cases/{case_ref}"
                 )
+                diagnostics = await client.get(
+                    f"/api/v1/governance/cases/{case_ref}/model-traces"
+                )
                 reviewed = await client.post(
                     f"/api/v1/governance/cases/{case_ref}/intent-review",
                     json={"decision": "CONFIRM"},
@@ -522,6 +671,11 @@ class WorkbenchGovernanceAPITests(unittest.IsolatedAsyncioTestCase):
 
             self.assertEqual(polled.json()["status"], "SUCCEEDED")
             self.assertEqual(case.json()["status"], "INTENT_REVIEW")
+            self.assertEqual(diagnostics.status_code, 404)
+            self.assertEqual(
+                diagnostics.json()["error_code"],
+                "WORKBENCH_DIAGNOSTICS_DISABLED",
+            )
             self.assertEqual(reviewed.status_code, 202)
             encoded = json.dumps(
                 [operation, polled.json(), case.json(), reviewed.json()],
@@ -530,6 +684,47 @@ class WorkbenchGovernanceAPITests(unittest.IsolatedAsyncioTestCase):
             self.assertNotIn("fictional-museum-root", encoded)
             self.assertNotIn("source_snapshot_hash", encoded)
             self.assertNotIn(str(temporary), encoded)
+
+    async def test_model_trace_endpoint_is_allowlisted_when_enabled(self) -> None:
+        repository = FakeRepository(_result())
+        with tempfile.TemporaryDirectory() as temporary:
+            governance = WorkbenchGovernanceService(
+                repository=repository,
+                sidecar_root=Path(temporary) / "sidecars",
+                provider_factory=FictionalProviderFactory(),
+                diagnostics_enabled=True,
+                executor=InlineExecutor(),
+                id_factory=_id_factory(),
+            )
+            app = create_app(WorkbenchService(repository), governance)
+            transport = httpx.ASGITransport(app=app)
+            async with httpx.AsyncClient(
+                transport=transport,
+                base_url="http://test",
+            ) as client:
+                created = await client.post(
+                    "/api/v1/governance/cases",
+                    json={
+                        "resource_id": "fictional-museum-resource",
+                        "version": "SIM-V2",
+                        "requirement_text": "记录虚构藏品的陈列高度。",
+                    },
+                )
+                case_ref = created.json()["case_ref"]
+                response = await client.get(
+                    f"/api/v1/governance/cases/{case_ref}/model-traces"
+                )
+
+            self.assertEqual(response.status_code, 200)
+            payload = response.json()
+            self.assertEqual(payload["model_mode"], "SIMULATOR_LIVE")
+            self.assertEqual(payload["thinking_status"], "DISABLED")
+            self.assertEqual(payload["items"][0]["validation_status"], "PASSED")
+            self.assertEqual(payload["items"][0]["usage"]["total_tokens"], 30)
+            encoded = json.dumps(payload, ensure_ascii=False)
+            self.assertNotIn("fixture-key", encoded)
+            self.assertNotIn(str(temporary), encoded)
+            self.assertNotIn("node-", encoded)
 
     async def test_null_subject_remains_a_valid_runtime_view(self) -> None:
         class NullSubjectIntentProvider(FictionalIntentProvider):

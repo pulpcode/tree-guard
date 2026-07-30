@@ -99,6 +99,11 @@ stdout、外网诊断包或 Git。
 
 Shadow MVP 的产品建议与审查记录写入 sidecar/overlay 工件，不修改生产信息树。
 
+Workbench 的模型交互诊断是一个受保护的本机开发例外，而不是可外传诊断包：
+它默认关闭，只通过独立 loopback API 返回当前进程内的有界请求/响应，并受
+[Workbench 治理 API](./workbench-governance-api.md)约束。Prompt 和模型 content
+仍不得进入 CLI stdout、日志、sidecar、Git 或跨环境诊断导出。
+
 ## 意外失败
 
 预期领域异常输出稳定 code 或固定 fallback，不输出 `str(exc)`、Provider body

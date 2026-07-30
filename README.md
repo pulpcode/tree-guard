@@ -236,6 +236,24 @@ TREEGUARD_WORKBENCH_SIDECAR_DIR=/absolute/private/path \
 调用前失败关闭。该批准只绑定当前 case，重新发起或切换信息树版本后必须重新勾选。
 完整需求、AI 结果和专家理由不会进入 API 错误、stdout 或普通访问日志。
 
+本地开发排查 Prompt 或模型合同失败时，可以显式开启模型交互诊断：
+
+```bash
+TREEGUARD_WORKBENCH_MODEL_DIAGNOSTICS=1 \
+  UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
+  treeguard-workbench --port 8000
+```
+
+开启后，治理页面底部出现默认折叠的“模型交互诊断”，按每次 attempt 展示实际
+system/user 消息、原始 `message.content`、Prompt 版本、本地校验结果和 Provider
+明确返回的 token 用量。当前调用固定 `enable_thinking=false`，因此页面只显示
+`Thinking: DISABLED`，不会生成或推测隐藏思考。
+
+该开关缺省为 `0`，且只适用于受保护的本机开发环境。Trace 只保存在 Workbench
+当前进程内存，重启即丢失；不会写入 sidecar、日志、URL、localStorage 或下载
+文件。它可能包含需求和候选语义，不得截图、复制或导出到外网；页面和 API 均不
+返回 key、Authorization、headers、base URL、内部路径、稳定 ID、hash 或完整树。
+
 当前 operation registry 是单进程内存实现：浏览器刷新可恢复，但 Workbench API
 进程重启后不能恢复 case 页面。已经发布的私有 sidecar 文件仍保留；跨进程恢复、
 多 worker、认证、生产队列和人工修订建议留待后续任务。

@@ -547,6 +547,7 @@ class SemanticRecommendationTests(unittest.TestCase):
             tree,
         )
         valid = _model_payload(projection)
+        traces = []
 
         class RecordingProvider(BailianSemanticRecommendationProvider):
             def __init__(self):
@@ -554,7 +555,8 @@ class SemanticRecommendationTests(unittest.TestCase):
                     BailianConfig(
                         api_key="fixture-key",
                         max_attempts=2,
-                    )
+                    ),
+                    trace_sink=traces.append,
                 )
                 self.bodies = []
 
@@ -608,6 +610,15 @@ class SemanticRecommendationTests(unittest.TestCase):
         self.assertNotIn("tree-fictional-museum", encoded)
         self.assertNotIn(candidate_set.candidate_set_hash, encoded)
         self.assertNotIn(confirmation.confirmation_hash, encoded)
+        self.assertEqual(len(traces), 2)
+        self.assertEqual(
+            {trace.stage for trace in traces},
+            {"SEMANTIC_RECOMMENDATION"},
+        )
+        self.assertEqual(
+            [trace.validation_status for trace in traces],
+            ["FAILED", "PASSED"],
+        )
 
         class InvalidProvider(BailianSemanticRecommendationProvider):
             def _post_json(self, body):

@@ -10,6 +10,7 @@ import {
   Button,
   Card,
   Checkbox,
+  Collapse,
   Descriptions,
   Divider,
   Empty,
@@ -27,15 +28,18 @@ import {
   clarifyGovernanceCase,
   createGovernanceCase,
   fetchGovernanceCase,
+  fetchGovernanceModelTraces,
   fetchGovernanceOperation,
   reviewGovernanceIntent,
   reviewGovernanceRecommendation,
   type GovernanceCase,
   type GovernanceModelMode,
+  type GovernanceModelTraceView,
   type GovernanceOperation,
   type TreeViewNode,
   WorkbenchAPIError,
 } from "./api";
+import { formatModelUsage, modelTraceStageLabel } from "./model-trace";
 
 interface GovernancePanelProps {
   resourceId?: string;
@@ -95,6 +99,14 @@ function GovernancePanel({
     refetchInterval: () =>
       RUNNING_STATUSES.has(operation.data?.status ?? "") ? 500 : false,
   });
+  const modelTraces = useQuery({
+    queryKey: ["governance-model-traces", caseRef],
+    queryFn: () => fetchGovernanceModelTraces(caseRef!),
+    enabled: Boolean(caseRef),
+    retry: false,
+    refetchInterval: () =>
+      RUNNING_STATUSES.has(operation.data?.status ?? "") ? 500 : false,
+  });
 
   useEffect(() => {
     if (
@@ -102,8 +114,9 @@ function GovernancePanel({
       !RUNNING_STATUSES.has(operation.data.status)
     ) {
       void governanceCase.refetch();
+      void modelTraces.refetch();
     }
-  }, [governanceCase.refetch, operation.data]);
+  }, [governanceCase.refetch, modelTraces.refetch, operation.data]);
 
   useEffect(() => {
     if (!resourceId || !version) {
@@ -187,7 +200,12 @@ function GovernancePanel({
     reviewIntent.error ??
     reviewRecommendation.error ??
     operation.error ??
-    governanceCase.error;
+    governanceCase.error ??
+    (
+      errorCode(modelTraces.error) !== "WORKBENCH_DIAGNOSTICS_DISABLED"
+        ? modelTraces.error
+        : null
+    );
   const currentCase = governanceCase.data;
   const busy =
     createCase.isPending ||
@@ -283,6 +301,14 @@ function GovernancePanel({
         />
       )}
 
+      {caseRef &&
+        errorCode(modelTraces.error) !== "WORKBENCH_DIAGNOSTICS_DISABLED" && (
+          <ModelTracePanel
+            value={modelTraces.data}
+            loading={modelTraces.isLoading}
+          />
+        )}
+
       {latestError && (
         <Alert
           className="governance-error"
@@ -302,6 +328,131 @@ function GovernancePanel({
         />
       )}
     </Card>
+  );
+}
+
+function ModelTracePanel({
+  value,
+  loading,
+}: {
+  value?: GovernanceModelTraceView;
+  loading: boolean;
+}) {
+  return (
+    <Collapse
+      className="model-trace-panel"
+      size="small"
+      items={[
+        {
+          key: "model-traces",
+          label: (
+            <Space wrap>
+              <RobotOutlined />
+              <span>模型交互诊断</span>
+              <Tag color="orange">仅当前进程内存</Tag>
+              {value && <Tag>{value.model_mode}</Tag>}
+              <Tag>尝试 {value?.items.length ?? 0}</Tag>
+            </Space>
+          ),
+          children: loading ? (
+            <Spin />
+          ) : (
+            <div className="model-trace-list">
+              <Alert
+                type="info"
+                showIcon
+                title="模型思考：DISABLED"
+                description="当前调用明确关闭 thinking；这里只展示实际请求消息、原始响应和本地合同校验，不生成或推测隐藏思考过程。"
+              />
+              {value?.items.length ? (
+                value.items.map((trace, index) => (
+                  <Card
+                    key={`${trace.stage}-${trace.attempt}-${index}`}
+                    size="small"
+                    title={`${modelTraceStageLabel(trace.stage)} · 第 ${trace.attempt} 次`}
+                    extra={
+                      <Tag
+                        color={
+                          trace.validation_status === "PASSED"
+                            ? "green"
+                            : "red"
+                        }
+                      >
+                        本地校验 {trace.validation_status}
+                      </Tag>
+                    }
+                  >
+                    <Descriptions size="small" column={2}>
+                      <Descriptions.Item label="Provider">
+                        {trace.provider}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="模型">
+                        {trace.model}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Prompt 版本">
+                        {trace.prompt_version}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Token">
+                        {formatModelUsage(trace.usage)}
+                      </Descriptions.Item>
+                      {trace.validation_error_code && (
+                        <Descriptions.Item label="校验错误" span={2}>
+                          <Tag color="red">
+                            {trace.validation_error_code}
+                          </Tag>
+                        </Descriptions.Item>
+                      )}
+                    </Descriptions>
+                    <Divider titlePlacement="start" plain>
+                      输入给模型的消息
+                    </Divider>
+                    {trace.request_messages.map((message, messageIndex) => (
+                      <div
+                        className="model-trace-message"
+                        key={`${message.role}-${messageIndex}`}
+                      >
+                        <Space>
+                          <Tag>{message.role}</Tag>
+                          {message.content_truncated && (
+                            <Tag color="orange">已截断</Tag>
+                          )}
+                        </Space>
+                        <pre className="model-trace-content">
+                          {message.content}
+                        </pre>
+                      </div>
+                    ))}
+                    <Divider titlePlacement="start" plain>
+                      模型原始输出
+                    </Divider>
+                    {trace.response_content === null ? (
+                      <Typography.Text type="secondary">
+                        Provider 未返回可展示的 message.content。
+                      </Typography.Text>
+                    ) : (
+                      <>
+                        {trace.response_content_truncated && (
+                          <Alert
+                            type="warning"
+                            showIcon
+                            title="原始输出超过诊断上限，页面仅显示前 64,000 个字符"
+                          />
+                        )}
+                        <pre className="model-trace-content">
+                          {trace.response_content}
+                        </pre>
+                      </>
+                    )}
+                  </Card>
+                ))
+              ) : (
+                <Empty description="尚无模型调用记录" />
+              )}
+            </div>
+          ),
+        },
+      ]}
+    />
   );
 }
 

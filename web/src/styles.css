@@ -249,6 +249,32 @@ input {
   margin-top: 2px;
 }
 
+.model-trace-list {
+  display: grid;
+  gap: 14px;
+}
+
+.model-trace-message {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.model-trace-content {
+  max-height: 340px;
+  margin: 0;
+  padding: 12px;
+  overflow: auto;
+  color: #24312b;
+  font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #f6f8f6;
+  border: 1px solid #e2e7e3;
+  border-radius: 7px;
+}
+
 .intent-card {
   border-color: #dce8e2;
   background: #fbfdfc;

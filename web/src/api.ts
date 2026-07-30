@@ -140,6 +140,42 @@ export interface GovernanceCase {
   } | null;
 }
 
+export interface GovernanceModelTraceMessage {
+  role: string;
+  content: string;
+  content_truncated: boolean;
+}
+
+export interface GovernanceModelTraceAttempt {
+  stage:
+    | "INTENT_DRAFT"
+    | "INTENT_CLARIFICATION"
+    | "SEMANTIC_RECOMMENDATION";
+  attempt: number;
+  provider: string;
+  model: string;
+  prompt_version: string;
+  thinking_status: "DISABLED";
+  request_messages: GovernanceModelTraceMessage[];
+  response_content: string | null;
+  response_content_truncated: boolean;
+  validation_status: "PASSED" | "FAILED";
+  validation_error_code: string | null;
+  usage: {
+    prompt_tokens?: number | null;
+    completion_tokens?: number | null;
+    total_tokens?: number | null;
+  } | null;
+}
+
+export interface GovernanceModelTraceView {
+  schema_version: "workbench-model-trace-view.v1";
+  case_ref: string;
+  model_mode: GovernanceModelMode;
+  thinking_status: "DISABLED";
+  items: GovernanceModelTraceAttempt[];
+}
+
 export interface GovernanceCaseCreateInput {
   resource_id: string;
   version: string;
@@ -234,6 +270,14 @@ export async function fetchGovernanceCase(
 ): Promise<GovernanceCase> {
   return requestJSON<GovernanceCase>(
     `/api/v1/governance/cases/${encodeURIComponent(caseRef)}`,
+  );
+}
+
+export async function fetchGovernanceModelTraces(
+  caseRef: string,
+): Promise<GovernanceModelTraceView> {
+  return requestJSON<GovernanceModelTraceView>(
+    `/api/v1/governance/cases/${encodeURIComponent(caseRef)}/model-traces`,
   );
 }
 

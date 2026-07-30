@@ -1,0 +1,248 @@
+{
+  "allowed_facets_by_subject": {
+    "ql-006": [
+      {
+        "cardinality": "SINGLE",
+        "name": "载体类别",
+        "node_id": "ql-022",
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "name": "馆藏册数",
+        "node_id": "ql-023",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "name": "默认外借许可",
+        "node_id": "ql-024",
+        "value_type": "boolean"
+      }
+    ],
+    "ql-007": [
+      {
+        "cardinality": "MULTIPLE",
+        "name": "刊期",
+        "node_id": "ql-025",
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "name": "缺期标记",
+        "node_id": "ql-026",
+        "value_type": "boolean"
+      }
+    ],
+    "ql-008": [
+      {
+        "cardinality": "MULTIPLE",
+        "name": "文件格式",
+        "node_id": "ql-027",
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "name": "并发席位",
+        "node_id": "ql-028",
+        "value_type": "integer"
+      }
+    ],
+    "ql-009": [
+      {
+        "cardinality": "MULTIPLE",
+        "name": "开放时间",
+        "node_id": "ql-029",
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "name": "座位容量",
+        "node_id": "ql-030",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "name": "预约要求",
+        "node_id": "ql-031",
+        "value_type": "boolean"
+      }
+    ],
+    "ql-010": [
+      {
+        "cardinality": "MULTIPLE",
+        "name": "开放时间",
+        "node_id": "ql-032",
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "name": "设备清单",
+        "node_id": "ql-033",
+        "value_type": "string"
+      }
+    ],
+    "ql-011": [
+      {
+        "cardinality": "SINGLE",
+        "name": "活动容量",
+        "node_id": "ql-034",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "name": "无障碍入口",
+        "node_id": "ql-035",
+        "value_type": "boolean"
+      }
+    ],
+    "ql-012": [
+      {
+        "cardinality": "SINGLE",
+        "name": "借阅册数",
+        "node_id": "ql-036",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "name": "借阅期限",
+        "node_id": "ql-037",
+        "value_type": "integer"
+      }
+    ],
+    "ql-013": [
+      {
+        "cardinality": "SINGLE",
+        "name": "预约时段",
+        "node_id": "ql-038",
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "name": "参与人数",
+        "node_id": "ql-039",
+        "value_type": "integer"
+      }
+    ],
+    "ql-014": [
+      {
+        "cardinality": "SINGLE",
+        "name": "咨询主题",
+        "node_id": "ql-040",
+        "value_type": "string"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "name": "回复渠道",
+        "node_id": "ql-041",
+        "value_type": "string"
+      }
+    ],
+    "ql-015": [
+      {
+        "cardinality": "SINGLE",
+        "name": "活动场次",
+        "node_id": "ql-042",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "name": "报名人数",
+        "node_id": "ql-043",
+        "value_type": "integer"
+      }
+    ],
+    "ql-016": [
+      {
+        "cardinality": "SINGLE",
+        "name": "活动场次",
+        "node_id": "ql-044",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "name": "材料清单",
+        "node_id": "ql-045",
+        "value_type": "string"
+      }
+    ],
+    "ql-017": [
+      {
+        "cardinality": "SINGLE",
+        "name": "展览周期",
+        "node_id": "ql-046",
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "name": "展项数量",
+        "node_id": "ql-047",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "name": "导览时段",
+        "node_id": "ql-048",
+        "value_type": "time_code"
+      }
+    ]
+  },
+  "blueprint_version": "qinglan-library-blueprint.v2",
+  "dataset_ref": "fictional-qinglan-library-control-v1",
+  "node_families": {
+    "blueprint_background": [
+      "ql-018",
+      "ql-019",
+      "ql-020",
+      "ql-021",
+      "ql-022",
+      "ql-024",
+      "ql-025",
+      "ql-026",
+      "ql-027",
+      "ql-028",
+      "ql-030",
+      "ql-031",
+      "ql-033",
+      "ql-035",
+      "ql-037",
+      "ql-040",
+      "ql-041",
+      "ql-043",
+      "ql-044",
+      "ql-045",
+      "ql-046",
+      "ql-047",
+      "ql-048"
+    ],
+    "curated_core": [
+      "ql-001",
+      "ql-002",
+      "ql-003",
+      "ql-004",
+      "ql-005",
+      "ql-006",
+      "ql-007",
+      "ql-008",
+      "ql-009",
+      "ql-010",
+      "ql-011",
+      "ql-012",
+      "ql-013",
+      "ql-014",
+      "ql-015",
+      "ql-016",
+      "ql-017",
+      "ql-023",
+      "ql-029",
+      "ql-032",
+      "ql-034",
+      "ql-036",
+      "ql-038",
+      "ql-039",
+      "ql-042"
+    ],
+    "stress_only_filler": []
+  },
+  "source_class": "CLEANROOM_SYNTHETIC"
+}

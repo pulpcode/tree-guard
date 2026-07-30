@@ -1,0 +1,120 @@
+{
+  "cells": [
+    {
+      "challenge_tags": [
+        "clear_intent",
+        "category_scope"
+      ],
+      "expected_observable_category": "STABLE_CANDIDATE",
+      "primary_risk": "CLEAR_INTENT",
+      "primary_role": "DOMAIN_CONTROL",
+      "scenario_ref": "QL-C01"
+    },
+    {
+      "challenge_tags": [
+        "homonym",
+        "type_signal"
+      ],
+      "expected_observable_category": "NEED_CLARIFICATION",
+      "primary_risk": "HOMONYM",
+      "primary_role": "DOMAIN_CONTROL",
+      "scenario_ref": "QL-C02"
+    },
+    {
+      "challenge_tags": [
+        "cross_branch"
+      ],
+      "expected_observable_category": "CONFLICT_VISIBLE",
+      "primary_risk": "CROSS_BRANCH",
+      "primary_role": "DOMAIN_CONTROL",
+      "scenario_ref": "QL-C03"
+    },
+    {
+      "challenge_tags": [
+        "kind_conflict"
+      ],
+      "expected_observable_category": "CONFLICT_VISIBLE",
+      "primary_risk": "KIND_CONFLICT",
+      "primary_role": "DOMAIN_CONTROL",
+      "scenario_ref": "QL-C04"
+    },
+    {
+      "challenge_tags": [
+        "cardinality_conflict"
+      ],
+      "expected_observable_category": "CONFLICT_VISIBLE",
+      "primary_risk": "CARDINALITY_CONFLICT",
+      "primary_role": "DOMAIN_CONTROL",
+      "scenario_ref": "QL-C05"
+    },
+    {
+      "challenge_tags": [
+        "wrong_parent_hint"
+      ],
+      "expected_observable_category": "CONFLICT_VISIBLE",
+      "primary_risk": "WRONG_PARENT_HINT",
+      "primary_role": "DOMAIN_CONTROL",
+      "scenario_ref": "QL-C06"
+    },
+    {
+      "challenge_tags": [
+        "near_name_negative"
+      ],
+      "expected_observable_category": "STABLE_CANDIDATE",
+      "primary_risk": "NEAR_NAME_HARD_NEGATIVE",
+      "primary_role": "DOMAIN_CONTROL",
+      "scenario_ref": "QL-C07"
+    },
+    {
+      "challenge_tags": [
+        "insufficient_evidence",
+        "judgment_requires_evidence"
+      ],
+      "expected_observable_category": "NEED_EVIDENCE",
+      "primary_risk": "INSUFFICIENT_EVIDENCE",
+      "primary_role": "DOMAIN_CONTROL",
+      "scenario_ref": "QL-C08"
+    },
+    {
+      "challenge_tags": [
+        "clarification_required"
+      ],
+      "expected_observable_category": "NEED_CLARIFICATION",
+      "primary_risk": "CLARIFICATION_REQUIRED",
+      "primary_role": "DOMAIN_CONTROL",
+      "scenario_ref": "QL-C09"
+    },
+    {
+      "challenge_tags": [
+        "cartesian_request",
+        "refusal"
+      ],
+      "expected_observable_category": "REFUSE_UNBOUNDED_COMBINATION",
+      "primary_risk": "REFUSAL",
+      "primary_role": "DOMAIN_CONTROL",
+      "scenario_ref": "QL-C10"
+    },
+    {
+      "challenge_tags": [
+        "near_duplicate_subtree",
+        "unusual_depth"
+      ],
+      "expected_observable_category": "NEED_EVIDENCE",
+      "primary_risk": "STRUCTURAL_ANOMALY_JUDGMENT",
+      "primary_role": "DOMAIN_CONTROL",
+      "scenario_ref": "QL-C11"
+    },
+    {
+      "challenge_tags": [
+        "small_tree_replay_baseline"
+      ],
+      "expected_observable_category": "STABLE_CANDIDATE",
+      "primary_risk": "REPLAY_BASELINE_ANCHOR",
+      "primary_role": "DOMAIN_CONTROL",
+      "scenario_ref": "QL-C12"
+    }
+  ],
+  "coverage_version": "fictional-coverage-matrix.v1",
+  "dataset_ref": "fictional-qinglan-library-control-v1",
+  "tree_size_bucket": "SMALL_40_60"
+}

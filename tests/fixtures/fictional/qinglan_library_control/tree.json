@@ -1,0 +1,865 @@
+{
+  "map_topology": {
+    "QINGLAN_COMMUNITY_LIBRARY": {
+      "metadata": {
+        "extension": {
+          "dataset_family": "curated_core"
+        },
+        "node_id": "ql-001",
+        "node_label": "QINGLAN_COMMUNITY_LIBRARY",
+        "node_label_route": "QINGLAN_COMMUNITY_LIBRARY",
+        "node_name": "青岚社区图书馆",
+        "node_order": 1,
+        "node_type": "concept",
+        "parent_node_id": null
+      },
+      "subnodes": {
+        "COLLECTION_RESOURCES": {
+          "metadata": {
+            "extension": {
+              "dataset_family": "curated_core"
+            },
+            "node_id": "ql-002",
+            "node_label": "COLLECTION_RESOURCES",
+            "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/COLLECTION_RESOURCES",
+            "node_name": "馆藏资源",
+            "node_order": 1,
+            "node_type": "concept",
+            "parent_node_id": "ql-001"
+          },
+          "subnodes": {
+            "DIGITAL_MATERIALS": {
+              "metadata": {
+                "extension": {
+                  "dataset_family": "curated_core"
+                },
+                "node_id": "ql-008",
+                "node_label": "DIGITAL_MATERIALS",
+                "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/COLLECTION_RESOURCES/-/DIGITAL_MATERIALS",
+                "node_name": "数字资料",
+                "node_order": 3,
+                "node_type": "concept",
+                "parent_node_id": "ql-002"
+              },
+              "subnodes": {
+                "CONCURRENT_SEATS": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-028",
+                    "node_label": "CONCURRENT_SEATS",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/COLLECTION_RESOURCES/-/DIGITAL_MATERIALS/-/CONCURRENT_SEATS",
+                    "node_name": "并发席位",
+                    "node_order": 2,
+                    "node_type": "property",
+                    "parent_node_id": "ql-008",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "integer"
+                  },
+                  "subnodes": {}
+                },
+                "FILE_FORMAT": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": true,
+                    "node_id": "ql-027",
+                    "node_label": "FILE_FORMAT",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/COLLECTION_RESOURCES/-/DIGITAL_MATERIALS/-/FILE_FORMAT",
+                    "node_name": "文件格式",
+                    "node_order": 1,
+                    "node_type": "property",
+                    "parent_node_id": "ql-008",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "string"
+                  },
+                  "subnodes": {}
+                }
+              }
+            },
+            "PRINT_MATERIALS": {
+              "metadata": {
+                "extension": {
+                  "dataset_family": "curated_core"
+                },
+                "node_id": "ql-006",
+                "node_label": "PRINT_MATERIALS",
+                "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/COLLECTION_RESOURCES/-/PRINT_MATERIALS",
+                "node_name": "纸本文献",
+                "node_order": 1,
+                "node_type": "concept",
+                "parent_node_id": "ql-002"
+              },
+              "subnodes": {
+                "CIRCULATION_RULES": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "node_id": "ql-018",
+                    "node_label": "CIRCULATION_RULES",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/COLLECTION_RESOURCES/-/PRINT_MATERIALS/-/CIRCULATION_RULES",
+                    "node_name": "流通规则",
+                    "node_order": 1,
+                    "node_type": "concept",
+                    "parent_node_id": "ql-006"
+                  },
+                  "subnodes": {
+                    "DEFAULT_LOAN_PERMISSION": {
+                      "metadata": {
+                        "extension": {
+                          "dataset_family": "blueprint_background"
+                        },
+                        "is_list": false,
+                        "node_id": "ql-024",
+                        "node_label": "DEFAULT_LOAN_PERMISSION",
+                        "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/COLLECTION_RESOURCES/-/PRINT_MATERIALS/-/CIRCULATION_RULES/-/DEFAULT_LOAN_PERMISSION",
+                        "node_name": "默认外借许可",
+                        "node_order": 1,
+                        "node_type": "property",
+                        "parent_node_id": "ql-018",
+                        "value_constraints": {},
+                        "value_placeholder": null,
+                        "value_type": "boolean"
+                      },
+                      "subnodes": {}
+                    }
+                  }
+                },
+                "HOLDING_COUNT": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "curated_core"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-023",
+                    "node_label": "HOLDING_COUNT",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/COLLECTION_RESOURCES/-/PRINT_MATERIALS/-/HOLDING_COUNT",
+                    "node_name": "馆藏册数",
+                    "node_order": 3,
+                    "node_type": "property",
+                    "parent_node_id": "ql-006",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "integer"
+                  },
+                  "subnodes": {}
+                },
+                "MEDIA_CATEGORY": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-022",
+                    "node_label": "MEDIA_CATEGORY",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/COLLECTION_RESOURCES/-/PRINT_MATERIALS/-/MEDIA_CATEGORY",
+                    "node_name": "载体类别",
+                    "node_order": 2,
+                    "node_type": "property",
+                    "parent_node_id": "ql-006",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "string"
+                  },
+                  "subnodes": {}
+                }
+              }
+            },
+            "SERIAL_PUBLICATIONS": {
+              "metadata": {
+                "extension": {
+                  "dataset_family": "curated_core"
+                },
+                "node_id": "ql-007",
+                "node_label": "SERIAL_PUBLICATIONS",
+                "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/COLLECTION_RESOURCES/-/SERIAL_PUBLICATIONS",
+                "node_name": "连载刊物",
+                "node_order": 2,
+                "node_type": "concept",
+                "parent_node_id": "ql-002"
+              },
+              "subnodes": {
+                "ISSUE_PATTERN": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": true,
+                    "node_id": "ql-025",
+                    "node_label": "ISSUE_PATTERN",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/COLLECTION_RESOURCES/-/SERIAL_PUBLICATIONS/-/ISSUE_PATTERN",
+                    "node_name": "刊期",
+                    "node_order": 1,
+                    "node_type": "property",
+                    "parent_node_id": "ql-007",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "string"
+                  },
+                  "subnodes": {}
+                },
+                "MISSING_ISSUE_FLAG": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-026",
+                    "node_label": "MISSING_ISSUE_FLAG",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/COLLECTION_RESOURCES/-/SERIAL_PUBLICATIONS/-/MISSING_ISSUE_FLAG",
+                    "node_name": "缺期标记",
+                    "node_order": 2,
+                    "node_type": "property",
+                    "parent_node_id": "ql-007",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "boolean"
+                  },
+                  "subnodes": {}
+                }
+              }
+            }
+          }
+        },
+        "PUBLIC_PROGRAMS": {
+          "metadata": {
+            "extension": {
+              "dataset_family": "curated_core"
+            },
+            "node_id": "ql-005",
+            "node_label": "PUBLIC_PROGRAMS",
+            "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/PUBLIC_PROGRAMS",
+            "node_name": "公共活动",
+            "node_order": 4,
+            "node_type": "concept",
+            "parent_node_id": "ql-001"
+          },
+          "subnodes": {
+            "COMMUNITY_EXHIBITION": {
+              "metadata": {
+                "extension": {
+                  "dataset_family": "curated_core"
+                },
+                "node_id": "ql-017",
+                "node_label": "COMMUNITY_EXHIBITION",
+                "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/PUBLIC_PROGRAMS/-/COMMUNITY_EXHIBITION",
+                "node_name": "社区展览",
+                "node_order": 3,
+                "node_type": "concept",
+                "parent_node_id": "ql-005"
+              },
+              "subnodes": {
+                "EXHIBITION_PERIOD": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-046",
+                    "node_label": "EXHIBITION_PERIOD",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/PUBLIC_PROGRAMS/-/COMMUNITY_EXHIBITION/-/EXHIBITION_PERIOD",
+                    "node_name": "展览周期",
+                    "node_order": 2,
+                    "node_type": "property",
+                    "parent_node_id": "ql-017",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "time_code"
+                  },
+                  "subnodes": {}
+                },
+                "EXHIBIT_COUNT": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-047",
+                    "node_label": "EXHIBIT_COUNT",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/PUBLIC_PROGRAMS/-/COMMUNITY_EXHIBITION/-/EXHIBIT_COUNT",
+                    "node_name": "展项数量",
+                    "node_order": 3,
+                    "node_type": "property",
+                    "parent_node_id": "ql-017",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "integer"
+                  },
+                  "subnodes": {}
+                },
+                "GUIDE_ARRANGEMENT": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "node_id": "ql-021",
+                    "node_label": "GUIDE_ARRANGEMENT",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/PUBLIC_PROGRAMS/-/COMMUNITY_EXHIBITION/-/GUIDE_ARRANGEMENT",
+                    "node_name": "导览安排",
+                    "node_order": 1,
+                    "node_type": "concept",
+                    "parent_node_id": "ql-017"
+                  },
+                  "subnodes": {
+                    "GUIDE_SLOT": {
+                      "metadata": {
+                        "extension": {
+                          "dataset_family": "blueprint_background"
+                        },
+                        "is_list": true,
+                        "node_id": "ql-048",
+                        "node_label": "GUIDE_SLOT",
+                        "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/PUBLIC_PROGRAMS/-/COMMUNITY_EXHIBITION/-/GUIDE_ARRANGEMENT/-/GUIDE_SLOT",
+                        "node_name": "导览时段",
+                        "node_order": 1,
+                        "node_type": "property",
+                        "parent_node_id": "ql-021",
+                        "value_constraints": {},
+                        "value_placeholder": null,
+                        "value_type": "time_code"
+                      },
+                      "subnodes": {}
+                    }
+                  }
+                }
+              }
+            },
+            "CRAFT_WORKSHOP": {
+              "metadata": {
+                "extension": {
+                  "dataset_family": "curated_core"
+                },
+                "node_id": "ql-016",
+                "node_label": "CRAFT_WORKSHOP",
+                "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/PUBLIC_PROGRAMS/-/CRAFT_WORKSHOP",
+                "node_name": "手作工作坊",
+                "node_order": 2,
+                "node_type": "concept",
+                "parent_node_id": "ql-005"
+              },
+              "subnodes": {
+                "MATERIAL_LIST": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": true,
+                    "node_id": "ql-045",
+                    "node_label": "MATERIAL_LIST",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/PUBLIC_PROGRAMS/-/CRAFT_WORKSHOP/-/MATERIAL_LIST",
+                    "node_name": "材料清单",
+                    "node_order": 2,
+                    "node_type": "property",
+                    "parent_node_id": "ql-016",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "string"
+                  },
+                  "subnodes": {}
+                },
+                "SESSION_COUNT": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-044",
+                    "node_label": "SESSION_COUNT",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/PUBLIC_PROGRAMS/-/CRAFT_WORKSHOP/-/SESSION_COUNT",
+                    "node_name": "活动场次",
+                    "node_order": 1,
+                    "node_type": "property",
+                    "parent_node_id": "ql-016",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "integer"
+                  },
+                  "subnodes": {}
+                }
+              }
+            },
+            "READING_CIRCLE": {
+              "metadata": {
+                "extension": {
+                  "dataset_family": "curated_core"
+                },
+                "node_id": "ql-015",
+                "node_label": "READING_CIRCLE",
+                "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/PUBLIC_PROGRAMS/-/READING_CIRCLE",
+                "node_name": "阅读分享会",
+                "node_order": 1,
+                "node_type": "concept",
+                "parent_node_id": "ql-005"
+              },
+              "subnodes": {
+                "REGISTRATION_COUNT": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-043",
+                    "node_label": "REGISTRATION_COUNT",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/PUBLIC_PROGRAMS/-/READING_CIRCLE/-/REGISTRATION_COUNT",
+                    "node_name": "报名人数",
+                    "node_order": 2,
+                    "node_type": "property",
+                    "parent_node_id": "ql-015",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "integer"
+                  },
+                  "subnodes": {}
+                },
+                "SESSION_COUNT": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "curated_core"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-042",
+                    "node_label": "SESSION_COUNT",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/PUBLIC_PROGRAMS/-/READING_CIRCLE/-/SESSION_COUNT",
+                    "node_name": "活动场次",
+                    "node_order": 1,
+                    "node_type": "property",
+                    "parent_node_id": "ql-015",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "integer"
+                  },
+                  "subnodes": {}
+                }
+              }
+            }
+          }
+        },
+        "READER_SERVICES": {
+          "metadata": {
+            "extension": {
+              "dataset_family": "curated_core"
+            },
+            "node_id": "ql-004",
+            "node_label": "READER_SERVICES",
+            "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/READER_SERVICES",
+            "node_name": "读者服务",
+            "node_order": 3,
+            "node_type": "concept",
+            "parent_node_id": "ql-001"
+          },
+          "subnodes": {
+            "LENDING_SERVICE": {
+              "metadata": {
+                "extension": {
+                  "dataset_family": "curated_core"
+                },
+                "node_id": "ql-012",
+                "node_label": "LENDING_SERVICE",
+                "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/READER_SERVICES/-/LENDING_SERVICE",
+                "node_name": "借阅办理",
+                "node_order": 1,
+                "node_type": "concept",
+                "parent_node_id": "ql-004"
+              },
+              "subnodes": {
+                "LOAN_LIMIT": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "curated_core"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-036",
+                    "node_label": "LOAN_LIMIT",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/READER_SERVICES/-/LENDING_SERVICE/-/LOAN_LIMIT",
+                    "node_name": "借阅册数",
+                    "node_order": 1,
+                    "node_type": "property",
+                    "parent_node_id": "ql-012",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "integer"
+                  },
+                  "subnodes": {}
+                },
+                "LOAN_PERIOD": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-037",
+                    "node_label": "LOAN_PERIOD",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/READER_SERVICES/-/LENDING_SERVICE/-/LOAN_PERIOD",
+                    "node_name": "借阅期限",
+                    "node_order": 2,
+                    "node_type": "property",
+                    "parent_node_id": "ql-012",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "integer"
+                  },
+                  "subnodes": {}
+                }
+              }
+            },
+            "REFERENCE_HELP": {
+              "metadata": {
+                "extension": {
+                  "dataset_family": "curated_core"
+                },
+                "node_id": "ql-014",
+                "node_label": "REFERENCE_HELP",
+                "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/READER_SERVICES/-/REFERENCE_HELP",
+                "node_name": "咨询协助",
+                "node_order": 3,
+                "node_type": "concept",
+                "parent_node_id": "ql-004"
+              },
+              "subnodes": {
+                "QUESTION_TOPIC": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-040",
+                    "node_label": "QUESTION_TOPIC",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/READER_SERVICES/-/REFERENCE_HELP/-/QUESTION_TOPIC",
+                    "node_name": "咨询主题",
+                    "node_order": 1,
+                    "node_type": "property",
+                    "parent_node_id": "ql-014",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "string"
+                  },
+                  "subnodes": {}
+                },
+                "RESPONSE_CHANNEL": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": true,
+                    "node_id": "ql-041",
+                    "node_label": "RESPONSE_CHANNEL",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/READER_SERVICES/-/REFERENCE_HELP/-/RESPONSE_CHANNEL",
+                    "node_name": "回复渠道",
+                    "node_order": 2,
+                    "node_type": "property",
+                    "parent_node_id": "ql-014",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "string"
+                  },
+                  "subnodes": {}
+                }
+              }
+            },
+            "SPACE_RESERVATION": {
+              "metadata": {
+                "extension": {
+                  "dataset_family": "curated_core"
+                },
+                "node_id": "ql-013",
+                "node_label": "SPACE_RESERVATION",
+                "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/READER_SERVICES/-/SPACE_RESERVATION",
+                "node_name": "空间预约",
+                "node_order": 2,
+                "node_type": "concept",
+                "parent_node_id": "ql-004"
+              },
+              "subnodes": {
+                "PARTICIPANT_COUNT": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "curated_core"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-039",
+                    "node_label": "PARTICIPANT_COUNT",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/READER_SERVICES/-/SPACE_RESERVATION/-/PARTICIPANT_COUNT",
+                    "node_name": "参与人数",
+                    "node_order": 2,
+                    "node_type": "property",
+                    "parent_node_id": "ql-013",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "integer"
+                  },
+                  "subnodes": {}
+                },
+                "RESERVATION_WINDOW": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "node_id": "ql-020",
+                    "node_label": "RESERVATION_WINDOW",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/READER_SERVICES/-/SPACE_RESERVATION/-/RESERVATION_WINDOW",
+                    "node_name": "预约窗口",
+                    "node_order": 1,
+                    "node_type": "concept",
+                    "parent_node_id": "ql-013"
+                  },
+                  "subnodes": {
+                    "RESERVATION_SLOT": {
+                      "metadata": {
+                        "extension": {
+                          "dataset_family": "curated_core"
+                        },
+                        "is_list": false,
+                        "node_id": "ql-038",
+                        "node_label": "RESERVATION_SLOT",
+                        "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/READER_SERVICES/-/SPACE_RESERVATION/-/RESERVATION_WINDOW/-/RESERVATION_SLOT",
+                        "node_name": "预约时段",
+                        "node_order": 1,
+                        "node_type": "property",
+                        "parent_node_id": "ql-020",
+                        "value_constraints": {},
+                        "value_placeholder": null,
+                        "value_type": "time_code"
+                      },
+                      "subnodes": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "SERVICE_SPACES": {
+          "metadata": {
+            "extension": {
+              "dataset_family": "curated_core"
+            },
+            "node_id": "ql-003",
+            "node_label": "SERVICE_SPACES",
+            "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/SERVICE_SPACES",
+            "node_name": "服务空间",
+            "node_order": 2,
+            "node_type": "concept",
+            "parent_node_id": "ql-001"
+          },
+          "subnodes": {
+            "GROUP_STUDY_ROOM": {
+              "metadata": {
+                "extension": {
+                  "dataset_family": "curated_core"
+                },
+                "node_id": "ql-010",
+                "node_label": "GROUP_STUDY_ROOM",
+                "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/SERVICE_SPACES/-/GROUP_STUDY_ROOM",
+                "node_name": "小组研讨室",
+                "node_order": 2,
+                "node_type": "concept",
+                "parent_node_id": "ql-003"
+              },
+              "subnodes": {
+                "EQUIPMENT_LIST": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": true,
+                    "node_id": "ql-033",
+                    "node_label": "EQUIPMENT_LIST",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/SERVICE_SPACES/-/GROUP_STUDY_ROOM/-/EQUIPMENT_LIST",
+                    "node_name": "设备清单",
+                    "node_order": 2,
+                    "node_type": "property",
+                    "parent_node_id": "ql-010",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "string"
+                  },
+                  "subnodes": {}
+                },
+                "OPEN_HOURS": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "curated_core"
+                    },
+                    "is_list": true,
+                    "node_id": "ql-032",
+                    "node_label": "OPEN_HOURS",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/SERVICE_SPACES/-/GROUP_STUDY_ROOM/-/OPEN_HOURS",
+                    "node_name": "开放时间",
+                    "node_order": 1,
+                    "node_type": "property",
+                    "parent_node_id": "ql-010",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "time_code"
+                  },
+                  "subnodes": {}
+                }
+              }
+            },
+            "MULTIPURPOSE_HALL": {
+              "metadata": {
+                "extension": {
+                  "dataset_family": "curated_core"
+                },
+                "node_id": "ql-011",
+                "node_label": "MULTIPURPOSE_HALL",
+                "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/SERVICE_SPACES/-/MULTIPURPOSE_HALL",
+                "node_name": "多用途活动厅",
+                "node_order": 3,
+                "node_type": "concept",
+                "parent_node_id": "ql-003"
+              },
+              "subnodes": {
+                "ACCESSIBLE_ENTRANCE": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-035",
+                    "node_label": "ACCESSIBLE_ENTRANCE",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/SERVICE_SPACES/-/MULTIPURPOSE_HALL/-/ACCESSIBLE_ENTRANCE",
+                    "node_name": "无障碍入口",
+                    "node_order": 2,
+                    "node_type": "property",
+                    "parent_node_id": "ql-011",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "boolean"
+                  },
+                  "subnodes": {}
+                },
+                "EVENT_CAPACITY": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "curated_core"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-034",
+                    "node_label": "EVENT_CAPACITY",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/SERVICE_SPACES/-/MULTIPURPOSE_HALL/-/EVENT_CAPACITY",
+                    "node_name": "活动容量",
+                    "node_order": 1,
+                    "node_type": "property",
+                    "parent_node_id": "ql-011",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "integer"
+                  },
+                  "subnodes": {}
+                }
+              }
+            },
+            "QUIET_READING_AREA": {
+              "metadata": {
+                "extension": {
+                  "dataset_family": "curated_core"
+                },
+                "node_id": "ql-009",
+                "node_label": "QUIET_READING_AREA",
+                "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/SERVICE_SPACES/-/QUIET_READING_AREA",
+                "node_name": "静音阅览区",
+                "node_order": 1,
+                "node_type": "concept",
+                "parent_node_id": "ql-003"
+              },
+              "subnodes": {
+                "OPEN_HOURS": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "curated_core"
+                    },
+                    "is_list": true,
+                    "node_id": "ql-029",
+                    "node_label": "OPEN_HOURS",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/SERVICE_SPACES/-/QUIET_READING_AREA/-/OPEN_HOURS",
+                    "node_name": "开放时间",
+                    "node_order": 2,
+                    "node_type": "property",
+                    "parent_node_id": "ql-009",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "time_code"
+                  },
+                  "subnodes": {}
+                },
+                "SEAT_CAPACITY": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "is_list": false,
+                    "node_id": "ql-030",
+                    "node_label": "SEAT_CAPACITY",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/SERVICE_SPACES/-/QUIET_READING_AREA/-/SEAT_CAPACITY",
+                    "node_name": "座位容量",
+                    "node_order": 3,
+                    "node_type": "property",
+                    "parent_node_id": "ql-009",
+                    "value_constraints": {},
+                    "value_placeholder": null,
+                    "value_type": "integer"
+                  },
+                  "subnodes": {}
+                },
+                "USE_ARRANGEMENT": {
+                  "metadata": {
+                    "extension": {
+                      "dataset_family": "blueprint_background"
+                    },
+                    "node_id": "ql-019",
+                    "node_label": "USE_ARRANGEMENT",
+                    "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/SERVICE_SPACES/-/QUIET_READING_AREA/-/USE_ARRANGEMENT",
+                    "node_name": "使用安排",
+                    "node_order": 1,
+                    "node_type": "concept",
+                    "parent_node_id": "ql-009"
+                  },
+                  "subnodes": {
+                    "RESERVATION_REQUIRED": {
+                      "metadata": {
+                        "extension": {
+                          "dataset_family": "blueprint_background"
+                        },
+                        "is_list": false,
+                        "node_id": "ql-031",
+                        "node_label": "RESERVATION_REQUIRED",
+                        "node_label_route": "QINGLAN_COMMUNITY_LIBRARY/-/SERVICE_SPACES/-/QUIET_READING_AREA/-/USE_ARRANGEMENT/-/RESERVATION_REQUIRED",
+                        "node_name": "预约要求",
+                        "node_order": 1,
+                        "node_type": "property",
+                        "parent_node_id": "ql-019",
+                        "value_constraints": {},
+                        "value_placeholder": null,
+                        "value_type": "boolean"
+                      },
+                      "subnodes": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "concurrent_version": 1,
+    "derived_from_real": false,
+    "fictional": true,
+    "gold_eligible": false,
+    "id": "qinglan-library-control-record-v2",
+    "map_id": "qinglan-library-control-tree",
+    "map_type": "resource",
+    "patch_eligible": false,
+    "source_class": "CLEANROOM_SYNTHETIC",
+    "version": "QL-1.1"
+  }
+}

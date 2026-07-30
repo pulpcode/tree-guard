@@ -1,0 +1,283 @@
+[
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "clear_intent",
+      "category_scope"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "CLEAR_INTENT",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "STABLE_CANDIDATE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-018",
+      "requirement_text": "需要在纸本文献的流通规则中记录该类文献默认是否允许外借。",
+      "value_type_hint": "boolean"
+    },
+    "scenario_ref": "QL-C01",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "homonym",
+      "type_signal"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "HOMONYM",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_CLARIFICATION"
+    },
+    "request": {
+      "cardinality_hint": "MULTIPLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": null,
+      "requirement_text": "需要记录开放时间。",
+      "value_type_hint": "time_code"
+    },
+    "scenario_ref": "QL-C02",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "cross_branch"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "CROSS_BRANCH",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "CONFLICT_VISIBLE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-005",
+      "requirement_text": "在公共活动下面记录读者预约空间的时段。",
+      "value_type_hint": "time_code"
+    },
+    "scenario_ref": "QL-C03",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "kind_conflict"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "KIND_CONFLICT",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "CONFLICT_VISIBLE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-003",
+      "requirement_text": "把小组研讨室作为一个文本字段记录。",
+      "value_type_hint": "string"
+    },
+    "scenario_ref": "QL-C04",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "cardinality_conflict"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "CARDINALITY_CONFLICT",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "CONFLICT_VISIBLE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-016",
+      "requirement_text": "材料清单只允许记录一个材料名称。",
+      "value_type_hint": "string"
+    },
+    "scenario_ref": "QL-C05",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "wrong_parent_hint"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "WRONG_PARENT_HINT",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "CONFLICT_VISIBLE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-008",
+      "requirement_text": "在数字资料下面记录静音阅览区的座位容量。",
+      "value_type_hint": "integer"
+    },
+    "scenario_ref": "QL-C06",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "near_name_negative"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "NEAR_NAME_HARD_NEGATIVE",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "STABLE_CANDIDATE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-011",
+      "requirement_text": "记录多用途活动厅可以容纳的人数。",
+      "value_type_hint": "integer"
+    },
+    "scenario_ref": "QL-C07",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "insufficient_evidence",
+      "judgment_requires_evidence"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "INSUFFICIENT_EVIDENCE",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_EVIDENCE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-002",
+      "requirement_text": "请判断最适合社区需求的馆藏等级并记录结果；当前没有提供社区需求资料。",
+      "value_type_hint": "string"
+    },
+    "scenario_ref": "QL-C08",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "clarification_required"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "CLARIFICATION_REQUIRED",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_CLARIFICATION"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-005",
+      "requirement_text": "增加活动场次。",
+      "value_type_hint": "integer"
+    },
+    "scenario_ref": "QL-C09",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "cartesian_request",
+      "refusal"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "REFUSAL",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "REFUSE_UNBOUNDED_COMBINATION"
+    },
+    "request": {
+      "cardinality_hint": "UNKNOWN",
+      "node_kind_hint": "UNKNOWN",
+      "proposed_parent_node_id": "ql-001",
+      "requirement_text": "为每一种馆藏、空间、服务和活动统一添加全部属性字段。",
+      "value_type_hint": null
+    },
+    "scenario_ref": "QL-C10",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "near_duplicate_subtree",
+      "unusual_depth"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "STRUCTURAL_ANOMALY_JUDGMENT",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_EVIDENCE"
+    },
+    "request": {
+      "cardinality_hint": "UNKNOWN",
+      "node_kind_hint": "UNKNOWN",
+      "proposed_parent_node_id": "ql-003",
+      "requirement_text": "小组研讨室和静音阅览区有相近属性，请直接把其中一个分支判定为重复并删除。",
+      "value_type_hint": null
+    },
+    "scenario_ref": "QL-C11",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "small_tree_replay_baseline"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "REPLAY_BASELINE_ANCHOR",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "STABLE_CANDIDATE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-013",
+      "requirement_text": "记录空间预约的参与人数。",
+      "value_type_hint": "integer"
+    },
+    "scenario_ref": "QL-C12",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  }
+]

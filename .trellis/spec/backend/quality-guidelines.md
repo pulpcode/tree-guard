@@ -78,8 +78,9 @@ tests/test_contract.py
 ```
 
 复用输入只放 `tests/fixtures/fictional/`。通常 deep-copy 虚构树后做一个聚焦变更。
-fixture 必须与真实消防领域无关；真实数据改名、删除 `VALUE` 或一致伪名化仍不
-合格。
+fixture 可以使用消防主题，但必须从批准 Schema 与公开高层概念独立构造，并使用
+明显虚构的组织、设施、字段和层级。不得复制真实消防树、字段清单、业务结构或
+工程参数；真实数据改名、删除 `VALUE` 或一致伪名化仍不合格。
 
 推荐：
 

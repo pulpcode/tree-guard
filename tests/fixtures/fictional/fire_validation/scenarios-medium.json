@@ -1,0 +1,962 @@
+{
+  "benchmark_role": "semantic_interference",
+  "dataset_id": "fictional-starbay-fire-validation",
+  "fictional": true,
+  "gold_eligible": false,
+  "items": [
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [
+          "需要记录虚构余温巡望节拍。"
+        ],
+        "evidence_gaps": [],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构余温巡望节拍",
+        "value_type": "string"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "CANDIDATES_READY",
+        "clarification_status": null,
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": "CONFIRMED",
+        "required_first_candidate_id": "ffv-core-001",
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "CLEAR_INTENT",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-forecast",
+        "requirement_text": "为完全虚构的星湾演练记录 clear-intent 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "clear-intent",
+      "semantic": {
+        "model_output": {
+          "candidate_assessments": [
+            {
+              "candidate_ref": "C001",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "SEMANTICALLY_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C002",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C003",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C004",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C005",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C006",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C007",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C008",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            }
+          ],
+          "clarification_question": null,
+          "evidence_gaps": [],
+          "rationale": "首个虚构候选与确认意图等价。",
+          "recommended_action": "USE_EXISTING_NODE",
+          "schema_version": "semantic-recommendation-model-output.v1",
+          "selected_candidate_ref": "C001",
+          "uncertainties": []
+        },
+        "review_decision": "CONFIRM_RECOMMENDATION"
+      }
+    },
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [
+          "需要记录虚构余温巡望节拍。"
+        ],
+        "evidence_gaps": [],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构余温巡望节拍",
+        "value_type": "string"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "CANDIDATES_READY",
+        "clarification_status": null,
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": "REJECTED",
+        "required_first_candidate_id": "ffv-core-001",
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "GLOBAL_BEATS_LOCAL",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-equipment",
+        "requirement_text": "为完全虚构的星湾演练记录 global-over-local 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "global-over-local",
+      "semantic": {
+        "model_output": {
+          "candidate_assessments": [
+            {
+              "candidate_ref": "C001",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "SEMANTICALLY_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C002",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C003",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C004",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C005",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C006",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C007",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C008",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            }
+          ],
+          "clarification_question": null,
+          "evidence_gaps": [],
+          "rationale": "首个虚构候选与确认意图等价。",
+          "recommended_action": "USE_EXISTING_NODE",
+          "schema_version": "semantic-recommendation-model-output.v1",
+          "selected_candidate_ref": "C001",
+          "uncertainties": []
+        },
+        "review_decision": "REJECT_RECOMMENDATION"
+      }
+    },
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [
+          "需要记录虚构泉幕储量刻度。"
+        ],
+        "evidence_gaps": [],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构泉幕储量刻度",
+        "value_type": "string"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "CANDIDATES_READY",
+        "clarification_status": null,
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": "ffv-core-013",
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "TYPE_CONFLICT",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-equipment",
+        "requirement_text": "为完全虚构的星湾演练记录 type-conflict 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "type-conflict",
+      "semantic": null
+    },
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "UNKNOWN",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "UNKNOWN",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": null,
+        "scenario": null,
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "quasarflux",
+        "value_type": null
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "NO_CANDIDATES",
+        "clarification_status": null,
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": null,
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "NO_CANDIDATES",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "为完全虚构的星湾演练记录 no-candidates 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": null
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "no-candidates",
+      "semantic": null
+    },
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "UNKNOWN",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "UNKNOWN",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": null,
+        "scenario": null,
+        "schema_version": "change-intent-model-output.v1",
+        "subject": null,
+        "value_type": null
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "INSUFFICIENT_SIGNAL",
+        "clarification_status": null,
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": null,
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "INSUFFICIENT_SIGNAL",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "为完全虚构的星湾演练记录 insufficient-signal 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": null
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "insufficient-signal",
+      "semantic": null
+    },
+    {
+      "clarification": {
+        "answer_text": "本次虚构验证使用星纹表现形式。",
+        "model_output": {
+          "assumptions": [],
+          "cardinality": "SINGLE",
+          "clarification_question": null,
+          "confirmed_facts": [
+            "需要记录虚构雾径导向标记。"
+          ],
+          "evidence_gaps": [],
+          "lifecycle": "单次虚构演练周期",
+          "node_kind": "PROPERTY",
+          "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+          "role": "虚构星湾演练信息",
+          "scenario": "完全虚构的星湾演练",
+          "schema_version": "change-intent-model-output.v1",
+          "subject": "虚构雾径导向标记",
+          "value_type": "string"
+        }
+      },
+      "flow": "CLARIFY",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": "虚构引导标记采用哪一种表现形式？",
+        "confirmed_facts": [
+          "需要记录虚构雾径导向标记。"
+        ],
+        "evidence_gaps": [
+          "尚未说明完全虚构的表现形式。"
+        ],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构雾径导向标记",
+        "value_type": "string"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "CANDIDATES_READY",
+        "clarification_status": "READY_FOR_HUMAN_REVIEW",
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "NEEDS_CLARIFICATION",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": "ffv-core-009",
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "CLARIFICATION_RESOLVES",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-guidance",
+        "requirement_text": "为完全虚构的星湾演练记录 clarify-resolves 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "clarify-resolves",
+      "semantic": null
+    },
+    {
+      "clarification": {
+        "answer_text": "本次虚构验证使用星纹表现形式。",
+        "model_output": {
+          "assumptions": [],
+          "cardinality": "SINGLE",
+          "clarification_question": "仍需确认虚构引导标记的表现形式吗？",
+          "confirmed_facts": [
+            "需要记录虚构雾径导向标记。"
+          ],
+          "evidence_gaps": [
+            "仍缺少一个完全虚构的表现形式。"
+          ],
+          "lifecycle": "单次虚构演练周期",
+          "node_kind": "PROPERTY",
+          "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+          "role": "虚构星湾演练信息",
+          "scenario": "完全虚构的星湾演练",
+          "schema_version": "change-intent-model-output.v1",
+          "subject": "虚构雾径导向标记",
+          "value_type": "string"
+        }
+      },
+      "flow": "CLARIFY",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": "虚构引导标记采用哪一种表现形式？",
+        "confirmed_facts": [
+          "需要记录虚构雾径导向标记。"
+        ],
+        "evidence_gaps": [
+          "尚未说明完全虚构的表现形式。"
+        ],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构雾径导向标记",
+        "value_type": "string"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": null,
+        "clarification_status": "CLARIFICATION_LIMIT_REACHED",
+        "confirmation_status": null,
+        "draft_status": "NEEDS_CLARIFICATION",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": null,
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "CLARIFICATION_LIMIT",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-guidance",
+        "requirement_text": "为完全虚构的星湾演练记录 clarify-stops 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_decision": null,
+      "scenario_ref": "clarify-stops",
+      "semantic": null
+    },
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [
+          "需要记录虚构初焰处置方式。"
+        ],
+        "evidence_gaps": [],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构初焰处置方式",
+        "value_type": "string"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": null,
+        "clarification_status": null,
+        "confirmation_status": "REJECTED",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": null,
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "HUMAN_REJECT",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-response",
+        "requirement_text": "为完全虚构的星湾演练记录 human-rejects 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_decision": "REJECT_DRAFT",
+      "scenario_ref": "human-rejects",
+      "semantic": null
+    },
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [
+          "需要记录虚构琥珀廊巡望状态。"
+        ],
+        "evidence_gaps": [],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构琥珀廊巡望状态",
+        "value_type": "string"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "CANDIDATES_READY",
+        "clarification_status": null,
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": "ffv-synthetic-0001",
+        "semantic_approval": false,
+        "semantic_error_code": "SEMANTIC_SELECTED_CANDIDATE_INVALID",
+        "semantic_projection_limit": 8
+      },
+      "purpose": "TOP8_OUT_OF_SCOPE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-forecast",
+        "requirement_text": "为完全虚构的星湾演练记录 generated-01 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "generated-01",
+      "semantic": {
+        "model_output": {
+          "candidate_assessments": [
+            {
+              "candidate_ref": "C001",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "SEMANTICALLY_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C002",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C003",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C004",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C005",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C006",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C007",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            },
+            {
+              "candidate_ref": "C008",
+              "reason": "已比较完全虚构的星湾候选。",
+              "relation": "NOT_EQUIVALENT"
+            }
+          ],
+          "clarification_question": null,
+          "evidence_gaps": [],
+          "rationale": "首个虚构候选与确认意图等价。",
+          "recommended_action": "USE_EXISTING_NODE",
+          "schema_version": "semantic-recommendation-model-output.v1",
+          "selected_candidate_ref": "C009",
+          "uncertainties": []
+        },
+        "review_decision": null
+      }
+    },
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [
+          "需要记录虚构琥珀廊巡望节拍。"
+        ],
+        "evidence_gaps": [],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构琥珀廊巡望节拍",
+        "value_type": "integer"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "CANDIDATES_READY",
+        "clarification_status": null,
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": "ffv-synthetic-0002",
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "SEMANTIC_HARD_NEGATIVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-alert",
+        "requirement_text": "为完全虚构的星湾演练记录 generated-02 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "integer"
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "generated-02",
+      "semantic": null
+    },
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [
+          "需要记录虚构琥珀廊巡望等级。"
+        ],
+        "evidence_gaps": [],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构琥珀廊巡望等级",
+        "value_type": "float"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "CANDIDATES_READY",
+        "clarification_status": null,
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": "ffv-synthetic-0003",
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "SEMANTIC_HARD_NEGATIVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-guidance",
+        "requirement_text": "为完全虚构的星湾演练记录 generated-03 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "float"
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "generated-03",
+      "semantic": null
+    },
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [
+          "需要记录虚构琥珀廊巡望数量。"
+        ],
+        "evidence_gaps": [],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构琥珀廊巡望数量",
+        "value_type": "boolean"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "CANDIDATES_READY",
+        "clarification_status": null,
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": "ffv-synthetic-0004",
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "SEMANTIC_HARD_NEGATIVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-equipment",
+        "requirement_text": "为完全虚构的星湾演练记录 generated-04 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "boolean"
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "generated-04",
+      "semantic": null
+    },
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [
+          "需要记录虚构琥珀廊巡望记录。"
+        ],
+        "evidence_gaps": [],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构琥珀廊巡望记录",
+        "value_type": "time_code"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "CANDIDATES_READY",
+        "clarification_status": null,
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": "ffv-synthetic-0005",
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "SEMANTIC_HARD_NEGATIVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-training",
+        "requirement_text": "为完全虚构的星湾演练记录 generated-05 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "time_code"
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "generated-05",
+      "semantic": null
+    },
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [
+          "需要记录虚构琥珀廊巡望方式。"
+        ],
+        "evidence_gaps": [],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构琥珀廊巡望方式",
+        "value_type": "string"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "CANDIDATES_READY",
+        "clarification_status": null,
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": "ffv-synthetic-0006",
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "SEMANTIC_HARD_NEGATIVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-response",
+        "requirement_text": "为完全虚构的星湾演练记录 generated-06 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "generated-06",
+      "semantic": null
+    },
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [
+          "需要记录虚构琥珀廊巡望时刻。"
+        ],
+        "evidence_gaps": [],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构琥珀廊巡望时刻",
+        "value_type": "integer"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "CANDIDATES_READY",
+        "clarification_status": null,
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": "ffv-synthetic-0007",
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "SEMANTIC_HARD_NEGATIVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-forecast",
+        "requirement_text": "为完全虚构的星湾演练记录 generated-07 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "integer"
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "generated-07",
+      "semantic": null
+    },
+    {
+      "clarification": null,
+      "flow": "DIRECT",
+      "initial_model_output": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [
+          "需要记录虚构琥珀廊巡望方位。"
+        ],
+        "evidence_gaps": [],
+        "lifecycle": "单次虚构演练周期",
+        "node_kind": "PROPERTY",
+        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+        "role": "虚构星湾演练信息",
+        "scenario": "完全虚构的星湾演练",
+        "schema_version": "change-intent-model-output.v1",
+        "subject": "虚构琥珀廊巡望方位",
+        "value_type": "float"
+      },
+      "oracle": {
+        "candidate_limit": 20,
+        "candidate_status": "CANDIDATES_READY",
+        "clarification_status": null,
+        "confirmation_status": "CONFIRMED_FOR_RETRIEVAL",
+        "draft_status": "READY_FOR_HUMAN_REVIEW",
+        "gold_eligible": false,
+        "patch_eligible": false,
+        "recommendation_status": null,
+        "required_first_candidate_id": "ffv-synthetic-0008",
+        "semantic_approval": false,
+        "semantic_error_code": null,
+        "semantic_projection_limit": 8
+      },
+      "purpose": "SEMANTIC_HARD_NEGATIVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "ffv-branch-alert",
+        "requirement_text": "为完全虚构的星湾演练记录 generated-08 信息。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "float"
+      },
+      "review_decision": "CONFIRM_FOR_RETRIEVAL",
+      "scenario_ref": "generated-08",
+      "semantic": null
+    }
+  ],
+  "scenario_count": 16,
+  "schema_version": "fictional-governance-scenarios.v1",
+  "tier": "medium"
+}

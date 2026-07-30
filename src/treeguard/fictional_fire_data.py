@@ -16,6 +16,12 @@ from typing import Any
 DATASET_SCHEMA_VERSION = "fictional-fire-validation-dataset.v1"
 SCENARIO_SCHEMA_VERSION = "fictional-governance-scenarios.v1"
 DATASET_ID = "fictional-starbay-fire-validation"
+FIRE_VALIDATION_CATEGORY_ID = "fictional-fire-validation-category"
+FIRE_VALIDATION_TIERS = ("small", "medium", "large")
+FIRE_VALIDATION_RESOURCE_IDS = {
+    tier: f"fictional-fire-{index:02d}-{tier}"
+    for index, tier in enumerate(FIRE_VALIDATION_TIERS, start=1)
+}
 TIER_SPECS = {
     "small": {
         "benchmark_role": "precision_contract",
@@ -242,6 +248,27 @@ def build_fictional_fire_tree(tier: str) -> dict[str, Any]:
             )
         },
     }
+
+
+def fire_validation_version(tier: str) -> str:
+    """Return the sole business version for one fictional validation tier."""
+
+    _tier_spec(tier)
+    return f"FFV-{tier.upper()}-V1"
+
+
+def fire_validation_record_id(tier: str) -> str:
+    """Return the sole version-record identifier for one fictional tier."""
+
+    _tier_spec(tier)
+    return f"ffv-record-{tier}-v1"
+
+
+def fire_validation_tree_id(tier: str) -> str:
+    """Return the canonical tree identifier for one fictional tier."""
+
+    _tier_spec(tier)
+    return f"ffv-map-{tier}"
 
 
 def build_fictional_fire_scenarios(tier: str) -> dict[str, Any]:

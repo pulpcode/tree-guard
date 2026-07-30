@@ -14,6 +14,9 @@ from pydantic import BaseModel, ConfigDict, Field
 from starlette.responses import Response
 
 from treeguard.change_intent import IntentValidationError
+from treeguard.fire_validation_dataset import (
+    FictionalFireValidationDataset,
+)
 from treeguard.repository_client import (
     ProvisionalRepositoryClient,
     RepositoryClientConfig,
@@ -30,6 +33,10 @@ from treeguard.workbench_governance import (
     WorkbenchGovernanceService,
     default_sidecar_root,
     model_diagnostics_enabled_from_env,
+)
+from treeguard.workbench_validation import (
+    ValidationWorkbenchError,
+    ValidationWorkbenchService,
 )
 
 
@@ -307,9 +314,136 @@ class GovernanceModelTraceResponse(BaseModel):
     items: list[GovernanceModelTraceAttempt] = Field(max_length=8)
 
 
+class ValidationVariantItem(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    variant_ref: str
+    category_id: str
+    resource_id: str
+    version: str
+    benchmark_role: str
+    node_count: int = Field(ge=1)
+    scenario_count: int = Field(ge=1)
+
+
+class ValidationDatasetItem(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    dataset_ref: str
+    title: str
+    fictional: Literal[True]
+    gold_eligible: Literal[False]
+    limitations: list[str] = Field(min_length=1, max_length=32)
+    variants: list[ValidationVariantItem] = Field(
+        min_length=1,
+        max_length=32,
+    )
+
+
+class ValidationDatasetCatalogResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    schema_version: Literal["validation-dataset-catalog.v1"]
+    items: list[ValidationDatasetItem] = Field(
+        min_length=1,
+        max_length=32,
+    )
+
+
+class ValidationScenarioRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    requirement_text: str
+    proposed_parent_ref: str | None
+    node_kind_hint: str
+    value_type_hint: str | None
+    cardinality_hint: str
+
+
+class ValidationExpectedView(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    intent_review_status: str
+    candidate_status: str | None
+    record_status: str | None
+    semantic_approval: Literal[False] | None
+    gold_eligible: Literal[False] | None
+    patch_eligible: Literal[False] | None
+
+
+class ValidationScenarioItem(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    scenario_ref: str
+    purpose: str
+    flow: str
+    request: ValidationScenarioRequest
+    expected: ValidationExpectedView
+
+
+class ValidationScenariosResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    schema_version: Literal["validation-scenarios.v1"]
+    dataset_ref: str
+    variant_ref: str
+    benchmark_role: str
+    fictional: Literal[True]
+    gold_eligible: Literal[False]
+    items: list[ValidationScenarioItem] = Field(max_length=128)
+
+
+class ValidationRunCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    dataset_ref: str = Field(
+        min_length=1,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+    )
+    variant_ref: str = Field(
+        min_length=1,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+    )
+    scenario_ref: str = Field(
+        min_length=1,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+    )
+    model_mode: Literal["SIMULATOR_LIVE", "BAILIAN_LIVE"]
+    external_data_approved: bool = False
+
+
+class ValidationComparisonItem(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    metric: str
+    expected: str | bool
+    actual: str | bool | None
+    status: Literal["PENDING", "MATCH", "MISMATCH", "NOT_OBSERVED"]
+
+
+class ValidationComparisonResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    schema_version: Literal["validation-comparison.v1"]
+    case_ref: str
+    dataset_ref: str
+    variant_ref: str
+    scenario_ref: str
+    case_status: str
+    status: Literal["IN_PROGRESS", "MATCH", "MISMATCH", "RUN_FAILED"]
+    fictional: Literal[True]
+    gold_eligible: Literal[False]
+    items: list[ValidationComparisonItem]
+    limitations: list[str] = Field(min_length=4, max_length=35)
+
+
 def _services_from_environment() -> tuple[
     WorkbenchService,
     WorkbenchGovernanceService,
+    ValidationWorkbenchService,
 ]:
     base_url = os.environ.get(
         "TREEGUARD_WORKBENCH_REPOSITORY_URL",
@@ -330,28 +464,39 @@ def _services_from_environment() -> tuple[
         ),
         diagnostics_enabled=model_diagnostics_enabled_from_env(),
     )
-    return workbench, governance
+    validation = ValidationWorkbenchService(
+        repository=repository,
+        governance=governance,
+        providers=(FictionalFireValidationDataset(),),
+    )
+    return workbench, governance, validation
 
 
 def create_app(
     service: WorkbenchService | None = None,
     governance_service: WorkbenchGovernanceService | None = None,
+    validation_service: ValidationWorkbenchService | None = None,
 ) -> FastAPI:
     """Create an app with an injectable read-only application service."""
 
     resolved_service = service
     resolved_governance_service = governance_service
+    resolved_validation_service = validation_service
 
     @asynccontextmanager
     async def lifespan(application: FastAPI) -> AsyncIterator[None]:
         if resolved_service is None:
-            workbench, governance = _services_from_environment()
+            workbench, governance, validation = _services_from_environment()
             application.state.workbench_service = workbench
             application.state.governance_service = governance
+            application.state.validation_service = validation
         else:
             application.state.workbench_service = resolved_service
             application.state.governance_service = (
                 resolved_governance_service
+            )
+            application.state.validation_service = (
+                resolved_validation_service
             )
         yield
 
@@ -405,6 +550,19 @@ def create_app(
         }:
             status_code = 409
         elif exc.code == "WORKBENCH_GOVERNANCE_UNAVAILABLE":
+            status_code = 503
+        else:
+            status_code = 422
+        return _error_response(status_code, exc.code)
+
+    @application.exception_handler(ValidationWorkbenchError)
+    async def validation_workbench_error_handler(
+        request: Request,
+        exc: ValidationWorkbenchError,
+    ) -> JSONResponse:
+        if exc.code.endswith("_NOT_FOUND"):
+            status_code = 404
+        elif exc.code == "VALIDATION_UNAVAILABLE":
             status_code = 503
         else:
             status_code = 422
@@ -524,6 +682,70 @@ def create_app(
         return _governance(request).model_trace_view(case_ref)
 
     @application.get(
+        "/api/v1/validation/datasets",
+        response_model=ValidationDatasetCatalogResponse,
+    )
+    async def validation_datasets(
+        request: Request,
+    ) -> dict[str, Any]:
+        return _validation(request).catalog()
+
+    @application.get(
+        "/api/v1/validation/datasets/{dataset_ref}/scenarios",
+        response_model=ValidationScenariosResponse,
+    )
+    async def validation_scenarios(
+        request: Request,
+        dataset_ref: Annotated[
+            str,
+            APIPath(
+                min_length=1,
+                max_length=128,
+                pattern=r"^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+            ),
+        ],
+        variant_ref: Annotated[
+            str,
+            Query(
+                min_length=1,
+                max_length=128,
+                pattern=r"^[A-Za-z0-9][A-Za-z0-9._:-]*$",
+            ),
+        ],
+    ) -> dict[str, Any]:
+        return _validation(request).scenarios(dataset_ref, variant_ref)
+
+    @application.post(
+        "/api/v1/validation/runs",
+        response_model=GovernanceOperationResponse,
+        status_code=202,
+    )
+    async def create_validation_run(
+        request: Request,
+        payload: Annotated[ValidationRunCreate, Body()],
+    ) -> dict[str, Any]:
+        return _validation(request).create_run(
+            dataset_ref=payload.dataset_ref,
+            variant_ref=payload.variant_ref,
+            scenario_ref=payload.scenario_ref,
+            model_mode=payload.model_mode,
+            external_data_approved=payload.external_data_approved,
+        )
+
+    @application.get(
+        "/api/v1/validation/runs/{case_ref}/comparison",
+        response_model=ValidationComparisonResponse,
+    )
+    async def validation_comparison(
+        request: Request,
+        case_ref: Annotated[
+            str,
+            APIPath(min_length=1, max_length=128),
+        ],
+    ) -> dict[str, Any]:
+        return _validation(request).comparison(case_ref)
+
+    @application.get(
         "/api/v1/governance/operations/{operation_ref}",
         response_model=GovernanceOperationResponse,
     )
@@ -594,6 +816,7 @@ def create_app(
     if resolved_service is not None:
         application.state.workbench_service = resolved_service
         application.state.governance_service = resolved_governance_service
+        application.state.validation_service = resolved_validation_service
     return application
 
 
@@ -607,6 +830,16 @@ def _governance(request: Request) -> WorkbenchGovernanceService:
         raise WorkbenchGovernanceError(
             "WORKBENCH_GOVERNANCE_UNAVAILABLE",
             "governance service is not configured",
+        )
+    return service
+
+
+def _validation(request: Request) -> ValidationWorkbenchService:
+    service = request.app.state.validation_service
+    if service is None:
+        raise ValidationWorkbenchError(
+            "VALIDATION_UNAVAILABLE",
+            "validation service is not configured",
         )
     return service
 

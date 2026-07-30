@@ -73,6 +73,35 @@ UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen python -c \
 同时把所有场景送入现有 Intent、Clarification、Retrieval 和 Semantic
 Projection Core。生成器或 oracle 发生未审阅漂移时测试会失败。
 
+## 可视化验证台
+
+本地仿真仓库会把三档消防树作为只读资源提供给 Workbench。启动仓库、Workbench
+API 和前端后，可以在通用的“虚构数据集验证场景”中选择消防数据集、档位和场景：
+
+```text
+可信场景引用
+→ 服务端重新读取 fixture 与对应消防树
+→ 既有意图 / 候选 / 语义建议 / 人工复核闭环
+→ 非 Gold 的可观察合同状态对照
+```
+
+页面不会接收上传的树，也不会把稳定节点 ID、冻结模型输出或 oracle 内部候选 ID
+发送给浏览器。浏览器提交的只有 `dataset_ref`、`variant_ref`、`scenario_ref`、
+模型模式和当次出域批准；具体需求、父节点提示和预期由服务端按可信引用重建。
+消防数据通过 `ValidationDatasetProvider` 注册，是当前首个数据集；新增其他虚构
+领域只增加 Provider/fixture 与注册项，不复制治理服务、HTTP 路由或前端流程。
+
+“本地 OpenAI 格式仿真”只验证接口、Prompt 载荷、严格 JSON 合同、候选编排和人工
+状态流转。仿真器只根据需求中明确出现的 clean-room 文本和 hints 生成确定性草稿，
+不会回放数据集中的冻结模型输出，也不证明消防语义判断正确。需要观察当前模型输出
+时可选择百炼模式，但必须对当次完全虚构内容显式批准；两种模式都复用同一治理流程
+和本地合同。
+
+合同对照只比较意图状态、候选状态、人工记录状态及
+`semantic_approval/gold_eligible/patch_eligible` 等可观察值。它不比较模型文本、
+语义结论、完整候选召回率或专家 Gold。当前运行绑定和 operation registry 只在
+单进程内存中，服务重启后页面不能恢复该次对照；已发布 sidecar 不会因此删除。
+
 ## 安全边界
 
 - fixture 不含 `VALUE`、真实消防字段、真实参数、专家文本、模型 trace、凭据、

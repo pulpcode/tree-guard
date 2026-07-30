@@ -14,6 +14,12 @@ from treeguard.ai_review import (
     LoopbackSimulatorSemanticRecommendationProvider,
 )
 from treeguard.demo_cli import main as demo_main
+from treeguard.fictional_fire_data import (
+    FIRE_VALIDATION_CATEGORY_ID,
+    FIRE_VALIDATION_RESOURCE_IDS,
+    FIRE_VALIDATION_TIERS,
+    TIER_SPECS,
+)
 from treeguard.json_utils import strict_json_loads
 from treeguard.repository_client import (
     ProvisionalRepositoryClient,
@@ -130,6 +136,46 @@ def _chat_body(schema_version: str) -> bytes:
     ).encode("utf-8")
 
 
+def _validation_intent_chat_body() -> bytes:
+    return json.dumps(
+        {
+            "model": "treeguard-simulator-model",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": json.dumps(
+                        {
+                            "output_contract": {
+                                "schema_version": (
+                                    "change-intent-model-output.v1"
+                                )
+                            },
+                            "intent_request": {
+                                "requirement_text": (
+                                    "为完全虚构的星湾演练记录 "
+                                    "clear-intent 信息。"
+                                ),
+                                "hints": {
+                                    "node_kind": "PROPERTY",
+                                    "value_type": "string",
+                                    "cardinality": "SINGLE",
+                                },
+                                "proposed_parent": None,
+                            },
+                        },
+                        ensure_ascii=False,
+                    ),
+                }
+            ],
+            "response_format": {"type": "json_object"},
+            "enable_thinking": False,
+            "temperature": 0,
+            "stream": False,
+        },
+        ensure_ascii=False,
+    ).encode("utf-8")
+
+
 class FictionalTreeTests(unittest.TestCase):
     def test_large_tree_is_deterministic_and_adaptable(self) -> None:
         first = build_fictional_tree(node_count=2_005, version="SIM-V2")
@@ -163,6 +209,35 @@ class FictionalTreeTests(unittest.TestCase):
 
 
 class PureSimulatorTests(unittest.TestCase):
+    def test_intent_simulation_is_domain_neutral_and_uses_explicit_facts(
+        self,
+    ) -> None:
+        response = ContractSimulator().handle(
+            method="POST",
+            target="/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {SIMULATOR_BEARER_TOKEN}",
+                "Content-Type": "application/json",
+            },
+            body=_validation_intent_chat_body(),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        envelope = strict_json_loads(response.body)
+        output = strict_json_loads(
+            envelope["choices"][0]["message"]["content"]
+        )
+        self.assertEqual(output["subject"], "clear-intent 信息")
+        self.assertIsNone(output["role"])
+        self.assertIsNone(output["scenario"])
+        self.assertIsNone(output["lifecycle"])
+        self.assertEqual(output["ownership"], "UNKNOWN")
+        self.assertEqual(output["node_kind"], "PROPERTY")
+        self.assertEqual(output["value_type"], "string")
+        self.assertEqual(output["cardinality"], "SINGLE")
+        self.assertNotIn("陈列高度", json.dumps(output, ensure_ascii=False))
+        self.assertNotIn("消防", json.dumps(output, ensure_ascii=False))
+
     def test_auth_and_query_fail_closed(self) -> None:
         simulator = ContractSimulator()
         unauthorized = simulator.handle(
@@ -295,11 +370,41 @@ class SimulatorHTTPIntegrationTests(unittest.TestCase):
             version_record_id=versions[1].version_record_id,
         )
 
-        self.assertEqual(len(categories), 2)
+        self.assertEqual(len(categories), 3)
         self.assertEqual(len(resources), 1)
         self.assertEqual(len(versions), 2)
         self.assertEqual(old.observed_node_count, 2_001)
         self.assertEqual(head.observed_node_count, 2_001)
+
+    def test_fire_validation_tiers_use_the_repository_contract(self) -> None:
+        client = _repository_client(node_count=20)
+        resources = client.list_resources(FIRE_VALIDATION_CATEGORY_ID)
+
+        self.assertEqual(
+            tuple(item.resource_id for item in resources),
+            tuple(
+                FIRE_VALIDATION_RESOURCE_IDS[tier]
+                for tier in FIRE_VALIDATION_TIERS
+            ),
+        )
+        for tier, resource in zip(
+            FIRE_VALIDATION_TIERS,
+            resources,
+            strict=True,
+        ):
+            with self.subTest(tier=tier):
+                versions = client.list_versions(resource.resource_id)
+                tree = client.fetch_tree(
+                    resource.resource_id,
+                    version_record_id=versions[0].version_record_id,
+                )
+
+                self.assertEqual(len(versions), 1)
+                self.assertTrue(versions[0].is_head)
+                self.assertEqual(
+                    tree.observed_node_count,
+                    TIER_SPECS[tier]["node_count"],
+                )
 
     def test_repository_verification_cli_reports_only_aggregates(self) -> None:
         client = _repository_client(node_count=25)

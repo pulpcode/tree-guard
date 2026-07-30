@@ -185,6 +185,18 @@ function App() {
     setSelectedRef(undefined);
   };
 
+  const selectValidationResource = (
+    nextCategory: string,
+    nextResource: string,
+    nextVersion: string,
+  ) => {
+    setCategoryId(nextCategory);
+    setResourceId(nextResource);
+    setVersion(nextVersion);
+    setSearchTerm("");
+    setSelectedRef(undefined);
+  };
+
   const firstError =
     categories.error ?? resources.error ?? versions.error ?? tree.error;
 
@@ -364,6 +376,7 @@ function App() {
               resourceId={resourceId}
               version={version}
               selectedNode={selectedNode}
+              onSelectValidationResource={selectValidationResource}
             />
           </main>
 

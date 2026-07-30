@@ -249,6 +249,19 @@ input {
   margin-top: 2px;
 }
 
+.validation-preset-card,
+.validation-comparison-card {
+  border-color: #dcd5eb;
+  background: #fcfaff;
+}
+
+.validation-preset-card > .ant-card-body,
+.validation-comparison-card > .ant-card-body,
+.validation-scenario-preview {
+  display: grid;
+  gap: 14px;
+}
+
 .model-trace-list {
   display: grid;
   gap: 14px;

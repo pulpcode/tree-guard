@@ -50,6 +50,11 @@ model_mode                # SIMULATOR_LIVE | BAILIAN_LIVE
 external_data_approved
 ```
 
+三个引用均为 1–128 字符，匹配
+`^[A-Za-z0-9][A-Za-z0-9._:-]*$`。注册表最多 32 个数据集；每个 manifest 最多
+32 个变体、32 条限制；单个变体最多 128 个场景，且场景数量必须与 manifest
+声明精确一致。
+
 服务端必须重新读取 `resource_id + version` 的可信树，并使用与树视图相同的
 `TreeReferenceIndex` 把临时父引用映射回内部节点。不得接受浏览器上传树、稳定
 `node_id`、hash、Provider 配置或完整治理工件。
@@ -211,3 +216,117 @@ trace_view = governance.model_trace_view(case_ref)  # 仅显式开发开关
 ```
 
 诊断使用独立的有界内存通道；正式 case 和可回放 sidecar 合同保持不变。
+
+## Scenario：数据集驱动的虚构场景验证叠加层
+
+### 1. Scope / Trigger
+
+修改虚构验证数据 Provider、`workbench_validation.py`、`/api/v1/validation/*`、
+场景预设或合同对照界面时适用。该叠加层只负责把服务端注册的可信 fixture 绑定到
+既有治理 case，不建立第二套治理状态机，也不把 oracle 提升为专家 Gold。消防是
+当前第一个注册数据集，不得成为通用服务、HTTP DTO、路由或前端流程的分支条件。
+
+### 2. Signatures
+
+```text
+GET  /api/v1/validation/datasets
+GET  /api/v1/validation/datasets/{dataset_ref}/scenarios?variant_ref=...
+POST /api/v1/validation/runs
+GET  /api/v1/validation/runs/{case_ref}/comparison
+```
+
+运行请求只包含：
+
+```text
+dataset_ref
+variant_ref
+scenario_ref
+model_mode                # SIMULATOR_LIVE | BAILIAN_LIVE
+external_data_approved
+```
+
+### 3. Contracts
+
+- `ValidationDatasetProvider` 提供 manifest、变体和可信场景；通用服务只按注册表
+  解析 `dataset_ref / variant_ref / scenario_ref`；
+- 仿真仓库把 31、401、2,001 节点消防树暴露为当前 Provider 的三个只读资源；
+- catalog 只返回数据集、变体、虚构资源选择器、节点/场景数量和非 Gold 限制；
+- scenario 视图只返回需求、类型/基数提示、`Nxxxxxx` 临时父引用和可观察状态预期；
+  禁止返回稳定节点 ID、冻结模型输出、要求命中的内部候选 ID；
+- 创建运行时，服务端必须按三个引用重新读取已注册 Provider，不信任浏览器回传的
+  需求、父节点或 oracle；
+- 新增虚构领域时只增加 Provider/fixture 与注册项，不修改通用验证服务、HTTP
+  合同、路由或前端流程组件；
+- `case_ref` 到场景的绑定只存在当前进程内存；比较接口读取既有治理 case，只比较
+  意图、候选、人工记录和三个安全标志等可观察合同状态；
+- 比较结果必须固定为 `fictional=true`、`gold_eligible=false`，并明确说明不比较
+  模型文本、语义结论、冻结模型输出、完整候选召回率或专家 Gold；
+- `SIMULATOR_LIVE` 只验证 OpenAI 格式和治理合同。仿真器可从显式 clean-room
+  需求与 hints 形成确定性草稿，但不得把 fixture 中的冻结模型输出伪装成当前
+  模型推理结果。
+
+### 4. Validation & Error Matrix
+
+| 条件 | 结果 |
+|---|---|
+| HTTP 引用/模型枚举或字段格式非法 | 422 / `WORKBENCH_REQUEST_INVALID` |
+| 未注册 dataset_ref | 404 / `VALIDATION_DATASET_NOT_FOUND` |
+| 未知 variant_ref | 404 / `VALIDATION_VARIANT_NOT_FOUND` |
+| 未知 scenario_ref | 404 / `VALIDATION_SCENARIO_NOT_FOUND` |
+| Provider manifest/场景数量不一致 | 422 / `VALIDATION_DATASET_CONTRACT_INVALID` |
+| 场景父节点不在绑定树 | 422 / `VALIDATION_SCENARIO_SOURCE_INVALID` |
+| 应用服务收到非允许模型模式 | `VALIDATION_MODEL_MODE_INVALID` |
+| 百炼未显式批准 | 422 / `EXTERNAL_DATA_APPROVAL_REQUIRED`，无树读取、无 case |
+| 治理服务未返回 case_ref | 422 / `VALIDATION_OPERATION_INVALID` |
+| case_ref 没有当前进程绑定 | 404 / `VALIDATION_RUN_NOT_FOUND` |
+| 绑定树不可读取或不合法 | 既有 `WORKBENCH_TREE_NOT_AVAILABLE` |
+| case 失败或状态不符 | 比较为 `RUN_FAILED` 或 `MISMATCH`，不得写完成假象 |
+
+### 5. Good / Base / Bad Cases
+
+- Good：选择消防数据集的 small/clear-intent 后，页面自动切换 31 节点树，以
+  只读预设进入既有意图、候选、建议和人工复核闭环，最终显示非 Gold 合同匹配。
+- Good：注册第二个非消防 Provider 后，同一 catalog、场景、运行和对照服务直接
+  工作，不增加领域路由或治理分支。
+- Good：百炼模式只有当前虚构运行得到显式批准后才调用真实 Provider。
+- Base：本地仿真显示“仅合同通路”，即使状态匹配也不声明语义正确。
+- Bad：浏览器上传完整树、稳定节点 ID、冻结输出或 oracle，服务端直接信任。
+- Bad：为每个领域复制一套 Service、DTO、路由或前端流程。
+- Bad：本地仿真固定选择 `C001` 后，将“符合合同预期”展示成领域语义准确。
+
+### 6. Tests Required
+
+- 三档资源通过同一仓库客户端读取，节点数与版本身份精确匹配；
+- 第二个非消防测试 Provider 通过注册复用同一目录、场景和运行服务；
+- catalog/scenario JSON canary 不含 `ffv-`、冻结输出、内部候选 ID 或稳定节点 ID；
+- 百炼批准门禁发生在树读取、sidecar 创建和 Provider 调用之前；
+- small 场景通过真实 Governance Service 完成，最终三个安全标志均为 false；
+- comparison 覆盖运行中、匹配、失败和未知绑定，并保持 `no-store`、`nosniff`；
+- 本地仿真只回显显式 clean-room 需求与 hints，不串入其他领域示例；
+- 通用服务、HTTP 路由/DTO 和前端流程模块不得包含消防分支；
+- 前端聚焦测试、构建和浏览器冒烟覆盖可信预设、仿真限制、中文消防树和人工完成。
+
+### 7. Wrong vs Correct
+
+Wrong：
+
+```python
+governance.create_case(**browser_request["scenario"])
+```
+
+这会让浏览器修改基准需求、父节点或预期。
+
+Correct：
+
+```python
+operation = validation.create_run(
+    dataset_ref=dataset_ref,
+    variant_ref=variant_ref,
+    scenario_ref=scenario_ref,
+    model_mode=model_mode,
+    external_data_approved=external_data_approved,
+)
+```
+
+浏览器只提交引用；服务端从已注册的可信 Provider 重建输入，并把运行交给既有
+治理服务。

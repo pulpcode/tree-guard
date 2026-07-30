@@ -78,14 +78,15 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - [实际源格式分析](docs/source-format-findings.md)
 - [百炼开发冒烟指南](docs/bailian-smoke.md)
 - [协议级开发仿真](docs/contract-simulator.md)
+- [消防主题三档虚构验证数据](docs/fire-validation-data.md)
 
 ## 当前实现
 
 当前代码覆盖确定性 Diff、两类版本审查、模型安全投影、AI 初审、专家审查，以及
 新增需求意图确认、一次受约束澄清、无 embedding 的全树词法/结构召回、受约束
 候选语义建议和人工复核。另有一个只连接 Clean-room 仿真仓库的 FastAPI + React
-只读工作台纵切；尚不包含治理流程 Web 操作、数据库连接、向量检索、语义 Gold 或
-Patch 发布：
+工作台，已支持治理流程 Web 操作和消防虚构场景合同对照；尚不包含生产数据库
+连接、向量检索、语义 Gold 或 Patch 发布：
 
 - `contracts/tree-snapshot.v1.schema.json`：Canonical Tree JSON Schema；
 - `contracts/tree-diff.v1.schema.json`：字段级 Snapshot Diff JSON Schema；
@@ -139,7 +140,13 @@ Patch 发布：
 - `src/treeguard/repository_client.py`：严格验证暂定四类只读仓库响应的最小客户端；
 - `src/treeguard/simulator_cli.py`：启动仿真服务和验证仓库读取的聚合 CLI；
 - `src/treeguard/workbench.py`：目录查询与浏览器树视图正向允许列表投影；
-- `src/treeguard/web.py`：只读 FastAPI Workbench API、固定错误合同和 no-store
+- `src/treeguard/workbench_governance.py`：意图、候选、建议和人工复核的
+  Workbench 应用服务与私有 sidecar 编排；
+- `src/treeguard/workbench_validation.py`：数据集驱动的可信场景引用、运行绑定和
+  非 Gold 可观察合同对照；
+- `src/treeguard/fire_validation_dataset.py`：消防虚构 fixture 的首个验证数据集
+  Provider；
+- `src/treeguard/web.py`：只读树与旁路治理 FastAPI API、固定错误合同和 no-store
   响应边界；
 - `src/treeguard/workbench_cli.py`：只监听 loopback、关闭访问日志的工作台 API
   启动入口；

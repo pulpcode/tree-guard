@@ -8,6 +8,16 @@ import urllib.parse
 from dataclasses import dataclass
 from typing import Any, Mapping
 
+from treeguard.fictional_fire_data import (
+    FIRE_VALIDATION_CATEGORY_ID,
+    FIRE_VALIDATION_RESOURCE_IDS,
+    FIRE_VALIDATION_TIERS,
+    TIER_SPECS,
+    build_fictional_fire_tree,
+    fire_validation_record_id,
+    fire_validation_tree_id,
+    fire_validation_version,
+)
 from treeguard.json_utils import StrictJSONError, strict_json_loads
 
 
@@ -18,6 +28,13 @@ SIMULATOR_RESOURCE_ID = "fictional-museum-resource"
 SIMULATOR_CATEGORY_ID = "fictional-catalog-category"
 SIMULATOR_TREE_ID = "fictional-museum-tree"
 SIMULATOR_HEAD_VERSION = "SIM-V2"
+SIMULATOR_RESOURCE_TREE_IDS = {
+    SIMULATOR_RESOURCE_ID: SIMULATOR_TREE_ID,
+    **{
+        FIRE_VALIDATION_RESOURCE_IDS[tier]: fire_validation_tree_id(tier)
+        for tier in FIRE_VALIDATION_TIERS
+    },
+}
 SIMULATOR_MODEL_SCENARIOS = {
     "ready",
     "clarification",
@@ -32,6 +49,9 @@ MAX_SIMULATOR_NODES = 10_000
 MAX_SIMULATOR_REQUEST_BYTES = 1_000_000
 _RESOURCE_PATH = re.compile(
     r"^/provisional/v1/resources/([^/]+)/(versions|tree)$"
+)
+_RECORDED_SUBJECT = re.compile(
+    r"记录\s*(?P<subject>.+?)[。.]*$"
 )
 
 
@@ -296,28 +316,42 @@ class ContractSimulator:
         if parsed.path == "/provisional/v1/resources":
             if set(query) != {"category_id"} or len(query["category_id"]) != 1:
                 return _error_response(400, "SIMULATOR_QUERY_INVALID")
-            if query["category_id"][0] != SIMULATOR_CATEGORY_ID:
-                return _json_response(_resource_response(items=[]))
-            return _json_response(_resource_response())
+            category_id = query["category_id"][0]
+            if category_id == SIMULATOR_CATEGORY_ID:
+                return _json_response(_resource_response())
+            if category_id == FIRE_VALIDATION_CATEGORY_ID:
+                return _json_response(_fire_resource_response())
+            return _json_response(_resource_response(items=[]))
         match = _RESOURCE_PATH.fullmatch(parsed.path)
         if match is None:
             return _error_response(404, "SIMULATOR_ROUTE_NOT_FOUND")
         resource_id = urllib.parse.unquote(match.group(1))
         operation = match.group(2)
-        if resource_id != SIMULATOR_RESOURCE_ID:
+        if resource_id not in SIMULATOR_RESOURCE_TREE_IDS:
             return _error_response(404, "SIMULATOR_RESOURCE_NOT_FOUND")
         if operation == "versions":
             if query:
                 return _error_response(400, "SIMULATOR_QUERY_INVALID")
-            return _json_response(_version_response())
-        return self._tree_response(query)
+            return _json_response(_version_response(resource_id))
+        return self._tree_response(resource_id, query)
 
     def _tree_response(
         self,
+        resource_id: str,
         query: dict[str, list[str]],
     ) -> SimulatorResponse:
         if len(query) != 1:
             return _error_response(400, "SIMULATOR_QUERY_INVALID")
+        if resource_id == SIMULATOR_RESOURCE_ID:
+            versions = {
+                "SIM-V1": "fictional-record-sim-v1",
+                "SIM-V2": "fictional-record-sim-v2",
+            }
+        else:
+            tier = _fire_tier_for_resource(resource_id)
+            versions = {
+                fire_validation_version(tier): fire_validation_record_id(tier)
+            }
         if "version" in query and len(query["version"]) == 1:
             version = query["version"][0]
         elif (
@@ -326,24 +360,30 @@ class ContractSimulator:
         ):
             record_id = query["version_record_id"][0]
             record_to_version = {
-                "fictional-record-sim-v1": "SIM-V1",
-                "fictional-record-sim-v2": "SIM-V2",
+                record_id: business_version
+                for business_version, record_id in versions.items()
             }
             version = record_to_version.get(record_id, "")
         else:
             return _error_response(400, "SIMULATOR_QUERY_INVALID")
-        if version not in {"SIM-V1", "SIM-V2"}:
+        if version not in versions:
             return _error_response(404, "SIMULATOR_VERSION_NOT_FOUND")
+        if resource_id == SIMULATOR_RESOURCE_ID:
+            tree = build_fictional_tree(
+                node_count=self.node_count,
+                version=version,
+            )
+        else:
+            tree = build_fictional_fire_tree(
+                _fire_tier_for_resource(resource_id)
+            )
         return _json_response(
             {
                 "schema_version": "provisional-simulator-tree.v1",
                 "contract_status": SIMULATOR_CONTRACT_STATUS,
                 "status": 0,
                 "message": "OK",
-                "data": build_fictional_tree(
-                    node_count=self.node_count,
-                    version=version,
-                ),
+                "data": tree,
             }
         )
 
@@ -469,10 +509,17 @@ def _model_output(
     if schema_version == "change-intent-model-output.v1":
         is_clarification = "clarification_input" in user_payload
         question = (
-            "应使用哪一种虚构计量单位？"
+            "还需要补充哪项关键需求约束？"
             if clarification and not is_clarification
             else None
         )
+        simulated_output = _simulated_intent_output(
+            user_payload,
+            schema_version=schema_version,
+            question=question,
+        )
+        if simulated_output is not None:
+            return simulated_output
         return {
             "schema_version": schema_version,
             "subject": "陈列高度",
@@ -534,6 +581,67 @@ def _model_output(
     return {"message": "hello", "valid": True}
 
 
+def _simulated_intent_output(
+    user_payload: dict[str, Any],
+    *,
+    schema_version: str,
+    question: str | None,
+) -> dict[str, Any] | None:
+    """Echo an explicit clean-room request without adding domain knowledge."""
+
+    intent_request = user_payload.get("intent_request")
+    if not isinstance(intent_request, dict):
+        return None
+    requirement_text = intent_request.get("requirement_text")
+    if not isinstance(requirement_text, str):
+        return None
+    requirement_text = requirement_text.strip()
+    if not requirement_text:
+        return None
+    hints = intent_request.get("hints")
+    if not isinstance(hints, dict):
+        return None
+    node_kind = hints.get("node_kind")
+    value_type = hints.get("value_type")
+    cardinality = hints.get("cardinality")
+    if (
+        node_kind not in {"CONCEPT", "PROPERTY", "UNKNOWN"}
+        or not (
+            value_type is None
+            or isinstance(value_type, str)
+            and value_type
+        )
+        or cardinality not in {"SINGLE", "MULTIPLE", "UNKNOWN"}
+    ):
+        return None
+    match = _RECORDED_SUBJECT.search(requirement_text)
+    subject = (
+        match.group("subject").strip()
+        if match is not None
+        else requirement_text
+    )
+    subject = subject[:1_000] or None
+    return {
+        "schema_version": schema_version,
+        "subject": subject,
+        "role": None,
+        "scenario": None,
+        "lifecycle": None,
+        "ownership": "UNKNOWN",
+        "node_kind": node_kind,
+        "value_type": value_type,
+        "cardinality": cardinality,
+        "confirmed_facts": [requirement_text[:1_000]],
+        "assumptions": [],
+        "evidence_gaps": (
+            ["尚有一个最重要的需求细节需要确认。"]
+            if question is not None
+            else []
+        ),
+        "clarification_question": question,
+    }
+
+
 def _category_response() -> dict[str, Any]:
     items = [
         {
@@ -547,6 +655,12 @@ def _category_response() -> dict[str, Any]:
             "parent_id": "fictional-root-category",
             "name": "虚构藏品目录",
             "order": 1,
+        },
+        {
+            "category_id": FIRE_VALIDATION_CATEGORY_ID,
+            "parent_id": "fictional-root-category",
+            "name": "虚构消防验证数据",
+            "order": 2,
         },
     ]
     return {
@@ -581,35 +695,70 @@ def _resource_response(
     }
 
 
-def _version_response() -> dict[str, Any]:
+def _fire_resource_response() -> dict[str, Any]:
     items = [
         {
-            "position": 0,
-            "version": "SIM-V1",
-            "version_record_id": "fictional-record-sim-v1",
-            "description": None,
-            "is_head": False,
-        },
-        {
-            "position": 1,
-            "version": "SIM-V2",
-            "version_record_id": "fictional-record-sim-v2",
-            "description": "模拟陈列用语更新。",
-            "is_head": True,
-        },
+            "resource_id": FIRE_VALIDATION_RESOURCE_IDS[tier],
+            "category_id": FIRE_VALIDATION_CATEGORY_ID,
+            "name": f"虚构星湾消防验证树 · {tier}",
+            "head_version": fire_validation_version(tier),
+            "head_version_record_id": fire_validation_record_id(tier),
+        }
+        for tier in FIRE_VALIDATION_TIERS
     ]
+    return _resource_response(items=items)
+
+
+def _version_response(resource_id: str) -> dict[str, Any]:
+    if resource_id == SIMULATOR_RESOURCE_ID:
+        items = [
+            {
+                "position": 0,
+                "version": "SIM-V1",
+                "version_record_id": "fictional-record-sim-v1",
+                "description": None,
+                "is_head": False,
+            },
+            {
+                "position": 1,
+                "version": "SIM-V2",
+                "version_record_id": "fictional-record-sim-v2",
+                "description": "模拟陈列用语更新。",
+                "is_head": True,
+            },
+        ]
+    else:
+        tier = _fire_tier_for_resource(resource_id)
+        items = [
+            {
+                "position": 0,
+                "version": fire_validation_version(tier),
+                "version_record_id": fire_validation_record_id(tier),
+                "description": (
+                    f"完全虚构的 {TIER_SPECS[tier]['node_count']} 节点验证树。"
+                ),
+                "is_head": True,
+            }
+        ]
     return {
         "schema_version": "provisional-simulator-versions.v1",
         "contract_status": SIMULATOR_CONTRACT_STATUS,
         "status": 0,
         "message": "OK",
         "data": {
-            "resource_id": SIMULATOR_RESOURCE_ID,
+            "resource_id": resource_id,
             "ordering": "OLDEST_FIRST",
             "items": items,
             "total": len(items),
         },
     }
+
+
+def _fire_tier_for_resource(resource_id: str) -> str:
+    for tier in FIRE_VALIDATION_TIERS:
+        if FIRE_VALIDATION_RESOURCE_IDS[tier] == resource_id:
+            return tier
+    raise ValueError("resource is not a fictional fire validation tree")
 
 
 def _json_response(

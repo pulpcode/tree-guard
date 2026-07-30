@@ -16,7 +16,7 @@ from treeguard.models import ImportResult
 from treeguard.simulator import (
     SIMULATOR_BEARER_TOKEN,
     SIMULATOR_CONTRACT_STATUS,
-    SIMULATOR_TREE_ID,
+    SIMULATOR_RESOURCE_TREE_IDS,
 )
 
 
@@ -277,7 +277,11 @@ class ProvisionalRepositoryClient:
                 "REPOSITORY_TREE_CONFORMANCE_INVALID",
                 "repository tree failed canonical conformance",
             )
-        if result.tree.tree_id != SIMULATOR_TREE_ID:
+        expected_tree_id = SIMULATOR_RESOURCE_TREE_IDS.get(resource_id)
+        if (
+            expected_tree_id is None
+            or result.tree.tree_id != expected_tree_id
+        ):
             raise RepositoryClientError(
                 "REPOSITORY_TREE_IDENTITY_MISMATCH",
                 "repository tree identity is inconsistent",

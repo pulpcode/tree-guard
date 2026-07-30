@@ -1,5 +1,6 @@
 import {
   CheckCircleOutlined,
+  ExperimentOutlined,
   RobotOutlined,
   SafetyCertificateOutlined,
 } from "@ant-design/icons";
@@ -27,9 +28,13 @@ import {
 import {
   clarifyGovernanceCase,
   createGovernanceCase,
+  createValidationRun,
   fetchGovernanceCase,
   fetchGovernanceModelTraces,
   fetchGovernanceOperation,
+  fetchValidationComparison,
+  fetchValidationDatasets,
+  fetchValidationScenarios,
   reviewGovernanceIntent,
   reviewGovernanceRecommendation,
   type GovernanceCase,
@@ -37,14 +42,30 @@ import {
   type GovernanceModelTraceView,
   type GovernanceOperation,
   type TreeViewNode,
+  type ValidationComparison,
+  type ValidationDatasetCatalog,
+  type ValidationScenario,
+  type ValidationScenarioList,
   WorkbenchAPIError,
 } from "./api";
+import {
+  findValidationDataset,
+  findValidationVariant,
+  formatValidationValue,
+  validationMetricLabel,
+  validationStatusLabel,
+} from "./validation";
 import { formatModelUsage, modelTraceStageLabel } from "./model-trace";
 
 interface GovernancePanelProps {
   resourceId?: string;
   version?: string;
   selectedNode?: TreeViewNode;
+  onSelectValidationResource: (
+    categoryId: string,
+    resourceId: string,
+    version: string,
+  ) => void;
 }
 
 const RUNNING_STATUSES = new Set(["PENDING", "RUNNING"]);
@@ -60,6 +81,7 @@ function GovernancePanel({
   resourceId,
   version,
   selectedNode,
+  onSelectValidationResource,
 }: GovernancePanelProps) {
   const [requirementText, setRequirementText] = useState(
     "为虚构博物馆藏品目录记录陈列高度。",
@@ -75,6 +97,12 @@ function GovernancePanel({
   const [modelMode, setModelMode] =
     useState<GovernanceModelMode>("SIMULATOR_LIVE");
   const [externalApproved, setExternalApproved] = useState(false);
+  const [validationDatasetRef, setValidationDatasetRef] =
+    useState<string>();
+  const [validationVariantRef, setValidationVariantRef] =
+    useState<string>();
+  const [validationScenarioRef, setValidationScenarioRef] =
+    useState<string>();
   const [caseRef, setCaseRef] = useState<string | undefined>(() =>
     runtimeRefFromQuery("case"),
   );
@@ -85,6 +113,23 @@ function GovernancePanel({
   const [reviewerReasoning, setReviewerReasoning] = useState("");
   const previousSelection = useRef<string | undefined>(undefined);
 
+  const validationCatalog = useQuery({
+    queryKey: ["validation-datasets"],
+    queryFn: fetchValidationDatasets,
+  });
+  const validationScenarios = useQuery({
+    queryKey: [
+      "validation-scenarios",
+      validationDatasetRef,
+      validationVariantRef,
+    ],
+    queryFn: () =>
+      fetchValidationScenarios(
+        validationDatasetRef!,
+        validationVariantRef!,
+      ),
+    enabled: Boolean(validationDatasetRef && validationVariantRef),
+  });
   const operation = useQuery({
     queryKey: ["governance-operation", operationRef],
     queryFn: () => fetchGovernanceOperation(operationRef!),
@@ -107,6 +152,28 @@ function GovernancePanel({
     refetchInterval: () =>
       RUNNING_STATUSES.has(operation.data?.status ?? "") ? 500 : false,
   });
+  const validationComparison = useQuery({
+    queryKey: ["validation-comparison", caseRef],
+    queryFn: () => fetchValidationComparison(caseRef!),
+    enabled: Boolean(caseRef),
+    retry: false,
+    refetchInterval: () =>
+      RUNNING_STATUSES.has(operation.data?.status ?? "") ? 500 : false,
+  });
+
+  const selectedValidationScenario = useMemo(
+    () =>
+      validationScenarios.data?.items.find(
+        (item) => item.scenario_ref === validationScenarioRef,
+      ),
+    [validationScenarioRef, validationScenarios.data],
+  );
+  const validationPresetActive = Boolean(
+    validationDatasetRef &&
+      validationVariantRef &&
+      validationScenarioRef &&
+      selectedValidationScenario,
+  );
 
   useEffect(() => {
     if (
@@ -115,8 +182,27 @@ function GovernancePanel({
     ) {
       void governanceCase.refetch();
       void modelTraces.refetch();
+      void validationComparison.refetch();
     }
-  }, [governanceCase.refetch, modelTraces.refetch, operation.data]);
+  }, [
+    governanceCase.refetch,
+    modelTraces.refetch,
+    operation.data,
+    validationComparison.refetch,
+  ]);
+
+  useEffect(() => {
+    if (!selectedValidationScenario) {
+      return;
+    }
+    const request = selectedValidationScenario.request;
+    setRequirementText(request.requirement_text);
+    setUseSelectedParent(false);
+    setNodeKind(request.node_kind_hint);
+    setValueType(request.value_type_hint ?? undefined);
+    setCardinality(request.cardinality_hint);
+    setExternalApproved(false);
+  }, [selectedValidationScenario]);
 
   useEffect(() => {
     if (!resourceId || !version) {
@@ -159,19 +245,28 @@ function GovernancePanel({
 
   const createCase = useMutation({
     mutationFn: () =>
-      createGovernanceCase({
-        resource_id: resourceId!,
-        version: version!,
-        requirement_text: requirementText.trim(),
-        proposed_parent_ref:
-          useSelectedParent && selectedNode ? selectedNode.ref : null,
-        node_kind_hint: nodeKind,
-        value_type_hint: valueType ?? null,
-        cardinality_hint: cardinality,
-        model_mode: modelMode,
-        external_data_approved:
-          modelMode === "BAILIAN_LIVE" && externalApproved,
-      }),
+      validationPresetActive
+        ? createValidationRun({
+            dataset_ref: validationDatasetRef!,
+            variant_ref: validationVariantRef!,
+            scenario_ref: validationScenarioRef!,
+            model_mode: modelMode,
+            external_data_approved:
+              modelMode === "BAILIAN_LIVE" && externalApproved,
+          })
+        : createGovernanceCase({
+            resource_id: resourceId!,
+            version: version!,
+            requirement_text: requirementText.trim(),
+            proposed_parent_ref:
+              useSelectedParent && selectedNode ? selectedNode.ref : null,
+            node_kind_hint: nodeKind,
+            value_type_hint: valueType ?? null,
+            cardinality_hint: cardinality,
+            model_mode: modelMode,
+            external_data_approved:
+              modelMode === "BAILIAN_LIVE" && externalApproved,
+          }),
     onSuccess: acceptOperation,
   });
   const clarify = useMutation({
@@ -201,6 +296,12 @@ function GovernancePanel({
     reviewRecommendation.error ??
     operation.error ??
     governanceCase.error ??
+    (
+      errorCode(validationComparison.error) !==
+      "VALIDATION_RUN_NOT_FOUND"
+        ? validationComparison.error
+        : null
+    ) ??
     (
       errorCode(modelTraces.error) !== "WORKBENCH_DIAGNOSTICS_DISABLED"
         ? modelTraces.error
@@ -241,6 +342,47 @@ function GovernancePanel({
         </Tag>
       }
     >
+      {!caseRef && (
+        <ValidationPresetSelector
+          catalog={validationCatalog.data}
+          scenarios={validationScenarios.data}
+          loading={
+            validationCatalog.isLoading || validationScenarios.isLoading
+          }
+          error={validationCatalog.error ?? validationScenarios.error}
+          datasetRef={validationDatasetRef}
+          variantRef={validationVariantRef}
+          scenarioRef={validationScenarioRef}
+          modelMode={modelMode}
+          onDatasetChange={(datasetRef) => {
+            setValidationDatasetRef(datasetRef);
+            setValidationVariantRef(undefined);
+            setValidationScenarioRef(undefined);
+            setExternalApproved(false);
+          }}
+          onVariantChange={(variantRef) => {
+            setValidationVariantRef(variantRef);
+            setValidationScenarioRef(undefined);
+            setExternalApproved(false);
+            const dataset = findValidationDataset(
+              validationCatalog.data?.items,
+              validationDatasetRef,
+            );
+            const selected = findValidationVariant(
+              dataset,
+              variantRef,
+            );
+            if (selected) {
+              onSelectValidationResource(
+                selected.category_id,
+                selected.resource_id,
+                selected.version,
+              );
+            }
+          }}
+          onScenarioChange={setValidationScenarioRef}
+        />
+      )}
       <Steps
         size="small"
         current={step}
@@ -272,7 +414,13 @@ function GovernancePanel({
           }}
           externalApproved={externalApproved}
           setExternalApproved={setExternalApproved}
-          disabled={!resourceId || !version}
+          presetLocked={validationPresetActive}
+          presetParentRef={
+            selectedValidationScenario?.request.proposed_parent_ref
+          }
+          disabled={
+            !validationPresetActive && (!resourceId || !version)
+          }
           submitting={createCase.isPending}
           onSubmit={() => createCase.mutate()}
         />
@@ -298,6 +446,12 @@ function GovernancePanel({
             reviewRecommendation.mutate(decision)
           }
           onReset={reset}
+        />
+      )}
+
+      {validationComparison.data && (
+        <ValidationComparisonPanel
+          value={validationComparison.data}
         />
       )}
 
@@ -456,6 +610,220 @@ function ModelTracePanel({
   );
 }
 
+function ValidationPresetSelector({
+  catalog,
+  scenarios,
+  loading,
+  error,
+  datasetRef,
+  variantRef,
+  scenarioRef,
+  modelMode,
+  onDatasetChange,
+  onVariantChange,
+  onScenarioChange,
+}: {
+  catalog?: ValidationDatasetCatalog;
+  scenarios?: ValidationScenarioList;
+  loading: boolean;
+  error: unknown;
+  datasetRef?: string;
+  variantRef?: string;
+  scenarioRef?: string;
+  modelMode: GovernanceModelMode;
+  onDatasetChange: (value?: string) => void;
+  onVariantChange: (value?: string) => void;
+  onScenarioChange: (value?: string) => void;
+}) {
+  const dataset = findValidationDataset(catalog?.items, datasetRef);
+  const scenario = scenarios?.items.find(
+    (item) => item.scenario_ref === scenarioRef,
+  );
+  return (
+    <Card
+      size="small"
+      className="validation-preset-card"
+      title={
+        <Space>
+          <ExperimentOutlined />
+          <span>虚构数据集验证场景</span>
+        </Space>
+      }
+      extra={<Tag color="purple">非 Gold</Tag>}
+    >
+      <Typography.Paragraph type="secondary">
+        可选地从服务端可信虚构数据载入一个场景。冻结模型输出不会在页面回放；
+        点击运行后仍会调用所选的当前模型。
+      </Typography.Paragraph>
+      <div className="hint-grid">
+        <label className="field-stack">
+          <span>验证数据集</span>
+          <Select
+            allowClear
+            loading={loading}
+            value={datasetRef}
+            placeholder="不使用预设，保持自由输入"
+            options={(catalog?.items ?? []).map((item) => ({
+              value: item.dataset_ref,
+              label: item.title,
+            }))}
+            onChange={onDatasetChange}
+          />
+        </label>
+        <label className="field-stack">
+          <span>数据变体</span>
+          <Select
+            allowClear
+            loading={loading}
+            value={variantRef}
+            disabled={!datasetRef}
+            placeholder="选择规模或数据形状"
+            options={(dataset?.variants ?? []).map((item) => ({
+              value: item.variant_ref,
+              label: `${item.variant_ref} · ${item.node_count} 节点 / ${item.scenario_count} 场景`,
+            }))}
+            onChange={onVariantChange}
+          />
+        </label>
+        <label className="field-stack">
+          <span>验证场景</span>
+          <Select
+            allowClear
+            loading={loading}
+            value={scenarioRef}
+            disabled={!variantRef}
+            placeholder="选择一个场景"
+            options={(scenarios?.items ?? []).map((item) => ({
+              value: item.scenario_ref,
+              label: `${item.purpose} · ${item.scenario_ref}`,
+            }))}
+            onChange={onScenarioChange}
+          />
+        </label>
+      </div>
+      {Boolean(error) && (
+        <Alert
+          type="error"
+          showIcon
+          title="验证场景载入失败"
+          description={`错误码：${errorCode(error)}`}
+        />
+      )}
+      {scenario && (
+        <ValidationScenarioPreview
+          value={scenario}
+          modelMode={modelMode}
+        />
+      )}
+    </Card>
+  );
+}
+
+function ValidationScenarioPreview({
+  value,
+  modelMode,
+}: {
+  value: ValidationScenario;
+  modelMode: GovernanceModelMode;
+}) {
+  return (
+    <div className="validation-scenario-preview">
+      <Alert
+        type="info"
+        showIcon
+        title="服务端可信预设已启用"
+        description="需求与提示在页面只读展示，运行时由服务端按场景引用重新读取，避免浏览器篡改基准输入。"
+      />
+      {modelMode === "SIMULATOR_LIVE" && (
+        <Alert
+          type="warning"
+          showIcon
+          title="本地仿真只验证 OpenAI 接口与治理合同"
+          description="仿真器会根据显式需求返回确定性合同结果，但不评估领域语义质量；下方合同对照也不比较模型文本或冻结模型输出。"
+        />
+      )}
+      <Descriptions size="small" column={2}>
+        <Descriptions.Item label="场景用途">
+          {value.purpose}
+        </Descriptions.Item>
+        <Descriptions.Item label="流程">
+          {value.flow}
+        </Descriptions.Item>
+        <Descriptions.Item label="预期意图">
+          {value.expected.intent_review_status}
+        </Descriptions.Item>
+        <Descriptions.Item label="预期候选">
+          {value.expected.candidate_status ?? "不适用"}
+        </Descriptions.Item>
+      </Descriptions>
+    </div>
+  );
+}
+
+function ValidationComparisonPanel({
+  value,
+}: {
+  value: ValidationComparison;
+}) {
+  const statusColor =
+    value.status === "MATCH"
+      ? "green"
+      : value.status === "IN_PROGRESS"
+        ? "blue"
+        : "red";
+  return (
+    <Card
+      size="small"
+      className="validation-comparison-card"
+      title={
+        <Space>
+          <ExperimentOutlined />
+          <span>验证场景合同对照</span>
+        </Space>
+      }
+      extra={
+        <Tag color={statusColor}>
+          {validationStatusLabel(value.status)}
+        </Tag>
+      }
+    >
+      <Alert
+        type="warning"
+        showIcon
+        title="这是虚构场景的合同对照，不是专家 Gold 或生产准确率"
+        description={value.limitations.join(" ")}
+      />
+      <Descriptions size="small" column={2}>
+        {value.items.map((item) => (
+          <Descriptions.Item
+            key={item.metric}
+            label={validationMetricLabel(item.metric)}
+          >
+            <Space wrap>
+              <span>
+                {formatValidationValue(item.actual)}
+                {" / 预期 "}
+                {formatValidationValue(item.expected)}
+              </span>
+              <Tag
+                color={
+                  item.status === "MATCH"
+                    ? "green"
+                    : item.status === "PENDING"
+                      ? "blue"
+                      : "red"
+                }
+              >
+                {validationStatusLabel(item.status)}
+              </Tag>
+            </Space>
+          </Descriptions.Item>
+        ))}
+      </Descriptions>
+    </Card>
+  );
+}
+
 interface IntakeFormProps {
   requirementText: string;
   setRequirementText: (value: string) => void;
@@ -474,6 +842,8 @@ interface IntakeFormProps {
   setModelMode: (value: GovernanceModelMode) => void;
   externalApproved: boolean;
   setExternalApproved: (value: boolean) => void;
+  presetLocked: boolean;
+  presetParentRef?: string | null;
   disabled: boolean;
   submitting: boolean;
   onSubmit: () => void;
@@ -499,24 +869,34 @@ function IntakeForm(props: IntakeFormProps) {
           maxLength={8_000}
           showCount
           value={props.requirementText}
+          disabled={props.presetLocked}
           onChange={(event) => props.setRequirementText(event.target.value)}
           placeholder="例如：为虚构藏品目录记录陈列高度。"
         />
       </label>
-      <Checkbox
-        checked={props.useSelectedParent}
-        disabled={!props.selectedNode}
-        onChange={(event) =>
-          props.setUseSelectedParent(event.target.checked)
-        }
-      >
-        将左侧当前节点“{props.selectedNode?.name ?? "尚未选择"}”作为拟挂载位置
-      </Checkbox>
+      {props.presetLocked ? (
+        <Alert
+          type="info"
+          title="拟挂载位置使用场景预设"
+          description={`临时引用：${props.presetParentRef ?? "未指定"}`}
+        />
+      ) : (
+        <Checkbox
+          checked={props.useSelectedParent}
+          disabled={!props.selectedNode}
+          onChange={(event) =>
+            props.setUseSelectedParent(event.target.checked)
+          }
+        >
+          将左侧当前节点“{props.selectedNode?.name ?? "尚未选择"}”作为拟挂载位置
+        </Checkbox>
+      )}
       <div className="hint-grid">
         <label className="field-stack">
           <span>节点类型提示</span>
           <Select
             value={props.nodeKind}
+            disabled={props.presetLocked}
             onChange={props.setNodeKind}
             options={[
               { value: "UNKNOWN", label: "未知" },
@@ -530,6 +910,7 @@ function IntakeForm(props: IntakeFormProps) {
           <Select
             allowClear
             value={props.valueType}
+            disabled={props.presetLocked}
             onChange={props.setValueType}
             placeholder="未知"
             options={[
@@ -544,6 +925,7 @@ function IntakeForm(props: IntakeFormProps) {
           <span>基数提示</span>
           <Select
             value={props.cardinality}
+            disabled={props.presetLocked}
             onChange={props.setCardinality}
             options={[
               { value: "UNKNOWN", label: "未知" },
@@ -563,7 +945,7 @@ function IntakeForm(props: IntakeFormProps) {
             options={[
               {
                 value: "SIMULATOR_LIVE",
-                label: "本地 OpenAI 格式仿真",
+                label: "本地 OpenAI 格式仿真（仅合同通路）",
               },
               {
                 value: "BAILIAN_LIVE",
@@ -591,7 +973,7 @@ function IntakeForm(props: IntakeFormProps) {
         loading={props.submitting}
         onClick={props.onSubmit}
       >
-        生成意图草稿
+        {props.presetLocked ? "运行验证场景" : "生成意图草稿"}
       </Button>
     </div>
   );

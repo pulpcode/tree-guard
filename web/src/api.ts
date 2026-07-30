@@ -176,6 +176,82 @@ export interface GovernanceModelTraceView {
   items: GovernanceModelTraceAttempt[];
 }
 
+export interface ValidationVariant {
+  variant_ref: string;
+  category_id: string;
+  resource_id: string;
+  version: string;
+  benchmark_role: string;
+  node_count: number;
+  scenario_count: number;
+}
+
+export interface ValidationDataset {
+  dataset_ref: string;
+  title: string;
+  fictional: true;
+  gold_eligible: false;
+  limitations: string[];
+  variants: ValidationVariant[];
+}
+
+export interface ValidationDatasetCatalog {
+  schema_version: "validation-dataset-catalog.v1";
+  items: ValidationDataset[];
+}
+
+export interface ValidationExpected {
+  intent_review_status: string;
+  candidate_status: string | null;
+  record_status: string | null;
+  semantic_approval: false | null;
+  gold_eligible: false | null;
+  patch_eligible: false | null;
+}
+
+export interface ValidationScenario {
+  scenario_ref: string;
+  purpose: string;
+  flow: string;
+  request: {
+    requirement_text: string;
+    proposed_parent_ref: string | null;
+    node_kind_hint: "CONCEPT" | "PROPERTY" | "UNKNOWN";
+    value_type_hint: string | null;
+    cardinality_hint: "SINGLE" | "MULTIPLE" | "UNKNOWN";
+  };
+  expected: ValidationExpected;
+}
+
+export interface ValidationScenarioList {
+  schema_version: "validation-scenarios.v1";
+  dataset_ref: string;
+  variant_ref: string;
+  benchmark_role: string;
+  fictional: true;
+  gold_eligible: false;
+  items: ValidationScenario[];
+}
+
+export interface ValidationComparison {
+  schema_version: "validation-comparison.v1";
+  case_ref: string;
+  dataset_ref: string;
+  variant_ref: string;
+  scenario_ref: string;
+  case_status: string;
+  status: "IN_PROGRESS" | "MATCH" | "MISMATCH" | "RUN_FAILED";
+  fictional: true;
+  gold_eligible: false;
+  items: Array<{
+    metric: string;
+    expected: string | boolean;
+    actual: string | boolean | null;
+    status: "PENDING" | "MATCH" | "MISMATCH" | "NOT_OBSERVED";
+  }>;
+  limitations: string[];
+}
+
 export interface GovernanceCaseCreateInput {
   resource_id: string;
   version: string;
@@ -245,6 +321,46 @@ export async function fetchTree(
   const query = new URLSearchParams({ version });
   return requestJSON<TreeView>(
     `/api/v1/resources/${encodedResource}/tree?${query.toString()}`,
+  );
+}
+
+export async function fetchValidationDatasets(): Promise<ValidationDatasetCatalog> {
+  return requestJSON<ValidationDatasetCatalog>(
+    "/api/v1/validation/datasets",
+  );
+}
+
+export async function fetchValidationScenarios(
+  datasetRef: string,
+  variantRef: string,
+): Promise<ValidationScenarioList> {
+  const query = new URLSearchParams({ variant_ref: variantRef });
+  return requestJSON<ValidationScenarioList>(
+    `/api/v1/validation/datasets/${encodeURIComponent(datasetRef)}/scenarios?${query.toString()}`,
+  );
+}
+
+export async function createValidationRun(input: {
+  dataset_ref: string;
+  variant_ref: string;
+  scenario_ref: string;
+  model_mode: GovernanceModelMode;
+  external_data_approved: boolean;
+}): Promise<GovernanceOperation> {
+  return requestJSON<GovernanceOperation>(
+    "/api/v1/validation/runs",
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function fetchValidationComparison(
+  caseRef: string,
+): Promise<ValidationComparison> {
+  return requestJSON<ValidationComparison>(
+    `/api/v1/validation/runs/${encodeURIComponent(caseRef)}/comparison`,
   );
 }
 

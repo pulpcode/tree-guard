@@ -1,0 +1,41 @@
+{
+  "promotion_record_version": "fictional-fixture-promotion.v1",
+  "dataset_ref": "fictional-qinglan-library-control-v1",
+  "run_ref": "qinglan-library-control-v1-run-004",
+  "candidate_state": "FROZEN",
+  "fixture_state": "PROMOTED",
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "fictional": true,
+  "derived_from_real": false,
+  "gold_eligible": false,
+  "patch_eligible": false,
+  "formal_fixture_promoted": true,
+  "runtime_registered": false,
+  "human_review": {
+    "protocol": "CODEX_ASSISTED_SINGLE_HUMAN_REVIEW",
+    "completed": 12,
+    "accepted": 12,
+    "revised": 0,
+    "rejected": 0,
+    "dual_review_completed": 0,
+    "within_time_budget": true,
+    "duration_minutes_recorded": false,
+    "stop_triggered": false
+  },
+  "freeze": {
+    "verified": true,
+    "bound_artifact_count": 12,
+    "promoted_data_file_count": 6
+  },
+  "legacy_similarity_audit": {
+    "authority": "DETERMINISTIC_READ_ONLY",
+    "decision": "ACCEPT",
+    "finding_codes": []
+  },
+  "limitations": [
+    "该 fixture 只验证完全虚构数据上的开发合同。",
+    "人工审核不会把 synthetic 数据变成 Gold。",
+    "相似度审计通过不证明真实领域正确性或生产准确率。",
+    "当前未加入运行时数据集注册表。"
+  ]
+}

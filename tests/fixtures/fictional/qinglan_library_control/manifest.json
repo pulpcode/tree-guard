@@ -1,0 +1,27 @@
+{
+  "dataset_ref": "fictional-qinglan-library-control-v1",
+  "derived_from_real": false,
+  "fictional": true,
+  "gold_eligible": false,
+  "limitations": [
+    "只验证完全虚构数据上的开发合同。",
+    "不是图书馆领域 Gold，不能外推生产准确率。",
+    "跨规模稳定性需在后续独立数据集上重放。"
+  ],
+  "manifest_version": "fictional-validation-manifest.v1",
+  "patch_eligible": false,
+  "primary_role": "DOMAIN_CONTROL",
+  "run_ref": "qinglan-library-control-v1-run-004",
+  "seed": 20260730,
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "state": "MACHINE_VALIDATED",
+  "variant": {
+    "benchmark_role": "cross_domain_control",
+    "category_id": "fictional-qinglan-library",
+    "node_count": 48,
+    "resource_id": "qinglan-library-control-tree",
+    "scenario_count": 12,
+    "variant_ref": "small",
+    "version": "QL-1.1"
+  }
+}

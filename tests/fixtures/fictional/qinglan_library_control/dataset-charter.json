@@ -1,0 +1,39 @@
+{
+  "charter_version": "fictional-dataset-charter.v1",
+  "dataset_ref": "fictional-qinglan-library-control-v1",
+  "derived_from_real": false,
+  "fictional": true,
+  "gold_eligible": false,
+  "independence": {
+    "audit_may_reject_but_must_not_guide_generation": true,
+    "generation_blind_to_legacy_fire_semantics": true,
+    "legacy_similarity_audit_stage": "POST_FREEZE_ONLY"
+  },
+  "non_goals": [
+    "不验证真实图书馆行业正确性。",
+    "不创建 Gold 或声明生产准确率。",
+    "不承担性能或生产形状结论。"
+  ],
+  "patch_eligible": false,
+  "primary_role": "DOMAIN_CONTROL",
+  "purpose": [
+    "检查通用实现是否依赖消防领域命名、分支或层级。",
+    "验证独立数据生成、机器门禁和人工审阅流水线。",
+    "为后续跨规模重放建立小型基线。"
+  ],
+  "review_budget": {
+    "candidate_limit": 12,
+    "dual_review_limit": 0,
+    "human_screen_all": true,
+    "random_sample": 4,
+    "self_recheck": 4,
+    "time_limit_minutes": 120
+  },
+  "seed": 20260730,
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "target": {
+    "nodes": 48,
+    "scenarios": 12,
+    "value_envelopes": 0
+  }
+}

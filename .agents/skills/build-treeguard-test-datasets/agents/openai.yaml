@@ -1,0 +1,4 @@
+interface:
+  display_name: "构建 TreeGuard 测试数据集"
+  short_description: "分阶段构建并审核多个完全虚构的 TreeGuard 验证数据集"
+  default_prompt: "使用 $build-treeguard-test-datasets 规划、构建、检查并分批晋升完全虚构的 TreeGuard 测试数据集。"

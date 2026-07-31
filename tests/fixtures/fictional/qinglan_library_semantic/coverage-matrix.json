@@ -1,0 +1,226 @@
+{
+  "cells": [
+    {
+      "challenge_tags": [
+        "clear_intent",
+        "existing_property"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "STABLE_CANDIDATE",
+      "primary_risk": "CLEAR_INTENT",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C01"
+    },
+    {
+      "challenge_tags": [
+        "homonym",
+        "cross_branch"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "NEED_CLARIFICATION",
+      "primary_risk": "HOMONYM",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C02"
+    },
+    {
+      "challenge_tags": [
+        "cross_branch",
+        "wrong_branch"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "CONFLICT_VISIBLE",
+      "primary_risk": "CROSS_BRANCH",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C03"
+    },
+    {
+      "challenge_tags": [
+        "kind_conflict"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "CONFLICT_VISIBLE",
+      "primary_risk": "KIND_CONFLICT",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C04"
+    },
+    {
+      "challenge_tags": [
+        "cardinality_conflict"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "CONFLICT_VISIBLE",
+      "primary_risk": "CARDINALITY_CONFLICT",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C05"
+    },
+    {
+      "challenge_tags": [
+        "wrong_parent_hint",
+        "cross_branch"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "CONFLICT_VISIBLE",
+      "primary_risk": "WRONG_PARENT_HINT",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C06"
+    },
+    {
+      "challenge_tags": [
+        "near_name_negative",
+        "existing_property"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "STABLE_CANDIDATE",
+      "primary_risk": "NEAR_NAME_HARD_NEGATIVE",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C07"
+    },
+    {
+      "challenge_tags": [
+        "insufficient_evidence",
+        "judgment_requires_evidence"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "NEED_EVIDENCE",
+      "primary_risk": "INSUFFICIENT_EVIDENCE",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C08"
+    },
+    {
+      "challenge_tags": [
+        "clarification_required",
+        "multiple_targets"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "NEED_CLARIFICATION",
+      "primary_risk": "CLARIFICATION_REQUIRED",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C09"
+    },
+    {
+      "challenge_tags": [
+        "refusal",
+        "unbounded_request",
+        "bounded_alternative_guidance"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "REFUSE_UNBOUNDED_COMBINATION",
+      "primary_risk": "REFUSAL",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C10"
+    },
+    {
+      "challenge_tags": [
+        "duplicate_substructure",
+        "deletion_requires_evidence"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "NEED_EVIDENCE",
+      "primary_risk": "DUPLICATE_SUBSTRUCTURE",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C11"
+    },
+    {
+      "challenge_tags": [
+        "unusual_depth",
+        "move_requires_evidence"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "NEED_EVIDENCE",
+      "primary_risk": "UNUSUAL_DEPTH",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C12"
+    },
+    {
+      "challenge_tags": [
+        "cartesian_request",
+        "refusal"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "REFUSE_UNBOUNDED_COMBINATION",
+      "primary_risk": "CARTESIAN_DENSITY",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C13"
+    },
+    {
+      "challenge_tags": [
+        "instance_boundary",
+        "clear_intent"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "STABLE_CANDIDATE",
+      "primary_risk": "INSTANCE_FIELD_SCOPE_CLEAR",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C14"
+    },
+    {
+      "challenge_tags": [
+        "collection_aggregate",
+        "instance_boundary"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "NEED_CLARIFICATION",
+      "primary_risk": "COLLECTION_AGGREGATE_SCOPE",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C15"
+    },
+    {
+      "challenge_tags": [
+        "policy_scope",
+        "instance_boundary"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "CONFLICT_VISIBLE",
+      "primary_risk": "POLICY_INSTANCE_SEPARATION",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C16"
+    },
+    {
+      "challenge_tags": [
+        "singleton_policy",
+        "existing_property"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "STABLE_CANDIDATE",
+      "primary_risk": "SINGLETON_POLICY_SCOPE",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C17"
+    },
+    {
+      "challenge_tags": [
+        "ancestor_scope",
+        "category_or_instance"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "NEED_CLARIFICATION",
+      "primary_risk": "ANCESTOR_SCOPE",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C18"
+    },
+    {
+      "challenge_tags": [
+        "conflicting_hints",
+        "kind_conflict"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "CONFLICT_VISIBLE",
+      "primary_risk": "CONFLICTING_HINTS",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C19"
+    },
+    {
+      "challenge_tags": [
+        "granularity_ambiguity",
+        "multiple_parents"
+      ],
+      "coverage_class": "NEW_SEMANTIC_COVERAGE",
+      "expected_observable_category": "NEED_CLARIFICATION",
+      "primary_risk": "GRANULARITY_AMBIGUITY",
+      "primary_role": "SEMANTIC_CHALLENGE",
+      "scenario_ref": "QS-C20"
+    }
+  ],
+  "coverage_version": "fictional-coverage-matrix.v1",
+  "dataset_ref": "fictional-qinglan-library-semantic-v1",
+  "tree_size_bucket": "MEDIUM_300_500"
+}

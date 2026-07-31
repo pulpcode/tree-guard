@@ -1,0 +1,36 @@
+{
+  "dataset_ref": "fictional-qinglan-library-semantic-v1",
+  "derived_from_real": false,
+  "fictional": true,
+  "gold_eligible": false,
+  "limitations": [
+    "只验证完全虚构数据上的中型语义挑战合同。",
+    "不是图书馆领域 Gold，不能外推生产准确率。",
+    "本批不声明跨规模语义重放结论。",
+    "24 个 lineage references 已按新实例边界重建。",
+    "stress-only filler 不参与语义准确率判断。"
+  ],
+  "manifest_version": "fictional-validation-manifest.v1",
+  "patch_eligible": false,
+  "primary_role": "SEMANTIC_CHALLENGE",
+  "run_ref": "qinglan-library-semantic-v1-run-007",
+  "seed": 20260731,
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "state": "MACHINE_VALIDATED",
+  "synthetic_lineage": {
+    "exact_replay_anchor_nodes": 0,
+    "lineage_reference_dataset": "fictional-qinglan-library-control-v1",
+    "lineage_reference_nodes": 24,
+    "lineage_references_count_as_new_coverage": false,
+    "replay_scenarios": 0
+  },
+  "variant": {
+    "benchmark_role": "semantic_challenge",
+    "category_id": "fictional-qinglan-library",
+    "node_count": 312,
+    "resource_id": "qinglan-library-semantic-tree",
+    "scenario_count": 20,
+    "variant_ref": "medium",
+    "version": "QS-1.0"
+  }
+}

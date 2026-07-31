@@ -1,0 +1,50 @@
+{
+  "charter_version": "fictional-dataset-charter.v1",
+  "dataset_ref": "fictional-qinglan-library-semantic-v1",
+  "derived_from_real": false,
+  "fictional": true,
+  "gold_eligible": false,
+  "independence": {
+    "audit_may_reject_but_must_not_guide_generation": true,
+    "generation_blind_to_legacy_fire_semantics": true,
+    "legacy_similarity_audit_stage": "POST_FREEZE_ONLY"
+  },
+  "non_goals": [
+    "不验证真实图书馆行业正确性。",
+    "不创建 Gold、Patch 或生产准确率指标。",
+    "不逼近真实生产树的字段、比例或结构。"
+  ],
+  "patch_eligible": false,
+  "primary_role": "SEMANTIC_CHALLENGE",
+  "purpose": [
+    "验证中型树中的歧义、冲突、证据不足、追问和拒答。",
+    "验证实例字段、集合汇总和单例政策作用域。",
+    "发现生成器的模板换词、重复结构和隐式笛卡尔积。"
+  ],
+  "review_budget": {
+    "candidate_limit": 20,
+    "codex_pre_review_all": true,
+    "dual_review_limit": 0,
+    "high_risk_self_recheck": 5,
+    "human_screen_all": true,
+    "random_self_recheck": 5,
+    "time_limit_minutes": 150
+  },
+  "seed": 20260731,
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "synthetic_lineage": {
+    "exact_replay_anchor_nodes": 0,
+    "lineage_reference_nodes": 24,
+    "replay_scenarios": 0
+  },
+  "target": {
+    "family_counts": {
+      "blueprint_background": 180,
+      "curated_core": 72,
+      "stress_only_filler": 60
+    },
+    "nodes": 312,
+    "scenarios": 20,
+    "value_envelopes": 0
+  }
+}

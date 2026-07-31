@@ -1,0 +1,481 @@
+[
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "clear_intent",
+      "existing_property"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "CLEAR_INTENT",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "STABLE_CANDIDATE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "qs-s004",
+      "requirement_text": "在社区周报下面记录每期包含的版面数量。",
+      "value_type_hint": "integer"
+    },
+    "scenario_ref": "QS-C01",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "homonym",
+      "cross_branch"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "HOMONYM",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_CLARIFICATION"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": null,
+      "requirement_text": "需要记录陪同人数。",
+      "value_type_hint": "integer"
+    },
+    "scenario_ref": "QS-C02",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "cross_branch",
+      "wrong_branch"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "CROSS_BRANCH",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "CONFLICT_VISIBLE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-005",
+      "requirement_text": "在公共活动下面记录预约取书的保留截止时刻。",
+      "value_type_hint": "time_code"
+    },
+    "scenario_ref": "QS-C03",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "kind_conflict"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "KIND_CONFLICT",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "CONFLICT_VISIBLE"
+    },
+    "request": {
+      "cardinality_hint": "UNKNOWN",
+      "node_kind_hint": "CONCEPT",
+      "proposed_parent_node_id": null,
+      "requirement_text": "把远程共学间作为一个概念节点记录。",
+      "value_type_hint": null
+    },
+    "scenario_ref": "QS-C04",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "cardinality_conflict"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "CARDINALITY_CONFLICT",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "CONFLICT_VISIBLE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "qs-s033",
+      "requirement_text": "将“纸艺练习”下的“参与材料”从可填写多个名称，改为只能填写一个名称。",
+      "value_type_hint": "string"
+    },
+    "scenario_ref": "QS-C05",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "wrong_parent_hint",
+      "cross_branch"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "WRONG_PARENT_HINT",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "CONFLICT_VISIBLE"
+    },
+    "request": {
+      "cardinality_hint": "MULTIPLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-002",
+      "requirement_text": "在馆藏资源下面记录低照度阅读角的照明级别。",
+      "value_type_hint": "string"
+    },
+    "scenario_ref": "QS-C06",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "near_name_negative",
+      "existing_property"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "NEAR_NAME_HARD_NEGATIVE",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "STABLE_CANDIDATE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "qs-s022",
+      "requirement_text": "记录预约取书允许保留的时长。",
+      "value_type_hint": "integer"
+    },
+    "scenario_ref": "QS-C07",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "insufficient_evidence",
+      "judgment_requires_evidence"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "INSUFFICIENT_EVIDENCE",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_EVIDENCE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "qs-s004",
+      "requirement_text": "请判断哪类社区周报最值得长期保存并记录等级；当前没有读者反馈或保存政策。",
+      "value_type_hint": "string"
+    },
+    "scenario_ref": "QS-C08",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "clarification_required",
+      "multiple_targets"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "CLARIFICATION_REQUIRED",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_CLARIFICATION"
+    },
+    "request": {
+      "cardinality_hint": "MULTIPLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-005",
+      "requirement_text": "记录社区展览内容的更新周期。",
+      "value_type_hint": "time_code"
+    },
+    "scenario_ref": "QS-C09",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "refusal",
+      "unbounded_request",
+      "bounded_alternative_guidance"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "REFUSAL",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "REFUSE_UNBOUNDED_COMBINATION"
+    },
+    "request": {
+      "cardinality_hint": "UNKNOWN",
+      "node_kind_hint": "UNKNOWN",
+      "proposed_parent_node_id": "ql-001",
+      "requirement_text": "为每个馆藏、空间、服务、活动和保障节点统一添加所有已经出现的属性。",
+      "value_type_hint": null
+    },
+    "scenario_ref": "QS-C10",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "duplicate_substructure",
+      "deletion_requires_evidence"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "DUPLICATE_SUBSTRUCTURE",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_EVIDENCE"
+    },
+    "request": {
+      "cardinality_hint": "UNKNOWN",
+      "node_kind_hint": "UNKNOWN",
+      "proposed_parent_node_id": "qs-s013",
+      "requirement_text": "低照度阅读角和安静长桌的部分属性相近，请直接删除其中一个分支。",
+      "value_type_hint": null
+    },
+    "scenario_ref": "QS-C11",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "unusual_depth",
+      "move_requires_evidence"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "UNUSUAL_DEPTH",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_EVIDENCE"
+    },
+    "request": {
+      "cardinality_hint": "UNKNOWN",
+      "node_kind_hint": "UNKNOWN",
+      "proposed_parent_node_id": "ql-001",
+      "requirement_text": "通道时段例外位于较深层级，请直接把它移动到信息树根节点。",
+      "value_type_hint": null
+    },
+    "scenario_ref": "QS-C12",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "cartesian_request",
+      "refusal"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "CARTESIAN_DENSITY",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "REFUSE_UNBOUNDED_COMBINATION"
+    },
+    "request": {
+      "cardinality_hint": "UNKNOWN",
+      "node_kind_hint": "UNKNOWN",
+      "proposed_parent_node_id": "ql-004",
+      "requirement_text": "把树中所有时间属性复制到全部读者服务节点。",
+      "value_type_hint": null
+    },
+    "scenario_ref": "QS-C13",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "instance_boundary",
+      "clear_intent"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "INSTANCE_FIELD_SCOPE_CLEAR",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "STABLE_CANDIDATE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "qs-s008",
+      "requirement_text": "为每条音频读物记录其自身的音频时长。",
+      "value_type_hint": "integer"
+    },
+    "scenario_ref": "QS-C14",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "collection_aggregate",
+      "instance_boundary"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "COLLECTION_AGGREGATE_SCOPE",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_CLARIFICATION"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-008",
+      "requirement_text": "记录全部音频读物的总时长。",
+      "value_type_hint": "integer"
+    },
+    "scenario_ref": "QS-C15",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "policy_scope",
+      "instance_boundary"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "POLICY_INSTANCE_SEPARATION",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "CONFLICT_VISIBLE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-006",
+      "requirement_text": "把纸本文献默认外借许可记录到每一条纸本文献记录中。",
+      "value_type_hint": "boolean"
+    },
+    "scenario_ref": "QS-C16",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "singleton_policy",
+      "existing_property"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "SINGLETON_POLICY_SCOPE",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "STABLE_CANDIDATE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-018",
+      "requirement_text": "在纸本文献流通政策中记录该类文献的默认外借许可。",
+      "value_type_hint": "boolean"
+    },
+    "scenario_ref": "QS-C17",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "ancestor_scope",
+      "category_or_instance"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "ANCESTOR_SCOPE",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_CLARIFICATION"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-006",
+      "requirement_text": "记录纸本文献是否允许外借。",
+      "value_type_hint": "boolean"
+    },
+    "scenario_ref": "QS-C18",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "conflicting_hints",
+      "kind_conflict"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "CONFLICTING_HINTS",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "CONFLICT_VISIBLE"
+    },
+    "request": {
+      "cardinality_hint": "MULTIPLE",
+      "node_kind_hint": "CONCEPT",
+      "proposed_parent_node_id": "ql-003",
+      "requirement_text": "把小型讨论间作为可重复记录的文本字段。",
+      "value_type_hint": "string"
+    },
+    "scenario_ref": "QS-C19",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "granularity_ambiguity",
+      "multiple_parents"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "GRANULARITY_AMBIGUITY",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_CLARIFICATION"
+    },
+    "request": {
+      "cardinality_hint": "UNKNOWN",
+      "node_kind_hint": "UNKNOWN",
+      "proposed_parent_node_id": "ql-004",
+      "requirement_text": "在读者服务下面增加预约提醒。",
+      "value_type_hint": null
+    },
+    "scenario_ref": "QS-C20",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  }
+]

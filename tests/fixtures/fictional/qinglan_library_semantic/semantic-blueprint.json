@@ -1,0 +1,2486 @@
+{
+  "allowed_facets_by_subject": {
+    "ql-009": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "curated_core",
+        "name": "馆舍名称",
+        "node_id": "ql-029",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      }
+    ],
+    "ql-010": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "curated_core",
+        "name": "开放时间",
+        "node_id": "ql-032",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      }
+    ],
+    "ql-011": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "curated_core",
+        "name": "活动容量",
+        "node_id": "ql-034",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      }
+    ],
+    "ql-018": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "curated_core",
+        "name": "默认外借许可",
+        "node_id": "ql-024",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "适用读者范围",
+        "node_id": "qs-b001",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "借出前置条件",
+        "node_id": "qs-b002",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "馆内使用例外",
+        "node_id": "qs-b003",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "规则复核周期",
+        "node_id": "qs-b004",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "整理批次标记",
+        "node_id": "qs-f001",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "同步状态",
+        "node_id": "qs-f002",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "ql-020": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "curated_core",
+        "name": "预约时段",
+        "node_id": "ql-038",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "curated_core",
+        "name": "参与人数",
+        "node_id": "ql-039",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "使用目的",
+        "node_id": "qs-b100",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "申请时刻",
+        "node_id": "qs-b101",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "候补接受",
+        "node_id": "qs-b102",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "流转备注",
+        "node_id": "qs-f036",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s001": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "查阅地点",
+        "node_id": "qs-b005",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "取用协助需求",
+        "node_id": "qs-b006",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "索引入口",
+        "node_id": "qs-b007",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "当日查阅上限",
+        "node_id": "qs-b008",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "校对节律",
+        "node_id": "qs-f003",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "准备说明",
+        "node_id": "qs-f004",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s002": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "收录主题",
+        "node_id": "qs-b009",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "年代跨度说明",
+        "node_id": "qs-b010",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "口述资料关联",
+        "node_id": "qs-b011",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "整理完成度",
+        "node_id": "qs-b012",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "交接提示",
+        "node_id": "qs-f005",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "复查时点",
+        "node_id": "qs-f006",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s003": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "字号级别",
+        "node_id": "qs-b013",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "辅助阅读说明",
+        "node_id": "qs-b014",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "可借阅册数",
+        "node_id": "qs-b015",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "配套音频标记",
+        "node_id": "qs-b016",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "复核窗口",
+        "node_id": "qs-f007",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "关注范围",
+        "node_id": "qs-f008",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s004": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "出刊频率",
+        "node_id": "qs-b017",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "版面数量",
+        "node_id": "qs-b018",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "社区栏目",
+        "node_id": "qs-b019",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "归档保留期",
+        "node_id": "qs-b020",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "维护分组",
+        "node_id": "qs-f009",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "调整备注",
+        "node_id": "qs-f010",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s005": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "主题周期",
+        "node_id": "qs-b021",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "专栏范围",
+        "node_id": "qs-b022",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "合订册状态",
+        "node_id": "qs-b023",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "往期可查数量",
+        "node_id": "qs-b024",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "观察备注",
+        "node_id": "qs-f011",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "巡查周期",
+        "node_id": "qs-f012",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s006": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "连载周期",
+        "node_id": "qs-b025",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "图像页数",
+        "node_id": "qs-b026",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "适读年龄段",
+        "node_id": "qs-b027",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "缺期说明",
+        "node_id": "qs-b028",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "轮转状态",
+        "node_id": "qs-f013",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "归档状态",
+        "node_id": "qs-f014",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s007": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "图像格式",
+        "node_id": "qs-b029",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "页面总数",
+        "node_id": "qs-b030",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "下载许可",
+        "node_id": "qs-b031",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "更新日期码",
+        "node_id": "qs-b032",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "更新来源说明",
+        "node_id": "qs-f015",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "协作提示",
+        "node_id": "qs-f016",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s008": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "音频时长",
+        "node_id": "qs-b033",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "朗读语言",
+        "node_id": "qs-b034",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "分段数量",
+        "node_id": "qs-b035",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "文稿同步",
+        "node_id": "qs-b036",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "暂存标识",
+        "node_id": "qs-f017",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "整备备注",
+        "node_id": "qs-f018",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s009": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "互动模块",
+        "node_id": "qs-b037",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "完成预计时长",
+        "node_id": "qs-b038",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "离线使用许可",
+        "node_id": "qs-b039",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "适用设备",
+        "node_id": "qs-b040",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "归档提示",
+        "node_id": "qs-f019",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "使用状态来源",
+        "node_id": "qs-f020",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s010": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "观察主题",
+        "node_id": "qs-b041",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "推荐季节",
+        "node_id": "qs-b042",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "图鉴关联",
+        "node_id": "qs-b043",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "任务卡数量",
+        "node_id": "qs-b044",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "清点方式",
+        "node_id": "qs-f021",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s011": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "手作方向",
+        "node_id": "qs-b045",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "工具难度",
+        "node_id": "qs-b046",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "参考作品数量",
+        "node_id": "qs-b047",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "材料替代说明",
+        "node_id": "qs-b048",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "核对日期码",
+        "node_id": "qs-f022",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s012": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "共读年龄段",
+        "node_id": "qs-b049",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "推荐时长",
+        "node_id": "qs-b050",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "讨论问题数量",
+        "node_id": "qs-b051",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "家庭参与提示",
+        "node_id": "qs-b052",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "处理队列",
+        "node_id": "qs-f023",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s013": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "座位朝向",
+        "node_id": "qs-b053",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "自然光时段",
+        "node_id": "qs-b054",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "电源可用",
+        "node_id": "qs-b055",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "桌面宽度等级",
+        "node_id": "qs-b056",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "维护优先级",
+        "node_id": "qs-f024",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s014": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "照明级别",
+        "node_id": "qs-b057",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "辅助灯可用",
+        "node_id": "qs-b058",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "推荐停留时长",
+        "node_id": "qs-b059",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "座位数量",
+        "node_id": "qs-b060",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "巡查标签",
+        "node_id": "qs-f025",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s015": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "可用席位",
+        "node_id": "qs-b061",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "桌面分区",
+        "node_id": "qs-b062",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "安静提示方式",
+        "node_id": "qs-b063",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "插座数量",
+        "node_id": "qs-b064",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "资料状态说明",
+        "node_id": "qs-f026",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s016": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "白板面数",
+        "node_id": "qs-b065",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "书写工具清单",
+        "node_id": "qs-b066",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "最多协作人数",
+        "node_id": "qs-b067",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "远程投屏许可",
+        "node_id": "qs-b068",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "操作提示",
+        "node_id": "qs-f027",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s017": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "讨论席位",
+        "node_id": "qs-b069",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "隔音等级",
+        "node_id": "qs-b070",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "预约提前量",
+        "node_id": "qs-b071",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "饮水许可",
+        "node_id": "qs-b072",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "变更缘由",
+        "node_id": "qs-f028",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s018": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "远程连接方式",
+        "node_id": "qs-b073",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "摄像设备可用",
+        "node_id": "qs-b074",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "同时在线人数",
+        "node_id": "qs-b075",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "支持平台",
+        "node_id": "qs-b076",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "检查节拍",
+        "node_id": "qs-f029",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s019": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "讲台移动范围",
+        "node_id": "qs-b077",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "扩音设备可用",
+        "node_id": "qs-b078",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "演示接口",
+        "node_id": "qs-b079",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "讲者席位",
+        "node_id": "qs-b080",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "交接渠道",
+        "node_id": "qs-f030",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s020": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "座席布局",
+        "node_id": "qs-b081",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "活动容量",
+        "node_id": "qs-b082",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "无障碍席位",
+        "node_id": "qs-b083",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "重排准备时长",
+        "node_id": "qs-b084",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "准备状态",
+        "node_id": "qs-f031",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s021": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "展示墙长度等级",
+        "node_id": "qs-b085",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "悬挂方式",
+        "node_id": "qs-b086",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "作品容量",
+        "node_id": "qs-b087",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "照明模式",
+        "node_id": "qs-b088",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "使用提醒",
+        "node_id": "qs-f032",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s022": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "保留时长",
+        "node_id": "qs-b089",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "取书窗口",
+        "node_id": "qs-b090",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "到馆提醒渠道",
+        "node_id": "qs-b091",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "超时释放",
+        "node_id": "qs-b092",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "整备方式",
+        "node_id": "qs-f033",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s023": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "分流去向",
+        "node_id": "qs-b093",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "处理批次数",
+        "node_id": "qs-b094",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "异常登记要求",
+        "node_id": "qs-b095",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "当日结清时刻",
+        "node_id": "qs-b096",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "记录周期",
+        "node_id": "qs-f034",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s024": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "提醒提前量",
+        "node_id": "qs-b097",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "提醒渠道",
+        "node_id": "qs-b098",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "暂停提醒",
+        "node_id": "qs-b099",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "关注标记",
+        "node_id": "qs-f035",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s025": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "保留原因",
+        "node_id": "qs-b103",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "释放时刻",
+        "node_id": "qs-b104",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "续留许可",
+        "node_id": "qs-b105",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "核验角色",
+        "node_id": "qs-f037",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s026": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "候补顺序说明",
+        "node_id": "qs-b106",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "通知渠道",
+        "node_id": "qs-b107",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "响应时限",
+        "node_id": "qs-b108",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "复查条件",
+        "node_id": "qs-f038",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s027": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "引导步骤",
+        "node_id": "qs-b109",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "首次到馆提示",
+        "node_id": "qs-b110",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "完成确认",
+        "node_id": "qs-b111",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "维护窗口",
+        "node_id": "qs-f039",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s028": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "协作成员数",
+        "node_id": "qs-b112",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "可见借阅记录范围",
+        "node_id": "qs-b113",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "代办许可",
+        "node_id": "qs-b114",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "同步提示",
+        "node_id": "qs-f040",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s029": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "协助方式",
+        "node_id": "qs-b115",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "预约需求",
+        "node_id": "qs-b116",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "陪同人数",
+        "node_id": "qs-b117",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "整理策略",
+        "node_id": "qs-f041",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s030": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "对谈主题",
+        "node_id": "qs-b118",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "嘉宾人数",
+        "node_id": "qs-b119",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "报名要求",
+        "node_id": "qs-b120",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "观察频率",
+        "node_id": "qs-f042",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s031": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "阅读章节",
+        "node_id": "qs-b121",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "讨论场次",
+        "node_id": "qs-b122",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "主持方式",
+        "node_id": "qs-b123",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "备用说明",
+        "node_id": "qs-f043",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s032": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "朗读篇目",
+        "node_id": "qs-b124",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "陪同人数",
+        "node_id": "qs-b125",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "录音许可",
+        "node_id": "qs-b126",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "协作备注",
+        "node_id": "qs-f044",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s033": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "折叠技法",
+        "node_id": "qs-b127",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "参与材料",
+        "node_id": "qs-b128",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "完成时长",
+        "node_id": "qs-b129",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "状态来源",
+        "node_id": "qs-f045",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s034": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "装帧方式",
+        "node_id": "qs-b130",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "工具套数",
+        "node_id": "qs-b131",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "安全说明",
+        "node_id": "qs-b132",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "调整时点",
+        "node_id": "qs-f046",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s035": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "可再用材料",
+        "node_id": "qs-b133",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "分类筐数",
+        "node_id": "qs-b134",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "清洁要求",
+        "node_id": "qs-b135",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "核对范围",
+        "node_id": "qs-f047",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s036": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "参展居民数",
+        "node_id": "qs-b136",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "作品类别",
+        "node_id": "qs-b137",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "展示周期",
+        "node_id": "qs-b138",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "处理节奏",
+        "node_id": "qs-f048",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s037": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "资料主题",
+        "node_id": "qs-b139",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "展签数量",
+        "node_id": "qs-b140",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "更新频率",
+        "node_id": "qs-b141",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "检查来源",
+        "node_id": "qs-f049",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s038": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "橱窗位置",
+        "node_id": "qs-b142",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "轮换周期",
+        "node_id": "qs-b143",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "可见作品数",
+        "node_id": "qs-b144",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "维护责任",
+        "node_id": "qs-f050",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s039": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "通行方向",
+        "node_id": "qs-b145",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "开放时段",
+        "node_id": "qs-b146",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "临时绕行",
+        "node_id": "qs-b147",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "记录口径",
+        "node_id": "qs-f051",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s040": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "辅助方式",
+        "node_id": "qs-b148",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "申请提前量",
+        "node_id": "qs-b149",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "陪同许可",
+        "node_id": "qs-b150",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "更新提示",
+        "node_id": "qs-f052",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s041": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "启用条件",
+        "node_id": "qs-b151",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "通道宽度等级",
+        "node_id": "qs-b152",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "值守需求",
+        "node_id": "qs-b153",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "复核范围",
+        "node_id": "qs-f053",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s042": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "例外日期",
+        "node_id": "qs-b154",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "适用人群",
+        "node_id": "qs-b155",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "确认状态",
+        "node_id": "qs-b156",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "交接状态",
+        "node_id": "qs-f054",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s043": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "轮值角色",
+        "node_id": "qs-b157",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "每班人数",
+        "node_id": "qs-b158",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "换班时刻",
+        "node_id": "qs-b159",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "观察时点",
+        "node_id": "qs-f055",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s044": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "切换步骤",
+        "node_id": "qs-b160",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "准备时长",
+        "node_id": "qs-b161",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "并行使用许可",
+        "node_id": "qs-b162",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "整理说明",
+        "node_id": "qs-f056",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s045": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "交接物资",
+        "node_id": "qs-b163",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "清点数量",
+        "node_id": "qs-b164",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "异常备注要求",
+        "node_id": "qs-b165",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "处理标记",
+        "node_id": "qs-f057",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s046": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "巡查区域",
+        "node_id": "qs-b166",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "巡查时段",
+        "node_id": "qs-b167",
+        "semantic_target_eligible": true,
+        "value_type": "time_code"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "异常灯位数",
+        "node_id": "qs-b168",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "核验提示",
+        "node_id": "qs-f058",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s047": [
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "复核位置",
+        "node_id": "qs-b169",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "照度等级",
+        "node_id": "qs-b170",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "补光需求",
+        "node_id": "qs-b171",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "维护备注",
+        "node_id": "qs-f059",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ],
+    "qs-s048": [
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "观察桌面数量",
+        "node_id": "qs-b172",
+        "semantic_target_eligible": true,
+        "value_type": "integer"
+      },
+      {
+        "cardinality": "MULTIPLE",
+        "dataset_family": "blueprint_background",
+        "name": "反光情况",
+        "node_id": "qs-b173",
+        "semantic_target_eligible": true,
+        "value_type": "string"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "blueprint_background",
+        "name": "调整建议状态",
+        "node_id": "qs-b174",
+        "semantic_target_eligible": true,
+        "value_type": "boolean"
+      },
+      {
+        "cardinality": "SINGLE",
+        "dataset_family": "stress_only_filler",
+        "name": "轮换条件",
+        "node_id": "qs-f060",
+        "semantic_target_eligible": false,
+        "value_type": "string"
+      }
+    ]
+  },
+  "blueprint_version": "qinglan-library-semantic-blueprint.v1",
+  "construction_policy": {
+    "exact_replay_anchors": 0,
+    "global_cartesian_product": false,
+    "numbered_sibling_names": false,
+    "organizational_concept_direct_scalar_fields": false,
+    "singleton_section_direct_scalar_fields": true,
+    "stress_filler_targetable": false,
+    "unusual_depth_paths": 2
+  },
+  "dataset_ref": "fictional-qinglan-library-semantic-v1",
+  "family_counts": {
+    "blueprint_background": 180,
+    "curated_core": 72,
+    "stress_only_filler": 60
+  },
+  "first_level_branches": [
+    "ql-002",
+    "ql-003",
+    "ql-004",
+    "ql-005",
+    "qs-ops",
+    "ql-009"
+  ],
+  "lineage_reference_node_ids": [
+    "ql-001",
+    "ql-002",
+    "ql-003",
+    "ql-004",
+    "ql-005",
+    "ql-006",
+    "ql-007",
+    "ql-008",
+    "ql-009",
+    "ql-012",
+    "ql-013",
+    "ql-015",
+    "ql-016",
+    "ql-017",
+    "ql-018",
+    "ql-020",
+    "ql-010",
+    "ql-011",
+    "ql-024",
+    "ql-029",
+    "ql-032",
+    "ql-034",
+    "ql-038",
+    "ql-039"
+  ],
+  "node_families": {
+    "blueprint_background": [
+      "qs-ops",
+      "qs-g004",
+      "qs-g010",
+      "qs-g014",
+      "qs-g015",
+      "qs-g016",
+      "qs-b001",
+      "qs-b002",
+      "qs-b003",
+      "qs-b004",
+      "qs-b005",
+      "qs-b006",
+      "qs-b007",
+      "qs-b008",
+      "qs-b009",
+      "qs-b010",
+      "qs-b011",
+      "qs-b012",
+      "qs-b013",
+      "qs-b014",
+      "qs-b015",
+      "qs-b016",
+      "qs-b017",
+      "qs-b018",
+      "qs-b019",
+      "qs-b020",
+      "qs-b021",
+      "qs-b022",
+      "qs-b023",
+      "qs-b024",
+      "qs-b025",
+      "qs-b026",
+      "qs-b027",
+      "qs-b028",
+      "qs-b029",
+      "qs-b030",
+      "qs-b031",
+      "qs-b032",
+      "qs-b033",
+      "qs-b034",
+      "qs-b035",
+      "qs-b036",
+      "qs-b037",
+      "qs-b038",
+      "qs-b039",
+      "qs-b040",
+      "qs-b041",
+      "qs-b042",
+      "qs-b043",
+      "qs-b044",
+      "qs-b045",
+      "qs-b046",
+      "qs-b047",
+      "qs-b048",
+      "qs-b049",
+      "qs-b050",
+      "qs-b051",
+      "qs-b052",
+      "qs-b053",
+      "qs-b054",
+      "qs-b055",
+      "qs-b056",
+      "qs-b057",
+      "qs-b058",
+      "qs-b059",
+      "qs-b060",
+      "qs-b061",
+      "qs-b062",
+      "qs-b063",
+      "qs-b064",
+      "qs-b065",
+      "qs-b066",
+      "qs-b067",
+      "qs-b068",
+      "qs-b069",
+      "qs-b070",
+      "qs-b071",
+      "qs-b072",
+      "qs-b073",
+      "qs-b074",
+      "qs-b075",
+      "qs-b076",
+      "qs-b077",
+      "qs-b078",
+      "qs-b079",
+      "qs-b080",
+      "qs-b081",
+      "qs-b082",
+      "qs-b083",
+      "qs-b084",
+      "qs-b085",
+      "qs-b086",
+      "qs-b087",
+      "qs-b088",
+      "qs-b089",
+      "qs-b090",
+      "qs-b091",
+      "qs-b092",
+      "qs-b093",
+      "qs-b094",
+      "qs-b095",
+      "qs-b096",
+      "qs-b097",
+      "qs-b098",
+      "qs-b099",
+      "qs-b100",
+      "qs-b101",
+      "qs-b102",
+      "qs-b103",
+      "qs-b104",
+      "qs-b105",
+      "qs-b106",
+      "qs-b107",
+      "qs-b108",
+      "qs-b109",
+      "qs-b110",
+      "qs-b111",
+      "qs-b112",
+      "qs-b113",
+      "qs-b114",
+      "qs-b115",
+      "qs-b116",
+      "qs-b117",
+      "qs-b118",
+      "qs-b119",
+      "qs-b120",
+      "qs-b121",
+      "qs-b122",
+      "qs-b123",
+      "qs-b124",
+      "qs-b125",
+      "qs-b126",
+      "qs-b127",
+      "qs-b128",
+      "qs-b129",
+      "qs-b130",
+      "qs-b131",
+      "qs-b132",
+      "qs-b133",
+      "qs-b134",
+      "qs-b135",
+      "qs-b136",
+      "qs-b137",
+      "qs-b138",
+      "qs-b139",
+      "qs-b140",
+      "qs-b141",
+      "qs-b142",
+      "qs-b143",
+      "qs-b144",
+      "qs-b145",
+      "qs-b146",
+      "qs-b147",
+      "qs-b148",
+      "qs-b149",
+      "qs-b150",
+      "qs-b151",
+      "qs-b152",
+      "qs-b153",
+      "qs-b154",
+      "qs-b155",
+      "qs-b156",
+      "qs-b157",
+      "qs-b158",
+      "qs-b159",
+      "qs-b160",
+      "qs-b161",
+      "qs-b162",
+      "qs-b163",
+      "qs-b164",
+      "qs-b165",
+      "qs-b166",
+      "qs-b167",
+      "qs-b168",
+      "qs-b169",
+      "qs-b170",
+      "qs-b171",
+      "qs-b172",
+      "qs-b173",
+      "qs-b174"
+    ],
+    "curated_core": [
+      "ql-001",
+      "ql-002",
+      "ql-003",
+      "ql-004",
+      "ql-005",
+      "ql-006",
+      "ql-007",
+      "ql-008",
+      "ql-009",
+      "ql-012",
+      "ql-013",
+      "ql-015",
+      "ql-016",
+      "ql-017",
+      "ql-018",
+      "qs-s001",
+      "qs-s002",
+      "qs-s003",
+      "qs-s004",
+      "qs-s005",
+      "qs-s006",
+      "qs-s007",
+      "qs-s008",
+      "qs-s009",
+      "qs-s010",
+      "qs-s011",
+      "qs-s012",
+      "qs-s013",
+      "qs-s014",
+      "qs-s015",
+      "qs-s016",
+      "qs-s017",
+      "qs-s018",
+      "qs-s019",
+      "qs-s020",
+      "qs-s021",
+      "qs-s022",
+      "qs-s023",
+      "qs-s024",
+      "ql-020",
+      "qs-s025",
+      "qs-s026",
+      "qs-s027",
+      "qs-s028",
+      "qs-s029",
+      "qs-s030",
+      "qs-s031",
+      "qs-s032",
+      "qs-s033",
+      "qs-s034",
+      "qs-s035",
+      "qs-s036",
+      "qs-s037",
+      "qs-s038",
+      "qs-s039",
+      "qs-s040",
+      "qs-s041",
+      "qs-s042",
+      "qs-s043",
+      "qs-s044",
+      "qs-s045",
+      "qs-s046",
+      "qs-s047",
+      "qs-s048",
+      "ql-010",
+      "ql-011",
+      "ql-024",
+      "ql-029",
+      "ql-032",
+      "ql-034",
+      "ql-038",
+      "ql-039"
+    ],
+    "stress_only_filler": [
+      "qs-f001",
+      "qs-f002",
+      "qs-f003",
+      "qs-f004",
+      "qs-f005",
+      "qs-f006",
+      "qs-f007",
+      "qs-f008",
+      "qs-f009",
+      "qs-f010",
+      "qs-f011",
+      "qs-f012",
+      "qs-f013",
+      "qs-f014",
+      "qs-f015",
+      "qs-f016",
+      "qs-f017",
+      "qs-f018",
+      "qs-f019",
+      "qs-f020",
+      "qs-f021",
+      "qs-f022",
+      "qs-f023",
+      "qs-f024",
+      "qs-f025",
+      "qs-f026",
+      "qs-f027",
+      "qs-f028",
+      "qs-f029",
+      "qs-f030",
+      "qs-f031",
+      "qs-f032",
+      "qs-f033",
+      "qs-f034",
+      "qs-f035",
+      "qs-f036",
+      "qs-f037",
+      "qs-f038",
+      "qs-f039",
+      "qs-f040",
+      "qs-f041",
+      "qs-f042",
+      "qs-f043",
+      "qs-f044",
+      "qs-f045",
+      "qs-f046",
+      "qs-f047",
+      "qs-f048",
+      "qs-f049",
+      "qs-f050",
+      "qs-f051",
+      "qs-f052",
+      "qs-f053",
+      "qs-f054",
+      "qs-f055",
+      "qs-f056",
+      "qs-f057",
+      "qs-f058",
+      "qs-f059",
+      "qs-f060"
+    ]
+  },
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "structural_group_ids": [
+    "ql-006",
+    "ql-007",
+    "ql-008",
+    "qs-g004",
+    "ql-012",
+    "ql-013",
+    "qs-g010",
+    "ql-015",
+    "ql-016",
+    "ql-017",
+    "qs-g014",
+    "qs-g015",
+    "qs-g016"
+  ],
+  "subject_ids": [
+    "ql-018",
+    "qs-s001",
+    "qs-s002",
+    "qs-s003",
+    "qs-s004",
+    "qs-s005",
+    "qs-s006",
+    "qs-s007",
+    "qs-s008",
+    "qs-s009",
+    "qs-s010",
+    "qs-s011",
+    "qs-s012",
+    "qs-s013",
+    "qs-s014",
+    "qs-s015",
+    "qs-s016",
+    "qs-s017",
+    "qs-s018",
+    "qs-s019",
+    "qs-s020",
+    "qs-s021",
+    "qs-s022",
+    "qs-s023",
+    "qs-s024",
+    "ql-020",
+    "qs-s025",
+    "qs-s026",
+    "qs-s027",
+    "qs-s028",
+    "qs-s029",
+    "qs-s030",
+    "qs-s031",
+    "qs-s032",
+    "qs-s033",
+    "qs-s034",
+    "qs-s035",
+    "qs-s036",
+    "qs-s037",
+    "qs-s038",
+    "qs-s039",
+    "qs-s040",
+    "qs-s041",
+    "qs-s042",
+    "qs-s043",
+    "qs-s044",
+    "qs-s045",
+    "qs-s046",
+    "qs-s047",
+    "qs-s048",
+    "ql-010",
+    "ql-011"
+  ],
+  "value_owner_contract": {
+    "class_owner_count": 52,
+    "concept_roles": [
+      "ORGANIZATIONAL_CONCEPT",
+      "SINGLETON_SECTION"
+    ],
+    "repeated_class_owner_count": 51,
+    "repeated_owner_scope": "REPEATED_RECORD",
+    "scalar_field_requires_declared_owner": true,
+    "scalar_field_scope": "PARENT_CLASS_RECORD",
+    "singleton_class_owner_count": 1,
+    "singleton_concept_scope": "RESOURCE_SINGLETON",
+    "singleton_owner_scope": "SINGLETON_RECORD",
+    "singleton_scalar_field_scope": "PARENT_SINGLETON_SECTION",
+    "singleton_section_count": 1
+  }
+}

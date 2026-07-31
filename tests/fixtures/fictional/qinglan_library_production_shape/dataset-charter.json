@@ -1,0 +1,62 @@
+{
+  "charter_version": "fictional-dataset-charter.v1",
+  "dataset_ref": "fictional-qinglan-library-production-shape-v1",
+  "derived_from_real": false,
+  "fictional": true,
+  "gold_eligible": false,
+  "independence": {
+    "audit_may_reject_but_must_not_guide_generation": true,
+    "generation_blind_to_legacy_fire_semantics": true,
+    "legacy_similarity_audit_stage": "POST_FREEZE_ONLY"
+  },
+  "non_goals": [
+    "不复现真实生产树语义、结构比例或字段。",
+    "不创建 Gold、Patch 或生产准确率指标。",
+    "不让 stress-only 节点承担语义结论。"
+  ],
+  "patch_eligible": false,
+  "primary_role": "PRODUCTION_SHAPE",
+  "purpose": [
+    "验证 2,001 节点下的确定性构建、适配和有界候选。",
+    "验证节点重排不改变声明锚点的可观察结果。",
+    "检查大规模生成没有模板换词或笛卡尔积扩张。"
+  ],
+  "review_budget": {
+    "candidate_limit": 8,
+    "codex_pre_review_all": true,
+    "dual_review_limit": 0,
+    "high_risk_self_recheck_scenarios": 4,
+    "human_review_curated_nodes": 40,
+    "human_screen_all_scenarios": true,
+    "random_node_sample": 24,
+    "random_self_recheck_scenarios": 3,
+    "structural_cluster_representatives": 12,
+    "time_limit_minutes": 180
+  },
+  "seed": 2026073101,
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "synthetic_lineage": {
+    "anchor_contract_nodes": 24,
+    "non_anchor_copy_allowed": false,
+    "replay_scenarios": 4
+  },
+  "target": {
+    "depth_counts": {
+      "0": 1,
+      "1": 6,
+      "2": 44,
+      "3": 270,
+      "4": 760,
+      "5": 700,
+      "6": 220
+    },
+    "family_counts": {
+      "approved_blueprint_background": 1561,
+      "curated_core": 40,
+      "stress_only_filler": 400
+    },
+    "nodes": 2001,
+    "scenarios": 8,
+    "value_envelopes": 0
+  }
+}

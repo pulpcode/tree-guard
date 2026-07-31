@@ -1,0 +1,46 @@
+{
+  "promotion_record_version": "fictional-fixture-promotion.v1",
+  "dataset_ref": "fictional-qinglan-library-production-shape-v1",
+  "run_ref": "qinglan-library-production-shape-v1-run-003",
+  "candidate_state": "FROZEN",
+  "fixture_state": "PROMOTED",
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "fictional": true,
+  "derived_from_real": false,
+  "gold_eligible": false,
+  "patch_eligible": false,
+  "formal_fixture_promoted": true,
+  "runtime_registered": false,
+  "human_review": {
+    "protocol": "CODEX_ASSISTED_SINGLE_HUMAN_REVIEW",
+    "evidence_source": "USER_CHAT_CONFIRMATION",
+    "completed": 8,
+    "accepted": 8,
+    "revised": 0,
+    "rejected": 0,
+    "dual_review_completed": 0,
+    "tree_scope_decision": "CONFIRM_SCOPE",
+    "anchor_contract_decision": "CONFIRM_SCOPE",
+    "within_time_budget": true,
+    "duration_minutes_recorded": false,
+    "stop_triggered": false
+  },
+  "freeze": {
+    "verified": true,
+    "bound_artifact_count": 13,
+    "promoted_data_file_count": 6
+  },
+  "legacy_similarity_audit": {
+    "authority": "DETERMINISTIC_READ_ONLY",
+    "decision": "ACCEPT",
+    "finding_codes": []
+  },
+  "limitations": [
+    "该 fixture 只验证完全虚构数据上的生产形状合同。",
+    "人工审核不会把 synthetic 数据变成 Gold。",
+    "相似度审计通过不证明真实领域正确性或生产准确率。",
+    "跨规模结论只适用于 24 个声明锚点和 4 个配对场景。",
+    "stress-only 节点不贡献语义准确率。",
+    "当前未加入运行时数据集注册表。"
+  ]
+}

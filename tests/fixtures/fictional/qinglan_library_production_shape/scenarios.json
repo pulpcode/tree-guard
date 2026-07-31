@@ -1,0 +1,206 @@
+[
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "clear_intent",
+      "existing_property",
+      "replay_anchor",
+      "large_tree"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "CLEAR_INTENT",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "STABLE_CANDIDATE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "qs-s004",
+      "requirement_text": "在社区周报下面记录每期包含的版面数量。",
+      "value_type_hint": "integer"
+    },
+    "scenario_ref": "QP-C01",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "homonym",
+      "cross_branch",
+      "replay_anchor",
+      "large_tree"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "HOMONYM",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_CLARIFICATION"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": null,
+      "requirement_text": "需要记录陪同人数。",
+      "value_type_hint": "integer"
+    },
+    "scenario_ref": "QP-C02",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "insufficient_evidence",
+      "judgment_requires_evidence",
+      "replay_anchor",
+      "large_tree"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "INSUFFICIENT_EVIDENCE",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_EVIDENCE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "qs-s004",
+      "requirement_text": "请判断哪类社区周报最值得长期保存并记录等级；当前没有读者反馈或保存政策。",
+      "value_type_hint": "string"
+    },
+    "scenario_ref": "QP-C03",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "wrong_parent_hint",
+      "cross_branch",
+      "replay_anchor",
+      "large_tree"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "WRONG_PARENT_HINT",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "CONFLICT_VISIBLE"
+    },
+    "request": {
+      "cardinality_hint": "MULTIPLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-002",
+      "requirement_text": "在馆藏资源下面记录低照度阅读角的照明级别。",
+      "value_type_hint": "string"
+    },
+    "scenario_ref": "QP-C04",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "near_name_negative",
+      "candidate_limit",
+      "large_tree"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "NEAR_NAME_HARD_NEGATIVE",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "STABLE_CANDIDATE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "qp-s001",
+      "requirement_text": "在馆藏版本下面记录版本说明。",
+      "value_type_hint": "string"
+    },
+    "scenario_ref": "QP-C05",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "value_owner",
+      "collection_item",
+      "large_tree"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "INSTANCE_SCOPE_CONFLICT",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "CONFLICT_VISIBLE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "ql-004",
+      "requirement_text": "在读者服务下面记录每位到馆协助对象的等候时长。",
+      "value_type_hint": "integer"
+    },
+    "scenario_ref": "QP-C06",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "deterministic_replay",
+      "node_reordering",
+      "large_tree"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "REORDER_STABILITY",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "STABLE_CANDIDATE"
+    },
+    "request": {
+      "cardinality_hint": "MULTIPLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": "qp-s002",
+      "requirement_text": "在开放安排下面记录开放时段。",
+      "value_type_hint": "time_code"
+    },
+    "scenario_ref": "QP-C07",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  },
+  {
+    "candidate_source": "AI_SYNTHETIC",
+    "challenge_tags": [
+      "stress_only",
+      "oracle_boundary",
+      "insufficient_evidence"
+    ],
+    "fictional": true,
+    "gold_eligible": false,
+    "patch_eligible": false,
+    "primary_risk": "LARGE_TREE_NO_SIGNAL",
+    "proposed_observable_state": {
+      "authority": "PROVISIONAL_HUMAN_REVIEW_REQUIRED",
+      "category": "NEED_EVIDENCE"
+    },
+    "request": {
+      "cardinality_hint": "SINGLE",
+      "node_kind_hint": "PROPERTY",
+      "proposed_parent_node_id": null,
+      "requirement_text": "请判断借阅高峰应采用哪一种最优分流方式并记录结论；当前树没有效果证据。",
+      "value_type_hint": "string"
+    },
+    "scenario_ref": "QP-C08",
+    "source_class": "CLEANROOM_SYNTHETIC"
+  }
+]

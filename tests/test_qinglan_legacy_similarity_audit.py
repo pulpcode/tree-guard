@@ -201,6 +201,42 @@ class QinglanLegacySimilarityAuditTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "frozen artifact changed"):
                 run_audit(run_dir, legacy_dir)
 
+    def test_additional_frozen_artifact_is_also_verified(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            run_dir, legacy_dir = self._arrange(
+                Path(directory),
+                new_names=("蓝庭", "容器区", "静默温度"),
+                legacy_names=("赤站", "轨道区", "脉冲密度"),
+            )
+            extra_path = run_dir / "tree-scope-review.json"
+            extra_path.write_text(
+                json.dumps({"decision": "CONFIRM_SCOPE"}, sort_keys=True),
+                encoding="utf-8",
+            )
+            manifest_path = run_dir / "freeze-manifest.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["artifacts"].append(
+                {
+                    "path": extra_path.name,
+                    "byte_sha256": hashlib.sha256(
+                        extra_path.read_bytes()
+                    ).hexdigest(),
+                }
+            )
+            manifest_path.write_text(
+                json.dumps(manifest, sort_keys=True),
+                encoding="utf-8",
+            )
+
+            self.assertEqual(
+                run_audit(run_dir, legacy_dir)["decision"],
+                "ACCEPT",
+            )
+            extra_path.write_text("{}", encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "frozen artifact changed"):
+                run_audit(run_dir, legacy_dir)
+
 
 if __name__ == "__main__":
     unittest.main()

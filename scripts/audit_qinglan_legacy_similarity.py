@@ -94,10 +94,15 @@ def verify_freeze_manifest(run_dir: Path) -> dict[str, Any]:
     entries = manifest.get("artifacts")
     if not isinstance(entries, list):
         raise ValueError("freeze manifest artifacts must be a list")
-    paths = [entry.get("path") for entry in entries if isinstance(entry, dict)]
-    if len(entries) != len(REQUIRED_FROZEN_ARTIFACTS):
-        raise ValueError("freeze manifest must bind exactly 12 artifacts")
-    if set(paths) != REQUIRED_FROZEN_ARTIFACTS or len(paths) != len(set(paths)):
+    if any(not isinstance(entry, dict) for entry in entries):
+        raise ValueError("freeze manifest artifact entries must be objects")
+    paths = [entry.get("path") for entry in entries]
+    if len(entries) < len(REQUIRED_FROZEN_ARTIFACTS):
+        raise ValueError("freeze manifest is missing required artifacts")
+    if (
+        not REQUIRED_FROZEN_ARTIFACTS.issubset(paths)
+        or len(paths) != len(set(paths))
+    ):
         raise ValueError("freeze manifest does not bind the required artifacts")
 
     for entry in entries:

@@ -1,0 +1,115 @@
+{
+  "cells": [
+    {
+      "challenge_tags": [
+        "clear_intent",
+        "existing_property",
+        "replay_anchor",
+        "large_tree"
+      ],
+      "coverage_class": "CROSS_SCALE_REPLAY",
+      "expected_observable_category": "STABLE_CANDIDATE",
+      "primary_risk": "CLEAR_INTENT",
+      "primary_role": "PRODUCTION_SHAPE",
+      "replay_of": "QS-C01",
+      "scenario_ref": "QP-C01"
+    },
+    {
+      "challenge_tags": [
+        "homonym",
+        "cross_branch",
+        "replay_anchor",
+        "large_tree"
+      ],
+      "coverage_class": "CROSS_SCALE_REPLAY",
+      "expected_observable_category": "NEED_CLARIFICATION",
+      "primary_risk": "HOMONYM",
+      "primary_role": "PRODUCTION_SHAPE",
+      "replay_of": "QS-C02",
+      "scenario_ref": "QP-C02"
+    },
+    {
+      "challenge_tags": [
+        "insufficient_evidence",
+        "judgment_requires_evidence",
+        "replay_anchor",
+        "large_tree"
+      ],
+      "coverage_class": "CROSS_SCALE_REPLAY",
+      "expected_observable_category": "NEED_EVIDENCE",
+      "primary_risk": "INSUFFICIENT_EVIDENCE",
+      "primary_role": "PRODUCTION_SHAPE",
+      "replay_of": "QS-C08",
+      "scenario_ref": "QP-C03"
+    },
+    {
+      "challenge_tags": [
+        "wrong_parent_hint",
+        "cross_branch",
+        "replay_anchor",
+        "large_tree"
+      ],
+      "coverage_class": "CROSS_SCALE_REPLAY",
+      "expected_observable_category": "CONFLICT_VISIBLE",
+      "primary_risk": "WRONG_PARENT_HINT",
+      "primary_role": "PRODUCTION_SHAPE",
+      "replay_of": "QS-C06",
+      "scenario_ref": "QP-C04"
+    },
+    {
+      "challenge_tags": [
+        "near_name_negative",
+        "candidate_limit",
+        "large_tree"
+      ],
+      "coverage_class": "LARGE_SHAPE_COVERAGE",
+      "expected_observable_category": "STABLE_CANDIDATE",
+      "primary_risk": "NEAR_NAME_HARD_NEGATIVE",
+      "primary_role": "PRODUCTION_SHAPE",
+      "replay_of": null,
+      "scenario_ref": "QP-C05"
+    },
+    {
+      "challenge_tags": [
+        "value_owner",
+        "collection_item",
+        "large_tree"
+      ],
+      "coverage_class": "LARGE_SHAPE_COVERAGE",
+      "expected_observable_category": "CONFLICT_VISIBLE",
+      "primary_risk": "INSTANCE_SCOPE_CONFLICT",
+      "primary_role": "PRODUCTION_SHAPE",
+      "replay_of": null,
+      "scenario_ref": "QP-C06"
+    },
+    {
+      "challenge_tags": [
+        "deterministic_replay",
+        "node_reordering",
+        "large_tree"
+      ],
+      "coverage_class": "LARGE_SHAPE_COVERAGE",
+      "expected_observable_category": "STABLE_CANDIDATE",
+      "primary_risk": "REORDER_STABILITY",
+      "primary_role": "PRODUCTION_SHAPE",
+      "replay_of": null,
+      "scenario_ref": "QP-C07"
+    },
+    {
+      "challenge_tags": [
+        "stress_only",
+        "oracle_boundary",
+        "insufficient_evidence"
+      ],
+      "coverage_class": "LARGE_SHAPE_COVERAGE",
+      "expected_observable_category": "NEED_EVIDENCE",
+      "primary_risk": "LARGE_TREE_NO_SIGNAL",
+      "primary_role": "PRODUCTION_SHAPE",
+      "replay_of": null,
+      "scenario_ref": "QP-C08"
+    }
+  ],
+  "coverage_version": "fictional-coverage-matrix.v1",
+  "dataset_ref": "fictional-qinglan-library-production-shape-v1",
+  "tree_size_bucket": "LARGE_1800_2300"
+}

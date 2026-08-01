@@ -1,0 +1,43 @@
+{
+  "dataset_ref": "fictional-qinglan-library-production-shape-v1",
+  "derived_from_real": false,
+  "fictional": true,
+  "frozen_semantic_inputs": {
+    "allowed_facets_digest": "34acf347f66b40496116bff14cfdc67a78927f09ef143581b45d86b7ef3b31cb",
+    "allowlist_source": "PRE_GENERATION_BLUEPRINT",
+    "record_blueprint_digest": "70566b7ea347a68d010a5b37e29d369ae1df2ebe787d3629f765889c631a92c3"
+  },
+  "gold_eligible": false,
+  "limitations": [
+    "只验证完全虚构数据上的生产形状合同。",
+    "不是图书馆领域 Gold，不能外推生产准确率。",
+    "跨规模结论只适用于 24 个声明锚点和 4 条配对场景。",
+    "stress-only filler 不参与语义准确率判断。"
+  ],
+  "manifest_version": "fictional-validation-manifest.v1",
+  "patch_eligible": false,
+  "primary_role": "PRODUCTION_SHAPE",
+  "run_ref": "qinglan-library-production-shape-v1-run-003",
+  "seed": 2026073101,
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "state": "MACHINE_VALIDATED",
+  "synthetic_lineage": {
+    "anchor_contract_nodes": 24,
+    "anchor_projection_excludes": [
+      "child_node_ids",
+      "order"
+    ],
+    "non_anchor_copy_allowed": false,
+    "replay_scenarios": 4,
+    "source_dataset": "fictional-qinglan-library-semantic-v1"
+  },
+  "variant": {
+    "benchmark_role": "production_shape",
+    "category_id": "fictional-qinglan-library",
+    "node_count": 2001,
+    "resource_id": "qinglan-library-production-shape-tree",
+    "scenario_count": 8,
+    "variant_ref": "large",
+    "version": "QP-1.0"
+  }
+}

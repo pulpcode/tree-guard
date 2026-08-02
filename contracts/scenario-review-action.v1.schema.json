@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-review-action.v1.schema.json",
+  "title": "TreeGuard Scenario Review Action v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "identity_status",
+    "decision",
+    "semantic_approval",
+    "gold_eligible",
+    "patch_eligible",
+    "expected_candidate_hash",
+    "expected_batch_hash",
+    "expected_candidate_ref",
+    "expected_snapshot_hash",
+    "expected_profile_hash",
+    "expected_plan_hash",
+    "expected_projection_hash",
+    "reviewer_ref",
+    "recorded_at",
+    "final_request",
+    "observable_oracle"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-review-action.v1"},
+    "identity_status": {"const": "UNVERIFIED_FILE_ASSERTION"},
+    "decision": {"const": "APPROVE_FOR_VALIDATION"},
+    "semantic_approval": {"const": false},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false},
+    "expected_candidate_hash": {"$ref": "#/$defs/digest"},
+    "expected_batch_hash": {"$ref": "#/$defs/digest"},
+    "expected_candidate_ref": {
+      "pattern": "^C(?:00[1-9]|0[12][0-9]|03[0-2])$",
+      "type": "string"
+    },
+    "expected_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "expected_profile_hash": {"$ref": "#/$defs/digest"},
+    "expected_plan_hash": {"$ref": "#/$defs/digest"},
+    "expected_projection_hash": {"$ref": "#/$defs/digest"},
+    "reviewer_ref": {"$ref": "#/$defs/reference"},
+    "recorded_at": {"format": "date-time", "type": "string"},
+    "final_request": {"$ref": "#/$defs/request"},
+    "observable_oracle": {"$ref": "#/$defs/oracle"}
+  },
+  "$defs": {
+    "digest": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "reference": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "type": "string"
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirement_text",
+        "proposed_parent_node_id",
+        "node_kind_hint",
+        "value_type_hint",
+        "cardinality_hint"
+      ],
+      "properties": {
+        "requirement_text": {"minLength": 1, "type": "string"},
+        "proposed_parent_node_id": {"type": ["string", "null"]},
+        "node_kind_hint": {
+          "enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]
+        },
+        "value_type_hint": {"type": ["string", "null"]},
+        "cardinality_hint": {
+          "enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]
+        }
+      }
+    },
+    "oracle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "draft_status",
+        "clarification_status",
+        "candidate_status",
+        "recommendation_status"
+      ],
+      "properties": {
+        "draft_status": {
+          "enum": ["READY_FOR_HUMAN_REVIEW", "NEEDS_CLARIFICATION"]
+        },
+        "clarification_status": {"const": null},
+        "candidate_status": {"const": null},
+        "recommendation_status": {"const": null}
+      }
+    }
+  }
+}

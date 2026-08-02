@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-preparation-model-output.v1.schema.json",
+  "title": "TreeGuard Scenario Preparation Model Output v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "plan_unit_ref", "scenario_ref", "planning_mode",
+    "scenario_family", "target_stage", "requirement_text", "proposed_parent_ref",
+    "node_kind_hint", "value_type_hint", "cardinality_hint", "supporting_node_refs",
+    "source_signal_refs", "requested_aspects", "rationale", "uncertainties", "evidence_gaps"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-preparation-model-output.v1"},
+    "plan_unit_ref": {"type": "string", "pattern": "^U(?:00[1-9]|0[12][0-9]|03[0-2])$"},
+    "scenario_ref": {"const": "S001"},
+    "planning_mode": {"enum": ["BRANCH_LOCAL", "CONTRAST", "AMBIGUITY"]},
+    "scenario_family": {"$ref": "#/$defs/scenarioFamily"},
+    "target_stage": {"enum": ["INTENT", "RETRIEVAL", "RECOMMENDATION"]},
+    "requirement_text": {"$ref": "#/$defs/text"},
+    "proposed_parent_ref": {"$ref": "#/$defs/nullableNodeRef"},
+    "node_kind_hint": {"$ref": "#/$defs/nullableKind"},
+    "value_type_hint": {"$ref": "#/$defs/nullableText"},
+    "cardinality_hint": {"$ref": "#/$defs/nullableCardinality"},
+    "supporting_node_refs": {"$ref": "#/$defs/nodeRefs"},
+    "source_signal_refs": {
+      "type": "array", "maxItems": 1, "uniqueItems": true,
+      "items": {"const": "D001"}
+    },
+    "requested_aspects": {
+      "type": "array", "minItems": 1, "maxItems": 3, "uniqueItems": true,
+      "items": {"$ref": "#/$defs/requestedAspect"}
+    },
+    "rationale": {"$ref": "#/$defs/text"},
+    "uncertainties": {"$ref": "#/$defs/textList"},
+    "evidence_gaps": {"$ref": "#/$defs/textList"}
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "textList": {"type": "array", "maxItems": 20, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+    "nodeRef": {"type": "string", "pattern": "^N(?:00[1-9]|0[1-5][0-9]|06[0-4])$"},
+    "nodeRefs": {"type": "array", "minItems": 1, "maxItems": 64, "uniqueItems": true, "items": {"$ref": "#/$defs/nodeRef"}},
+    "nullableNodeRef": {"oneOf": [{"$ref": "#/$defs/nodeRef"}, {"type": "null"}]},
+    "nullableText": {"oneOf": [{"$ref": "#/$defs/text"}, {"type": "null"}]},
+    "nullableKind": {"oneOf": [{"enum": ["CONCEPT", "PROPERTY"]}, {"type": "null"}]},
+    "nullableCardinality": {"oneOf": [{"enum": ["SINGLE", "MULTIPLE"]}, {"type": "null"}]},
+    "scenarioFamily": {
+      "enum": [
+        "CLEAR_EXISTING_REUSE", "NEW_NODE_PLACEMENT", "HOMONYM_CLARIFICATION",
+        "WRONG_PARENT_OR_CROSS_BRANCH", "KIND_CONFLICT", "CARDINALITY_CONFLICT",
+        "INSUFFICIENT_EVIDENCE", "UNBOUNDED_COMBINATION"
+      ]
+    },
+    "requestedAspect": {
+      "type": "object", "additionalProperties": false,
+      "required": ["aspect", "supporting_node_refs"],
+      "properties": {
+        "aspect": {"$ref": "#/$defs/text"},
+        "supporting_node_refs": {"$ref": "#/$defs/nodeRefs"}
+      }
+    }
+  }
+}

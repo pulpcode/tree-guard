@@ -55,6 +55,9 @@ worker、queue、vector index、Spring/MongoDB 直连或生产 Patch publisher�
 - `retrieval.py`：确认意图上的确定性全树候选评分、截断和回放。
 - `semantic_recommendation.py`：有界候选投影、关系—动作政策、人工建议复核和可信
   记录回放。
+- `tree_understanding.py`：全树结构画像、M2 有界投影，以及 M3 稀疏场景计划、
+  逐单元投影、待审候选与部分失败批次的可信来源合同；
+- `model_safety.py`：模型文本不得回显内部节点标识的共享纯函数检查。
 
 这些模块必须保持确定性，不得自行发起网络或文件系统副作用。
 
@@ -71,6 +74,8 @@ Provider 可以执行网络 IO；返回 JSON 必须通过本地字段、枚举�
 
 ### 应用边界
 
+- `scenario_validation.py`：显式冻结候选最终请求/可观察 Oracle，并仅执行 INTENT、
+  明确把召回和推荐记录为 `NOT_RUN` 的无持久化验证边界；
 - `cli.py`：聚合一致性命令；
 - `ai_cli.py`：单个业务版本审查案例、可选 AI 调用和私有 bundle 输出；
 - `expert_cli.py`：`apply`、`prepare-approval`、`replay` 私有文件工作流；

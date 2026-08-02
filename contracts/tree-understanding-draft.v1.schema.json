@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/tree-understanding-draft.v1.schema.json",
+  "title": "TreeGuard Tree Understanding Draft v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "model_provider",
+    "model_capability",
+    "model_name",
+    "prompt_version",
+    "model_provenance_status",
+    "review_status",
+    "semantic_approval",
+    "gold_eligible",
+    "patch_eligible",
+    "source_snapshot_hash",
+    "source_profile_hash",
+    "source_projection_hash",
+    "summary",
+    "finding_assessments",
+    "generation_status",
+    "virtual_scenarios",
+    "uncertainties",
+    "evidence_gaps",
+    "draft_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "tree-understanding-draft.v1"},
+    "model_provider": {"$ref": "#/$defs/text"},
+    "model_capability": {"$ref": "#/$defs/text"},
+    "model_name": {"$ref": "#/$defs/text"},
+    "prompt_version": {"$ref": "#/$defs/text"},
+    "model_provenance_status": {"const": "UNVERIFIED_MODEL_OUTPUT"},
+    "review_status": {"const": "PENDING_HUMAN_REVIEW"},
+    "semantic_approval": {"const": false},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false},
+    "source_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "source_profile_hash": {"$ref": "#/$defs/digest"},
+    "source_projection_hash": {"$ref": "#/$defs/digest"},
+    "summary": {"$ref": "#/$defs/text"},
+    "finding_assessments": {
+      "type": "array",
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/findingAssessment"}
+    },
+    "generation_status": {
+      "enum": ["SCENARIOS_PROPOSED", "NEED_EVIDENCE", "ABSTAIN"]
+    },
+    "virtual_scenarios": {
+      "type": "array",
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/scenario"}
+    },
+    "uncertainties": {"$ref": "#/$defs/textList"},
+    "evidence_gaps": {"$ref": "#/$defs/textList"},
+    "draft_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "textList": {
+      "type": "array",
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/text"}
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nodeRef": {
+      "type": "string",
+      "pattern": "^N(?:00[1-9]|0[1-9][0-9]|1[01][0-9]|12[0-8])$"
+    },
+    "findingRef": {
+      "type": "string",
+      "pattern": "^D(?:00[1-9]|0[1-4][0-9]|050)$"
+    },
+    "findingAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["finding_ref", "disposition", "reason"],
+      "properties": {
+        "finding_ref": {"$ref": "#/$defs/findingRef"},
+        "disposition": {
+          "enum": [
+            "POTENTIAL_ISSUE",
+            "EXPECTED_PATTERN",
+            "NEED_EVIDENCE"
+          ]
+        },
+        "reason": {"$ref": "#/$defs/text"}
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scenario_ref",
+        "title",
+        "natural_language_request",
+        "validation_goal",
+        "supporting_node_refs",
+        "source_finding_refs",
+        "rationale"
+      ],
+      "properties": {
+        "scenario_ref": {
+          "type": "string",
+          "pattern": "^S00[1-8]$"
+        },
+        "title": {"$ref": "#/$defs/text"},
+        "natural_language_request": {"$ref": "#/$defs/text"},
+        "validation_goal": {
+          "enum": [
+            "RETRIEVAL",
+            "SEMANTIC_DISTINCTION",
+            "PLACEMENT",
+            "TYPE_CARDINALITY",
+            "CLARIFICATION",
+            "CROSS_BRANCH_REUSE"
+          ]
+        },
+        "supporting_node_refs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/nodeRef"}
+        },
+        "source_finding_refs": {
+          "type": "array",
+          "maxItems": 50,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/findingRef"}
+        },
+        "rationale": {"$ref": "#/$defs/text"}
+      }
+    }
+  }
+}

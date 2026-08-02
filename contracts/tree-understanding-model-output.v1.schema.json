@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/tree-understanding-model-output.v1.schema.json",
+  "title": "TreeGuard Tree Understanding Model Output v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "summary",
+    "finding_assessments",
+    "generation_status",
+    "virtual_scenarios",
+    "uncertainties",
+    "evidence_gaps"
+  ],
+  "properties": {
+    "schema_version": {"const": "tree-understanding-model-output.v1"},
+    "summary": {"$ref": "#/$defs/text"},
+    "finding_assessments": {
+      "type": "array",
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/findingAssessment"}
+    },
+    "generation_status": {
+      "enum": ["SCENARIOS_PROPOSED", "NEED_EVIDENCE", "ABSTAIN"]
+    },
+    "virtual_scenarios": {
+      "type": "array",
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/scenario"}
+    },
+    "uncertainties": {"$ref": "#/$defs/textList"},
+    "evidence_gaps": {"$ref": "#/$defs/textList"}
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "textList": {
+      "type": "array",
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/text"}
+    },
+    "nodeRef": {
+      "type": "string",
+      "pattern": "^N(?:00[1-9]|0[1-9][0-9]|1[01][0-9]|12[0-8])$"
+    },
+    "findingRef": {
+      "type": "string",
+      "pattern": "^D(?:00[1-9]|0[1-4][0-9]|050)$"
+    },
+    "findingAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["finding_ref", "disposition", "reason"],
+      "properties": {
+        "finding_ref": {"$ref": "#/$defs/findingRef"},
+        "disposition": {
+          "enum": [
+            "POTENTIAL_ISSUE",
+            "EXPECTED_PATTERN",
+            "NEED_EVIDENCE"
+          ]
+        },
+        "reason": {"$ref": "#/$defs/text"}
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scenario_ref",
+        "title",
+        "natural_language_request",
+        "validation_goal",
+        "supporting_node_refs",
+        "source_finding_refs",
+        "rationale"
+      ],
+      "properties": {
+        "scenario_ref": {
+          "type": "string",
+          "pattern": "^S00[1-8]$"
+        },
+        "title": {"$ref": "#/$defs/text"},
+        "natural_language_request": {"$ref": "#/$defs/text"},
+        "validation_goal": {
+          "enum": [
+            "RETRIEVAL",
+            "SEMANTIC_DISTINCTION",
+            "PLACEMENT",
+            "TYPE_CARDINALITY",
+            "CLARIFICATION",
+            "CROSS_BRANCH_REUSE"
+          ]
+        },
+        "supporting_node_refs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/nodeRef"}
+        },
+        "source_finding_refs": {
+          "type": "array",
+          "maxItems": 50,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/findingRef"}
+        },
+        "rationale": {"$ref": "#/$defs/text"}
+      }
+    }
+  }
+}

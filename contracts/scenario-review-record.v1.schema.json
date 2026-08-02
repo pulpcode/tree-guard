@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-review-record.v1.schema.json",
+  "title": "TreeGuard Reviewed Validation Scenario v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "identity_status",
+    "semantic_approval",
+    "gold_eligible",
+    "patch_eligible",
+    "source_candidate_hash",
+    "source_batch_hash",
+    "candidate_ref",
+    "source_snapshot_hash",
+    "source_profile_hash",
+    "source_plan_hash",
+    "source_projection_hash",
+    "source_action_hash",
+    "plan_unit_ref",
+    "scenario_target_stage",
+    "scenario_family",
+    "reviewer_ref",
+    "recorded_at",
+    "request",
+    "oracle",
+    "reviewed_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-review-record.v1"},
+    "status": {"const": "APPROVED_FOR_VALIDATION"},
+    "identity_status": {"const": "UNVERIFIED_FILE_ASSERTION"},
+    "semantic_approval": {"const": false},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false},
+    "source_candidate_hash": {"$ref": "#/$defs/digest"},
+    "source_batch_hash": {"$ref": "#/$defs/digest"},
+    "candidate_ref": {
+      "pattern": "^C(?:00[1-9]|0[12][0-9]|03[0-2])$",
+      "type": "string"
+    },
+    "source_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "source_profile_hash": {"$ref": "#/$defs/digest"},
+    "source_plan_hash": {"$ref": "#/$defs/digest"},
+    "source_projection_hash": {"$ref": "#/$defs/digest"},
+    "source_action_hash": {"$ref": "#/$defs/digest"},
+    "plan_unit_ref": {
+      "pattern": "^U(?:00[1-9]|0[12][0-9]|03[0-2])$",
+      "type": "string"
+    },
+    "scenario_target_stage": {
+      "enum": ["INTENT", "RETRIEVAL", "RECOMMENDATION"]
+    },
+    "scenario_family": {"$ref": "#/$defs/scenarioFamily"},
+    "reviewer_ref": {"$ref": "#/$defs/reference"},
+    "recorded_at": {"format": "date-time", "type": "string"},
+    "request": {"$ref": "scenario-review-action.v1.schema.json#/$defs/request"},
+    "oracle": {"$ref": "scenario-review-action.v1.schema.json#/$defs/oracle"},
+    "reviewed_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "reference": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "type": "string"
+    },
+    "scenarioFamily": {
+      "enum": [
+        "CLEAR_EXISTING_REUSE",
+        "NEW_NODE_PLACEMENT",
+        "HOMONYM_CLARIFICATION",
+        "WRONG_PARENT_OR_CROSS_BRANCH",
+        "KIND_CONFLICT",
+        "CARDINALITY_CONFLICT",
+        "INSUFFICIENT_EVIDENCE",
+        "UNBOUNDED_COMBINATION"
+      ]
+    }
+  }
+}

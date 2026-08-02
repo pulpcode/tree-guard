@@ -119,6 +119,61 @@ FastAPI 的目录接口只提供分类、资源、版本和树视图读取。树
 当前没有跨进程 case 恢复、数据库、认证、多 worker 队列或生产写能力。该纵切只
 证明 2,001 节点虚构树上的浏览、AI 建议、人工复核与可回放旁路可以端到端运行。
 
+### 3.2 已实现的信息树理解 M0–M3 与百炼虚构数据验证
+
+当前另有一条尚未接入 Workbench 的信息树验证准备链路。M0–M2 保留全树画像与
+单次自由场景草案；M3 在其上增加确定性覆盖规划：
+
+```text
+CanonicalTree
+→ 100% 确定性结构画像与固定 finding
+→ 风险优先、分支稀疏覆盖的 16（硬上限 32）单元计划
+→ 每单元最多 48（硬上限 64）节点的独立允许列表投影
+→ 显式选择内网 Qwen，或获批的百炼虚构数据 Provider
+→ 每单元最多两次完整生成与本地字段/引用/来源/模式校验
+→ 运行级 C001—C032 归并的 PENDING_HUMAN_REVIEW 候选批次
+→ 显式人工冻结最终请求和可观察 Oracle
+→ 仅运行 INTENT；RETRIEVAL / RECOMMENDATION 明确 NOT_RUN
+```
+
+模型视图使用调用内 `N001`—`N128` 和 `D001`—`D050` 引用，不包含稳定节点/
+树 ID、label、route、path label、hash、VALUE、extension 或未知 metadata。
+投影显式给出包含与遗漏数量；`coverage_complete=false` 时不得声称已理解整树。
+模型可以用 `NEED_EVIDENCE` 或 `ABSTAIN` 生成零场景，不能被合同强迫编造问题。
+
+M3 固定八个核心场景族；本地代码选择场景族、分支、锚点、提示政策、调用预算和
+覆盖状态，模型只把单元转写为一条自然语言结构建模/变更需求。新增节点语义不能
+从树中凭空推导，只能由来源快照绑定、名称确实不存在的显式 seed 提供。候选固定
+非语义审批、非 Gold、非 Patch；部分单元失败、未执行或因预算遗漏时，成功候选
+仍可独立审核，但批次为 `PARTIAL`。未执行单元使用独立 typed 记录，不能伪装成
+模型或 transport 失败。批次把风险族结果、branch-local 结果、目标阶段准备结果和
+跨投影唯一节点并集分开披露；目标阶段验证仍全部为 `NOT_RUN`，节点进入投影也不
+等于语义理解。可信回放从全部成功预构建投影重建整批覆盖与 digest。
+
+场景准备 Prompt v3 为八族提供不同的确定性任务说明，并把对象模板的
+requirement/aspect/rationale/evidence gap 改为必须重写的四个哨兵。本地拒绝任一
+哨兵残留、五类自然语言字段中的独立 `N/D/S` 临时引用，以及同名澄清/无界组合
+缺少 uncertainty、证据不足缺少 evidence gap；Prompt 进一步区分结构定义与实例
+值，并约束自然用户视角、无界诉求、具体证据缺口和基数含义，但这些真实语义仍由
+Codex/人工审核，不能用关键词门禁自动批准。该变化只升级 Prompt provenance，
+不改变 M3 v1 Schema、规划、投影或调用上限。
+
+审核边界位于独立的 `scenario_validation.py`，不复用会写 sidecar 并继续召回/
+推荐的 Workbench 流程。审核 action 同时绑定 batch/candidate/tree/profile/plan/
+projection 摘要并冻结最终请求和 Oracle；首切片只调用一次意图 Provider，目标为
+召回或推荐的候选即使意图状态匹配，也只能记录 `target_validation_status=NOT_RUN`。
+当前仍不把候选注册为验证数据集，不写产品 sidecar，也不执行召回/推荐验收。
+
+开发和回归直接复用现有 48/312/2,001 节点青岚完全虚构树。三个 `tree.json` 是
+生成输入；独立 overlay 只补 `NEW_NODE_PLACEMENT`；原有 scenarios、覆盖矩阵和
+promotion 在生成完成后才作隐藏对照，不能进入真实模型请求。
+进程内固定 transport 回放标记为 `FIXTURE_REPLAY`，真实模型生成标记为
+`UNVERIFIED_MODEL_GENERATION`；该来源状态不构成语义能力、Gold 或审批证明。
+
+百炼路径只用于本仓库独立构造的完全虚构树，调用前要求显式外发批准；真实树及
+真实节点名称仍只能发给受保护环境内的 Qwen。两种 Provider 不自动回退，百炼
+冒烟通过也不能替代内网生产数据验证。
+
 ## 4. 版本化合同
 
 所有跨模块和跨区合同都应有独立 JSON Schema 版本，不能只依赖 Pydantic 类。

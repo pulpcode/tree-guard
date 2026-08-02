@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-review-intent-run.v1.schema.json",
+  "title": "TreeGuard Scenario INTENT-only Run v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_reviewed_hash",
+    "source_action_hash",
+    "source_candidate_hash",
+    "source_batch_hash",
+    "source_snapshot_hash",
+    "source_request_hash",
+    "source_intent_draft_hash",
+    "plan_unit_ref",
+    "candidate_ref",
+    "scenario_target_stage",
+    "scenario_family",
+    "expected_draft_status",
+    "actual_draft_status",
+    "intent_validation_status",
+    "retrieval_validation_status",
+    "recommendation_validation_status",
+    "target_validation_status",
+    "run_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-review-intent-run.v1"},
+    "source_reviewed_hash": {"$ref": "#/$defs/digest"},
+    "source_action_hash": {"$ref": "#/$defs/digest"},
+    "source_candidate_hash": {"$ref": "#/$defs/digest"},
+    "source_batch_hash": {"$ref": "#/$defs/digest"},
+    "source_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "source_request_hash": {"$ref": "#/$defs/digest"},
+    "source_intent_draft_hash": {"$ref": "#/$defs/digest"},
+    "plan_unit_ref": {
+      "pattern": "^U(?:00[1-9]|0[12][0-9]|03[0-2])$",
+      "type": "string"
+    },
+    "candidate_ref": {
+      "pattern": "^C(?:00[1-9]|0[12][0-9]|03[0-2])$",
+      "type": "string"
+    },
+    "scenario_target_stage": {
+      "enum": ["INTENT", "RETRIEVAL", "RECOMMENDATION"]
+    },
+    "scenario_family": {"$ref": "#/$defs/scenarioFamily"},
+    "expected_draft_status": {"$ref": "#/$defs/draftStatus"},
+    "actual_draft_status": {"$ref": "#/$defs/draftStatus"},
+    "intent_validation_status": {"enum": ["MATCH", "MISMATCH"]},
+    "retrieval_validation_status": {"const": "NOT_RUN"},
+    "recommendation_validation_status": {"const": "NOT_RUN"},
+    "target_validation_status": {
+      "enum": ["MATCH", "MISMATCH", "NOT_RUN"]
+    },
+    "run_hash": {"$ref": "#/$defs/digest"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"scenario_target_stage": {"const": "INTENT"}}
+      },
+      "then": {
+        "properties": {
+          "target_validation_status": {"enum": ["MATCH", "MISMATCH"]}
+        }
+      },
+      "else": {
+        "properties": {"target_validation_status": {"const": "NOT_RUN"}}
+      }
+    }
+  ],
+  "$defs": {
+    "digest": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "draftStatus": {
+      "enum": ["READY_FOR_HUMAN_REVIEW", "NEEDS_CLARIFICATION"]
+    },
+    "reference": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+      "type": "string"
+    },
+    "scenarioFamily": {
+      "enum": [
+        "CLEAR_EXISTING_REUSE",
+        "NEW_NODE_PLACEMENT",
+        "HOMONYM_CLARIFICATION",
+        "WRONG_PARENT_OR_CROSS_BRANCH",
+        "KIND_CONFLICT",
+        "CARDINALITY_CONFLICT",
+        "INSUFFICIENT_EVIDENCE",
+        "UNBOUNDED_COMBINATION"
+      ]
+    }
+  }
+}

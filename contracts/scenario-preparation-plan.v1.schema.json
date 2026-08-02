@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-preparation-plan.v1.schema.json",
+  "title": "TreeGuard Scenario Preparation Plan v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "algorithm_version",
+    "source_snapshot_hash",
+    "source_profile_hash",
+    "max_plan_units",
+    "node_limit",
+    "new_node_placement_seed",
+    "family_statuses",
+    "units",
+    "covered_branch_node_ids",
+    "omitted_branch_node_ids",
+    "plan_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-preparation-plan.v1"},
+    "algorithm_version": {"const": "treeguard.scenario-preparation-plan.v1"},
+    "source_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "source_profile_hash": {"$ref": "#/$defs/digest"},
+    "max_plan_units": {"type": "integer", "minimum": 1, "maximum": 32},
+    "node_limit": {"type": "integer", "minimum": 1, "maximum": 64},
+    "new_node_placement_seed": {
+      "oneOf": [
+        {"$ref": "#/$defs/newNodeSeed"},
+        {"type": "null"}
+      ]
+    },
+    "family_statuses": {"$ref": "#/$defs/familyStatuses"},
+    "units": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/planUnit"}
+    },
+    "covered_branch_node_ids": {"$ref": "#/$defs/internalRefs"},
+    "omitted_branch_node_ids": {"$ref": "#/$defs/internalRefs"},
+    "plan_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "internalRefs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "nullableText": {
+      "oneOf": [{"$ref": "#/$defs/text"}, {"type": "null"}]
+    },
+    "nullableKind": {
+      "oneOf": [{"enum": ["CONCEPT", "PROPERTY"]}, {"type": "null"}]
+    },
+    "nullableCardinality": {
+      "oneOf": [{"enum": ["SINGLE", "MULTIPLE"]}, {"type": "null"}]
+    },
+    "newNodeSeed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_node_id",
+        "proposed_name",
+        "node_kind_hint",
+        "value_type_hint",
+        "cardinality_hint"
+      ],
+      "properties": {
+        "parent_node_id": {"$ref": "#/$defs/text"},
+        "proposed_name": {"$ref": "#/$defs/text"},
+        "node_kind_hint": {"enum": ["CONCEPT", "PROPERTY"]},
+        "value_type_hint": {"$ref": "#/$defs/nullableText"},
+        "cardinality_hint": {"$ref": "#/$defs/nullableCardinality"}
+      }
+    },
+    "familyStatus": {
+      "enum": ["PLANNED", "NOT_APPLICABLE", "OMITTED_BUDGET"]
+    },
+    "familyStatuses": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "CLEAR_EXISTING_REUSE",
+        "NEW_NODE_PLACEMENT",
+        "HOMONYM_CLARIFICATION",
+        "WRONG_PARENT_OR_CROSS_BRANCH",
+        "KIND_CONFLICT",
+        "CARDINALITY_CONFLICT",
+        "INSUFFICIENT_EVIDENCE",
+        "UNBOUNDED_COMBINATION"
+      ],
+      "properties": {
+        "CLEAR_EXISTING_REUSE": {"$ref": "#/$defs/familyStatus"},
+        "NEW_NODE_PLACEMENT": {"$ref": "#/$defs/familyStatus"},
+        "HOMONYM_CLARIFICATION": {"$ref": "#/$defs/familyStatus"},
+        "WRONG_PARENT_OR_CROSS_BRANCH": {"$ref": "#/$defs/familyStatus"},
+        "KIND_CONFLICT": {"$ref": "#/$defs/familyStatus"},
+        "CARDINALITY_CONFLICT": {"$ref": "#/$defs/familyStatus"},
+        "INSUFFICIENT_EVIDENCE": {"$ref": "#/$defs/familyStatus"},
+        "UNBOUNDED_COMBINATION": {"$ref": "#/$defs/familyStatus"}
+      }
+    },
+    "planUnit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plan_unit_ref",
+        "unit_role",
+        "planning_mode",
+        "scenario_family",
+        "target_stage",
+        "primary_anchor_node_id",
+        "anchor_node_ids",
+        "allowed_branch_node_ids",
+        "finding_code",
+        "parent_hint_policy",
+        "proposed_parent_node_id",
+        "node_kind_hint_policy",
+        "node_kind_hint",
+        "value_type_hint_policy",
+        "value_type_hint",
+        "cardinality_hint_policy",
+        "cardinality_hint",
+        "node_limit"
+      ],
+      "properties": {
+        "plan_unit_ref": {"type": "string", "pattern": "^U(?:00[1-9]|0[12][0-9]|03[0-2])$"},
+        "unit_role": {"enum": ["RISK_CHALLENGE", "BRANCH_COVERAGE"]},
+        "planning_mode": {"enum": ["BRANCH_LOCAL", "CONTRAST", "AMBIGUITY"]},
+        "scenario_family": {"$ref": "#/$defs/scenarioFamily"},
+        "target_stage": {"enum": ["INTENT", "RETRIEVAL", "RECOMMENDATION"]},
+        "primary_anchor_node_id": {"$ref": "#/$defs/text"},
+        "anchor_node_ids": {"$ref": "#/$defs/internalRefs"},
+        "allowed_branch_node_ids": {"$ref": "#/$defs/internalRefs"},
+        "finding_code": {
+          "oneOf": [
+            {"enum": ["NAME_REUSED_ACROSS_PATHS", "NAME_CONTRACT_CONFLICT", "CHILD_CONTRACT_VECTOR_REUSED"]},
+            {"type": "null"}
+          ]
+        },
+        "parent_hint_policy": {"enum": ["ABSENT", "CORRECT", "INTENTIONALLY_CONFLICTING"]},
+        "proposed_parent_node_id": {"$ref": "#/$defs/nullableText"},
+        "node_kind_hint_policy": {"$ref": "#/$defs/requestHintPolicy"},
+        "node_kind_hint": {"$ref": "#/$defs/nullableKind"},
+        "value_type_hint_policy": {"$ref": "#/$defs/requestHintPolicy"},
+        "value_type_hint": {"$ref": "#/$defs/nullableText"},
+        "cardinality_hint_policy": {"$ref": "#/$defs/requestHintPolicy"},
+        "cardinality_hint": {"$ref": "#/$defs/nullableCardinality"},
+        "node_limit": {"type": "integer", "minimum": 1, "maximum": 64}
+      }
+    },
+    "scenarioFamily": {
+      "enum": [
+        "CLEAR_EXISTING_REUSE",
+        "NEW_NODE_PLACEMENT",
+        "HOMONYM_CLARIFICATION",
+        "WRONG_PARENT_OR_CROSS_BRANCH",
+        "KIND_CONFLICT",
+        "CARDINALITY_CONFLICT",
+        "INSUFFICIENT_EVIDENCE",
+        "UNBOUNDED_COMBINATION"
+      ]
+    },
+    "requestHintPolicy": {
+      "enum": ["ABSENT", "MATCHING", "INTENTIONALLY_CONFLICTING", "SEED_DEFINED"]
+    }
+  }
+}

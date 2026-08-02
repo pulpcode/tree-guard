@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "scenario-preparation-overlay.v1.schema.json",
+  "title": "TreeGuard Scenario Preparation Overlay v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "overlay_ref",
+    "source_fixture_ref",
+    "source_snapshot_hash",
+    "scenario_family",
+    "planning_mode",
+    "target_stage",
+    "fictional",
+    "derived_from_real",
+    "gold_eligible",
+    "patch_eligible",
+    "new_node_placement_seed"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "scenario-preparation-overlay.v1"
+    },
+    "overlay_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "source_fixture_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "source_snapshot_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "scenario_family": {
+      "const": "NEW_NODE_PLACEMENT"
+    },
+    "planning_mode": {
+      "const": "BRANCH_LOCAL"
+    },
+    "target_stage": {
+      "const": "RECOMMENDATION"
+    },
+    "fictional": {
+      "const": true
+    },
+    "derived_from_real": {
+      "const": false
+    },
+    "gold_eligible": {
+      "const": false
+    },
+    "patch_eligible": {
+      "const": false
+    },
+    "new_node_placement_seed": {
+      "$ref": "#/$defs/newNodePlacementSeed"
+    }
+  },
+  "$defs": {
+    "newNodePlacementSeed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_node_id",
+        "proposed_name",
+        "node_kind_hint",
+        "value_type_hint",
+        "cardinality_hint"
+      ],
+      "properties": {
+        "parent_node_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "proposed_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "node_kind_hint": {
+          "const": "PROPERTY"
+        },
+        "value_type_hint": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "cardinality_hint": {
+          "enum": ["SINGLE", "MULTIPLE"]
+        }
+      }
+    }
+  }
+}

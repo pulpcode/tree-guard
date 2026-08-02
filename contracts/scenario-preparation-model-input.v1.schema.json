@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-preparation-model-input.v1.schema.json",
+  "title": "TreeGuard Scenario Preparation Model Input v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "projection_version",
+    "task_type",
+    "assignment",
+    "tree_shape",
+    "coverage",
+    "nodes",
+    "signals"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-preparation-model-input.v1"},
+    "projection_version": {"const": "treeguard.scenario-preparation-projection.v1"},
+    "task_type": {"const": "TREE_CHANGE_SCENARIO_PREPARATION"},
+    "assignment": {"$ref": "#/$defs/assignment"},
+    "tree_shape": {"$ref": "#/$defs/treeShape"},
+    "coverage": {"$ref": "#/$defs/coverage"},
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/node"}
+    },
+    "signals": {
+      "type": "array",
+      "maxItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/signal"}
+    }
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "nodeRef": {"type": "string", "pattern": "^N(?:00[1-9]|0[1-5][0-9]|06[0-4])$"},
+    "nodeRefs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/nodeRef"}
+    },
+    "nullableText": {"oneOf": [{"$ref": "#/$defs/text"}, {"type": "null"}]},
+    "nullableNodeRef": {"oneOf": [{"$ref": "#/$defs/nodeRef"}, {"type": "null"}]},
+    "nullableKind": {"oneOf": [{"enum": ["CONCEPT", "PROPERTY"]}, {"type": "null"}]},
+    "nullableCardinality": {"oneOf": [{"enum": ["SINGLE", "MULTIPLE"]}, {"type": "null"}]},
+    "scenarioFamily": {
+      "enum": [
+        "CLEAR_EXISTING_REUSE", "NEW_NODE_PLACEMENT", "HOMONYM_CLARIFICATION",
+        "WRONG_PARENT_OR_CROSS_BRANCH", "KIND_CONFLICT", "CARDINALITY_CONFLICT",
+        "INSUFFICIENT_EVIDENCE", "UNBOUNDED_COMBINATION"
+      ]
+    },
+    "requestHintPolicy": {"enum": ["ABSENT", "MATCHING", "INTENTIONALLY_CONFLICTING", "SEED_DEFINED"]},
+    "assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plan_unit_ref", "unit_role", "planning_mode", "scenario_family", "target_stage",
+        "primary_anchor_ref", "anchor_refs", "evidence_node_refs", "proposed_new_node_name",
+        "parent_hint_policy", "proposed_parent_ref", "node_kind_hint_policy", "node_kind_hint",
+        "value_type_hint_policy", "value_type_hint", "cardinality_hint_policy", "cardinality_hint"
+      ],
+      "properties": {
+        "plan_unit_ref": {"type": "string", "pattern": "^U(?:00[1-9]|0[12][0-9]|03[0-2])$"},
+        "unit_role": {"enum": ["RISK_CHALLENGE", "BRANCH_COVERAGE"]},
+        "planning_mode": {"enum": ["BRANCH_LOCAL", "CONTRAST", "AMBIGUITY"]},
+        "scenario_family": {"$ref": "#/$defs/scenarioFamily"},
+        "target_stage": {"enum": ["INTENT", "RETRIEVAL", "RECOMMENDATION"]},
+        "primary_anchor_ref": {"$ref": "#/$defs/nodeRef"},
+        "anchor_refs": {"$ref": "#/$defs/nodeRefs"},
+        "evidence_node_refs": {"$ref": "#/$defs/nodeRefs"},
+        "proposed_new_node_name": {"$ref": "#/$defs/nullableText"},
+        "parent_hint_policy": {"enum": ["ABSENT", "CORRECT", "INTENTIONALLY_CONFLICTING"]},
+        "proposed_parent_ref": {"$ref": "#/$defs/nullableNodeRef"},
+        "node_kind_hint_policy": {"$ref": "#/$defs/requestHintPolicy"},
+        "node_kind_hint": {"$ref": "#/$defs/nullableKind"},
+        "value_type_hint_policy": {"$ref": "#/$defs/requestHintPolicy"},
+        "value_type_hint": {"$ref": "#/$defs/nullableText"},
+        "cardinality_hint_policy": {"$ref": "#/$defs/requestHintPolicy"},
+        "cardinality_hint": {"$ref": "#/$defs/nullableCardinality"}
+      }
+    },
+    "treeShape": {
+      "type": "object", "additionalProperties": false,
+      "required": ["node_count", "root_count", "top_level_branch_count"],
+      "properties": {
+        "node_count": {"type": "integer", "minimum": 1},
+        "root_count": {"type": "integer", "minimum": 1},
+        "top_level_branch_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "coverage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["total_node_count", "included_node_count", "omitted_node_count", "allowed_branch_count", "coverage_complete"],
+      "properties": {
+        "total_node_count": {"type": "integer", "minimum": 1},
+        "included_node_count": {"type": "integer", "minimum": 1, "maximum": 64},
+        "omitted_node_count": {"type": "integer", "minimum": 0},
+        "allowed_branch_count": {"type": "integer", "minimum": 1, "maximum": 3},
+        "coverage_complete": {"type": "boolean"}
+      }
+    },
+    "node": {
+      "type": "object", "additionalProperties": false,
+      "required": ["node_ref", "parent_ref", "depth", "name", "kind", "value_type", "cardinality", "direct_child_count", "included_child_refs"],
+      "properties": {
+        "node_ref": {"$ref": "#/$defs/nodeRef"},
+        "parent_ref": {"$ref": "#/$defs/nullableNodeRef"},
+        "depth": {"type": "integer", "minimum": 0},
+        "name": {"$ref": "#/$defs/text"},
+        "kind": {"enum": ["CONCEPT", "PROPERTY"]},
+        "value_type": {"$ref": "#/$defs/nullableText"},
+        "cardinality": {"$ref": "#/$defs/nullableCardinality"},
+        "direct_child_count": {"type": "integer", "minimum": 0},
+        "included_child_refs": {"type": "array", "maxItems": 64, "uniqueItems": true, "items": {"$ref": "#/$defs/nodeRef"}}
+      }
+    },
+    "signal": {
+      "type": "object", "additionalProperties": false,
+      "required": ["signal_ref", "code", "node_refs", "source_occurrence_count"],
+      "properties": {
+        "signal_ref": {"const": "D001"},
+        "code": {"enum": ["NAME_REUSED_ACROSS_PATHS", "NAME_CONTRACT_CONFLICT", "CHILD_CONTRACT_VECTOR_REUSED"]},
+        "node_refs": {"$ref": "#/$defs/nodeRefs"},
+        "source_occurrence_count": {"type": "integer", "minimum": 2}
+      }
+    }
+  }
+}

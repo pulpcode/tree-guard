@@ -14,6 +14,7 @@ from treeguard.change_intent import (
     IntentContent,
 )
 from treeguard.hashing import canonical_digest
+from treeguard.model_safety import contains_internal_identifier
 from treeguard.models import CanonicalTree
 from treeguard.retrieval import (
     DEFAULT_MAX_CANDIDATES,
@@ -124,15 +125,6 @@ _RFC3339 = re.compile(
 )
 _CONTROL_CHARACTER = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")
 _SURROGATE_CHARACTER = re.compile(r"[\ud800-\udfff]")
-_FABRICATED_INTERNAL_ID = re.compile(
-    r"(?i)(?:"
-    r"\b(?:node|tree)[-_:/]\d[A-Za-z0-9._:@/-]*\b"
-    r"|\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-"
-    r"[89ab][0-9a-f]{3}-[0-9a-f]{12}\b"
-    r"|\b[0-9a-f]{24}\b"
-    r"|\b[0-9a-f]{64}\b"
-    r")"
-)
 _MAX_TEXT_CHARS = 1_000
 _MAX_REASONING_CHARS = 8_000
 _MAX_LIST_ITEMS = 20
@@ -1311,23 +1303,14 @@ def _validate_assessment_sequence(
 
 
 def _reject_internal_ids(text_values: tuple[str, ...], tree: CanonicalTree) -> None:
-    if any(_FABRICATED_INTERNAL_ID.search(text) for text in text_values):
+    if contains_internal_identifier(
+        text_values,
+        (node.node_id for node in tree.nodes),
+    ):
         raise SemanticRecommendationError(
             "SEMANTIC_INTERNAL_ID_FORBIDDEN",
-            "semantic recommendation text must not contain identifier-like values",
+            "semantic recommendation text must not contain internal identifiers",
         )
-    for node in tree.nodes:
-        node_id = node.node_id
-        if not node_id:
-            continue
-        if any(
-            (node_id in text if len(node_id) >= 4 else node_id == text)
-            for text in text_values
-        ):
-            raise SemanticRecommendationError(
-                "SEMANTIC_INTERNAL_ID_FORBIDDEN",
-                "semantic recommendation text must not contain internal identifiers",
-            )
 
 
 def _parse_enum(value: Any, allowed: set[str], code: str) -> str:

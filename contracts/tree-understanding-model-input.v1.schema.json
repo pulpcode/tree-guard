@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/tree-understanding-model-input.v1.schema.json",
+  "title": "TreeGuard Tree Understanding Model Input v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "projection_version",
+    "task_type",
+    "tree_shape",
+    "coverage",
+    "nodes",
+    "findings"
+  ],
+  "properties": {
+    "schema_version": {"const": "tree-understanding-model-input.v1"},
+    "projection_version": {
+      "const": "treeguard.tree-understanding-projection.v1"
+    },
+    "task_type": {"const": "TREE_VALIDATION_PREPARATION"},
+    "tree_shape": {"$ref": "#/$defs/treeShape"},
+    "coverage": {"$ref": "#/$defs/coverage"},
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/node"}
+    },
+    "findings": {
+      "type": "array",
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/finding"}
+    }
+  },
+  "$defs": {
+    "treeShape": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_count", "root_count", "max_depth"],
+      "properties": {
+        "node_count": {"type": "integer", "minimum": 1},
+        "root_count": {"type": "integer", "minimum": 1},
+        "max_depth": {"type": "integer", "minimum": 0}
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "total_node_count",
+        "included_node_count",
+        "omitted_node_count",
+        "total_finding_count",
+        "included_finding_count",
+        "omitted_finding_count",
+        "coverage_complete"
+      ],
+      "properties": {
+        "total_node_count": {"type": "integer", "minimum": 1},
+        "included_node_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 128
+        },
+        "omitted_node_count": {"type": "integer", "minimum": 0},
+        "total_finding_count": {"type": "integer", "minimum": 0},
+        "included_finding_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 50
+        },
+        "omitted_finding_count": {"type": "integer", "minimum": 0},
+        "coverage_complete": {"type": "boolean"}
+      }
+    },
+    "nodeRef": {
+      "type": "string",
+      "pattern": "^N(?:00[1-9]|0[1-9][0-9]|1[01][0-9]|12[0-8])$"
+    },
+    "findingRef": {
+      "type": "string",
+      "pattern": "^D(?:00[1-9]|0[1-4][0-9]|050)$"
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_ref",
+        "parent_ref",
+        "depth",
+        "name",
+        "kind",
+        "value_type",
+        "cardinality",
+        "direct_child_count",
+        "included_child_refs"
+      ],
+      "properties": {
+        "node_ref": {"$ref": "#/$defs/nodeRef"},
+        "parent_ref": {
+          "oneOf": [
+            {"$ref": "#/$defs/nodeRef"},
+            {"type": "null"}
+          ]
+        },
+        "depth": {"type": "integer", "minimum": 0},
+        "name": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "kind": {"enum": ["CONCEPT", "PROPERTY"]},
+        "value_type": {
+          "oneOf": [
+            {"type": "string", "minLength": 1, "maxLength": 1000},
+            {"type": "null"}
+          ]
+        },
+        "cardinality": {
+          "oneOf": [
+            {"enum": ["SINGLE", "MULTIPLE"]},
+            {"type": "null"}
+          ]
+        },
+        "direct_child_count": {"type": "integer", "minimum": 0},
+        "included_child_refs": {
+          "type": "array",
+          "maxItems": 128,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/nodeRef"}
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "finding_ref",
+        "code",
+        "node_refs",
+        "occurrence_count"
+      ],
+      "properties": {
+        "finding_ref": {"$ref": "#/$defs/findingRef"},
+        "code": {
+          "enum": [
+            "NAME_REUSED_ACROSS_PATHS",
+            "NAME_CONTRACT_CONFLICT",
+            "CHILD_CONTRACT_VECTOR_REUSED"
+          ]
+        },
+        "node_refs": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 128,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/nodeRef"}
+        },
+        "occurrence_count": {"type": "integer", "minimum": 2}
+      }
+    }
+  }
+}

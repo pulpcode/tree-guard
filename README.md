@@ -116,6 +116,28 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - `contracts/semantic-recommendation-content.v1.schema.json`：人工修订建议的本地约束合同；
 - `contracts/recommendation-review-action.v1.schema.json`：确认、修订或拒绝建议的人工 action；
 - `contracts/recommendation-record.v1.schema.json`：只作运营反馈、可可信回放的审查记录；
+- `contracts/tree-diagnostic-profile.v1.schema.json`：确定性全树结构画像合同；
+- `contracts/tree-understanding-model-input.v1.schema.json`：带覆盖计数和临时
+  `N/D` 引用的有界模型投影；
+- `contracts/tree-understanding-model-output.v1.schema.json`：待审 finding 判断与
+  虚拟验证场景模型输出；
+- `contracts/tree-understanding-draft.v1.schema.json`：绑定可信来源且固定非 Gold、
+  非 Patch 的验证准备草案；
+- `contracts/scenario-preparation-plan.v1.schema.json`：风险优先、分支稀疏覆盖且默认
+  最多 16 个单元的确定性 M3 场景计划；
+- `contracts/scenario-preparation-model-input.v1.schema.json` /
+  `scenario-preparation-model-output.v1.schema.json`：每计划单元独立的临时引用投影
+  与单候选模型输出；
+- `contracts/scenario-preparation-candidate.v1.schema.json` /
+  `scenario-preparation-batch.v1.schema.json`：待审候选和运行级 `C001`—`C032`
+  归并批次；批次分别披露风险族、branch-local、目标阶段和唯一投影节点覆盖，并
+  区分 `FIXTURE_REPLAY` 与未验证模型生成来源；
+- `contracts/scenario-preparation-overlay.v1.schema.json`：只补树中不存在语义的完全
+  虚构新增节点种子，不包含自然语言需求或 Oracle；
+- `contracts/scenario-review-action.v1.schema.json`、
+  `scenario-review-record.v1.schema.json` 与
+  `scenario-review-intent-run.v1.schema.json`：显式审核冻结请求/可观察 Oracle，并
+  记录仅执行 INTENT、后两阶段为 `NOT_RUN` 的验证证据；
 - `contracts/provisional-simulator-response.v1.schema.json`：明确标记为暂定的
   Clean-room 仓库仿真响应合同；
 - `src/treeguard/adapter.py`：直接导出和 API 响应的递归适配器；
@@ -124,7 +146,10 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - `src/treeguard/history.py`：同一业务版本内、只读、确定性的历史证据分簇、VALUE 风险门禁与可信快照重放校验；
 - `src/treeguard/business_review.py`：按外部显式顺序比较相邻业务版本，不解析版本字符串，也不依赖 `concurrent_version` 连续；
 - `src/treeguard/evidence.py`：过滤未知字段、审计信息和原始 VALUE，以临时 `F/X/C` 引用构造有界 EvidencePack；
-- `src/treeguard/ai_review.py`：百炼 OpenAI 兼容 Provider、版本审查和意图草稿的本地严格校验、最多一次受控重试和失败拒答；
+- `src/treeguard/ai_review.py`：百炼与内网 Qwen 的独立 OpenAI 兼容 Provider、
+  版本审查、意图草稿和信息树理解/场景准备的本地严格校验、最多一次受控重试和
+  失败拒答；M3 Prompt v3 以八族任务说明、四个不可复制哨兵和全自然语言字段的
+  临时引用门禁减少占位与协议泄漏，并继续把真实语义留给人工审核；
 - `src/treeguard/ai_cli.py`：默认只输出聚合信息的内部冒烟 CLI；
 - `src/treeguard/expert_synthesis.py`：专家原文 AI 整理、本地来源绑定和外部载荷授权门；
 - `src/treeguard/expert_review.py`：专家思考、AI 整理、暂定状态和最终裁决的确定性状态机与回放；
@@ -133,6 +158,11 @@ MVP 只生成 Patch 文件，不接入 Spring Boot 正式写接口，不直接�
 - `src/treeguard/lexical.py`：历史 Evidence 与在线召回共享的确定性词法切分；
 - `src/treeguard/retrieval.py`：全树词法/结构召回、父位置 boost、确定性排序和候选回放；
 - `src/treeguard/semantic_recommendation.py`：Top-8 候选投影、语义关系/动作门禁、人工复核记录和可信回放；
+- `src/treeguard/tree_understanding.py`：全树确定性画像、M2 单次投影，以及 M3
+  稀疏计划、逐单元投影、待审候选和部分失败批次的可信来源合同；
+- `src/treeguard/scenario_validation.py`：不接 Workbench/sidecar 的显式候选审核门
+  与纯内存 INTENT-only 验证切片；
+- `src/treeguard/model_safety.py`：模型文本不得回显内部节点标识的共享确定性检查；
 - `src/treeguard/private_io.py`：敏感 JSON 的有界私有读取和不可覆盖原子发布；
 - `src/treeguard/governance_cli.py`：意图、召回、语义建议、人工复核和回放的文件型旁路工作流；
 - `src/treeguard/demo_cli.py`：使用内置完全虚构数据编排正式六步治理命令的一键演示；

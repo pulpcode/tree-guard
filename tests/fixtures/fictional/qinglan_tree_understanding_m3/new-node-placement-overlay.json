@@ -1,0 +1,20 @@
+{
+  "schema_version": "scenario-preparation-overlay.v1",
+  "overlay_ref": "qinglan-m3-new-node-placement-v1",
+  "source_fixture_ref": "qinglan_library_semantic",
+  "source_snapshot_hash": "71425809fa98a770d412e6283fa42b537248b63bbfbcd6ac681abfdacd1e6e3d",
+  "scenario_family": "NEW_NODE_PLACEMENT",
+  "planning_mode": "BRANCH_LOCAL",
+  "target_stage": "RECOMMENDATION",
+  "fictional": true,
+  "derived_from_real": false,
+  "gold_eligible": false,
+  "patch_eligible": false,
+  "new_node_placement_seed": {
+    "parent_node_id": "qs-s007",
+    "proposed_name": "无障碍替代文本说明",
+    "node_kind_hint": "PROPERTY",
+    "value_type_hint": "string",
+    "cardinality_hint": "SINGLE"
+  }
+}

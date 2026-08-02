@@ -21,6 +21,11 @@ from treeguard.internal_repository import (
     InternalRepositoryClient,
     InternalRepositoryConfig,
 )
+from treeguard.qinglan_validation_dataset import (
+    FictionalQinglanRepositoryOverlay,
+    FictionalQinglanSemanticValidationDataset,
+    FictionalQinglanValidationDataset,
+)
 from treeguard.repository_client import (
     ProvisionalRepositoryClient,
     RepositoryClientConfig,
@@ -470,13 +475,21 @@ def _services_from_environment() -> tuple[
         DEFAULT_REPOSITORY_BASE_URL,
     )
     if repository_mode == "SIMULATOR":
-        repository = ProvisionalRepositoryClient(
-            RepositoryClientConfig(base_url=base_url)
+        repository = FictionalQinglanRepositoryOverlay(
+            ProvisionalRepositoryClient(
+                RepositoryClientConfig(base_url=base_url)
+            )
+        )
+        validation_providers = (
+            FictionalFireValidationDataset(),
+            FictionalQinglanValidationDataset(),
+            FictionalQinglanSemanticValidationDataset(),
         )
     elif repository_mode == "INTERNAL":
         repository = InternalRepositoryClient(
             InternalRepositoryConfig(base_url=base_url)
         )
+        validation_providers = (FictionalFireValidationDataset(),)
     else:
         raise RepositoryClientError(
             "WORKBENCH_REPOSITORY_MODE_INVALID",
@@ -497,7 +510,7 @@ def _services_from_environment() -> tuple[
     validation = ValidationWorkbenchService(
         repository=repository,
         governance=governance,
-        providers=(FictionalFireValidationDataset(),),
+        providers=validation_providers,
     )
     return workbench, governance, validation
 

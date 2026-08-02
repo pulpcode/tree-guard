@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-capability-run.v1.schema.json",
+  "title": "TreeGuard Scenario Capability Run v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_overlay_hash",
+    "source_reviewed_hash",
+    "source_snapshot_hash",
+    "source_request_hash",
+    "source_intent_draft_hash",
+    "source_candidate_set_hash",
+    "source_recommendation_draft_hash",
+    "plan_unit_ref",
+    "candidate_ref",
+    "expected_route",
+    "intent",
+    "retrieval",
+    "recommendation",
+    "full_path_status",
+    "run_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-capability-run.v1"},
+    "source_overlay_hash": {"$ref": "#/$defs/digest"},
+    "source_reviewed_hash": {"$ref": "#/$defs/digest"},
+    "source_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "source_request_hash": {"$ref": "#/$defs/digest"},
+    "source_intent_draft_hash": {"$ref": "#/$defs/optionalDigest"},
+    "source_candidate_set_hash": {"$ref": "#/$defs/optionalDigest"},
+    "source_recommendation_draft_hash": {"$ref": "#/$defs/optionalDigest"},
+    "plan_unit_ref": {
+      "type": "string",
+      "pattern": "^U(?:00[1-9]|0[12][0-9]|03[0-2])$"
+    },
+    "candidate_ref": {
+      "type": "string",
+      "pattern": "^C(?:00[1-9]|0[12][0-9]|03[0-2])$"
+    },
+    "expected_route": {"enum": ["PROCEED", "CLARIFY"]},
+    "intent": {"$ref": "#/$defs/stageResult"},
+    "retrieval": {"$ref": "#/$defs/stageResult"},
+    "recommendation": {"$ref": "#/$defs/stageResult"},
+    "full_path_status": {"enum": ["MATCH", "MISMATCH", "RUN_FAILED"]},
+    "run_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "optionalDigest": {
+      "oneOf": [
+        {"$ref": "#/$defs/digest"},
+        {"type": "null"}
+      ]
+    },
+    "stageResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["applicable", "status", "reason_code"],
+      "properties": {
+        "applicable": {"type": "boolean"},
+        "status": {
+          "enum": ["MATCH", "MISMATCH", "NOT_RUN", "RUN_FAILED"]
+        },
+        "reason_code": {
+          "enum": [
+            "INTENT_ORACLE_MATCH",
+            "INTENT_ORACLE_MISMATCH",
+            "INTENT_PROVIDER_FAILED",
+            "RETRIEVAL_ORACLE_MATCH",
+            "RETRIEVAL_ORACLE_MISMATCH",
+            "RETRIEVAL_RUN_FAILED",
+            "RECOMMENDATION_ORACLE_MATCH",
+            "RECOMMENDATION_ORACLE_MISMATCH",
+            "RECOMMENDATION_PROVIDER_FAILED",
+            "EXPECTED_CLARIFICATION_SHORT_CIRCUIT",
+            "UPSTREAM_INTENT_MISMATCH",
+            "UPSTREAM_INTENT_RUN_FAILED",
+            "UPSTREAM_RETRIEVAL_MISMATCH",
+            "UPSTREAM_RETRIEVAL_RUN_FAILED"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"applicable": {"const": false}}},
+          "then": {"properties": {"status": {"const": "NOT_RUN"}}}
+        }
+      ]
+    }
+  }
+}

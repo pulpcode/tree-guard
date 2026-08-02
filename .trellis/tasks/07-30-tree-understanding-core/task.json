@@ -19,7 +19,8 @@
   "pr_url": null,
   "subtasks": [],
   "children": [
-    "08-01-tree-understanding-m3"
+    "08-01-tree-understanding-m3",
+    "08-02-tree-understanding-m4-blind-validation"
   ],
   "parent": null,
   "relatedFiles": [],

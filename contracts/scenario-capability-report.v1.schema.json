@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-capability-report.v1.schema.json",
+  "title": "TreeGuard Scenario Capability Public Gate Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "semantic_approval",
+    "gold_eligible",
+    "patch_eligible",
+    "candidate_preparation",
+    "execution",
+    "hard_failure_codes",
+    "decision"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-capability-report.v1"},
+    "semantic_approval": {"const": false},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false},
+    "candidate_preparation": {"$ref": "#/$defs/candidatePreparation"},
+    "execution": {"$ref": "#/$defs/execution"},
+    "hard_failure_codes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "CONTRACT_INTEGRITY_FAILURE",
+          "DATA_BOUNDARY_FAILURE",
+          "RESULT_ACCOUNTING_FAILURE",
+          "SOURCE_BINDING_FAILURE"
+        ]
+      }
+    },
+    "decision": {"enum": ["GO_SHADOW", "NO_GO"]}
+  },
+  "$defs": {
+    "code": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]{2,127}$"
+    },
+    "gateStatus": {"enum": ["PASS", "FAIL"]},
+    "failureCodes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/code"}
+    },
+    "nonNegativeInteger": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "candidatePreparation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planned_unit_count",
+        "accounted_unit_count",
+        "accepted_count",
+        "revised_accepted_count",
+        "rejected_count",
+        "generation_failure_count",
+        "blocking_finding_count",
+        "review_minutes",
+        "status",
+        "failure_codes"
+      ],
+      "properties": {
+        "planned_unit_count": {"type": "integer", "minimum": 1},
+        "accounted_unit_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "accepted_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "revised_accepted_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "rejected_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "generation_failure_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "blocking_finding_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "review_minutes": {"$ref": "#/$defs/nonNegativeInteger"},
+        "status": {"$ref": "#/$defs/gateStatus"},
+        "failure_codes": {"$ref": "#/$defs/failureCodes"}
+      }
+    },
+    "stageAggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicable_count",
+        "match_count",
+        "mismatch_count",
+        "not_run_count",
+        "run_failed_count"
+      ],
+      "properties": {
+        "applicable_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "match_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "mismatch_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "not_run_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "run_failed_count": {"$ref": "#/$defs/nonNegativeInteger"}
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selected_scenario_count",
+        "proceed_route_count",
+        "clarify_route_count",
+        "clarification_coverage_status",
+        "full_path_match_count",
+        "full_path_mismatch_count",
+        "full_path_run_failed_count",
+        "intent",
+        "retrieval",
+        "recommendation",
+        "status",
+        "failure_codes"
+      ],
+      "properties": {
+        "selected_scenario_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8
+        },
+        "proceed_route_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "clarify_route_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "clarification_coverage_status": {
+          "enum": [
+            "COVERED",
+            "NOT_APPLICABLE_WITH_BACKFILL",
+            "MISSING"
+          ]
+        },
+        "full_path_match_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "full_path_mismatch_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "full_path_run_failed_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "intent": {"$ref": "#/$defs/stageAggregate"},
+        "retrieval": {"$ref": "#/$defs/stageAggregate"},
+        "recommendation": {"$ref": "#/$defs/stageAggregate"},
+        "status": {"$ref": "#/$defs/gateStatus"},
+        "failure_codes": {"$ref": "#/$defs/failureCodes"}
+      }
+    }
+  }
+}

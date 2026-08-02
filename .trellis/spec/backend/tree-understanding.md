@@ -1,6 +1,6 @@
 # 信息树理解与验证场景准备
 
-本规范记录当前已实现的 M0–M3 合同及百炼虚构数据验证通道。它是只读 Shadow
+本规范记录当前已实现的 M0–M4 合同及百炼虚构数据验证通道。它是只读 Shadow
 能力，不是“模型已理解整树”的证明，也不授予语义审批、Gold、Patch 或生产写入
 资格。
 
@@ -14,6 +14,7 @@
 - `tree-understanding-*.v1.schema.json`、`scenario-preparation-*.v1.schema.json`
   或 `scenario-review-*.v1.schema.json`；
 - `scenario_validation.py` 的显式审核与 INTENT-only 执行边界；
+- `scenario_capability_validation.py` 的完整能力 Oracle、分阶段执行与 Shadow 门槛；
 - 虚拟验证场景的状态、引用、数量或人工审核政策。
 
 确定性全树扫描与不可信模型边界必须分离。真实树投影只允许发送给受保护环境
@@ -93,6 +94,21 @@ run_reviewed_intent_slice(
     reviewed, action, batch, batch_candidate,
     projection, plan, profile, tree, provider,
 ) -> ScenarioIntentRun
+
+freeze_capability_overlay(
+    reviewed, plan, tree, *,
+    review_status, reviewer_ref, recorded_at, review_round, oracle,
+) -> ScenarioCapabilityOverlay
+
+run_reviewed_capability_scenario(
+    overlay, reviewed, action, batch, batch_candidate,
+    projection, plan, profile, tree, intent_provider, semantic_provider,
+) -> ScenarioCapabilityRun
+
+build_capability_gate_report(
+    preparation, runs, *,
+    clarification_coverage_status, hard_failure_codes,
+) -> CapabilityGateReport
 ```
 
 `from_dict(payload, projection, profile, tree)` 必须从可信来源重建整个草案，不能只
@@ -227,6 +243,41 @@ run_reviewed_intent_slice(
 - 审核、候选和运行工件始终 `semantic_approval=false`、非 Gold、非 Patch；
   M3 不写 Workbench sidecar、不注册 dataset provider。
 
+### M4 完整能力 overlay、执行与门槛
+
+- M4 新增独立 `scenario-capability-overlay.v1`、`scenario-capability-run.v1` 和
+  `scenario-capability-report.v1`，不得修改或放宽 M3 action、record、intent-run
+  v1；
+- overlay 只接受 `ACCEPTED` 或 `REVISED_ACCEPTED`，固定
+  `CLEANROOM_SYNTHETIC`、`fictional=true`、`derived_from_real=false`、
+  `semantic_approval=false`、非 Gold、非 Patch，并绑定 reviewed hash、树快照、
+  计划和“已审核 request + 完整 Oracle”的内容 digest；
+- `expected_route` 只取 `PROCEED`/`CLARIFY`，且必须与 M3 已冻结的
+  `draft_status` 一致；意图 profile 只做确定性字段比较：标量字段可用
+  `EXACT_ONE_OF`，标量或 tuple 可用 `NON_EMPTY`，tuple 可用 `EMPTY`，不比较字段
+  显式使用 `NOT_COMPARED`，不得加入另一个 LLM judge；
+- `CLARIFY` 时召回和推荐均不适用；`PROCEED` 时二者均适用。召回按允许状态和
+  稳定 node ID 的 Hit@K 判断；空目标 Oracle 只能接受非 ready 状态；
+- 推荐 Oracle 是一个或多个完整的 `action + stable target/null + relation/null`
+  联合结果，禁止分别命中三个集合后做笛卡尔拼接；运行级 `C001`—`C008` 必须先
+  通过同次 Top-8 候选映射回稳定 node ID；
+- 意图 `MISMATCH/RUN_FAILED` 固定短路召回和推荐；召回
+  `MISMATCH/RUN_FAILED` 固定短路推荐。级联阶段保持适用分母但记
+  `NOT_RUN` 和固定上游 reason，不重复增加语义失败数；
+- 私有 run 可以保存来源 hash，但公开 report 只能保存固定政策值、候选审核聚合、
+  阶段分母/计数、允许列表 code 和 `GO_SHADOW/NO_GO`，不得包含 request、Oracle、
+  稳定目标、hash、Prompt、模型文本或 trace；
+- 候选门要求计划完全记账、可执行候选至少 8、直接接受至少 4、reject 加生成失败
+  最多 3、blocking finding 为 0、人工审核不超过 150 分钟；执行门要求恰好 8 条、
+  至少 6 条完整路径 MATCH、每个适用阶段最多 1 条 MISMATCH/RUN_FAILED，并满足
+  7+1 澄清组成或显式 `NOT_APPLICABLE_WITH_BACKFILL` 的 8 条完整链路；
+- 只有两个门均 PASS 且 `DATA_BOUNDARY_FAILURE`、`SOURCE_BINDING_FAILURE`、
+  `CONTRACT_INTEGRITY_FAILURE`、`RESULT_ACCOUNTING_FAILURE` 均不存在时，才输出
+  `GO_SHADOW`；该结论只授权继续受控 Shadow 验证；
+- 单 overlay 是功能运行时合同；数据集 manifest、批量 sidecar wrapper、fixture
+  SHA、合同提交绑定和数据集 selector 由独立数据任务拥有，但其中每个可执行项必须
+  能重建该 overlay，不能在数据分支发明宽松运行时字段。
+
 ### 内网 Qwen
 
 只允许 `InternalQwenConfig`。请求沿用现有隔离 transport：禁 proxy/redirect、
@@ -285,6 +336,16 @@ JSON、`enable_thinking=false`、`temperature=0` 与最多两次尝试。
 | 未审核候选直接执行或 action 陈旧 | `SCENARIO_REVIEW_REQUIRED` / `SCENARIO_REVIEW_ACTION_STALE` |
 | candidate/projection/plan/tree 来源不匹配 | `SCENARIO_REVIEW_CANDIDATE_SOURCE_MISMATCH` 等来源错误 |
 | Intent Provider 返回错误来源草案 | `SCENARIO_INTENT_DRAFT_SOURCE_MISMATCH` |
+| M4 overlay 额外字段、版本或固定政策改变 | `CAPABILITY_OVERLAY_*_INVALID` |
+| M4 overlay 与 reviewed bytes/tree/plan 不一致 | `CAPABILITY_OVERLAY_SOURCE_MISMATCH` |
+| M4 Oracle 稳定目标不在绑定树中 | `CAPABILITY_ORACLE_SOURCE_MISMATCH` |
+| M4 route 与 M3 observable Oracle 矛盾 | `CAPABILITY_OVERLAY_OBSERVABLE_ORACLE_MISMATCH` |
+| M4 执行前 M3 来源回放失败 | `CAPABILITY_REVIEWED_SOURCE_MISMATCH`，Provider 零调用 |
+| M4 Provider/本地输出合同失败 | 对应阶段 `RUN_FAILED`，后续固定 `NOT_RUN` |
+| M4 意图或 Hit@K 不符合 Oracle | 对应阶段 `MISMATCH`，后续固定短路 |
+| M4 run 存储重放来源不一致 | `CAPABILITY_RUN_SOURCE_MISMATCH` 或 `CAPABILITY_RUN_REVIEWED_SOURCE_MISMATCH` |
+| M4 公开 hard failure code 不在四项允许列表 | `CAPABILITY_HARD_FAILURE_CODES_INVALID` |
+| M4 任一硬失败、候选门或执行门失败 | `NO_GO` |
 
 ## 5. Good / Base / Bad Cases
 
@@ -293,6 +354,12 @@ JSON、`enable_thinking=false`、`temperature=0` 与最多两次尝试。
 - Base：证据不足时返回 `NEED_EVIDENCE`、零场景和至少一个 evidence gap。
 - Bad：直接发送 profile `to_dict()`、隐藏遗漏节点、把场景当 oracle、让外部百炼
   调用真实节点 name、或把模型输出直接注册进验证数据集。
+- M4 Good：人工冻结完整 Oracle 后，意图、Hit@K 和推荐联合结果均 MATCH，公开
+  报告只显示聚合门槛并输出 `GO_SHADOW`。
+- M4 Base：合法澄清在意图阶段 MATCH，召回/推荐为不适用的 `NOT_RUN`；或上游
+  不匹配导致下游适用但短路，不重复计错。
+- M4 Bad：Oracle 保存 `C001`、分别维护 action/target/relation 集合后做组合，或把
+  6/8 通过解释为生产准确率/Gold。
 
 ## 6. Tests Required
 
@@ -331,6 +398,16 @@ JSON、`enable_thinking=false`、`temperature=0` 与最多两次尝试。
   重算外层 hash 在 Provider 调用前失败；
 - 已审核 INTENT-only 执行恰好调用一次 draft，后两阶段为显式 `NOT_RUN`，且
   RETRIEVAL/RECOMMENDATION target 不借用 INTENT MATCH 冒充通过。
+- M4 三份 Schema 的顶层/嵌套 required 与 serializer 精确一致；overlay 额外字段、
+  错树、错计划、错受审字节、route 矛盾和重新哈希篡改均拒绝；
+- 完整链路把 `C001` 映射回同次候选集的稳定目标后比较；Hit@K 未命中不调用推荐，
+  推荐动作—目标—关系只按冻结联合结果判断；
+- 合法澄清、三个阶段 MATCH/MISMATCH/RUN_FAILED、上游短路、运行重放和固定 reason
+  code 均有正反例；级联 `NOT_RUN` 不增加下游 mismatch/run-failed；
+- 候选门和执行门覆盖阈值等号、低一单位、两次同阶段失败、硬失败、7+1 与 N/A 回填；
+  runs 重排不改变公开报告；
+- 公开报告使用 request、Oracle、node ID、source hash、Prompt、模型文本和 trace
+  canary 做允许列表泄漏测试；M3 v1 序列化与完整原有 suite 保持不变。
 
 ## 7. Wrong vs Correct
 
@@ -393,4 +470,37 @@ draft = ScenarioCandidateDraft.from_dict(
     payload, projection, plan, profile, tree
 )
 # from_dict 通过当前 from_model_dict 合同重建；旧 Prompt 标记没有绕过权限。
+```
+
+M4 Wrong：
+
+```python
+if draft.selected_candidate_ref in oracle.acceptable_candidate_refs:
+    recommendation_status = "MATCH"
+```
+
+`C001` 只在一次 Top-8 投影内有效，不能成为长期 Oracle 身份。
+
+M4 Correct：
+
+```python
+overlay = freeze_capability_overlay(
+    reviewed, plan, tree,
+    review_status="ACCEPTED",
+    reviewer_ref=reviewer_ref,
+    recorded_at=recorded_at,
+    review_round=1,
+    oracle=oracle,
+)
+run = run_reviewed_capability_scenario(
+    overlay, reviewed, action, batch, candidate,
+    projection, plan, profile, tree, intent_provider, semantic_provider,
+)
+report = build_capability_gate_report(
+    preparation_metrics, runs,
+    clarification_coverage_status="NOT_APPLICABLE_WITH_BACKFILL",
+    hard_failure_codes=(),
+)
+assert report.decision in {"GO_SHADOW", "NO_GO"}
+assert report.gold_eligible is False
 ```

@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-capability-overlay.v1.schema.json",
+  "title": "TreeGuard Scenario Capability Overlay v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "identity_status",
+    "source_class",
+    "fictional",
+    "derived_from_real",
+    "semantic_approval",
+    "gold_eligible",
+    "patch_eligible",
+    "source_reviewed_hash",
+    "source_snapshot_hash",
+    "source_plan_hash",
+    "source_reviewed_content_hash",
+    "reviewer_ref",
+    "recorded_at",
+    "review_round",
+    "oracle",
+    "overlay_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-capability-overlay.v1"},
+    "status": {"enum": ["ACCEPTED", "REVISED_ACCEPTED"]},
+    "identity_status": {"const": "UNVERIFIED_FILE_ASSERTION"},
+    "source_class": {"const": "CLEANROOM_SYNTHETIC"},
+    "fictional": {"const": true},
+    "derived_from_real": {"const": false},
+    "semantic_approval": {"const": false},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false},
+    "source_reviewed_hash": {"$ref": "#/$defs/digest"},
+    "source_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "source_plan_hash": {"$ref": "#/$defs/digest"},
+    "source_reviewed_content_hash": {"$ref": "#/$defs/digest"},
+    "reviewer_ref": {"$ref": "#/$defs/reference"},
+    "recorded_at": {"$ref": "#/$defs/timestamp"},
+    "review_round": {"enum": [1, 2]},
+    "oracle": {"$ref": "#/$defs/oracle"},
+    "overlay_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "reference": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "nodeId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "fieldExpectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field_name", "policy", "acceptable_values"],
+      "properties": {
+        "field_name": {
+          "enum": [
+            "subject",
+            "role",
+            "scenario",
+            "lifecycle",
+            "ownership",
+            "node_kind",
+            "value_type",
+            "cardinality",
+            "clarification_question",
+            "confirmed_facts",
+            "assumptions",
+            "evidence_gaps"
+          ]
+        },
+        "policy": {
+          "enum": ["EMPTY", "EXACT_ONE_OF", "NON_EMPTY", "NOT_COMPARED"]
+        },
+        "acceptable_values": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "oneOf": [
+              {"type": "string", "minLength": 1, "maxLength": 1000},
+              {"type": "null"}
+            ]
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"policy": {"const": "EXACT_ONE_OF"}}},
+          "then": {"properties": {"acceptable_values": {"minItems": 1}}},
+          "else": {"properties": {"acceptable_values": {"maxItems": 0}}}
+        }
+      ]
+    },
+    "intentProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_ref", "field_expectations"],
+      "properties": {
+        "profile_ref": {
+          "type": "string",
+          "pattern": "^P(?:00[1-9]|0[1-9][0-9])$"
+        },
+        "field_expectations": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {"$ref": "#/$defs/fieldExpectation"}
+        }
+      }
+    },
+    "retrieval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicable",
+        "allowed_statuses",
+        "acceptable_node_ids",
+        "top_k"
+      ],
+      "properties": {
+        "applicable": {"type": "boolean"},
+        "allowed_statuses": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "CANDIDATES_READY",
+              "NO_CANDIDATES",
+              "INSUFFICIENT_SIGNAL"
+            ]
+          }
+        },
+        "acceptable_node_ids": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/nodeId"}
+        },
+        "top_k": {
+          "oneOf": [
+            {"type": "integer", "minimum": 1, "maximum": 20},
+            {"type": "null"}
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"applicable": {"const": false}}},
+          "then": {
+            "properties": {
+              "allowed_statuses": {"maxItems": 0},
+              "acceptable_node_ids": {"maxItems": 0},
+              "top_k": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "allowed_statuses": {"minItems": 1},
+              "top_k": {"type": "integer", "minimum": 1, "maximum": 20}
+            }
+          }
+        }
+      ]
+    },
+    "recommendationOutcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action", "target_node_id", "relation"],
+      "properties": {
+        "action": {
+          "enum": [
+            "USE_EXISTING_NODE",
+            "ADD_NODE_FROM_CONTRACT",
+            "ADD_CONTEXT_FIELD",
+            "NEED_CLARIFICATION",
+            "NEED_EVIDENCE",
+            "ABSTAIN"
+          ]
+        },
+        "target_node_id": {
+          "oneOf": [
+            {"$ref": "#/$defs/nodeId"},
+            {"type": "null"}
+          ]
+        },
+        "relation": {
+          "oneOf": [
+            {
+              "enum": [
+                "SEMANTICALLY_EQUIVALENT",
+                "REUSES_CONTRACT",
+                "CONTEXTUALLY_RELATED",
+                "NOT_EQUIVALENT",
+                "NEED_EVIDENCE"
+              ]
+            },
+            {"type": "null"}
+          ]
+        }
+      }
+    },
+    "recommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["applicable", "acceptable_outcomes"],
+      "properties": {
+        "applicable": {"type": "boolean"},
+        "acceptable_outcomes": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/recommendationOutcome"}
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"applicable": {"const": true}}},
+          "then": {"properties": {"acceptable_outcomes": {"minItems": 1}}},
+          "else": {"properties": {"acceptable_outcomes": {"maxItems": 0}}}
+        }
+      ]
+    },
+    "oracle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expected_route",
+        "acceptable_intent_profiles",
+        "retrieval",
+        "recommendation"
+      ],
+      "properties": {
+        "expected_route": {"enum": ["PROCEED", "CLARIFY"]},
+        "acceptable_intent_profiles": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {"$ref": "#/$defs/intentProfile"}
+        },
+        "retrieval": {"$ref": "#/$defs/retrieval"},
+        "recommendation": {"$ref": "#/$defs/recommendation"}
+      }
+    }
+  }
+}

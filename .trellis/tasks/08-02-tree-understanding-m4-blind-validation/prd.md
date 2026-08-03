@@ -183,6 +183,8 @@
   — 记录非盲校准候选的聚合绑定、机器证据和待人工审核门。
 - [`research/m4-sealed-validation-freeze.md`](research/m4-sealed-validation-freeze.md)
   — 冻结下一轮新未见数据的规模、隔离、三次重复性、门槛和停线规则，不含隐藏正文。
+- [`research/m45-repeatability-contract.md`](research/m45-repeatability-contract.md)
+  — 记录 v1 只支持 8 条的合同缺口，并定义保持 v1 兼容的 24×3 聚合报告。
 
 ## Technical Approach
 
@@ -242,6 +244,10 @@
     密封执行场景，功能对话不读取树、场景或隐藏 Oracle 正文。每条在同一配置下运行
     三次，分别报告合同合法率、Oracle 匹配率和 3/3 稳定性；揭盲后该数据只保留为
     回归/校准，不在同一数据上调参后重新门控。
+15. **M4.5 重复性报告合同**：保持 8 条 `scenario-capability-report.v1` 不变，新增
+    独立 24×3 聚合报告；严格验证三轮场景集合/route 一致、round 内唯一、18+6 组成，
+    并按冻结的 98% 合同合法率、100% 实际召回、每轮 18/24、稳定 18/24 和零硬冲突
+    错误复用门槛给出 `GO_SHADOW/NO_GO`。
 
 ## Decision (ADR-lite)
 

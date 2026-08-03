@@ -51,12 +51,20 @@ from treeguard.tree_understanding import (
 
 
 CAPABILITY_OVERLAY_SCHEMA_VERSION = "scenario-capability-overlay.v1"
+CAPABILITY_SILVER_AUTHORIZATION_SCHEMA_VERSION = (
+    "scenario-capability-silver-authorization.v1"
+)
 CAPABILITY_RUN_SCHEMA_VERSION = "scenario-capability-run.v1"
 CAPABILITY_REPORT_SCHEMA_VERSION = "scenario-capability-report.v1"
+CAPABILITY_ORACLE_REQUEST_POLICY_VERSION = (
+    "treeguard.capability-oracle-request-policy.v1"
+)
 
 SOURCE_CLASS = "CLEANROOM_SYNTHETIC"
 IDENTITY_STATUS = "UNVERIFIED_FILE_ASSERTION"
 OVERLAY_REVIEW_STATUSES = {"ACCEPTED", "REVISED_ACCEPTED"}
+SILVER_AUTHORIZATION_STATUS = "SILVER_ACCEPTED"
+SILVER_ASSESSMENT_AUTHORITY = "CODEX_ASSISTED"
 EXPECTED_ROUTES = {"PROCEED", "CLARIFY"}
 STAGE_STATUSES = {"MATCH", "MISMATCH", "NOT_RUN", "RUN_FAILED"}
 STAGE_REASON_CODES = {
@@ -86,6 +94,18 @@ LIST_INTENT_FIELD_NAMES = {
     "assumptions",
     "confirmed_facts",
     "evidence_gaps",
+}
+UNBOUND_V1_INTENT_FIELD_NAMES = {
+    "subject",
+    "role",
+    "scenario",
+    "lifecycle",
+    "ownership",
+} | LIST_INTENT_FIELD_NAMES
+STRUCTURED_REQUEST_INTENT_FIELDS = {
+    "node_kind": "node_kind_hint",
+    "value_type": "value_type_hint",
+    "cardinality": "cardinality_hint",
 }
 INTENT_FIELD_NAMES = {
     "subject",
@@ -141,6 +161,29 @@ _OVERLAY_KEYS = {
     "review_round",
     "oracle",
     "overlay_hash",
+}
+_SILVER_AUTHORIZATION_KEYS = {
+    "schema_version",
+    "status",
+    "quality_tier",
+    "assessment_authority",
+    "identity_status",
+    "source_class",
+    "fictional",
+    "derived_from_real",
+    "semantic_approval",
+    "gold_eligible",
+    "gate_eligible",
+    "patch_eligible",
+    "execution_scope",
+    "source_reviewed_hash",
+    "source_snapshot_hash",
+    "source_plan_hash",
+    "source_reviewed_content_hash",
+    "assessor_ref",
+    "recorded_at",
+    "oracle",
+    "authorization_hash",
 }
 _ORACLE_KEYS = {
     "expected_route",
@@ -672,6 +715,222 @@ class ScenarioCapabilityOverlay:
         return payload
 
 
+@dataclass(frozen=True, slots=True)
+class ScenarioCapabilitySilverAuthorization:
+    """Non-authoritative Codex-assisted authorization for calibration only."""
+
+    source_reviewed_hash: str
+    source_snapshot_hash: str
+    source_plan_hash: str
+    source_reviewed_content_hash: str
+    assessor_ref: str
+    recorded_at: str
+    oracle: CapabilityOracle
+    authorization_hash: str
+
+    def __post_init__(self) -> None:
+        for field_name in (
+            "source_reviewed_hash",
+            "source_snapshot_hash",
+            "source_plan_hash",
+            "source_reviewed_content_hash",
+            "authorization_hash",
+        ):
+            _validate_digest(getattr(self, field_name), field_name)
+        _validate_reference(self.assessor_ref, "assessor_ref")
+        _validate_timestamp(self.recorded_at)
+        if not isinstance(self.oracle, CapabilityOracle):
+            raise ValueError("silver authorization requires a complete Oracle")
+        if self.authorization_hash != canonical_digest(self._payload()):
+            raise ValueError("silver authorization hash does not match its payload")
+
+    @property
+    def overlay_hash(self) -> str:
+        """Expose the existing run binding name without changing run v1 bytes."""
+
+        return self.authorization_hash
+
+    @property
+    def gold_eligible(self) -> bool:
+        return False
+
+    @property
+    def gate_eligible(self) -> bool:
+        return False
+
+    @property
+    def patch_eligible(self) -> bool:
+        return False
+
+    @classmethod
+    def from_dict(
+        cls,
+        payload: Any,
+        reviewed: ReviewedValidationScenario,
+        plan: ScenarioPreparationPlan,
+        tree: CanonicalTree,
+    ) -> "ScenarioCapabilitySilverAuthorization":
+        if not isinstance(payload, dict) or set(payload) != _SILVER_AUTHORIZATION_KEYS:
+            raise ScenarioCapabilityError(
+                "CAPABILITY_SILVER_AUTHORIZATION_FIELDS_INVALID",
+                "silver authorization must use the exact contract fields",
+            )
+        if payload["schema_version"] != CAPABILITY_SILVER_AUTHORIZATION_SCHEMA_VERSION:
+            raise ScenarioCapabilityError(
+                "CAPABILITY_SILVER_AUTHORIZATION_VERSION_INVALID",
+                "silver authorization schema is unsupported",
+            )
+        if (
+            payload["status"] != SILVER_AUTHORIZATION_STATUS
+            or payload["quality_tier"] != "SILVER"
+            or payload["assessment_authority"] != SILVER_ASSESSMENT_AUTHORITY
+            or payload["identity_status"] != IDENTITY_STATUS
+            or payload["source_class"] != SOURCE_CLASS
+            or payload["fictional"] is not True
+            or payload["derived_from_real"] is not False
+            or payload["semantic_approval"] is not False
+            or payload["gold_eligible"] is not False
+            or payload["gate_eligible"] is not False
+            or payload["patch_eligible"] is not False
+            or payload["execution_scope"] != "CALIBRATION_ONLY"
+        ):
+            raise ScenarioCapabilityError(
+                "CAPABILITY_SILVER_AUTHORIZATION_POLICY_INVALID",
+                "silver authorization violates its fixed calibration policy",
+            )
+        try:
+            authorization = cls(
+                source_reviewed_hash=payload["source_reviewed_hash"],
+                source_snapshot_hash=payload["source_snapshot_hash"],
+                source_plan_hash=payload["source_plan_hash"],
+                source_reviewed_content_hash=payload[
+                    "source_reviewed_content_hash"
+                ],
+                assessor_ref=payload["assessor_ref"],
+                recorded_at=payload["recorded_at"],
+                oracle=CapabilityOracle.from_dict(payload["oracle"]),
+                authorization_hash=payload["authorization_hash"],
+            )
+        except (KeyError, TypeError, ValueError):
+            raise ScenarioCapabilityError(
+                "CAPABILITY_SILVER_AUTHORIZATION_VALUE_INVALID",
+                "silver authorization failed local validation",
+            ) from None
+        verify_silver_authorization_for_execution(
+            authorization,
+            reviewed,
+            plan,
+            tree,
+        )
+        return authorization
+
+    def _payload(self) -> dict[str, Any]:
+        return {
+            "schema_version": CAPABILITY_SILVER_AUTHORIZATION_SCHEMA_VERSION,
+            "status": SILVER_AUTHORIZATION_STATUS,
+            "quality_tier": "SILVER",
+            "assessment_authority": SILVER_ASSESSMENT_AUTHORITY,
+            "identity_status": IDENTITY_STATUS,
+            "source_class": SOURCE_CLASS,
+            "fictional": True,
+            "derived_from_real": False,
+            "semantic_approval": False,
+            "gold_eligible": False,
+            "gate_eligible": False,
+            "patch_eligible": False,
+            "execution_scope": "CALIBRATION_ONLY",
+            "source_reviewed_hash": self.source_reviewed_hash,
+            "source_snapshot_hash": self.source_snapshot_hash,
+            "source_plan_hash": self.source_plan_hash,
+            "source_reviewed_content_hash": self.source_reviewed_content_hash,
+            "assessor_ref": self.assessor_ref,
+            "recorded_at": self.recorded_at,
+            "oracle": self.oracle.to_dict(),
+        }
+
+    def to_dict(self) -> dict[str, Any]:
+        payload = self._payload()
+        payload["authorization_hash"] = self.authorization_hash
+        return payload
+
+
+def freeze_silver_capability_authorization(
+    reviewed: ReviewedValidationScenario,
+    plan: ScenarioPreparationPlan,
+    tree: CanonicalTree,
+    *,
+    assessor_ref: str,
+    recorded_at: str,
+    oracle: CapabilityOracle,
+) -> ScenarioCapabilitySilverAuthorization:
+    """Freeze a Codex-assisted Silver decision for calibration execution only."""
+
+    if not isinstance(reviewed, ReviewedValidationScenario):
+        raise ScenarioCapabilityError(
+            "CAPABILITY_REVIEWED_SCENARIO_REQUIRED",
+            "a reviewed validation scenario is required",
+        )
+    if not isinstance(plan, ScenarioPreparationPlan) or not isinstance(
+        tree, CanonicalTree
+    ):
+        raise ScenarioCapabilityError(
+            "CAPABILITY_OVERLAY_SOURCE_INVALID",
+            "a typed plan and resource tree are required",
+        )
+    if not isinstance(oracle, CapabilityOracle):
+        raise ScenarioCapabilityError(
+            "CAPABILITY_ORACLE_REQUIRED",
+            "a complete typed capability Oracle is required",
+        )
+    try:
+        _validate_oracle_node_sources(oracle, tree)
+        source_content_hash = _reviewed_content_digest(reviewed, oracle)
+        payload = {
+            "schema_version": CAPABILITY_SILVER_AUTHORIZATION_SCHEMA_VERSION,
+            "status": SILVER_AUTHORIZATION_STATUS,
+            "quality_tier": "SILVER",
+            "assessment_authority": SILVER_ASSESSMENT_AUTHORITY,
+            "identity_status": IDENTITY_STATUS,
+            "source_class": SOURCE_CLASS,
+            "fictional": True,
+            "derived_from_real": False,
+            "semantic_approval": False,
+            "gold_eligible": False,
+            "gate_eligible": False,
+            "patch_eligible": False,
+            "execution_scope": "CALIBRATION_ONLY",
+            "source_reviewed_hash": reviewed.reviewed_hash,
+            "source_snapshot_hash": tree.snapshot_hash,
+            "source_plan_hash": plan.plan_hash,
+            "source_reviewed_content_hash": source_content_hash,
+            "assessor_ref": assessor_ref,
+            "recorded_at": recorded_at,
+            "oracle": oracle.to_dict(),
+        }
+        authorization = ScenarioCapabilitySilverAuthorization(
+            source_reviewed_hash=reviewed.reviewed_hash,
+            source_snapshot_hash=tree.snapshot_hash,
+            source_plan_hash=plan.plan_hash,
+            source_reviewed_content_hash=source_content_hash,
+            assessor_ref=assessor_ref,
+            recorded_at=recorded_at,
+            oracle=oracle,
+            authorization_hash=canonical_digest(payload),
+        )
+    except (TypeError, ValueError):
+        raise ScenarioCapabilityError(
+            "CAPABILITY_SILVER_AUTHORIZATION_VALUE_INVALID",
+            "silver authorization failed local validation",
+        ) from None
+    verify_silver_authorization_for_execution(
+        authorization,
+        reviewed,
+        plan,
+        tree,
+    )
+    return authorization
+
+
 def freeze_capability_overlay(
     reviewed: ReviewedValidationScenario,
     plan: ScenarioPreparationPlan,
@@ -747,7 +1006,7 @@ def freeze_capability_overlay(
             "CAPABILITY_OVERLAY_VALUE_INVALID",
             "capability overlay failed local validation",
         ) from None
-    verify_capability_overlay_against_sources(overlay, reviewed, plan, tree)
+    verify_capability_overlay_for_execution(overlay, reviewed, plan, tree)
     return overlay
 
 
@@ -804,6 +1063,114 @@ def verify_capability_overlay_against_sources(
         raise ScenarioCapabilityError(
             "CAPABILITY_ORACLE_SOURCE_MISMATCH",
             "capability Oracle targets do not exist in the bound tree",
+        ) from None
+
+
+def verify_capability_overlay_for_execution(
+    overlay: ScenarioCapabilityOverlay,
+    reviewed: ReviewedValidationScenario,
+    plan: ScenarioPreparationPlan,
+    tree: CanonicalTree,
+) -> None:
+    """Verify source bindings and that the v1 Oracle is request-observable."""
+
+    verify_capability_overlay_against_sources(overlay, reviewed, plan, tree)
+    verify_capability_oracle_against_reviewed_request(
+        overlay.oracle,
+        reviewed,
+        tree,
+    )
+
+
+def verify_silver_authorization_for_execution(
+    authorization: ScenarioCapabilitySilverAuthorization,
+    reviewed: ReviewedValidationScenario,
+    plan: ScenarioPreparationPlan,
+    tree: CanonicalTree,
+) -> None:
+    """Verify a non-gating Silver authorization and all source bindings."""
+
+    if not isinstance(authorization, ScenarioCapabilitySilverAuthorization):
+        raise ScenarioCapabilityError(
+            "CAPABILITY_SILVER_AUTHORIZATION_REQUIRED",
+            "a Silver calibration authorization is required",
+        )
+    if (
+        not isinstance(reviewed, ReviewedValidationScenario)
+        or not isinstance(plan, ScenarioPreparationPlan)
+        or not isinstance(tree, CanonicalTree)
+    ):
+        raise ScenarioCapabilityError(
+            "CAPABILITY_SILVER_AUTHORIZATION_SOURCE_INVALID",
+            "Silver authorization sources must use trusted typed contracts",
+        )
+    expected_bindings = (
+        (authorization.source_reviewed_hash, reviewed.reviewed_hash),
+        (authorization.source_snapshot_hash, tree.snapshot_hash),
+        (authorization.source_plan_hash, plan.plan_hash),
+        (reviewed.source_snapshot_hash, tree.snapshot_hash),
+        (reviewed.source_plan_hash, plan.plan_hash),
+        (plan.source_snapshot_hash, tree.snapshot_hash),
+        (
+            authorization.source_reviewed_content_hash,
+            _reviewed_content_digest(reviewed, authorization.oracle),
+        ),
+    )
+    if any(expected != actual for expected, actual in expected_bindings):
+        raise ScenarioCapabilityError(
+            "CAPABILITY_SILVER_AUTHORIZATION_SOURCE_MISMATCH",
+            "Silver authorization does not match the reviewed bytes, plan, and tree",
+        )
+    expected_draft_status = (
+        "READY_FOR_HUMAN_REVIEW"
+        if authorization.oracle.expected_route == "PROCEED"
+        else "NEEDS_CLARIFICATION"
+    )
+    if reviewed.oracle.draft_status != expected_draft_status:
+        raise ScenarioCapabilityError(
+            "CAPABILITY_SILVER_AUTHORIZATION_OBSERVABLE_ORACLE_MISMATCH",
+            "Silver route contradicts the reviewed observable Oracle",
+        )
+    try:
+        _validate_oracle_node_sources(authorization.oracle, tree)
+    except ValueError:
+        raise ScenarioCapabilityError(
+            "CAPABILITY_ORACLE_SOURCE_MISMATCH",
+            "capability Oracle targets do not exist in the bound tree",
+        ) from None
+    verify_capability_oracle_against_reviewed_request(
+        authorization.oracle,
+        reviewed,
+        tree,
+    )
+
+
+def verify_capability_oracle_against_reviewed_request(
+    oracle: CapabilityOracle,
+    reviewed: ReviewedValidationScenario,
+    tree: CanonicalTree,
+) -> None:
+    """Preflight one proposed Oracle without pretending it was human-frozen."""
+
+    if not isinstance(oracle, CapabilityOracle):
+        raise ScenarioCapabilityError(
+            "CAPABILITY_ORACLE_REQUIRED",
+            "a complete typed capability Oracle is required",
+        )
+    if not isinstance(reviewed, ReviewedValidationScenario) or not isinstance(
+        tree, CanonicalTree
+    ):
+        raise ScenarioCapabilityError(
+            "CAPABILITY_OVERLAY_SOURCE_INVALID",
+            "capability Oracle sources must use trusted typed contracts",
+        )
+    request = _intent_request(reviewed, tree)
+    try:
+        _validate_oracle_request_support(oracle, request)
+    except ValueError:
+        raise ScenarioCapabilityError(
+            "CAPABILITY_ORACLE_REQUEST_MISMATCH",
+            "capability intent Oracle is not supported by the frozen request",
         ) from None
 
 
@@ -1020,7 +1387,7 @@ class ScenarioCapabilityRun:
                 "CAPABILITY_RUN_REVIEWED_SOURCE_MISMATCH",
                 "capability run reviewed source replay failed",
             ) from None
-        verify_capability_overlay_against_sources(overlay, reviewed, plan, tree)
+        verify_capability_overlay_for_execution(overlay, reviewed, plan, tree)
         request = _intent_request(reviewed, tree)
         if (
             run.source_overlay_hash != overlay.overlay_hash
@@ -1074,6 +1441,76 @@ def run_reviewed_capability_scenario(
     intent_provider: IntentCapabilityProvider,
     semantic_provider: SemanticCapabilityProvider,
 ) -> ScenarioCapabilityRun:
+    """Execute one human-frozen capability scenario."""
+
+    if not isinstance(overlay, ScenarioCapabilityOverlay):
+        raise ScenarioCapabilityError(
+            "CAPABILITY_OVERLAY_REQUIRED",
+            "a human-frozen capability overlay is required",
+        )
+    return _run_capability_scenario(
+        overlay,
+        reviewed,
+        action,
+        batch,
+        batch_candidate,
+        projection,
+        plan,
+        profile,
+        tree,
+        intent_provider,
+        semantic_provider,
+    )
+
+
+def run_silver_capability_scenario(
+    authorization: ScenarioCapabilitySilverAuthorization,
+    reviewed: ReviewedValidationScenario,
+    action: ScenarioReviewAction,
+    batch: ScenarioPreparationBatch,
+    batch_candidate: ScenarioPreparationBatchCandidate,
+    projection: ScenarioPreparationProjection,
+    plan: ScenarioPreparationPlan,
+    profile: TreeDiagnosticProfile,
+    tree: CanonicalTree,
+    intent_provider: IntentCapabilityProvider,
+    semantic_provider: SemanticCapabilityProvider,
+) -> ScenarioCapabilityRun:
+    """Execute one Codex-assisted Silver scenario for calibration only."""
+
+    if not isinstance(authorization, ScenarioCapabilitySilverAuthorization):
+        raise ScenarioCapabilityError(
+            "CAPABILITY_SILVER_AUTHORIZATION_REQUIRED",
+            "a Silver calibration authorization is required",
+        )
+    return _run_capability_scenario(
+        authorization,
+        reviewed,
+        action,
+        batch,
+        batch_candidate,
+        projection,
+        plan,
+        profile,
+        tree,
+        intent_provider,
+        semantic_provider,
+    )
+
+
+def _run_capability_scenario(
+    overlay: ScenarioCapabilityOverlay | ScenarioCapabilitySilverAuthorization,
+    reviewed: ReviewedValidationScenario,
+    action: ScenarioReviewAction,
+    batch: ScenarioPreparationBatch,
+    batch_candidate: ScenarioPreparationBatchCandidate,
+    projection: ScenarioPreparationProjection,
+    plan: ScenarioPreparationPlan,
+    profile: TreeDiagnosticProfile,
+    tree: CanonicalTree,
+    intent_provider: IntentCapabilityProvider,
+    semantic_provider: SemanticCapabilityProvider,
+) -> ScenarioCapabilityRun:
     """Execute intent, deterministic retrieval, and recommendation with short-circuiting."""
 
     try:
@@ -1092,7 +1529,10 @@ def run_reviewed_capability_scenario(
             "CAPABILITY_REVIEWED_SOURCE_MISMATCH",
             "reviewed scenario failed trusted source replay",
         ) from None
-    verify_capability_overlay_against_sources(overlay, reviewed, plan, tree)
+    if isinstance(overlay, ScenarioCapabilityOverlay):
+        verify_capability_overlay_for_execution(overlay, reviewed, plan, tree)
+    else:
+        verify_silver_authorization_for_execution(overlay, reviewed, plan, tree)
     request = _intent_request(reviewed, tree)
 
     try:
@@ -1856,7 +2296,7 @@ def _stage_aggregate(
 
 
 def _short_circuit_run(
-    overlay: ScenarioCapabilityOverlay,
+    overlay: ScenarioCapabilityOverlay | ScenarioCapabilitySilverAuthorization,
     reviewed: ReviewedValidationScenario,
     tree: CanonicalTree,
     request: IntentRequest,
@@ -1924,6 +2364,66 @@ def _intent_matches(draft: ChangeIntentDraft, oracle: CapabilityOracle) -> bool:
         _intent_profile_matches(draft, profile)
         for profile in oracle.acceptable_intent_profiles
     )
+
+
+def _validate_oracle_request_support(
+    oracle: CapabilityOracle,
+    request: IntentRequest,
+) -> None:
+    """Reject v1 expectations whose evidence cannot be replayed deterministically."""
+
+    for profile in oracle.acceptable_intent_profiles:
+        if tuple(
+            expectation.field_name
+            for expectation in profile.field_expectations
+        ) != tuple(sorted(INTENT_FIELD_NAMES)):
+            raise ValueError("v1 intent profiles must explicitly cover every field")
+        has_discriminating_expectation = False
+        for expectation in profile.field_expectations:
+            field_name = expectation.field_name
+            if field_name in UNBOUND_V1_INTENT_FIELD_NAMES:
+                if expectation.policy != "NOT_COMPARED":
+                    raise ValueError("free-text intent fields need v2 support binding")
+                continue
+
+            request_field = STRUCTURED_REQUEST_INTENT_FIELDS.get(field_name)
+            if request_field is not None:
+                expected_value = getattr(request, request_field)
+                if expected_value is None or expected_value == "UNKNOWN":
+                    if expectation.policy != "NOT_COMPARED":
+                        raise ValueError(
+                            "missing hints cannot support exact expectations"
+                        )
+                    continue
+                if (
+                    expectation.policy != "EXACT_ONE_OF"
+                    or expectation.acceptable_values != (expected_value,)
+                ):
+                    raise ValueError(
+                        "explicit hints require exact singleton expectations"
+                    )
+                has_discriminating_expectation = True
+                continue
+
+            if field_name != "clarification_question":
+                raise ValueError("intent expectation has no v1 request support rule")
+            if oracle.expected_route == "CLARIFY":
+                if expectation.policy != "NON_EMPTY":
+                    raise ValueError(
+                        "CLARIFY requires a non-empty clarification question"
+                    )
+                has_discriminating_expectation = True
+                continue
+            if expectation.policy == "NOT_COMPARED":
+                continue
+            if oracle.expected_route == "PROCEED":
+                if (
+                    expectation.policy != "EXACT_ONE_OF"
+                    or expectation.acceptable_values != (None,)
+                ):
+                    raise ValueError("PROCEED cannot require a clarification question")
+        if not has_discriminating_expectation:
+            raise ValueError("intent profile has no request-supported comparison")
 
 
 def _intent_profile_matches(
@@ -2239,7 +2739,9 @@ def _validate_timestamp(value: Any) -> None:
 
 
 __all__ = [
+    "CAPABILITY_ORACLE_REQUEST_POLICY_VERSION",
     "CAPABILITY_OVERLAY_SCHEMA_VERSION",
+    "CAPABILITY_SILVER_AUTHORIZATION_SCHEMA_VERSION",
     "CAPABILITY_REPORT_SCHEMA_VERSION",
     "CAPABILITY_RUN_SCHEMA_VERSION",
     "CLARIFICATION_COVERAGE_STATUSES",
@@ -2257,11 +2759,17 @@ __all__ = [
     "RetrievalOracle",
     "ScenarioCapabilityError",
     "ScenarioCapabilityOverlay",
+    "ScenarioCapabilitySilverAuthorization",
     "ScenarioCapabilityRun",
     "ScenarioPreparationMetrics",
     "STAGE_REASON_CODES",
     "build_capability_gate_report",
     "freeze_capability_overlay",
+    "freeze_silver_capability_authorization",
     "run_reviewed_capability_scenario",
+    "run_silver_capability_scenario",
+    "verify_capability_oracle_against_reviewed_request",
     "verify_capability_overlay_against_sources",
+    "verify_capability_overlay_for_execution",
+    "verify_silver_authorization_for_execution",
 ]

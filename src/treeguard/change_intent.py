@@ -57,6 +57,12 @@ _CONTENT_KEYS = {
     "clarification_question",
 }
 _MODEL_OUTPUT_KEYS = _CONTENT_KEYS | {"schema_version"}
+_MODEL_CONTENT_ERROR_PREFIXES = {
+    "INTENT_MODEL_CONTENT_INVALID": "INTENT_MODEL",
+    "INTENT_CLARIFICATION_MODEL_CONTENT_INVALID": (
+        "INTENT_CLARIFICATION_MODEL"
+    ),
+}
 _DRAFT_KEYS = {
     "schema_version",
     "model_provider",
@@ -191,38 +197,50 @@ class IntentContent:
                 error_code,
                 "intent content must use the exact contract fields",
             )
+
+        parsers = {
+            "subject": lambda value: _optional_text(value, "subject"),
+            "role": lambda value: _optional_text(value, "role"),
+            "scenario": lambda value: _optional_text(value, "scenario"),
+            "lifecycle": lambda value: _optional_text(value, "lifecycle"),
+            "ownership": lambda value: _enum(
+                value, OWNERSHIP_CLASSES, "ownership"
+            ),
+            "node_kind": lambda value: _enum(
+                value, NODE_KINDS, "node_kind"
+            ),
+            "value_type": lambda value: _optional_text(value, "value_type"),
+            "cardinality": lambda value: _enum(
+                value, CARDINALITIES, "cardinality"
+            ),
+            "confirmed_facts": lambda value: _text_tuple(
+                value, "confirmed_facts"
+            ),
+            "assumptions": lambda value: _text_tuple(value, "assumptions"),
+            "evidence_gaps": lambda value: _text_tuple(
+                value, "evidence_gaps"
+            ),
+            "clarification_question": lambda value: _optional_text(
+                value, "clarification_question"
+            ),
+        }
+        values = {}
+        for field_name, parser in parsers.items():
+            try:
+                values[field_name] = parser(payload[field_name])
+            except (TypeError, ValueError):
+                prefix = _MODEL_CONTENT_ERROR_PREFIXES.get(error_code)
+                detail_code = (
+                    f"{prefix}_{field_name.upper()}_INVALID"
+                    if prefix is not None
+                    else error_code
+                )
+                raise IntentValidationError(
+                    detail_code,
+                    f"intent field {field_name} failed local validation",
+                ) from None
         try:
-            return cls(
-                subject=_optional_text(payload["subject"], "subject"),
-                role=_optional_text(payload["role"], "role"),
-                scenario=_optional_text(payload["scenario"], "scenario"),
-                lifecycle=_optional_text(payload["lifecycle"], "lifecycle"),
-                ownership=_enum(
-                    payload["ownership"],
-                    OWNERSHIP_CLASSES,
-                    "ownership",
-                ),
-                node_kind=_enum(payload["node_kind"], NODE_KINDS, "node_kind"),
-                value_type=_optional_text(payload["value_type"], "value_type"),
-                cardinality=_enum(
-                    payload["cardinality"],
-                    CARDINALITIES,
-                    "cardinality",
-                ),
-                confirmed_facts=_text_tuple(
-                    payload["confirmed_facts"],
-                    "confirmed_facts",
-                ),
-                assumptions=_text_tuple(payload["assumptions"], "assumptions"),
-                evidence_gaps=_text_tuple(
-                    payload["evidence_gaps"],
-                    "evidence_gaps",
-                ),
-                clarification_question=_optional_text(
-                    payload["clarification_question"],
-                    "clarification_question",
-                ),
-            )
+            return cls(**values)
         except ValueError:
             raise IntentValidationError(
                 error_code,
@@ -1387,13 +1405,19 @@ def _optional_text(value: Any, field_name: str) -> str | None:
 
 
 def _text_tuple(value: Any, field_name: str) -> tuple[str, ...]:
-    if (
-        not isinstance(value, list)
-        or len(value) > _MAX_LIST_ITEMS
-        or len(value) != len(set(value))
-    ):
+    if not isinstance(value, list) or len(value) > _MAX_LIST_ITEMS:
         raise ValueError(f"{field_name} must be a bounded unique text array")
-    result = tuple(_required_text(item, field_name) for item in value)
+    parsed: list[str] = []
+    seen: set[str] = set()
+    for item in value:
+        text = _required_text(item, field_name)
+        if text in seen:
+            raise ValueError(
+                f"{field_name} must be a bounded unique text array"
+            )
+        seen.add(text)
+        parsed.append(text)
+    result = tuple(parsed)
     _validate_text_tuple(result, field_name)
     return result
 

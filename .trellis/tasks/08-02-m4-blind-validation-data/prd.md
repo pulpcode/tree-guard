@@ -136,4 +136,17 @@ overlay。任何受审字节、树、计划、字段、枚举、Top-K 或比较�
 - 正式执行集为 `U001`—`U005`、`U007`—`U009`：7 条 `PROCEED` 加 1 条
   `CLARIFY`。`U006`、`U010`、`U011` 接受但不生成 overlay；
 - `tests/fixtures/fictional/fire_validation_m4_blind/` 已物化为 `FROZEN`，正式
-  preflight 和数据专属篡改测试通过；仍未 stage、commit、push 或 merge。
+  数据提交为 `a3acfb2`，并已合入功能分支；没有 push。
+
+## 首轮实验后的处置
+
+- 首轮模型实验在 Intent 阶段发现冻结 request 与 Oracle profile 的可实现性冲突，
+  公开归类为 `CONTRACT_INTEGRITY_FAILURE`；召回、推荐和 Semantic 均未执行；
+- 原 manifest 与 sidecar 字节、SHA 和 `FROZEN` 生命周期保持不变，`FROZEN` 只表示
+  字节冻结，不再表示具备门控资格；
+- 当前数据固定降级为诊断/校准输入，不能在修订后重新声明为未见 holdout；
+- 功能分支增加 request-aware Oracle 执行资格后，本 fixture 的门控 preflight 应固定
+  返回 `DATASET_CONTRACT_INTEGRITY_FAILURE`，但原有字节、来源、预算、记账和篡改
+  反例仍需先完整重放；
+- 修订 Oracle 必须使用新 dataset/sidecar 身份并重新人工审核，只能承担非盲校准；
+  正式 M4 go/no-go 需要另一个运行前密封的数据包。

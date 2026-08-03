@@ -2,11 +2,12 @@
 
 ## 当前状态
 
-- 功能合同已在 `codex/tree-understanding-agent` 工作区实现并通过本地验证；
-- 当前仍未 stage、commit、push 或 merge，因此**尚不存在可供数据分支同步的冻结
-  合同提交**；
-- 数据分支在用户审阅并批准功能提交前继续停在第一阶段，不生成候选、Oracle 或正式
-  fixture。
+- 功能合同已以 `d7dff79` 提交，数据分支同步后以 `a3acfb2` 冻结完全虚构 fixture，
+  两者已在 `codex/tree-understanding-agent` 集成；没有 push；
+- 首轮实验发现 v1 request 与 Intent Oracle profile 不可同时满足，数据字节保持
+  不变并降级为诊断/校准输入；该结果不是模型准确率；
+- 后续功能合同增加 request-aware 执行资格。历史 overlay 可做来源重放，但当前 fire
+  v1 在 Provider 前固定失败，不能继续承担 go/no-go。
 
 ## 功能分支拥有的冻结候选
 
@@ -35,7 +36,9 @@ M3 的 `scenario-review-action.v1`、`scenario-review-record.v1` 和
 - `expected_route`：`PROCEED` 或 `CLARIFY`，并与 M3 observable `draft_status` 一致；
 - intent profile：`P001` 起的有序 profile；字段与 policy 精确服从 overlay Schema。
   标量可用 `EXACT_ONE_OF`，标量或 tuple 可用 `NON_EMPTY`，tuple 可用 `EMPTY`，
-  显式忽略用 `NOT_COMPARED`；模型 rationale 不进入 Oracle；
+  显式忽略用 `NOT_COMPARED`；M4 v1 每个可执行 profile 必须完整列出 12 个字段，
+  非空结构化 hint 必须精确比较，`UNKNOWN`/`null` hint 与无逐字段来源绑定的字段
+  必须 `NOT_COMPARED`；模型 rationale 不进入 Oracle；
 - retrieval：完整链路必须 `applicable=true`，状态使用既有三项枚举；有目标时只允许
   `CANDIDATES_READY`，目标保存稳定虚构 node ID，`top_k` 固定在 1–20；无目标时不得
   接受 ready 状态；

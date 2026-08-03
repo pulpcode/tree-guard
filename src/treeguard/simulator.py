@@ -554,12 +554,39 @@ def _model_output(
             if isinstance(item, dict)
             and isinstance(item.get("candidate_ref"), str)
         ]
+        intent = (
+            semantic_input.get("intent")
+            if isinstance(semantic_input, dict)
+            else None
+        )
+        selected_ref = next(
+            (
+                item["candidate_ref"]
+                for item in candidates
+                if isinstance(item, dict)
+                and isinstance(item.get("candidate_ref"), str)
+                and isinstance(intent, dict)
+                and (
+                    intent.get("node_kind") == "UNKNOWN"
+                    or item.get("kind") == intent.get("node_kind")
+                )
+                and (
+                    intent.get("value_type") is None
+                    or item.get("value_type") == intent.get("value_type")
+                )
+                and (
+                    intent.get("cardinality") == "UNKNOWN"
+                    or item.get("cardinality") == intent.get("cardinality")
+                )
+            ),
+            None,
+        )
         assessments = [
             {
                 "candidate_ref": ref,
                 "relation": (
                     "SEMANTICALLY_EQUIVALENT"
-                    if index == 0
+                    if ref == selected_ref
                     else "NOT_EQUIVALENT"
                 ),
                 "reason": "已比较一个确定性的虚构候选。",
@@ -570,9 +597,9 @@ def _model_output(
             "schema_version": schema_version,
             "candidate_assessments": assessments,
             "recommended_action": (
-                "USE_EXISTING_NODE" if refs else "ABSTAIN"
+                "USE_EXISTING_NODE" if selected_ref is not None else "ABSTAIN"
             ),
-            "selected_candidate_ref": refs[0] if refs else None,
+            "selected_candidate_ref": selected_ref,
             "rationale": "仿真器返回固定且符合合同的结果。",
             "uncertainties": [],
             "evidence_gaps": [],

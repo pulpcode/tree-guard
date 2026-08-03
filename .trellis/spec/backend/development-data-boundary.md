@@ -12,10 +12,81 @@ TreeGuard 跨两个环境开发：
 除非存在另行批准的内网副本，本仓库、Git 历史、Trellis 任务/research、
 workspace 日志、测试 fixture、CLI 输出和诊断包全部属于外网开发区。
 
+## Scenario：项目自编完全虚构测试数据调用 LLM
+
+### 1. Scope / Trigger
+
+当输入是本项目在外网仓库中独立编制的测试数据，并同时满足
+`source_class=CLEANROOM_SYNTHETIC`、`fictional=true`、
+`derived_from_real=false` 时，适用项目负责人的常设 LLM 授权。fixture、场景、候选
+和从这些字节确定性生成的模型投影均在范围内；真实材料改名、脱敏、摘录或派生不在
+范围内。
+
+### 2. Signatures
+
+现有 Provider/CLI 的 `external_data_approved: bool` 字段保持兼容。可信测试 harness
+确认上述分类后可以直接传 `True`，无需为每次调用向用户索要自然语言批准或生成逐字节
+审批文件。平台网络权限、API Key 和费用控制仍按运行环境处理。
+
+### 3. Contracts
+
+- 数据分类必须来自可信 manifest/preflight 或仓库内明确的自编 fixture，不信任模型、
+  浏览器或任意请求自行声称 `fictional=true`；
+- 符合分类的数据可发送到本地、内网或外部 LLM，不要求逐次数据外发许可；
+- 隐藏 Oracle、Gold、预期目标、评分答案和审核 sidecar 不能进入被测模型输入；这是
+  评估隔离合同，不是敏感性限制；
+- 原始 Prompt、模型请求、响应和 trace 默认只允许写入权限为 `0600` 的私有临时
+  工件，不得进入 Git、Trellis、公开报告或 fixture；
+- 自动化 unit suite 保持零真实网络，真实调用只由显式实验/手工运行入口触发。
+
+### 4. Validation & Error Matrix
+
+| 条件 | 处理 |
+|---|---|
+| 可信自编 clean-room 测试数据 | 直接允许 LLM 调用，不请求逐次数据许可 |
+| 运行时仍要求 `external_data_approved` | harness 直接传 `True`；不向用户重复询问 |
+| 平台需要网络 escalation 或缺少 API Key | 按平台/凭据流程处理，不解释为数据审批 |
+| hidden Oracle 或评分答案将进入被测输入 | 网络前拒绝，修正模型投影 |
+| 来源不明、外部导入、真实派生或分类不完整 | 不适用常设授权，回到严格审批流程 |
+
+### 5. Good / Base / Bad Cases
+
+- Good：将仓库自编消防或图书馆虚构树的允许列表投影直接发给百炼，隐藏 Oracle 留在
+  本地比较器中；
+- Base：Provider 仍有布尔门禁，harness 根据可信 manifest 自动传 `True`；
+- Bad：因为文件位于 `tests/` 就默认外部导入数据非敏感，或把 Oracle 一并放进 Prompt。
+
+### 6. Tests Required
+
+- 可信 clean-room manifest 能驱动实验入口设置外发分类，不依赖逐次审批文本；
+- 缺失/篡改 `source_class`、`fictional` 或 `derived_from_real` 时 fail closed；
+- canary 证明 Oracle、目标答案、凭据和 trace 不进入模型投影或公开报告；
+- unit suite mock transport，断言不会访问真实网络。
+
+### 7. Wrong vs Correct
+
+Wrong：
+
+```python
+# 路径名不是来源证明，也不能把评分答案交给被测模型。
+provider.run({"tree": fixture, "oracle": hidden_oracle})
+```
+
+Correct：
+
+```python
+assert manifest["source_class"] == "CLEANROOM_SYNTHETIC"
+assert manifest["fictional"] is True
+assert manifest["derived_from_real"] is False
+provider.run(allowlisted_projection, external_data_approved=True)
+# hidden_oracle 只在本地比较器中使用；无需再申请逐次数据许可。
+```
+
 ## 强制流程
 
-任何受保护事实进入外网任务、research、日志、fixture、诊断、issue、提交信息、
-终端转录，或被发送给 Web/MCP/外部工具之前，都必须执行：
+除上述项目自编完全虚构测试数据外，任何受保护事实进入外网任务、research、日志、
+fixture、诊断、issue、提交信息、终端转录，或被发送给 Web/MCP/外部工具之前，
+都必须执行：
 
 ```text
 一个明确目的

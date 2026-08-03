@@ -1240,6 +1240,18 @@ def _validate_source_policy(
             "SEMANTIC_ACTION_POLICY_INVALID",
             "all-evidence-gap candidates cannot support a positive action",
         )
+    if (
+        action == "USE_EXISTING_NODE"
+        and selected_candidate_ref is not None
+        and _candidate_contract_conflicts(
+            projection,
+            selected_candidate_ref,
+        )
+    ):
+        raise SemanticRecommendationError(
+            "SEMANTIC_SELECTED_CANDIDATE_CONTRACT_CONFLICT",
+            "selected candidate conflicts with the confirmed intent contract",
+        )
     if action == "ADD_CONTEXT_FIELD":
         intent = projection.intent
         if intent.scenario is None or not intent.confirmed_facts:
@@ -1247,6 +1259,32 @@ def _validate_source_policy(
                 "SEMANTIC_CONTEXT_EVIDENCE_REQUIRED",
                 "context extension requires a scenario and confirmed fact",
             )
+
+
+def _candidate_contract_conflicts(
+    projection: SemanticCandidateProjection,
+    selected_candidate_ref: str,
+) -> bool:
+    candidate = next(
+        item
+        for item in projection.candidates
+        if item.candidate_ref == selected_candidate_ref
+    )
+    intent = projection.intent
+    return (
+        (
+            intent.node_kind != "UNKNOWN"
+            and candidate.kind != intent.node_kind
+        )
+        or (
+            intent.value_type is not None
+            and candidate.value_type != intent.value_type
+        )
+        or (
+            intent.cardinality != "UNKNOWN"
+            and candidate.cardinality != intent.cardinality
+        )
+    )
 
 
 def _validate_action_shape(

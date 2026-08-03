@@ -129,6 +129,41 @@ def _action(draft, *, decision: str = "CONFIRM_FOR_RETRIEVAL"):
 
 
 class ChangeIntentTests(unittest.TestCase):
+    def test_model_content_errors_identify_the_invalid_field_safely(self) -> None:
+        tree = _tree()
+        request = IntentRequest.from_dict(_request_payload(), tree)
+        invalid_values = {
+            "subject": "",
+            "ownership": "NOT_AN_OWNERSHIP",
+            "node_kind": "NOT_A_KIND",
+            "cardinality": "NOT_A_CARDINALITY",
+            "confirmed_facts": ["duplicate", "duplicate"],
+            "assumptions": [{"not": "text"}],
+            "evidence_gaps": None,
+            "clarification_question": [],
+        }
+
+        for field_name, invalid_value in invalid_values.items():
+            with self.subTest(field_name=field_name):
+                payload = _model_payload()
+                payload[field_name] = invalid_value
+                with self.assertRaises(IntentValidationError) as captured:
+                    ChangeIntentDraft.from_model_dict(
+                        payload,
+                        request,
+                        tree,
+                        model_provider="UNVERIFIED_MODEL_OUTPUT_FILE",
+                        model_capability="JSON_OBJECT",
+                        model_name="fixture-model",
+                        prompt_version="treeguard.change-intent.zh.v3",
+                    )
+                self.assertEqual(
+                    captured.exception.code,
+                    f"INTENT_MODEL_{field_name.upper()}_INVALID",
+                )
+                self.assertNotIn("duplicate", str(captured.exception))
+                self.assertNotIn("NOT_A_", str(captured.exception))
+
     def test_request_projection_is_allowlisted_and_omits_internal_ids(self) -> None:
         tree = _tree()
         request = IntentRequest.from_dict(_request_payload(), tree)
@@ -617,14 +652,10 @@ class ChangeIntentTests(unittest.TestCase):
 
             def _post_json(self, body):
                 self.bodies.append(body)
-                payload = (
-                    {
-                        "intent": _model_payload(),
-                        "debug_note": rejected_marker,
-                    }
-                    if len(self.bodies) == 1
-                    else _model_payload()
-                )
+                payload = _model_payload()
+                if len(self.bodies) == 1:
+                    payload["cardinality"] = "NOT_A_CARDINALITY"
+                    payload["confirmed_facts"].append(rejected_marker)
                 return {
                     "choices": [
                         {
@@ -673,11 +704,37 @@ class ChangeIntentTests(unittest.TestCase):
         )
         self.assertIn("必须写入", output_contract["hint_policy"])
         self.assertEqual(
-            retry_user_payload["previous_validation_error"],
-            "INTENT_MODEL_FIELDS_INVALID",
+            first_user_payload["stage_policy"]["intent_goal"],
+            "COMPILE_SEARCHABLE_INTENT",
+        )
+        self.assertTrue(
+            first_user_payload["stage_policy"][
+                "candidate_conflicts_belong_to_semantic_stage"
+            ]
+        )
+        self.assertTrue(
+            first_user_payload["stage_policy"][
+                "request_ambiguity_still_requires_one_question"
+            ]
+        )
+        self.assertNotIn(
+            "complete_explicit_hints_prefer_null_question",
+            first_user_payload["stage_policy"],
         )
         self.assertIn(
-            "失败类别为 INTENT_MODEL_FIELDS_INVALID",
+            "不得仅因为可能存在树结构冲突而提前提问",
+            provider.bodies[0]["messages"][0]["content"],
+        )
+        self.assertIn(
+            "需求文本自身仍存在未解决的互斥解释",
+            provider.bodies[0]["messages"][0]["content"],
+        )
+        self.assertEqual(
+            retry_user_payload["previous_validation_error"],
+            "INTENT_MODEL_CARDINALITY_INVALID",
+        )
+        self.assertIn(
+            "失败类别为 INTENT_MODEL_CARDINALITY_INVALID",
             provider.bodies[1]["messages"][0]["content"],
         )
         self.assertIn(
@@ -690,7 +747,7 @@ class ChangeIntentTests(unittest.TestCase):
         )
         self.assertEqual(
             draft.prompt_version,
-            "treeguard.change-intent.zh.v2",
+            "treeguard.change-intent.zh.v4",
         )
         self.assertNotIn(rejected_marker, json.dumps(provider.bodies[1]))
         self.assertNotIn("node-002", encoded)
@@ -699,7 +756,7 @@ class ChangeIntentTests(unittest.TestCase):
         self.assertEqual(traces[0].stage, "INTENT_DRAFT")
         self.assertEqual(
             traces[0].validation_error_code,
-            "INTENT_MODEL_FIELDS_INVALID",
+            "INTENT_MODEL_CARDINALITY_INVALID",
         )
         self.assertEqual(traces[1].validation_status, "PASSED")
         self.assertEqual(traces[1].thinking_status, "DISABLED")

@@ -118,7 +118,8 @@ RecommendationRecord.from_dict(payload, draft, action, confirmation, candidate_s
 | 建议记录 | `recommendation-record.v1` | 可信回放，固定为非 Gold、非审批、非 Patch |
 
 模型投影只包含需求、提示和不带稳定 ID 的拟挂载节点视图。完整模型投影仍可能含
-真实语义，外部百炼调用必须有 `--live --external-data-approved`。没有新增环境键；
+真实语义，外部百炼调用必须有 `--live --external-data-approved`。对可信项目自编
+clean-room 测试数据，harness 可直接设置该分类声明而无需逐次许可。没有新增环境键；
 复用 `BAILIAN_API_KEY`、`TREEGUARD_LLM_BASE_URL` 和 `TREEGUARD_LLM_MODEL`。
 
 初始草稿只有在 `review_status=NEEDS_CLARIFICATION` 时才能进入 `clarify`。回答以
@@ -128,14 +129,20 @@ RecommendationRecord.from_dict(payload, draft, action, confirmation, candidate_s
 再构造 `IntentClarificationRound v1`。修订意图无追问时状态为
 `READY_FOR_HUMAN_REVIEW`；仍有追问时状态固定为
 `CLARIFICATION_LIMIT_REACHED`，不得再次自动澄清或确认进入检索。人工拒绝仍允许。
-`treeguard.change-intent.zh.v2` 初始意图 Prompt 必须给出精确的 13 字段顶层对象
+`treeguard.change-intent.zh.v4` 初始意图 Prompt 必须给出精确的 13 字段顶层对象
 模板，明确禁止 `intent`、`data`、`result` 等外层包装，约束可空文本使用 JSON
 `null`、列表使用数组。模板只规定结构和缺少证据时的缺省值；输入直接支持字段时
 模型必须用提取结果替换 `null`、`UNKNOWN` 或空数组，不能机械照抄模板。Prompt
 必须明确 `subject` 是待治理的信息项/字段名称、其余可空业务字段的含义，
 以及非 `UNKNOWN`、非 `null` 用户 hints 在无冲突时必须写入对应字段。首次本地校验
-失败时只把固定错误码带入至多一次纠错重试，不得回传被拒绝的原始模型响应，也不得
+失败时使用 `INTENT_MODEL_<FIELD>_INVALID` 字段级安全错误码，并只把该固定错误码
+带入至多一次纠错重试；错误码不得包含字段值或模型原文，不得回传被拒绝的原始模型响应，也不得
 在本地删除多余字段、补字段或归一化为合法合同；重试仍失败则按原稳定错误码关闭。
+Intent 阶段只判断是否已形成可检索的结构化意图；候选是否存在以及类型、值类型或
+基数冲突属于召回/推荐阶段，不能仅以潜在树冲突为由提前澄清。但需求文本自身仍有
+未解决的互斥解释、范围边界或组合方式，且不同解释会改变结构化意图时，即使结构化
+hints 完整也必须提出一个最重要的原子问题；只有请求本身无此歧义时才优先返回
+`clarification_question=null`。
 `treeguard.change-intent-clarification.zh.v3` Prompt 要求已经由回答明确解决的事实
 不得同时保留为假设、证据缺口或再次追问；剩余追问只能选择一个原子问题，不能拼接
 多个问题。真实 OpenAI 兼容模型可能用空字符串表达缺省值，因此 Prompt 还必须要求
@@ -163,6 +170,13 @@ Top-20 策略生成的 `CandidateSet`，并固定取前 8 个候选映射为 `C0
 人工决策为何都固定为 `OPERATIONAL_FEEDBACK_ONLY`、
 `identity_status=UNVERIFIED_FILE_ASSERTION`、`semantic_approval=false`、
 `patch_eligible=false`、`gold_eligible=false`。
+`treeguard.semantic-recommendation.zh.v3` 必须明确：`USE_EXISTING_NODE` 只有在
+选中候选的 `node_kind`、显式 `value_type` 和显式 `cardinality` 与确认意图兼容时
+才合法。模型即使把冲突候选标记为 `SEMANTICALLY_EQUIVALENT`，本地仍以
+`SEMANTIC_SELECTED_CANDIDATE_CONTRACT_CONFLICT` 拒绝并完整重试；不得自动改写成
+澄清、新建或其他动作。一次完整重试必须只携带本地固定 `SEMANTIC_*` 错误码，不得
+回传被拒绝的模型响应；精确错误码用于提示模型修正具体合同类别。
+`ADD_NODE_FROM_CONTRACT` 等非直接复用动作继续按各自政策校验。
 
 ### 4. Validation & Error Matrix
 
@@ -172,6 +186,7 @@ Top-20 策略生成的 `CandidateSet`，并固定取前 8 个候选映射为 `C0
 | 需求字段/版本非法 | `INTENT_REQUEST_FIELDS_INVALID` / `INTENT_REQUEST_VERSION_INVALID` |
 | 拟挂载节点未知或 unsupported | `INTENT_PARENT_UNKNOWN` |
 | 模型多字段、越权字段或非法版本 | `INTENT_MODEL_FIELDS_INVALID` / `INTENT_MODEL_VERSION_INVALID` |
+| 模型某个 Intent 内容字段类型、枚举、长度或列表合同非法 | `INTENT_MODEL_<FIELD>_INVALID` |
 | 模型文本包含已知节点 ID 或常见伪造内部 ID 形态 | `INTENT_MODEL_INTERNAL_ID_FORBIDDEN` |
 | 无追问草稿尝试澄清 | `INTENT_CLARIFICATION_NOT_REQUIRED` |
 | 回答未绑定当前初始草稿 | `INTENT_CLARIFICATION_ANSWER_STALE` |
@@ -192,6 +207,7 @@ Top-20 策略生成的 `CandidateSet`，并固定取前 8 个候选映射为 `C0
 | 模型未按顺序评估全部 Top-8 或引用未知候选 | `SEMANTIC_CANDIDATE_COVERAGE_INVALID` / `SEMANTIC_CANDIDATE_REF_INVALID` |
 | 模型/人工建议含稳定或伪造内部 ID | `SEMANTIC_INTERNAL_ID_FORBIDDEN` |
 | 正向动作无候选、关系不匹配或证据不足 | `SEMANTIC_ACTION_POLICY_INVALID` |
+| 直接复用候选与确认意图的类型、值类型或基数冲突 | `SEMANTIC_SELECTED_CANDIDATE_CONTRACT_CONFLICT` |
 | 上下文扩展缺场景或已确认事实 | `SEMANTIC_CONTEXT_EVIDENCE_REQUIRED` |
 | 澄清问题/证据缺口与动作不一致 | `SEMANTIC_ACTION_POLICY_INVALID` |
 | 人工 action 未绑定当前建议草稿 | `RECOMMENDATION_ACTION_STALE` |
@@ -238,13 +254,13 @@ bailian-live 缺批准时必须在创建目录、生成输入和网络调用前�
 - 澄清门禁：无需澄清、陈旧回答、内部 ID、超限投影、直接确认、单轮耗尽和人工
   confirmed intent 残留问题均使用精确错误码失败；
 - 模型边界：额外字段、审批字段、已知/常见伪造节点 ID、超限文本和非法 JSON
-  拒绝；
+  拒绝；每个 Intent 内容字段失败返回对应安全错误码，且错误文本不包含原值；
 - 来源绑定：错误需求、陈旧草稿、重算哈希后的确认篡改仍拒绝；
 - 召回：全树强匹配可超过局部弱匹配，节点存储重排不改变结果；
 - 安全状态：未确认、拒绝、过期、无信号和零候选均不产生新增许可；
 - 投影：固定 Top-8 顺序、只用临时引用，稳定 ID/hash/VALUE/未知字段不进入模型；
 - 语义政策：六类动作、五类关系、正向映射、澄清/证据字段、上下文临时门槛和
-  合法 `ABSTAIN` 全部覆盖；
+  合法 `ABSTAIN` 全部覆盖；直接复用的类型、值类型和基数冲突分别拒绝；
 - 人工复核：确认、修订、拒绝、陈旧 action、非法修订和可信记录篡改覆盖；
 - 反馈边界：所有记录保持非 Gold/非审批/非 Patch，reasoning 不进入聚合 stdout；
 - 文件边界：`0600`、symlink/FIFO/公开权限/覆盖拒绝和部分发布清理；

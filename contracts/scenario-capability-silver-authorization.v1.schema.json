@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-capability-silver-authorization.v1.schema.json",
+  "title": "TreeGuard Scenario Capability Silver Authorization v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "quality_tier",
+    "assessment_authority",
+    "identity_status",
+    "source_class",
+    "fictional",
+    "derived_from_real",
+    "semantic_approval",
+    "gold_eligible",
+    "gate_eligible",
+    "patch_eligible",
+    "execution_scope",
+    "source_reviewed_hash",
+    "source_snapshot_hash",
+    "source_plan_hash",
+    "source_reviewed_content_hash",
+    "assessor_ref",
+    "recorded_at",
+    "oracle",
+    "authorization_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-capability-silver-authorization.v1"},
+    "status": {"const": "SILVER_ACCEPTED"},
+    "quality_tier": {"const": "SILVER"},
+    "assessment_authority": {"const": "CODEX_ASSISTED"},
+    "identity_status": {"const": "UNVERIFIED_FILE_ASSERTION"},
+    "source_class": {"const": "CLEANROOM_SYNTHETIC"},
+    "fictional": {"const": true},
+    "derived_from_real": {"const": false},
+    "semantic_approval": {"const": false},
+    "gold_eligible": {"const": false},
+    "gate_eligible": {"const": false},
+    "patch_eligible": {"const": false},
+    "execution_scope": {"const": "CALIBRATION_ONLY"},
+    "source_reviewed_hash": {"$ref": "#/$defs/digest"},
+    "source_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "source_plan_hash": {"$ref": "#/$defs/digest"},
+    "source_reviewed_content_hash": {"$ref": "#/$defs/digest"},
+    "assessor_ref": {"$ref": "#/$defs/reference"},
+    "recorded_at": {"$ref": "#/$defs/timestamp"},
+    "oracle": {
+      "$ref": "scenario-capability-overlay.v1.schema.json#/$defs/oracle"
+    },
+    "authorization_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "reference": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?(?:Z|[+-]\\d{2}:\\d{2})$"
+    }
+  }
+}

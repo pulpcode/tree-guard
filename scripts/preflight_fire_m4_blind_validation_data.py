@@ -28,6 +28,7 @@ from treeguard.scenario_capability_validation import (  # noqa: E402
     CAPABILITY_REPORT_SCHEMA_VERSION,
     CAPABILITY_RUN_SCHEMA_VERSION,
     ScenarioCapabilityOverlay,
+    verify_capability_overlay_for_execution,
 )
 from treeguard.scenario_validation import (  # noqa: E402
     ACTION_SCHEMA_VERSION,
@@ -367,7 +368,7 @@ def _validate_review_budget(
         raise M4BlindDataError("DATASET_REVIEW_BUDGET_EXCEEDED")
 
 
-def _load_and_validate_tree_and_plan():
+def load_bound_tree_profile_and_plan():
     try:
         base_manifest, _ = _read_canonical_json(
             BASE_MANIFEST_PATH,
@@ -424,7 +425,7 @@ def _validate_items(
     tree: Any,
     profile: Any,
     plan: Any,
-) -> tuple[int, int]:
+) -> tuple[int, int, tuple[tuple[Any, ReviewedValidationScenario], ...]]:
     items = sidecar["items"]
     if not isinstance(items, list) or len(items) != 11:
         raise M4BlindDataError("DATASET_EXECUTION_ACCOUNTING_INVALID")
@@ -441,6 +442,7 @@ def _validate_items(
     }
     proceed_count = 0
     clarify_count = 0
+    execution_overlays: list[tuple[Any, ReviewedValidationScenario]] = []
     for expected_unit, raw_item in zip(EXPECTED_UNITS, items, strict=True):
         item = _require_exact_dict(
             raw_item, _ITEM_KEYS, "DATASET_SIDECAR_FIELDS_INVALID"
@@ -534,6 +536,7 @@ def _validate_items(
                     raise M4BlindDataError(
                         "DATASET_EXECUTION_ACCOUNTING_INVALID"
                     )
+                execution_overlays.append((overlay, reviewed))
             elif item["overlay"] is not None:
                 raise M4BlindDataError("DATASET_EXECUTION_ACCOUNTING_INVALID")
         except M4BlindDataError:
@@ -549,7 +552,7 @@ def _validate_items(
         or clarify_count != 1
     ):
         raise M4BlindDataError("DATASET_EXECUTION_ACCOUNTING_INVALID")
-    return proceed_count, clarify_count
+    return proceed_count, clarify_count, tuple(execution_overlays)
 
 
 def validate_fixture(
@@ -607,7 +610,7 @@ def validate_fixture(
         raise M4BlindDataError("DATASET_CONTRACT_BINDING_INVALID")
     _validate_manifest_and_sidecar_bindings(manifest, sidecar)
     _validate_review_budget(manifest, sidecar)
-    tree, profile, plan = _load_and_validate_tree_and_plan()
+    tree, profile, plan = load_bound_tree_profile_and_plan()
 
     batch_payload = sidecar["scenario_preparation_batch"]
     if (
@@ -627,7 +630,7 @@ def validate_fixture(
         or batch.not_executed_unit_count != 0
     ):
         raise M4BlindDataError("DATASET_PLAN_ACCOUNTING_INVALID")
-    proceed_count, clarify_count = _validate_items(
+    proceed_count, clarify_count, execution_overlays = _validate_items(
         sidecar, batch, tree, profile, plan
     )
 
@@ -664,6 +667,13 @@ def validate_fixture(
         or _digest(sidecar_bytes) != FROZEN_ORACLE_SIDECAR_SHA256
     ):
         raise M4BlindDataError("DATASET_FIXTURE_SHA_MISMATCH")
+    try:
+        for overlay, reviewed in execution_overlays:
+            verify_capability_overlay_for_execution(
+                overlay, reviewed, plan, tree
+            )
+    except (TypeError, ValueError, RuntimeError):
+        raise M4BlindDataError("DATASET_CONTRACT_INTEGRITY_FAILURE") from None
 
     return {
         "schema_version": REPORT_SCHEMA_VERSION,

@@ -58,17 +58,14 @@ def _rewrite_sidecar(fixture_dir: Path, sidecar) -> None:
 
 
 class FireM4BlindValidationDataTests(unittest.TestCase):
-    def test_fixture_preflight_replays_all_source_bound_contracts(self) -> None:
-        report = PREFLIGHT.validate_fixture(FIXTURE_DIR)
+    def test_fixture_preflight_rejects_known_unanswerable_oracle(self) -> None:
+        with self.assertRaises(PREFLIGHT.M4BlindDataError) as caught:
+            PREFLIGHT.validate_fixture(FIXTURE_DIR)
 
-        self.assertEqual(report["status"], "PASS")
-        self.assertEqual(report["reviewed_candidate_count"], 11)
-        self.assertEqual(report["accepted_candidate_count"], 11)
-        self.assertEqual(report["execution_count"], 8)
-        self.assertEqual(report["full_chain_count"], 7)
-        self.assertEqual(report["clarification_count"], 1)
-        self.assertEqual(report["blocking_finding_count"], 0)
-        self.assertEqual(report["finding_counts"], {})
+        self.assertEqual(
+            caught.exception.code,
+            "DATASET_CONTRACT_INTEGRITY_FAILURE",
+        )
 
     def test_fixture_files_are_canonical_and_manifest_is_aggregate_only(self) -> None:
         self.assertEqual(
@@ -369,12 +366,17 @@ class FireM4BlindValidationDataTests(unittest.TestCase):
                 str(FIXTURE_DIR),
             ],
             cwd=PROJECT_ROOT,
-            check=True,
+            check=False,
             capture_output=True,
             text=True,
         )
         report = json.loads(completed.stdout)
-        self.assertEqual(report["status"], "PASS")
+        self.assertEqual(completed.returncode, 1)
+        self.assertEqual(report["status"], "FAIL")
+        self.assertEqual(
+            report["finding_counts"],
+            {"DATASET_CONTRACT_INTEGRITY_FAILURE": 1},
+        )
         sidecar = _read_json(FIXTURE_DIR / "oracle-sidecar.json")
         hidden_canaries = {
             sidecar["tree_snapshot_hash"],

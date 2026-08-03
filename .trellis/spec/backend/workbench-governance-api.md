@@ -53,6 +53,11 @@ model_mode                # SIMULATOR_LIVE | BAILIAN_LIVE | QWEN_LIVE
 external_data_approved
 ```
 
+对注册表中可信分类为 `CLEANROOM_SYNTHETIC / fictional=true /
+derived_from_real=false` 的项目自编测试数据，服务端或实验 harness 可以直接把
+`external_data_approved` 设为 `True`，无需让用户逐次确认。该字段对其他来源仍保持
+fail-closed，且不能授权把隐藏 Oracle 发送给被测模型。
+
 三个引用均为 1–128 字符，匹配
 `^[A-Za-z0-9][A-Za-z0-9._:-]*$`。注册表最多 32 个数据集；每个 manifest 最多
 32 个变体、32 条限制；单个变体最多 128 个场景，且场景数量必须与 manifest

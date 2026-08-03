@@ -44,6 +44,9 @@ def _sources(
     lifecycle: str | None = "Catalog lifetime",
     confirmed_facts: list[str] | None = None,
     proposed_parent_node_id: str | None = "node-004",
+    node_kind: str = "PROPERTY",
+    value_type: str | None = "float",
+    cardinality: str = "SINGLE",
 ):
     result = load_tree_export(FIXTURE_PATH)
     assert result.tree is not None
@@ -53,9 +56,9 @@ def _sources(
             "schema_version": "intent-request.v1",
             "requirement_text": "Record one imaginary display measurement.",
             "proposed_parent_node_id": proposed_parent_node_id,
-            "node_kind_hint": "PROPERTY",
-            "value_type_hint": "float",
-            "cardinality_hint": "SINGLE",
+            "node_kind_hint": node_kind,
+            "value_type_hint": value_type,
+            "cardinality_hint": cardinality,
         },
         tree,
     )
@@ -67,9 +70,9 @@ def _sources(
             "scenario": scenario,
             "lifecycle": lifecycle,
             "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
-            "node_kind": "PROPERTY",
-            "value_type": "float" if subject is not None else None,
-            "cardinality": "SINGLE",
+            "node_kind": node_kind,
+            "value_type": value_type if subject is not None else None,
+            "cardinality": cardinality,
             "confirmed_facts": (
                 ["A display measurement is requested."]
                 if confirmed_facts is None
@@ -182,6 +185,70 @@ def _review_action_payload(
 
 
 class SemanticRecommendationTests(unittest.TestCase):
+    def test_use_existing_rejects_explicit_structural_conflicts(self) -> None:
+        tree, confirmation, candidate_set = _sources(cardinality="MULTIPLE")
+        projection = build_semantic_candidate_projection(
+            confirmation,
+            candidate_set,
+            tree,
+        )
+        self.assertEqual(projection.candidates[0].cardinality, "SINGLE")
+
+        with self.assertRaises(SemanticRecommendationError) as captured:
+            _draft(
+                _model_payload(projection),
+                tree,
+                confirmation,
+                candidate_set,
+            )
+        self.assertEqual(
+            captured.exception.code,
+            "SEMANTIC_SELECTED_CANDIDATE_CONTRACT_CONFLICT",
+        )
+
+        tree, confirmation, candidate_set = _sources(value_type="integer")
+        projection = build_semantic_candidate_projection(
+            confirmation,
+            candidate_set,
+            tree,
+        )
+        self.assertEqual(projection.candidates[0].value_type, "float")
+
+        with self.assertRaises(SemanticRecommendationError) as captured:
+            _draft(
+                _model_payload(projection),
+                tree,
+                confirmation,
+                candidate_set,
+            )
+        self.assertEqual(
+            captured.exception.code,
+            "SEMANTIC_SELECTED_CANDIDATE_CONTRACT_CONFLICT",
+        )
+
+        tree, confirmation, candidate_set = _sources()
+        projection = build_semantic_candidate_projection(
+            confirmation,
+            candidate_set,
+            tree,
+        )
+        concept = next(item for item in projection.candidates if item.kind == "CONCEPT")
+        kind_conflict = _model_payload(projection)
+        for assessment in kind_conflict["candidate_assessments"]:
+            assessment["relation"] = (
+                "SEMANTICALLY_EQUIVALENT"
+                if assessment["candidate_ref"] == concept.candidate_ref
+                else "NOT_EQUIVALENT"
+            )
+        kind_conflict["selected_candidate_ref"] = concept.candidate_ref
+
+        with self.assertRaises(SemanticRecommendationError) as captured:
+            _draft(kind_conflict, tree, confirmation, candidate_set)
+        self.assertEqual(
+            captured.exception.code,
+            "SEMANTIC_SELECTED_CANDIDATE_CONTRACT_CONFLICT",
+        )
+
     def test_projection_is_top_eight_allowlist_without_stable_ids(self) -> None:
         tree, confirmation, candidate_set = _sources()
         projection = build_semantic_candidate_projection(
@@ -595,10 +662,35 @@ class SemanticRecommendationTests(unittest.TestCase):
         user_payload = json.loads(
             provider.bodies[0]["messages"][1]["content"]
         )
+        retry_user_payload = json.loads(
+            provider.bodies[1]["messages"][1]["content"]
+        )
         self.assertTrue(
             user_payload["deterministic_policy"][
                 "add_context_field_requires_scenario_and_confirmed_fact"
             ]
+        )
+        self.assertEqual(
+            user_payload["deterministic_policy"][
+                "use_existing_requires_compatible_fields"
+            ],
+            ["node_kind", "value_type", "cardinality"],
+        )
+        self.assertIn(
+            "结构冲突",
+            provider.bodies[0]["messages"][0]["content"],
+        )
+        self.assertEqual(
+            retry_user_payload["previous_validation_error"],
+            "SEMANTIC_MODEL_FIELDS_INVALID",
+        )
+        self.assertIn(
+            "失败类别为 SEMANTIC_MODEL_FIELDS_INVALID",
+            provider.bodies[1]["messages"][0]["content"],
+        )
+        self.assertEqual(
+            draft.prompt_version,
+            "treeguard.semantic-recommendation.zh.v3",
         )
         self.assertEqual(
             user_payload["output_contract"][

@@ -19,6 +19,11 @@
 - 当前来源绑定的候选审核执行只覆盖意图阶段，召回和推荐仍需新的显式合同；
 - 数据构建工作流要求先冻结 Charter、文件所有权、共享合同和合并顺序，再由独立
   worktree 并行准备数据工件。
+- 首轮 fire M4 v1 实验在 Intent 阶段暴露 request、Prompt 与 Oracle 不可同时满足：
+  7 条本地合法草案全部被判 `MISMATCH`，1 条 `RUN_FAILED`，后续阶段零调用；该
+  结果属于合同完整性诊断，不是模型准确率；
+- fire M4 v1 已进入实验并影响后续合同修复，原字节只保留为诊断/校准输入，不能
+  再承担未见 holdout 的门控结论。
 
 ## Constraints
 
@@ -36,7 +41,7 @@
 3. 继续使用确定性稀疏规划、有界投影、单元级有限重试和本地失败关闭；
 4. 所有合同候选按清晰性、可执行性、证据关联、风险族与目标区分、不过度声称进行
    人工审核，并记录 `accept / revise / reject` 与审核成本；
-5. 首轮最多选择 8 条 `accept` 或人工修订后接受的候选执行；每条都必须冻结最终请求
+5. fire M4 v1 首轮最多选择 8 条 `accept` 或人工修订后接受的候选执行；每条都必须冻结最终请求
    和完整能力 Oracle，`reject` 与未完成审核的候选不运行、不进入执行分母；
 6. 意图、召回和推荐分别报告 `MATCH / MISMATCH / NOT_RUN / RUN_FAILED`，后一
    阶段不得覆盖前一阶段失败；
@@ -45,13 +50,14 @@
 8. 运行时可以用内部目标身份作精确比较，公开报告只保留聚合结果，不公开隐藏参照；
 9. 全部数据与工件保持 `CLEANROOM_SYNTHETIC`、`gold_eligible=false`、
    `patch_eligible=false`；
-10. 自动化测试不发网络；外部模型实验仍需对最终请求字节和用途单独批准。
+10. 自动化测试不发网络；本项目自编 clean-room 测试数据适用常设 LLM 授权，实验
+    harness 可直接设置外传资格；其他来源仍需对最终请求字节和用途单独批准。
 11. 首轮 M4 作为进入受保护环境 Shadow 验证的 go/no-go 可行性门槛；通过只表示
     值得继续受控验证，不表示达到生产准确率或可自主决策。
-12. 门槛采用分层有界失败预算：数据边界、来源绑定、合同完整性和结果记账零失败；
+12. fire M4 v1 门槛采用分层有界失败预算：数据边界、来源绑定、合同完整性和结果记账零失败；
     最多 8 条中至少 6 条完整符合各自 Oracle 预期路径；每个实际适用阶段最多允许
     1 条 `MISMATCH` 或 `RUN_FAILED`，且失败必须可定位、可人工审阅。
-13. 执行样本优先选择 7 条预期进入召回与推荐的完整链路，以及 1 条有真实树证据支持的
+13. fire M4 v1 执行样本优先选择 7 条预期进入召回与推荐的完整链路，以及 1 条有真实树证据支持的
     澄清短路；没有合法歧义时将该风险记为 `NOT_APPLICABLE`，以完整链路回填，禁止
     为满足配额制造虚假歧义。
 14. 并行数据任务采用两阶段交付：第一阶段只准备 Dataset Charter、覆盖蓝图、审核规则
@@ -70,9 +76,31 @@
     内映射回稳定节点身份，再与长期 Oracle 比较。
 20. 意图路径不符合 Oracle 或召回目标未命中时，后续阶段固定短路并记录上游原因，
     不把同一根因重复记成多个阶段语义失败。
-21. 候选准备质量进入同一 go/no-go 的独立门：固定计划全部记账，可执行候选至少 8 条，
+21. fire M4 v1 候选准备质量进入同一 go/no-go 的独立门：固定计划全部记账，可执行候选至少 8 条，
     其中直接接受至少 4 条，不可用候选最多 3 条，无 blocking finding，人工审核不超过
     150 分钟；候选门和 MVP 执行门必须同时通过。
+22. M4 v1 在冻结、数据 preflight 和执行前必须校验 Intent Oracle 是否能由冻结 request
+    确定性支持；失败使用 `CAPABILITY_ORACLE_REQUEST_MISMATCH`，且 Provider 零调用。
+23. v1 profile 必须显式覆盖全部 12 个 Intent 字段。非 `UNKNOWN`/非 `null` 的
+    `node_kind/value_type/cardinality` hint 必须按 request 精确比较；`UNKNOWN`/`null`
+    只表示缺少输入证据，必须 `NOT_COMPARED`。没有逐字段来源绑定的
+    `subject/role/scenario/lifecycle/ownership` 及
+    `confirmed_facts/assumptions/evidence_gaps` 也只能 `NOT_COMPARED`；`PROCEED`
+    至少保留一个结构化有区分力比较，`CLARIFY` 必须要求非空澄清问题。
+24. 历史形状合法但不可回答的 overlay 允许做来源和字节诊断重放，但不得执行或进入
+    go/no-go 分母；公开层将其归入 `CONTRACT_INTEGRITY_FAILURE`，不伪装成模型
+    `MISMATCH`。
+25. fire M4 v1 原 fixture 字节保持不变并固定为门控不合格；修订版本只能用于非盲
+    校准，正式门控必须使用新的、运行前密封且未参与本轮修复的数据包。
+26. 下一轮门控在生成数据正文前冻结当前功能提交、Intent v4、Semantic v3、实际
+    Provider/模型/endpoint 类别、生成参数、重试政策、比较器和评分线；揭盲后任一项
+    改变都会使该数据降级为校准集。
+27. 新数据使用一棵独立、同领域、800–2,000 节点的 clean-room 虚构树和 24 条密封
+    执行场景，目标为 18 条完整链路与 6 条合法澄清；不复制既有树、不做笛卡尔积，
+    不为本轮额外准备 10,000–50,000 节点压力树。
+28. 24 条场景各执行三次；分别统计首发与重试后合同合法率、逐阶段 Oracle 匹配率、
+    每轮端到端匹配率、场景级 3/3 稳定数及澄清 precision/recall，不采用最好一次或
+    多数票替代波动结论。
 
 ## Acceptance Criteria
 
@@ -82,14 +110,15 @@
   本次门控 holdout；
 - [ ] 每个计划单元得到候选、固定失败或未执行状态，调用数不超过合同上限；
 - [ ] 所有合同候选完成统一 rubric 审核并输出聚合分级和人工成本；
-- [ ] 固定计划全部得到候选或固定失败；`ACCEPTED + REVISED_ACCEPTED >= 8`、
+- [ ] fire M4 v1 固定计划全部得到候选或固定失败；`ACCEPTED + REVISED_ACCEPTED >= 8`、
   `ACCEPTED >= 4`、`REJECTED + 固定生成失败 <= 3`，且审核不超过 150 分钟；
 - [ ] 只有来源绑定的人工审核场景能执行，陈旧、篡改或缺失 Oracle 固定错误码拒绝；
 - [ ] 三个阶段分别报告分母和结果，不把状态通过解释成实质语义正确；
 - [ ] 门槛将数据边界、来源绑定、合同完整性等硬失败与可审阅的语义偏差分开判定；
 - [ ] 任何硬失败均输出 `NO_GO`；没有硬失败时，只有整体和逐阶段失败预算同时满足才
   输出 `GO_SHADOW`；
-- [ ] 样本组成满足 7+1 目标，或对澄清风险给出确定性 `NOT_APPLICABLE` 及回填记录；
+- [ ] fire M4 v1 样本组成满足 7+1 目标，或对澄清风险给出确定性
+  `NOT_APPLICABLE` 及回填记录；
 - [ ] 数据第一阶段不新增运行时字段、不修改正式 fixture，并能在没有隐藏正文的情况下
   供功能分支实现合同；
 - [ ] 第二阶段开始前记录冻结合同版本，数据工件与审核记录绑定同一 digest；
@@ -101,6 +130,19 @@
   对陈旧、篡改、错树、错计划和错受审字节 fail closed；
 - [ ] 意图、召回和推荐的 `MATCH / MISMATCH / NOT_RUN / RUN_FAILED` 具有固定
   上游短路语义，批次汇总不会重复计算级联失败；
+- [ ] request 与 Oracle 不可同时满足时在任一 Provider 调用前固定拒绝；历史工件仍
+  可来源重放，但数据 preflight 和执行资格均为合同失败；
+- [ ] v1 的结构化 hint 比较与冻结 request 精确一致，自由文本/list 字段没有逐字段
+  支持绑定时不能使用 `NON_EMPTY` 或 `EMPTY`；
+- [ ] fire M4 v1 的公开诊断只含固定 code 和聚合计数，fixture 原字节不被重写，且不
+  再计为 `GATING_HOLDOUT`；
+- [ ] 新密封验证绑定不可变功能 commit，功能对话在执行前只接收 dataset identity、
+  规模、覆盖计数和 digest，不读取新树、场景或 Oracle 正文；
+- [ ] 新执行集固定 24 条并完成三轮；硬合同零失败、重试后 Intent/Semantic 合同合法率
+  均不低于 98%、确定性召回命中率为 100%、每轮端到端匹配率不低于 75%，且至少
+  18/24 场景三次全部匹配；
+- [ ] 澄清 precision/recall 和结构冲突错误复用单独记账；任何被本地门禁接受的硬冲突
+  错误复用直接 `NO_GO`；
 - [ ] 仓库只保存允许列表聚合、固定 code 和审核统计，不保存外部模型原始请求、响应
   或 trace；
 - [ ] 聚焦测试、完整后端测试、前端回归/构建、Trellis task validate 和
@@ -125,6 +167,7 @@
 - 对全部分支与风险族做笛卡尔积；
 - 首轮增加 UI、数据库、队列、向量索引或新运行时依赖；
 - 查看结果后仍把同一批数据称为未见 holdout。
+- 为让 fire M4 v1 重新通过而定向调 Prompt，或把修订后的同一数据重新命名为盲测。
 
 ## Technical Notes
 
@@ -136,6 +179,10 @@
 
 - [`research/runtime-contract-options.md`](research/runtime-contract-options.md) — 比较三种
   完整能力接入方式，推荐在已审核场景上增加来源绑定 overlay。
+- [`research/m4-calibration-candidate-handoff.md`](research/m4-calibration-candidate-handoff.md)
+  — 记录非盲校准候选的聚合绑定、机器证据和待人工审核门。
+- [`research/m4-sealed-validation-freeze.md`](research/m4-sealed-validation-freeze.md)
+  — 冻结下一轮新未见数据的规模、隔离、三次重复性、门槛和停线规则，不含隐藏正文。
 
 ## Technical Approach
 
@@ -159,6 +206,42 @@
    提交；数据分支只在同步该提交后进入第二阶段，生成和人工冻结 sidecar。
 5. **集成与虚构模型实验**：数据工件获准晋升并合入后执行联合回归；外部模型请求需
    另行冻结最终字节并取得明确批准，实验结果只报告聚合门槛和限制。
+6. **合同完整性修复与重新分流**：保留首轮聚合诊断，增加 request-aware Oracle
+   执行资格检查；fire v1 只用于校准，正式 go/no-go 改用新的密封 holdout。
+7. **非盲校准候选**：从原 fire v1 冻结字节派生新的 `CALIBRATION_ONLY` staging
+   身份，补齐完整 12 字段 profile；把 v1 无逐字段来源绑定的自由文本/list 字段和
+   `UNKNOWN`/`null` hint 收窄为 `NOT_COMPARED`，非空结构化 hint 保持精确比较；
+   逐项保存提议证据绑定，机器检查后固定停在 `PENDING_HUMAN_REVIEW`，不自动冻结
+   或晋升。
+8. **Silver 校准执行**：按用户决策把 Codex 辅助审核的 8 条候选冻结为独立
+   `CODEX_ASSISTED` / `SILVER` 授权；允许进入本次校准执行，但固定非 Gold、非门禁、
+   非 Patch，且实验成功不得自动升级。先冻结并审批 Intent 精确请求，回放结果后再
+   冻结和审批实际适用的 Semantic 请求；两阶段均不得在批准前外发。
+9. **下游隔离实验**：对首轮中 Intent 失败或不匹配、且 Silver Oracle 预期为
+   `PROCEED` 的 5 条场景，使用私有、来源绑定的 Codex 辅助参考 Intent 替代 Intent
+   Provider，只运行确定性召回并准备实际可达的 Semantic 请求。参考 Intent 固定为
+   `DOWNSTREAM_ISOLATION_ONLY`，不得计入端到端成绩、门禁或 Gold；任何 Semantic
+   外发仍须先冻结精确请求字节并取得单独批准。
+10. **M4.1 校准修复**：为模型 Intent 内容校验增加不含原文的字段级错误码；明确
+    Intent 只负责编译可检索意图，候选冲突留给后续阶段；Semantic 对
+    `USE_EXISTING_NODE` 增加 `node_kind/value_type/cardinality` 确定性兼容门禁，
+    冲突时拒绝模型输出并允许一次完整重试，不在本地改写建议。使用已暴露 Silver
+    数据做回归，不恢复 holdout 或门禁身份。
+11. **M4.2 澄清边界校准**：保留“候选冲突不触发 Intent 澄清”，但把“完整 hints
+    优先不提问”收窄为只适用于请求文本本身无互斥解释、范围或组合歧义；若不同解释
+    会改变结构化意图，即使 hints 完整也必须提出一个原子问题。仍只使用已暴露
+    Silver 数据校准，不改变 Oracle、Semantic 门禁或正式 holdout 要求。
+12. **M4.3 Semantic 失败诊断**：实验运行器只从 Provider trace 提取固定
+    `SEMANTIC_*` 校验错误码并聚合记账，不保存模型响应、理由或候选正文；用同一冻结
+    请求重复执行三次，区分稳定失败与输出波动，不以单次最好结果替代重复性结论。
+13. **M4.4 Semantic 精确重试**：将首次本地失败的固定 `SEMANTIC_*` code 送入一次
+    完整重试，禁止回传原始响应或在本地改写动作；审批白名单枚举所有允许错误码正文，
+    但实际调用上限仍保持每场景最多两次。
+14. **M4.5 新未见数据密封验证**：冻结当前 Intent v4、Semantic v3、模型、运行时
+    合同和评分门槛；由独立 worktree 基于全新同领域 800–2,000 节点虚构树准备 24 条
+    密封执行场景，功能对话不读取树、场景或隐藏 Oracle 正文。每条在同一配置下运行
+    三次，分别报告合同合法率、Oracle 匹配率和 3/3 稳定性；揭盲后该数据只保留为
+    回归/校准，不在同一数据上调参后重新门控。
 
 ## Decision (ADR-lite)
 
@@ -197,3 +280,26 @@
 - **Decision**：候选准备质量采用平衡门槛，与 MVP 执行门并列且必须同时通过；
 - **Consequences**：少量可执行场景不能掩盖 Agent 大量返工或失败，同时允许首轮未见树
   暴露少量可解释缺陷。
+- **Context**：首轮 fire v1 的形状、来源和记账均合法，但 Intent Oracle 要求输出
+  request 未结构化支持的自由文本字段，并把允许存在的 assumptions/evidence gaps
+  错误冻结为空；
+- **Decision**：M4 v1 保持 wire shape 不变，但执行资格只允许确定性 request-observable
+  约束；历史不可回答 overlay 可读取、不可执行。更丰富的自由文本 Oracle 以后通过带
+  逐 expectation support binding 的新版本实现；
+- **Consequences**：fire v1 固定成为诊断/校准数据，不能继续给出盲测泛化结论；修复
+  后需要新的密封数据才能重新执行正式门控。
+- **Context**：8 条 request-observable 校准候选已经完成 Codex 辅助审核，但尚无独立
+  人工 Gold 审核；直接伪装成人工 overlay 会破坏审核来源语义；
+- **Decision**：新增独立 Silver 校准授权合同，保留 `CODEX_ASSISTED` 来源，允许验证
+  Intent—确定性召回—Semantic 推荐链路是否可运行；
+- **Consequences**：本轮可以先获得工程可行性和错误归因证据，但结果不进入
+  `GO_SHADOW` 门禁、不证明生产准确率。链路走通后再单独决定 Gold 标准、人工审核
+  预算和未见数据执行，不得自动转换现有 Silver。
+- **Context**：首轮 Intent 失败会阻止召回和推荐执行，无法判断技术路径是仅上游
+  Intent 不稳定，还是下游召回/推荐同样不可用；
+- **Decision**：新增一次非生产的下游隔离实验，以 5 条私有 Codex 辅助 Silver 参考
+  Intent 替代 Intent Provider，参考文件必须绑定原始请求、Silver 授权和首轮 Intent
+  结果 SHA；
+- **Consequences**：可以独立观察确定性召回和 Semantic 推荐，但所得结果只能回答
+  “给定可接受 Intent 后下游是否工作”，不能回答 LLM 能否自行理解需求，也不能与
+  原端到端通过率合并。

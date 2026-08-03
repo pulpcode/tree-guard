@@ -31,10 +31,14 @@ from treeguard.scenario_capability_validation import (
     RetrievalOracle,
     ScenarioCapabilityError,
     ScenarioCapabilityRun,
+    ScenarioCapabilitySilverAuthorization,
     ScenarioPreparationMetrics,
     build_capability_gate_report,
     freeze_capability_overlay,
+    freeze_silver_capability_authorization,
     run_reviewed_capability_scenario,
+    run_silver_capability_scenario,
+    verify_capability_oracle_against_reviewed_request,
 )
 from treeguard.scenario_validation import apply_scenario_review
 from treeguard.semantic_recommendation import SemanticRecommendationDraft
@@ -45,7 +49,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 class FakeSemanticProvider:
-    def __init__(self, *, selected_ref: str = "C001") -> None:
+    def __init__(self, *, selected_ref: str = "C002") -> None:
         self.selected_ref = selected_ref
         self.calls = 0
 
@@ -97,6 +101,16 @@ def _reviewed_context(*, draft_status: str = "READY_FOR_HUMAN_REVIEW"):
         batch_candidate,
         draft_status=draft_status,
     )
+    if draft_status == "READY_FOR_HUMAN_REVIEW":
+        action = replace(
+            action,
+            final_request=replace(
+                action.final_request,
+                node_kind_hint="PROPERTY",
+                value_type_hint="string",
+                cardinality_hint="MULTIPLE",
+            ),
+        )
     reviewed = apply_scenario_review(
         action,
         batch,
@@ -142,27 +156,50 @@ def _preview_candidate_set(reviewed, tree):
     return build_candidate_set(confirmation, tree)
 
 
-def _proceed_oracle(target_node_id: str) -> CapabilityOracle:
+def _proceed_oracle(
+    target_node_id: str,
+    *,
+    top_k: int = 1,
+) -> CapabilityOracle:
     return CapabilityOracle(
         expected_route="PROCEED",
         acceptable_intent_profiles=(
             IntentOracleProfile(
                 profile_ref="P001",
                 field_expectations=(
+                    IntentFieldExpectation("assumptions", "NOT_COMPARED", ()),
                     IntentFieldExpectation(
                         field_name="cardinality",
                         policy="EXACT_ONE_OF",
-                        acceptable_values=("UNKNOWN",),
+                        acceptable_values=("MULTIPLE",),
                     ),
+                    IntentFieldExpectation(
+                        field_name="clarification_question",
+                        policy="EXACT_ONE_OF",
+                        acceptable_values=(None,),
+                    ),
+                    IntentFieldExpectation(
+                        "confirmed_facts", "NOT_COMPARED", ()
+                    ),
+                    IntentFieldExpectation("evidence_gaps", "NOT_COMPARED", ()),
+                    IntentFieldExpectation("lifecycle", "NOT_COMPARED", ()),
                     IntentFieldExpectation(
                         field_name="node_kind",
                         policy="EXACT_ONE_OF",
-                        acceptable_values=("UNKNOWN",),
+                        acceptable_values=("PROPERTY",),
                     ),
+                    IntentFieldExpectation("ownership", "NOT_COMPARED", ()),
+                    IntentFieldExpectation("role", "NOT_COMPARED", ()),
+                    IntentFieldExpectation("scenario", "NOT_COMPARED", ()),
                     IntentFieldExpectation(
                         field_name="subject",
-                        policy="NON_EMPTY",
+                        policy="NOT_COMPARED",
                         acceptable_values=(),
+                    ),
+                    IntentFieldExpectation(
+                        field_name="value_type",
+                        policy="EXACT_ONE_OF",
+                        acceptable_values=("string",),
                     ),
                 ),
             ),
@@ -171,7 +208,7 @@ def _proceed_oracle(target_node_id: str) -> CapabilityOracle:
             applicable=True,
             allowed_statuses=("CANDIDATES_READY",),
             acceptable_node_ids=(target_node_id,),
-            top_k=1,
+            top_k=top_k,
         ),
         recommendation=RecommendationOracle(
             applicable=True,
@@ -200,12 +237,115 @@ def _frozen_context():
         reviewer_ref="fictional-capability-reviewer",
         recorded_at="2030-01-02T03:05:00Z",
         review_round=1,
-        oracle=_proceed_oracle(candidate_set.candidates[0].node_id),
+        oracle=_proceed_oracle(
+            candidate_set.candidates[1].node_id,
+            top_k=2,
+        ),
     )
     return (*context, overlay)
 
 
 class ScenarioCapabilityContractTests(unittest.TestCase):
+    def test_silver_authorization_round_trip_is_non_gating_and_source_bound(self):
+        (
+            tree,
+            _,
+            plan,
+            _,
+            _,
+            _,
+            _,
+            reviewed,
+            overlay,
+        ) = _frozen_context()
+        authorization = freeze_silver_capability_authorization(
+            reviewed,
+            plan,
+            tree,
+            assessor_ref="codex-m4-calibration-review",
+            recorded_at="2030-01-02T03:06:00Z",
+            oracle=overlay.oracle,
+        )
+
+        rebuilt = ScenarioCapabilitySilverAuthorization.from_dict(
+            authorization.to_dict(),
+            reviewed,
+            plan,
+            tree,
+        )
+
+        self.assertEqual(rebuilt, authorization)
+        self.assertFalse(rebuilt.gold_eligible)
+        self.assertFalse(rebuilt.gate_eligible)
+        self.assertFalse(rebuilt.patch_eligible)
+        self.assertEqual(rebuilt.to_dict()["quality_tier"], "SILVER")
+        self.assertEqual(
+            rebuilt.to_dict()["assessment_authority"],
+            "CODEX_ASSISTED",
+        )
+
+    def test_silver_authorization_cannot_claim_gold_or_human_authority(self):
+        tree, _, plan, _, _, _, _, reviewed, overlay = _frozen_context()
+        authorization = freeze_silver_capability_authorization(
+            reviewed,
+            plan,
+            tree,
+            assessor_ref="codex-m4-calibration-review",
+            recorded_at="2030-01-02T03:06:00Z",
+            oracle=overlay.oracle,
+        )
+        payload = authorization.to_dict()
+        payload["gold_eligible"] = True
+
+        with self.assertRaisesRegex(
+            ScenarioCapabilityError,
+            "fixed calibration policy",
+        ):
+            ScenarioCapabilitySilverAuthorization.from_dict(
+                payload,
+                reviewed,
+                plan,
+                tree,
+            )
+
+    def test_silver_authorization_runs_the_same_calibration_path(self):
+        (
+            tree,
+            profile,
+            plan,
+            projection,
+            batch,
+            batch_candidate,
+            action,
+            reviewed,
+            overlay,
+        ) = _frozen_context()
+        authorization = freeze_silver_capability_authorization(
+            reviewed,
+            plan,
+            tree,
+            assessor_ref="codex-m4-calibration-review",
+            recorded_at="2030-01-02T03:06:00Z",
+            oracle=overlay.oracle,
+        )
+
+        result = run_silver_capability_scenario(
+            authorization,
+            reviewed,
+            action,
+            batch,
+            batch_candidate,
+            projection,
+            plan,
+            profile,
+            tree,
+            FakeIntentDraftProvider(),
+            FakeSemanticProvider(),
+        )
+
+        self.assertEqual(result.source_overlay_hash, authorization.authorization_hash)
+        self.assertEqual(result.full_path_status, "MATCH")
+
     def test_overlay_round_trip_binds_reviewed_bytes_tree_plan_and_oracle(self):
         (
             tree,
@@ -392,6 +532,192 @@ class ScenarioCapabilityContractTests(unittest.TestCase):
             )
         self.assertEqual(caught.exception.code, "CAPABILITY_RUN_SOURCE_MISMATCH")
 
+    def test_oracle_request_policy_rejects_unbound_or_conflicting_profiles(self):
+        tree, _, plan, _, _, _, _, reviewed = _reviewed_context()
+        candidate_set = _preview_candidate_set(reviewed, tree)
+        base_oracle = _proceed_oracle(candidate_set.candidates[0].node_id)
+        invalid_expectations = (
+            IntentFieldExpectation("role", "NON_EMPTY", ()),
+            IntentFieldExpectation("assumptions", "EMPTY", ()),
+            IntentFieldExpectation("cardinality", "NOT_COMPARED", ()),
+            IntentFieldExpectation("node_kind", "EXACT_ONE_OF", ("CONCEPT",)),
+            IntentFieldExpectation("value_type", "NON_EMPTY", ()),
+        )
+
+        for expectation in invalid_expectations:
+            with self.subTest(field=expectation.field_name):
+                base_profile = base_oracle.acceptable_intent_profiles[0]
+                invalid = replace(
+                    base_oracle,
+                    acceptable_intent_profiles=(
+                        IntentOracleProfile(
+                            "P001",
+                            tuple(
+                                expectation
+                                if item.field_name == expectation.field_name
+                                else item
+                                for item in base_profile.field_expectations
+                            ),
+                        ),
+                    ),
+                )
+                with self.assertRaises(ScenarioCapabilityError) as caught:
+                    freeze_capability_overlay(
+                        reviewed,
+                        plan,
+                        tree,
+                        review_status="ACCEPTED",
+                        reviewer_ref="fictional-capability-reviewer",
+                        recorded_at="2030-01-02T03:05:00Z",
+                        review_round=1,
+                        oracle=invalid,
+                    )
+                self.assertEqual(
+                    caught.exception.code,
+                    "CAPABILITY_ORACLE_REQUEST_MISMATCH",
+                )
+
+        invalid_profile = IntentOracleProfile(
+            "P002",
+            (IntentFieldExpectation("scenario", "NON_EMPTY", ()),),
+        )
+        one_invalid_alternative = replace(
+            base_oracle,
+            acceptable_intent_profiles=(
+                base_oracle.acceptable_intent_profiles[0],
+                invalid_profile,
+            ),
+        )
+        with self.assertRaises(ScenarioCapabilityError) as caught:
+            freeze_capability_overlay(
+                reviewed,
+                plan,
+                tree,
+                review_status="ACCEPTED",
+                reviewer_ref="fictional-capability-reviewer",
+                recorded_at="2030-01-02T03:05:00Z",
+                review_round=1,
+                oracle=one_invalid_alternative,
+            )
+        self.assertEqual(
+            caught.exception.code,
+            "CAPABILITY_ORACLE_REQUEST_MISMATCH",
+        )
+
+    def test_oracle_request_policy_accepts_exact_explicit_hints(self):
+        (
+            tree,
+            profile,
+            plan,
+            projection,
+            batch,
+            batch_candidate,
+            action,
+            _,
+        ) = _reviewed_context()
+        explicit_action = replace(
+            action,
+            final_request=replace(
+                action.final_request,
+                node_kind_hint="PROPERTY",
+                value_type_hint="string",
+                cardinality_hint="MULTIPLE",
+            ),
+        )
+        reviewed = apply_scenario_review(
+            explicit_action,
+            batch,
+            batch_candidate,
+            projection,
+            plan,
+            profile,
+            tree,
+        )
+        candidate_set = _preview_candidate_set(reviewed, tree)
+        oracle = _proceed_oracle(candidate_set.candidates[0].node_id)
+        verify_capability_oracle_against_reviewed_request(
+            oracle,
+            reviewed,
+            tree,
+        )
+
+        overlay = freeze_capability_overlay(
+            reviewed,
+            plan,
+            tree,
+            review_status="ACCEPTED",
+            reviewer_ref="fictional-capability-reviewer",
+            recorded_at="2030-01-02T03:05:00Z",
+            review_round=1,
+            oracle=oracle,
+        )
+
+        self.assertEqual(overlay.oracle, oracle)
+
+    def test_legacy_unanswerable_overlay_is_readable_but_not_executable(self):
+        (
+            tree,
+            profile,
+            plan,
+            projection,
+            batch,
+            batch_candidate,
+            action,
+            reviewed,
+            overlay,
+        ) = _frozen_context()
+        invalid_oracle = replace(
+            overlay.oracle,
+            acceptable_intent_profiles=(
+                IntentOracleProfile(
+                    "P001",
+                    (IntentFieldExpectation("role", "NON_EMPTY", ()),),
+                ),
+            ),
+        )
+        payload = overlay.to_dict()
+        payload["oracle"] = invalid_oracle.to_dict()
+        payload["source_reviewed_content_hash"] = canonical_digest(
+            {
+                "source_reviewed_hash": reviewed.reviewed_hash,
+                "request": {
+                    "requirement_text": reviewed.request.requirement_text,
+                    "proposed_parent_node_id": reviewed.request.proposed_parent_node_id,
+                    "node_kind_hint": reviewed.request.node_kind_hint,
+                    "value_type_hint": reviewed.request.value_type_hint,
+                    "cardinality_hint": reviewed.request.cardinality_hint,
+                },
+                "capability_oracle": invalid_oracle.to_dict(),
+            }
+        )
+        payload.pop("overlay_hash")
+        payload["overlay_hash"] = canonical_digest(payload)
+        legacy = type(overlay).from_dict(payload, reviewed, plan, tree)
+        intent_provider = FakeIntentDraftProvider()
+        semantic_provider = FakeSemanticProvider()
+
+        with self.assertRaises(ScenarioCapabilityError) as caught:
+            run_reviewed_capability_scenario(
+                legacy,
+                reviewed,
+                action,
+                batch,
+                batch_candidate,
+                projection,
+                plan,
+                profile,
+                tree,
+                intent_provider,
+                semantic_provider,
+            )
+
+        self.assertEqual(
+            caught.exception.code,
+            "CAPABILITY_ORACLE_REQUEST_MISMATCH",
+        )
+        self.assertEqual(intent_provider.calls, 0)
+        self.assertEqual(semantic_provider.calls, 0)
+
     def test_expected_clarification_matches_and_skips_later_stages(self):
         context = _reviewed_context(draft_status="NEEDS_CLARIFICATION")
         tree, profile, plan, projection, batch, batch_candidate, action, reviewed = (
@@ -404,14 +730,42 @@ class ScenarioCapabilityContractTests(unittest.TestCase):
                     profile_ref="P001",
                     field_expectations=(
                         IntentFieldExpectation(
+                            "assumptions", "NOT_COMPARED", ()
+                        ),
+                        IntentFieldExpectation(
+                            "cardinality", "NOT_COMPARED", ()
+                        ),
+                        IntentFieldExpectation(
                             field_name="clarification_question",
                             policy="NON_EMPTY",
                             acceptable_values=(),
                         ),
                         IntentFieldExpectation(
+                            "confirmed_facts", "NOT_COMPARED", ()
+                        ),
+                        IntentFieldExpectation(
+                            "evidence_gaps", "NOT_COMPARED", ()
+                        ),
+                        IntentFieldExpectation(
+                            "lifecycle", "NOT_COMPARED", ()
+                        ),
+                        IntentFieldExpectation(
+                            "node_kind", "NOT_COMPARED", ()
+                        ),
+                        IntentFieldExpectation(
+                            "ownership", "NOT_COMPARED", ()
+                        ),
+                        IntentFieldExpectation("role", "NOT_COMPARED", ()),
+                        IntentFieldExpectation(
+                            "scenario", "NOT_COMPARED", ()
+                        ),
+                        IntentFieldExpectation(
                             field_name="subject",
-                            policy="NON_EMPTY",
+                            policy="NOT_COMPARED",
                             acceptable_values=(),
+                        ),
+                        IntentFieldExpectation(
+                            "value_type", "NOT_COMPARED", ()
                         ),
                     ),
                 ),
@@ -453,6 +807,115 @@ class ScenarioCapabilityContractTests(unittest.TestCase):
             "EXPECTED_CLARIFICATION_SHORT_CIRCUIT",
         )
         self.assertEqual(semantic_provider.calls, 0)
+
+        exact_unknown_profile = replace(
+            oracle.acceptable_intent_profiles[0],
+            field_expectations=tuple(
+                IntentFieldExpectation(
+                    "node_kind", "EXACT_ONE_OF", ("UNKNOWN",)
+                )
+                if item.field_name == "node_kind"
+                else item
+                for item in oracle.acceptable_intent_profiles[0].field_expectations
+            ),
+        )
+        with self.assertRaises(ScenarioCapabilityError) as caught:
+            freeze_capability_overlay(
+                reviewed,
+                plan,
+                tree,
+                review_status="ACCEPTED",
+                reviewer_ref="fictional-capability-reviewer",
+                recorded_at="2030-01-02T03:05:00Z",
+                review_round=1,
+                oracle=replace(
+                    oracle,
+                    acceptable_intent_profiles=(exact_unknown_profile,),
+                ),
+            )
+        self.assertEqual(
+            caught.exception.code,
+            "CAPABILITY_ORACLE_REQUEST_MISMATCH",
+        )
+
+    def test_clarify_policy_cannot_ignore_the_required_question(self):
+        tree, profile, plan, projection, batch, batch_candidate = _context("U004")
+        action = _action(
+            tree,
+            profile,
+            plan,
+            projection,
+            batch,
+            batch_candidate,
+            draft_status="NEEDS_CLARIFICATION",
+        )
+        action = replace(
+            action,
+            final_request=replace(
+                action.final_request,
+                node_kind_hint="PROPERTY",
+            ),
+        )
+        reviewed = apply_scenario_review(
+            action,
+            batch,
+            batch_candidate,
+            projection,
+            plan,
+            profile,
+            tree,
+        )
+        field_expectations = tuple(
+            IntentFieldExpectation(
+                field_name=field_name,
+                policy=(
+                    "EXACT_ONE_OF"
+                    if field_name == "node_kind"
+                    else "NOT_COMPARED"
+                ),
+                acceptable_values=(
+                    ("PROPERTY",) if field_name == "node_kind" else ()
+                ),
+            )
+            for field_name in (
+                "assumptions",
+                "cardinality",
+                "clarification_question",
+                "confirmed_facts",
+                "evidence_gaps",
+                "lifecycle",
+                "node_kind",
+                "ownership",
+                "role",
+                "scenario",
+                "subject",
+                "value_type",
+            )
+        )
+        oracle = CapabilityOracle(
+            expected_route="CLARIFY",
+            acceptable_intent_profiles=(
+                IntentOracleProfile("P001", field_expectations),
+            ),
+            retrieval=RetrievalOracle(False, (), (), None),
+            recommendation=RecommendationOracle(False, ()),
+        )
+
+        with self.assertRaises(ScenarioCapabilityError) as caught:
+            freeze_capability_overlay(
+                reviewed,
+                plan,
+                tree,
+                review_status="ACCEPTED",
+                reviewer_ref="fictional-capability-reviewer",
+                recorded_at="2030-01-02T03:05:00Z",
+                review_round=1,
+                oracle=oracle,
+            )
+        self.assertEqual(
+            caught.exception.code,
+            "CAPABILITY_ORACLE_REQUEST_MISMATCH",
+        )
 
     def test_overlay_cannot_contradict_reviewed_observable_route(self):
         tree, _, plan, _, _, _, _, reviewed = _reviewed_context()
@@ -630,35 +1093,34 @@ class ScenarioCapabilityContractTests(unittest.TestCase):
             reviewed,
             overlay,
         ) = _frozen_context()
-        mismatching_oracle = replace(
-            overlay.oracle,
-            acceptable_intent_profiles=(
-                IntentOracleProfile(
-                    profile_ref="P001",
-                    field_expectations=(
-                        IntentFieldExpectation(
-                            field_name="node_kind",
-                            policy="EXACT_ONE_OF",
-                            acceptable_values=("CONCEPT",),
-                        ),
-                    ),
-                ),
-            ),
-        )
-        mismatching = freeze_capability_overlay(
-            reviewed,
-            plan,
-            tree,
-            review_status="ACCEPTED",
-            reviewer_ref="fictional-capability-reviewer",
-            recorded_at="2030-01-02T03:05:00Z",
-            review_round=1,
-            oracle=mismatching_oracle,
-        )
         semantic_provider = FakeSemanticProvider()
 
+        class WrongHintIntentProvider:
+            def __init__(self):
+                self.calls = 0
+
+            def draft(self, request, source_tree):
+                self.calls += 1
+                original = FakeIntentDraftProvider().draft(request, source_tree)
+                payload = {
+                    "schema_version": "change-intent-model-output.v1",
+                    **original.intent.to_dict(),
+                    "node_kind": "CONCEPT",
+                }
+                return type(original).from_model_dict(
+                    payload,
+                    request,
+                    source_tree,
+                    model_provider="FICTIONAL_TEST_PROVIDER",
+                    model_capability="JSON_OBJECT",
+                    model_name="fictional-test-model",
+                    prompt_version="treeguard.change-intent.test.v1",
+                )
+
+        intent_provider = WrongHintIntentProvider()
+
         result = run_reviewed_capability_scenario(
-            mismatching,
+            overlay,
             reviewed,
             action,
             batch,
@@ -667,10 +1129,11 @@ class ScenarioCapabilityContractTests(unittest.TestCase):
             plan,
             profile,
             tree,
-            FakeIntentDraftProvider(),
+            intent_provider,
             semantic_provider,
         )
 
+        self.assertEqual(intent_provider.calls, 1)
         self.assertEqual(result.intent.status, "MISMATCH")
         self.assertTrue(result.retrieval.applicable)
         self.assertEqual(result.retrieval.status, "NOT_RUN")
@@ -879,6 +1342,7 @@ class ScenarioCapabilityContractTests(unittest.TestCase):
 
         for filename in (
             "scenario-capability-overlay.v1.schema.json",
+            "scenario-capability-silver-authorization.v1.schema.json",
             "scenario-capability-run.v1.schema.json",
             "scenario-capability-report.v1.schema.json",
         ):
@@ -910,6 +1374,14 @@ class ScenarioCapabilityContractTests(unittest.TestCase):
             FakeIntentDraftProvider(),
             FakeSemanticProvider(),
         )
+        silver = freeze_silver_capability_authorization(
+            reviewed,
+            plan,
+            tree,
+            assessor_ref="codex-m4-calibration-review",
+            recorded_at="2030-01-02T03:06:00Z",
+            oracle=overlay.oracle,
+        )
         report = build_capability_gate_report(
             ScenarioPreparationMetrics(11, 11, 4, 4, 2, 1, 0, 150),
             tuple(_synthetic_run(index) for index in range(1, 9)),
@@ -930,6 +1402,13 @@ class ScenarioCapabilityContractTests(unittest.TestCase):
                 / "scenario-capability-run.v1.schema.json"
             ).read_text()
         )
+        silver_schema = json.loads(
+            (
+                PROJECT_ROOT
+                / "contracts"
+                / "scenario-capability-silver-authorization.v1.schema.json"
+            ).read_text()
+        )
         report_schema = json.loads(
             (
                 PROJECT_ROOT
@@ -939,6 +1418,7 @@ class ScenarioCapabilityContractTests(unittest.TestCase):
         )
 
         self.assertEqual(set(overlay_schema["required"]), set(overlay.to_dict()))
+        self.assertEqual(set(silver_schema["required"]), set(silver.to_dict()))
         self.assertEqual(
             set(overlay_schema["$defs"]["oracle"]["required"]),
             set(overlay.oracle.to_dict()),

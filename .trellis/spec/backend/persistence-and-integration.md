@@ -120,10 +120,13 @@ Provider transport 必须显式启用并 fail-closed：
 - response 大小有界，并严格解析 JSON；
 - authorization token 只在 header；
 - 最多两次顺序尝试；
-- 读取/发送选定文件前取得明确数据批准；
+- 读取/发送真实、外部导入、来源不明或非 clean-room 文件前取得明确数据批准；本项目
+  自编且可信分类为 `CLEANROOM_SYNTHETIC / fictional=true /
+  derived_from_real=false` 的测试数据已有常设 LLM 授权，无需逐次批准；
 - expert text 还必须绑定精确批准的 request-plan manifest。
 
-上述官方 HTTPS host、Authorization 和精确外发批准约束适用于百炼。内网 Qwen
+上述官方 HTTPS host 和 Authorization 约束适用于百炼；精确外发批准仅适用于不在
+clean-room 常设授权内的数据。内网 Qwen
 使用独立 `QWEN_*` 错误族、受保护环境 `/v1` 地址和
 `chat_template_kwargs.enable_thinking=false`，不发送 Authorization、不要求百炼
 出域批准，也不得自动回退。它仍禁用 proxy/redirect、限制响应大小并严格校验输出。

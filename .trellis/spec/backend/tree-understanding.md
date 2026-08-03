@@ -18,7 +18,8 @@
 - 虚拟验证场景的状态、引用、数量或人工审核政策。
 
 确定性全树扫描与不可信模型边界必须分离。真实树投影只允许发送给受保护环境
-内的 Qwen；百炼只允许接收完全虚构数据，或另行完成最终字节与用途审批的投影。
+内的 Qwen；百炼可以直接接收项目自编、可信分类的完全虚构测试数据，无需逐次数据
+许可；其他数据仍需另行完成最终字节与用途审批。
 增加 Workbench、sidecar、候选持久化或数据集注册需要独立任务。
 
 ## 2. Signatures
@@ -100,10 +101,23 @@ freeze_capability_overlay(
     review_status, reviewer_ref, recorded_at, review_round, oracle,
 ) -> ScenarioCapabilityOverlay
 
+freeze_silver_capability_authorization(
+    reviewed, plan, tree, *, assessor_ref, recorded_at, oracle,
+) -> ScenarioCapabilitySilverAuthorization
+
 run_reviewed_capability_scenario(
     overlay, reviewed, action, batch, batch_candidate,
     projection, plan, profile, tree, intent_provider, semantic_provider,
 ) -> ScenarioCapabilityRun
+
+run_silver_capability_scenario(
+    authorization, reviewed, action, batch, batch_candidate,
+    projection, plan, profile, tree, intent_provider, semantic_provider,
+) -> ScenarioCapabilityRun
+
+verify_capability_overlay_for_execution(
+    overlay, reviewed, plan, tree,
+) -> None
 
 build_capability_gate_report(
     preparation, runs, *,
@@ -252,6 +266,13 @@ build_capability_gate_report(
   `CLEANROOM_SYNTHETIC`、`fictional=true`、`derived_from_real=false`、
   `semantic_approval=false`、非 Gold、非 Patch，并绑定 reviewed hash、树快照、
   计划和“已审核 request + 完整 Oracle”的内容 digest；
+- Codex 辅助审核不得伪装成上述人工 overlay。校准执行使用独立
+  `scenario-capability-silver-authorization.v1`，固定
+  `status=SILVER_ACCEPTED`、`quality_tier=SILVER`、
+  `assessment_authority=CODEX_ASSISTED`、`execution_scope=CALIBRATION_ONLY`，
+  且 `gold_eligible=false`、`gate_eligible=false`、`patch_eligible=false`；
+  Silver 只能授权校准调用和来源绑定结果记录，不能进入正式 M4 门槛分母，实验成功
+  也不能自动升级为 Gold；
 - `expected_route` 只取 `PROCEED`/`CLARIFY`，且必须与 M3 已冻结的
   `draft_status` 一致；意图 profile 只做确定性字段比较：标量字段可用
   `EXACT_ONE_OF`，标量或 tuple 可用 `NON_EMPTY`，tuple 可用 `EMPTY`，不比较字段
@@ -277,6 +298,29 @@ build_capability_gate_report(
 - 单 overlay 是功能运行时合同；数据集 manifest、批量 sidecar wrapper、fixture
   SHA、合同提交绑定和数据集 selector 由独立数据任务拥有，但其中每个可执行项必须
   能重建该 overlay，不能在数据分支发明宽松运行时字段。
+- request-aware 执行资格政策固定为
+  `treeguard.capability-oracle-request-policy.v1`。M4 v1 request 只有
+  `node_kind_hint`、`value_type_hint`、`cardinality_hint` 是可逐字段确定性重放的
+  Intent 证据：显式且非 `UNKNOWN`/非 `null` 的 hint 必须用 `EXACT_ONE_OF`
+  精确接受该值，不得选择性忽略；`UNKNOWN`/`null` 只表示 request 没有提供证据，
+  对应 expectation 必须是 `NOT_COMPARED`，不能据此断言模型也应输出未知或空值；
+- `clarification_question` 由 route 支持：`PROCEED` 可以 `NOT_COMPARED` 或精确
+  接受 `null`，`CLARIFY` 必须 `NON_EMPTY`；route 本身仍先比较，且 `PROCEED`
+  的空问题检查不替代至少一个结构化 hint 提供的区分力；
+- v1 没有逐字段文本 span 或完整性证明，因此
+  `subject/role/scenario/lifecycle/ownership` 和
+  `confirmed_facts/assumptions/evidence_gaps` 只能 `NOT_COMPARED`。尤其
+  `PROCEED` 只表示没有澄清问题，不保证 assumptions/evidence gaps 为空；
+- 每个可执行 profile 必须显式且只覆盖全部 12 个 Intent 字段；`PROCEED` 至少保留
+  一个由非空结构化 hint 支持的有区分力比较，`CLARIFY` 可以由非空澄清问题承担
+  区分力，禁止退化成只比较 route 或无条件通过；
+- `ScenarioCapabilityOverlay.from_dict()` 可以对历史 overlay 做形状和来源重放；
+  `freeze_capability_overlay()`、`verify_capability_overlay_for_execution()`、实际运行和
+  数据门禁必须另外校验 request support。历史不可回答工件可以保留为诊断，但不能
+  调用 Provider 或进入 go/no-go 分母；
+- 未来若要比较自由文本字段或断言 list 为空，必须升级 overlay 版本，为每个
+  expectation 绑定结构化 request 字段或精确文本 span 与完整性证据；单独增加不可
+  重放的 `answerability=true` 不能放宽 v1。
 
 ### 内网 Qwen
 
@@ -293,12 +337,13 @@ M3 在任何网络调用前完整回放 tree/profile/plan，并零网络预构�
 ### 百炼虚构数据验证
 
 只允许 `BailianConfig`，并且 `external_data_approved` 必须精确为 `True` 才能
-发起网络。请求复用同一投影、Prompt、模型输出合同和本地来源绑定，沿用百炼
-官方 HTTPS host、Authorization header、禁 proxy/redirect、有界响应、严格
-JSON、`enable_thinking=false`、`temperature=0` 与最多两次尝试。
+发起网络。对于可信的项目自编 clean-room 测试数据，实验 harness 可以直接设置该值，
+无需逐次向用户索要数据许可。请求复用同一投影、Prompt、模型输出合同和本地来源
+绑定，沿用百炼官方 HTTPS host、Authorization header、禁 proxy/redirect、有界
+响应、严格 JSON、`enable_thinking=false`、`temperature=0` 与最多两次尝试。
 
-该门禁只证明调用方显式批准当前外发用途，不把投影自动变成脱敏数据。外网开发
-仅使用独立构造的完全虚构树；真实树、真实节点名称、专家文本或生产模型流量
+该门禁只声明调用方已确认输入具备外传资格，不把任意投影自动变成脱敏数据。项目自编
+clean-room 测试数据已有常设 LLM 授权；真实树、真实节点名称、专家文本或生产模型流量
 不得进入百炼。内网 Qwen 与百炼必须显式选择，禁止自动回退。
 
 任一次模型输出未通过精确字段、引用或跨字段政策时，只能要求模型重新生成一次
@@ -323,7 +368,7 @@ JSON、`enable_thinking=false`、`temperature=0` 与最多两次尝试。
 | 模型文本包含内部 ID | `TREE_UNDERSTANDING_MODEL_INTERNAL_ID_FORBIDDEN` |
 | 存储草案重建后不一致 | `TREE_UNDERSTANDING_DRAFT_SOURCE_MISMATCH` |
 | Qwen transport 失败 | 既有 `QWEN_*` family，不返回部分草案 |
-| 百炼缺少显式外发批准 | `EXTERNAL_DATA_APPROVAL_REQUIRED`，网络前失败 |
+| 百炼缺少 `external_data_approved=True` 外传资格声明 | `EXTERNAL_DATA_APPROVAL_REQUIRED`，网络前失败 |
 | 百炼 transport 失败 | 既有 `BAILIAN_*` family，不返回部分草案 |
 | M3 plan/unit/node limit 非法 | `SCENARIO_PREPARATION_*_LIMIT_INVALID` |
 | M3 seed 父节点未知或名称已存在 | `SCENARIO_PREPARATION_NEW_NODE_SEED_INVALID` |
@@ -340,6 +385,7 @@ JSON、`enable_thinking=false`、`temperature=0` 与最多两次尝试。
 | M4 overlay 与 reviewed bytes/tree/plan 不一致 | `CAPABILITY_OVERLAY_SOURCE_MISMATCH` |
 | M4 Oracle 稳定目标不在绑定树中 | `CAPABILITY_ORACLE_SOURCE_MISMATCH` |
 | M4 route 与 M3 observable Oracle 矛盾 | `CAPABILITY_OVERLAY_OBSERVABLE_ORACLE_MISMATCH` |
+| M4 Intent expectation 无冻结 request 支持或与 hint/route 冲突 | `CAPABILITY_ORACLE_REQUEST_MISMATCH`，Provider 零调用 |
 | M4 执行前 M3 来源回放失败 | `CAPABILITY_REVIEWED_SOURCE_MISMATCH`，Provider 零调用 |
 | M4 Provider/本地输出合同失败 | 对应阶段 `RUN_FAILED`，后续固定 `NOT_RUN` |
 | M4 意图或 Hit@K 不符合 Oracle | 对应阶段 `MISMATCH`，后续固定短路 |
@@ -360,6 +406,12 @@ JSON、`enable_thinking=false`、`temperature=0` 与最多两次尝试。
   不匹配导致下游适用但短路，不重复计错。
 - M4 Bad：Oracle 保存 `C001`、分别维护 action/target/relation 集合后做组合，或把
   6/8 通过解释为生产准确率/Gold。
+- M4 request-policy Good：只比较冻结的类型/基数 hint 和 route；未结构化支持的
+  自由文本字段显式 `NOT_COMPARED`，后续召回/推荐仍承担实质定位验收。
+- M4 request-policy Base：历史 overlay 形状和来源可重放，但执行资格因固定 request
+  policy 失败，保留为诊断而不调用模型。
+- M4 request-policy Bad：仅凭 requirement text 非空就要求 role/scenario
+  `NON_EMPTY`，或仅凭 `PROCEED` 就要求 assumptions/evidence gaps `EMPTY`。
 
 ## 6. Tests Required
 
@@ -400,6 +452,11 @@ JSON、`enable_thinking=false`、`temperature=0` 与最多两次尝试。
   RETRIEVAL/RECOMMENDATION target 不借用 INTENT MATCH 冒充通过。
 - M4 三份 Schema 的顶层/嵌套 required 与 serializer 精确一致；overlay 额外字段、
   错树、错计划、错受审字节、route 矛盾和重新哈希篡改均拒绝；
+- Silver authorization 的固定来源、质量等级、非 Gold/非门禁政策和来源 digest
+  必须逐项重放；篡改 authority、gate/Gold 资格或 Oracle 后重算外层 hash 仍拒绝；
+- M4 request policy 覆盖 hint 精确一致/冲突、PROCEED/CLARIFY question、未绑定
+  自由文本、list `EMPTY`、多 profile 任一不合法、历史 overlay 可读不可执行，以及
+  Intent/Semantic Provider 零调用；
 - 完整链路把 `C001` 映射回同次候选集的稳定目标后比较；Hit@K 未命中不调用推荐，
   推荐动作—目标—关系只按冻结联合结果判断；
 - 合法澄清、三个阶段 MATCH/MISMATCH/RUN_FAILED、上游短路、运行重放和固定 reason
@@ -430,8 +487,8 @@ assert draft.review_status == "PENDING_HUMAN_REVIEW"
 ```
 
 外网虚构数据效果冒烟必须显式选择
-`BailianTreeUnderstandingProvider` 并传入 `external_data_approved=True`；这不
-授权真实树外发。
+`BailianTreeUnderstandingProvider` 并传入 `external_data_approved=True`；对项目
+自编 clean-room 测试数据可直接传入，无需逐次许可，但这不授权真实树外发。
 
 M3 Correct：
 
@@ -481,6 +538,16 @@ if draft.selected_candidate_ref in oracle.acceptable_candidate_refs:
 
 `C001` 只在一次 Top-8 投影内有效，不能成为长期 Oracle 身份。
 
+M4 request-policy Wrong：
+
+```python
+IntentFieldExpectation("role", "NON_EMPTY", ())
+IntentFieldExpectation("evidence_gaps", "EMPTY", ())
+```
+
+v1 没有 role 的逐字段输入证据，也没有“请求完整且无证据缺口”的来源绑定；形状合法
+不等于 Oracle 可实现。
+
 M4 Correct：
 
 ```python
@@ -504,3 +571,6 @@ report = build_capability_gate_report(
 assert report.decision in {"GO_SHADOW", "NO_GO"}
 assert report.gold_eligible is False
 ```
+
+执行前还必须调用 `verify_capability_overlay_for_execution()`；历史 overlay 的
+`from_dict()` 成功只表示形状、哈希和来源可重放，不授予门控执行资格。

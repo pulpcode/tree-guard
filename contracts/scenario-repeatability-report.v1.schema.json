@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-repeatability-report.v1.schema.json",
+  "title": "TreeGuard M4.5 Sealed Repeatability Public Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_version",
+    "semantic_approval",
+    "gold_eligible",
+    "patch_eligible",
+    "preparation",
+    "round_count",
+    "selected_scenario_count",
+    "proceed_route_count",
+    "clarify_route_count",
+    "rounds",
+    "stable_full_path_match_count",
+    "executed_retrieval_count",
+    "retrieval_match_count",
+    "intent_contract",
+    "semantic_contract",
+    "clarification",
+    "unsafe_reuse_count",
+    "hard_failure_codes",
+    "failure_codes",
+    "decision"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-repeatability-report.v1"},
+    "policy_version": {"const": "treeguard.m45-sealed-repeatability-gate.v1"},
+    "semantic_approval": {"const": false},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false},
+    "preparation": {"$ref": "#/$defs/preparation"},
+    "round_count": {"const": 3},
+    "selected_scenario_count": {"const": 24},
+    "proceed_route_count": {"const": 18},
+    "clarify_route_count": {"const": 6},
+    "rounds": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"$ref": "#/$defs/round"}
+    },
+    "stable_full_path_match_count": {"type": "integer", "minimum": 0, "maximum": 24},
+    "executed_retrieval_count": {"$ref": "#/$defs/nonNegativeInteger"},
+    "retrieval_match_count": {"$ref": "#/$defs/nonNegativeInteger"},
+    "intent_contract": {"$ref": "#/$defs/contractCompliance"},
+    "semantic_contract": {"$ref": "#/$defs/contractCompliance"},
+    "clarification": {"$ref": "#/$defs/clarification"},
+    "unsafe_reuse_count": {"$ref": "#/$defs/nonNegativeInteger"},
+    "hard_failure_codes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "CONTRACT_INTEGRITY_FAILURE",
+          "DATA_BOUNDARY_FAILURE",
+          "RESULT_ACCOUNTING_FAILURE",
+          "SOURCE_BINDING_FAILURE"
+        ]
+      }
+    },
+    "failure_codes": {"$ref": "#/$defs/failureCodes"},
+    "decision": {"enum": ["GO_SHADOW", "NO_GO"]}
+  },
+  "$defs": {
+    "nonNegativeInteger": {"type": "integer", "minimum": 0},
+    "code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,127}$"},
+    "failureCodes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/code"}
+    },
+    "preparation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_count",
+        "reviewed_count",
+        "execution_count",
+        "accepted_count",
+        "revised_accepted_count",
+        "rejected_count",
+        "blocking_finding_count",
+        "review_minutes"
+      ],
+      "properties": {
+        "candidate_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "reviewed_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "execution_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "accepted_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "revised_accepted_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "rejected_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "blocking_finding_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "review_minutes": {"$ref": "#/$defs/nonNegativeInteger"}
+      }
+    },
+    "contractCompliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit_count", "first_pass_valid_count", "final_valid_count"],
+      "properties": {
+        "unit_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "first_pass_valid_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "final_valid_count": {"$ref": "#/$defs/nonNegativeInteger"}
+      }
+    },
+    "clarification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "true_positive_count",
+        "false_positive_count",
+        "false_negative_count",
+        "true_negative_count"
+      ],
+      "properties": {
+        "true_positive_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "false_positive_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "false_negative_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "true_negative_count": {"$ref": "#/$defs/nonNegativeInteger"}
+      }
+    },
+    "stageAggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applicable_count",
+        "match_count",
+        "mismatch_count",
+        "not_run_count",
+        "run_failed_count"
+      ],
+      "properties": {
+        "applicable_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "match_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "mismatch_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "not_run_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "run_failed_count": {"$ref": "#/$defs/nonNegativeInteger"}
+      }
+    },
+    "round": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "round_index",
+        "proceed_route_count",
+        "clarify_route_count",
+        "full_path_match_count",
+        "full_path_mismatch_count",
+        "full_path_run_failed_count",
+        "intent",
+        "retrieval",
+        "recommendation"
+      ],
+      "properties": {
+        "round_index": {"type": "integer", "minimum": 1, "maximum": 3},
+        "proceed_route_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "clarify_route_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "full_path_match_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "full_path_mismatch_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "full_path_run_failed_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "intent": {"$ref": "#/$defs/stageAggregate"},
+        "retrieval": {"$ref": "#/$defs/stageAggregate"},
+        "recommendation": {"$ref": "#/$defs/stageAggregate"}
+      }
+    }
+  }
+}

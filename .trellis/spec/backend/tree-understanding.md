@@ -322,6 +322,28 @@ build_capability_gate_report(
   expectation 绑定结构化 request 字段或精确文本 span 与完整性证据；单独增加不可
   重放的 `answerability=true` 不能放宽 v1。
 
+### M4.5 密封重复性报告
+
+- `scenario-capability-report.v1` 保持首轮 8 条、7+1/8+0、6/8 和逐阶段单失败预算
+  不变；24×3 验证使用独立 `scenario-repeatability-report.v1` 与
+  `treeguard.m45-sealed-repeatability-gate.v1`，不能修改或复用 v1 门槛常量；
+- 新报告消费三轮现有 `ScenarioCapabilityRun`：每轮精确 24 条、round 内 overlay
+  唯一，三轮 overlay 集合和 expected route 一致；同一 overlay 跨轮重复是重复性
+  观测，不是重复记账；
+- 每轮组成固定 18 `PROCEED` + 6 `CLARIFY`。公开报告只保存逐轮阶段聚合、每轮完整
+  路径计数、3/3 稳定数、实际执行召回命中、Intent/Semantic 合同合法计数、澄清
+  TP/FP/FN/TN、硬冲突错误复用数、固定 code 和决定；
+- 固定门槛为：Intent/Semantic 重试后最终合同合法率均至少 98%，实际执行的确定性
+  召回 100%，每轮完整路径至少 18/24，3/3 稳定场景至少 18/24，硬冲突错误复用为
+  0，四类 hard failure 为 0；百分比使用整数交叉乘法判断；
+- Semantic 合同分母精确等于三轮中真正执行推荐的单元数；上游短路不伪装成 Semantic
+  合同失败。澄清混淆矩阵本版单独观察，不另设通过阈值；
+- 多个来源绑定 batch/plan 可以组成 24 条密封执行集，但每条 overlay 仍绑定自己的
+  可信 plan/batch/reviewed bytes；报告不把多个 plan 伪造成一个 plan，也不放宽
+  planner 的 32 单元上限；
+- 报告 parser 只能验证聚合自洽和固定政策，不能从聚合值反推出逐场景交集或权威来源；
+  完整执行 harness 必须先可信重放各单条 run，再构建报告。匹配报告不是签名或 Gold。
+
 ### 内网 Qwen
 
 只允许 `InternalQwenConfig`。请求沿用现有隔离 transport：禁 proxy/redirect、

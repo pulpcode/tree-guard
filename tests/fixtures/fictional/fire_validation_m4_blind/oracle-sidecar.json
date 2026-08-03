@@ -1,0 +1,2552 @@
+{
+  "base_dataset_ref": "fictional-fire-governance-validation",
+  "clarification_coverage_status": "COVERED",
+  "contract_versions": {
+    "capability_overlay": "scenario-capability-overlay.v1",
+    "capability_report": "scenario-capability-report.v1",
+    "capability_run": "scenario-capability-run.v1",
+    "intent_draft": "change-intent-draft.v1",
+    "intent_request": "intent-request.v1",
+    "recommendation": "semantic-recommendation-draft.v1",
+    "retrieval": "candidate-set.v1",
+    "scenario_preparation_batch": "scenario-preparation-batch.v1",
+    "scenario_preparation_plan": "scenario-preparation-plan.v1",
+    "scenario_review_action": "scenario-review-action.v1",
+    "scenario_review_record": "scenario-review-record.v1"
+  },
+  "dataset_ref": "fictional-fire-m4-blind-v1",
+  "derived_from_real": false,
+  "dual_review_limit": 0,
+  "execution_scenario_refs": [
+    "M4-U001",
+    "M4-U002",
+    "M4-U003",
+    "M4-U004",
+    "M4-U005",
+    "M4-U007",
+    "M4-U008",
+    "M4-U009"
+  ],
+  "feature_contract_commit": "d7dff7994167d606aa2e3269c7606860bf22fc41",
+  "fictional": true,
+  "gold_eligible": false,
+  "human_review_elapsed_minutes": 20,
+  "items": [
+    {
+      "action": {
+        "decision": "APPROVE_FOR_VALIDATION",
+        "expected_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "expected_candidate_hash": "92daab44efe2fe43a0932c05845b5f4d35af5e004e4954547ef77cf7ba08d66c",
+        "expected_candidate_ref": "C001",
+        "expected_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "expected_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "expected_projection_hash": "d6b58ad4e742863cbad65953abadb5d13ed20ad73130b23a3649c1dda6ea34d2",
+        "expected_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "final_request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的现场负责人姓名。",
+          "value_type_hint": "string"
+        },
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "observable_oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-review-action.v1",
+        "semantic_approval": false
+      },
+      "candidate_digest": "92daab44efe2fe43a0932c05845b5f4d35af5e004e4954547ef77cf7ba08d66c",
+      "candidate_ref": "C001",
+      "execution_coverage_cell": "B01",
+      "execution_eligible": true,
+      "finding_codes": [],
+      "overlay": {
+        "derived_from_real": false,
+        "fictional": true,
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "acceptable_intent_profiles": [
+            {
+              "field_expectations": [
+                {
+                  "acceptable_values": [],
+                  "field_name": "assumptions",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "SINGLE"
+                  ],
+                  "field_name": "cardinality",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [
+                    null
+                  ],
+                  "field_name": "clarification_question",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "confirmed_facts",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "evidence_gaps",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "PROPERTY"
+                  ],
+                  "field_name": "node_kind",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "ownership",
+                  "policy": "NOT_COMPARED"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "role",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "scenario",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "subject",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "string"
+                  ],
+                  "field_name": "value_type",
+                  "policy": "EXACT_ONE_OF"
+                }
+              ],
+              "profile_ref": "P001"
+            }
+          ],
+          "expected_route": "PROCEED",
+          "recommendation": {
+            "acceptable_outcomes": [
+              {
+                "action": "USE_EXISTING_NODE",
+                "relation": "SEMANTICALLY_EQUIVALENT",
+                "target_node_id": "ffv-core-009"
+              }
+            ],
+            "applicable": true
+          },
+          "retrieval": {
+            "acceptable_node_ids": [
+              "ffv-core-009"
+            ],
+            "allowed_statuses": [
+              "CANDIDATES_READY"
+            ],
+            "applicable": true,
+            "top_k": 8
+          }
+        },
+        "overlay_hash": "d4def352666ee51d3be54817a10ae1ab41be4bb19fbab22d04b68d6ebb1524fd",
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "review_round": 1,
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-capability-overlay.v1",
+        "semantic_approval": false,
+        "source_class": "CLEANROOM_SYNTHETIC",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_reviewed_content_hash": "402c55c4ec166200245bf1439b70983636950cbe80b459c11b5f240c070097c2",
+        "source_reviewed_hash": "929bb212ab2b9cb654e4500d575319197a731cb5846f34e4406e465a9140e329",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "ACCEPTED"
+      },
+      "plan_unit_ref": "U001",
+      "review_round": 1,
+      "review_status": "ACCEPTED",
+      "reviewed": {
+        "candidate_ref": "C001",
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "plan_unit_ref": "U001",
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的现场负责人姓名。",
+          "value_type_hint": "string"
+        },
+        "reviewed_hash": "929bb212ab2b9cb654e4500d575319197a731cb5846f34e4406e465a9140e329",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "scenario_family": "CLEAR_EXISTING_REUSE",
+        "scenario_target_stage": "RETRIEVAL",
+        "schema_version": "scenario-review-record.v1",
+        "semantic_approval": false,
+        "source_action_hash": "e332927d8a9b68a1caa8ddb384a447f298fc60e1c6ab397504e35446813e0eb9",
+        "source_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "source_candidate_hash": "92daab44efe2fe43a0932c05845b5f4d35af5e004e4954547ef77cf7ba08d66c",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "source_projection_hash": "d6b58ad4e742863cbad65953abadb5d13ed20ad73130b23a3649c1dda6ea34d2",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "APPROVED_FOR_VALIDATION"
+      },
+      "rubric_passed": [
+        "DATA_BOUNDARY",
+        "SOURCE_BINDING",
+        "INDEPENDENCE",
+        "ANSWERABILITY",
+        "COVERAGE_VALUE",
+        "INTENT_CORRECTNESS",
+        "RETRIEVAL_CORRECTNESS",
+        "RECOMMENDATION_CORRECTNESS",
+        "ORACLE_HIDING",
+        "DETERMINISM"
+      ],
+      "scenario_ref": "M4-U001",
+      "source_coverage_cell": "B01"
+    },
+    {
+      "action": {
+        "decision": "APPROVE_FOR_VALIDATION",
+        "expected_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "expected_candidate_hash": "aad17d7eb964d283335c201d4ec593a9e831ff06992cdf3786cabcd76f0e7598",
+        "expected_candidate_ref": "C002",
+        "expected_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "expected_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "expected_projection_hash": "92ac85e34096af365a7f8ec4c614faf9f53d7f6cc1ea5064f264d24bab75db1a",
+        "expected_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "final_request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": "ffv-branch-actions",
+          "requirement_text": "请记录这项完全虚构任务的现场负责人姓名；给出的父级位于处置过程分支，请根据整棵树判断是否已有更合适的字段。",
+          "value_type_hint": "string"
+        },
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "observable_oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-review-action.v1",
+        "semantic_approval": false
+      },
+      "candidate_digest": "aad17d7eb964d283335c201d4ec593a9e831ff06992cdf3786cabcd76f0e7598",
+      "candidate_ref": "C002",
+      "execution_coverage_cell": "B03",
+      "execution_eligible": true,
+      "finding_codes": [],
+      "overlay": {
+        "derived_from_real": false,
+        "fictional": true,
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "acceptable_intent_profiles": [
+            {
+              "field_expectations": [
+                {
+                  "acceptable_values": [],
+                  "field_name": "assumptions",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "SINGLE"
+                  ],
+                  "field_name": "cardinality",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [
+                    null
+                  ],
+                  "field_name": "clarification_question",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "confirmed_facts",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "evidence_gaps",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "PROPERTY"
+                  ],
+                  "field_name": "node_kind",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "ownership",
+                  "policy": "NOT_COMPARED"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "role",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "scenario",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "subject",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "string"
+                  ],
+                  "field_name": "value_type",
+                  "policy": "EXACT_ONE_OF"
+                }
+              ],
+              "profile_ref": "P001"
+            }
+          ],
+          "expected_route": "PROCEED",
+          "recommendation": {
+            "acceptable_outcomes": [
+              {
+                "action": "USE_EXISTING_NODE",
+                "relation": "SEMANTICALLY_EQUIVALENT",
+                "target_node_id": "ffv-core-009"
+              }
+            ],
+            "applicable": true
+          },
+          "retrieval": {
+            "acceptable_node_ids": [
+              "ffv-core-009"
+            ],
+            "allowed_statuses": [
+              "CANDIDATES_READY"
+            ],
+            "applicable": true,
+            "top_k": 8
+          }
+        },
+        "overlay_hash": "a6bfdb4710d0835fe085215d2bb038ed308996ca5d8e8d0b4dfce4ac227641f1",
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "review_round": 1,
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-capability-overlay.v1",
+        "semantic_approval": false,
+        "source_class": "CLEANROOM_SYNTHETIC",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_reviewed_content_hash": "90f95d49b5acf8f428626edc3c153d362b19fef5be33bf444c19c0240a502bc2",
+        "source_reviewed_hash": "36742bfd0c7ed0a1873e77e86076c76fd2ceccf75c4a7d30870e8633028647d4",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "ACCEPTED"
+      },
+      "plan_unit_ref": "U002",
+      "review_round": 1,
+      "review_status": "ACCEPTED",
+      "reviewed": {
+        "candidate_ref": "C002",
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "plan_unit_ref": "U002",
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": "ffv-branch-actions",
+          "requirement_text": "请记录这项完全虚构任务的现场负责人姓名；给出的父级位于处置过程分支，请根据整棵树判断是否已有更合适的字段。",
+          "value_type_hint": "string"
+        },
+        "reviewed_hash": "36742bfd0c7ed0a1873e77e86076c76fd2ceccf75c4a7d30870e8633028647d4",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "scenario_family": "WRONG_PARENT_OR_CROSS_BRANCH",
+        "scenario_target_stage": "RECOMMENDATION",
+        "schema_version": "scenario-review-record.v1",
+        "semantic_approval": false,
+        "source_action_hash": "b8e1e501e9b9c66027a9dd76e35d13c19220b80bde9354c4c67cf979ff3482a3",
+        "source_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "source_candidate_hash": "aad17d7eb964d283335c201d4ec593a9e831ff06992cdf3786cabcd76f0e7598",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "source_projection_hash": "92ac85e34096af365a7f8ec4c614faf9f53d7f6cc1ea5064f264d24bab75db1a",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "APPROVED_FOR_VALIDATION"
+      },
+      "rubric_passed": [
+        "DATA_BOUNDARY",
+        "SOURCE_BINDING",
+        "INDEPENDENCE",
+        "ANSWERABILITY",
+        "COVERAGE_VALUE",
+        "INTENT_CORRECTNESS",
+        "RETRIEVAL_CORRECTNESS",
+        "RECOMMENDATION_CORRECTNESS",
+        "ORACLE_HIDING",
+        "DETERMINISM"
+      ],
+      "scenario_ref": "M4-U002",
+      "source_coverage_cell": "B03"
+    },
+    {
+      "action": {
+        "decision": "APPROVE_FOR_VALIDATION",
+        "expected_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "expected_candidate_hash": "14892ecda759194df96877af13c2c70f9abac99f930db794163607d951d2b01d",
+        "expected_candidate_ref": "C003",
+        "expected_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "expected_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "expected_projection_hash": "2a5b74118ea21b357b1e2512b7f2e03f742430be57780bebebd38884a9fcbe95",
+        "expected_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "final_request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "CONCEPT",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请为这项完全虚构任务记录现场负责人姓名；请求把它描述为概念，同时判断树中是否已经存在可复用的同义字段。",
+          "value_type_hint": "string"
+        },
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "observable_oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-review-action.v1",
+        "semantic_approval": false
+      },
+      "candidate_digest": "14892ecda759194df96877af13c2c70f9abac99f930db794163607d951d2b01d",
+      "candidate_ref": "C003",
+      "execution_coverage_cell": "B04",
+      "execution_eligible": true,
+      "finding_codes": [],
+      "overlay": {
+        "derived_from_real": false,
+        "fictional": true,
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "acceptable_intent_profiles": [
+            {
+              "field_expectations": [
+                {
+                  "acceptable_values": [],
+                  "field_name": "assumptions",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "SINGLE"
+                  ],
+                  "field_name": "cardinality",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [
+                    null
+                  ],
+                  "field_name": "clarification_question",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "confirmed_facts",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "evidence_gaps",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "CONCEPT"
+                  ],
+                  "field_name": "node_kind",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "ownership",
+                  "policy": "NOT_COMPARED"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "role",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "scenario",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "subject",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "string"
+                  ],
+                  "field_name": "value_type",
+                  "policy": "EXACT_ONE_OF"
+                }
+              ],
+              "profile_ref": "P001"
+            }
+          ],
+          "expected_route": "PROCEED",
+          "recommendation": {
+            "acceptable_outcomes": [
+              {
+                "action": "NEED_CLARIFICATION",
+                "relation": null,
+                "target_node_id": null
+              }
+            ],
+            "applicable": true
+          },
+          "retrieval": {
+            "acceptable_node_ids": [
+              "ffv-core-009"
+            ],
+            "allowed_statuses": [
+              "CANDIDATES_READY"
+            ],
+            "applicable": true,
+            "top_k": 8
+          }
+        },
+        "overlay_hash": "36d30ff1c82ab8fa11c8aab487f537d5efcc539c4fe3c1f44f81a850178910ab",
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "review_round": 1,
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-capability-overlay.v1",
+        "semantic_approval": false,
+        "source_class": "CLEANROOM_SYNTHETIC",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_reviewed_content_hash": "97b6b59e130863dddb0294edc6097c78d07d12d39f4bb011a75b145b44096d1f",
+        "source_reviewed_hash": "87fa0ebde8dab4cf1f8cf83e6e7d1f88a73ef65966a3723be3bef906eb806bc1",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "ACCEPTED"
+      },
+      "plan_unit_ref": "U003",
+      "review_round": 1,
+      "review_status": "ACCEPTED",
+      "reviewed": {
+        "candidate_ref": "C003",
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "plan_unit_ref": "U003",
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "CONCEPT",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请为这项完全虚构任务记录现场负责人姓名；请求把它描述为概念，同时判断树中是否已经存在可复用的同义字段。",
+          "value_type_hint": "string"
+        },
+        "reviewed_hash": "87fa0ebde8dab4cf1f8cf83e6e7d1f88a73ef65966a3723be3bef906eb806bc1",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "scenario_family": "KIND_CONFLICT",
+        "scenario_target_stage": "RECOMMENDATION",
+        "schema_version": "scenario-review-record.v1",
+        "semantic_approval": false,
+        "source_action_hash": "c8da30673f1cccc182c7757af81f449c5cd550879478359eb2bfe0a78451ffda",
+        "source_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "source_candidate_hash": "14892ecda759194df96877af13c2c70f9abac99f930db794163607d951d2b01d",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "source_projection_hash": "2a5b74118ea21b357b1e2512b7f2e03f742430be57780bebebd38884a9fcbe95",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "APPROVED_FOR_VALIDATION"
+      },
+      "rubric_passed": [
+        "DATA_BOUNDARY",
+        "SOURCE_BINDING",
+        "INDEPENDENCE",
+        "ANSWERABILITY",
+        "COVERAGE_VALUE",
+        "INTENT_CORRECTNESS",
+        "RETRIEVAL_CORRECTNESS",
+        "RECOMMENDATION_CORRECTNESS",
+        "ORACLE_HIDING",
+        "DETERMINISM"
+      ],
+      "scenario_ref": "M4-U003",
+      "source_coverage_cell": "B04"
+    },
+    {
+      "action": {
+        "decision": "APPROVE_FOR_VALIDATION",
+        "expected_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "expected_candidate_hash": "c29d2738f32b3927908284d16e2a90dc648b5236eae3a5e6ef52a631d546d751",
+        "expected_candidate_ref": "C004",
+        "expected_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "expected_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "expected_projection_hash": "84abf896fbb192e5c1059f5191d7df737f5c895665b45dd45e7c945343503690",
+        "expected_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "final_request": {
+          "cardinality_hint": "MULTIPLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请为这项完全虚构任务记录多名现场负责人的姓名，并判断现有单值字段能否直接复用。",
+          "value_type_hint": "string"
+        },
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "observable_oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-review-action.v1",
+        "semantic_approval": false
+      },
+      "candidate_digest": "c29d2738f32b3927908284d16e2a90dc648b5236eae3a5e6ef52a631d546d751",
+      "candidate_ref": "C004",
+      "execution_coverage_cell": "B05",
+      "execution_eligible": true,
+      "finding_codes": [],
+      "overlay": {
+        "derived_from_real": false,
+        "fictional": true,
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "acceptable_intent_profiles": [
+            {
+              "field_expectations": [
+                {
+                  "acceptable_values": [],
+                  "field_name": "assumptions",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "MULTIPLE"
+                  ],
+                  "field_name": "cardinality",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [
+                    null
+                  ],
+                  "field_name": "clarification_question",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "confirmed_facts",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "evidence_gaps",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "PROPERTY"
+                  ],
+                  "field_name": "node_kind",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "ownership",
+                  "policy": "NOT_COMPARED"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "role",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "scenario",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "subject",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "string"
+                  ],
+                  "field_name": "value_type",
+                  "policy": "EXACT_ONE_OF"
+                }
+              ],
+              "profile_ref": "P001"
+            }
+          ],
+          "expected_route": "PROCEED",
+          "recommendation": {
+            "acceptable_outcomes": [
+              {
+                "action": "NEED_CLARIFICATION",
+                "relation": null,
+                "target_node_id": null
+              }
+            ],
+            "applicable": true
+          },
+          "retrieval": {
+            "acceptable_node_ids": [
+              "ffv-core-009"
+            ],
+            "allowed_statuses": [
+              "CANDIDATES_READY"
+            ],
+            "applicable": true,
+            "top_k": 8
+          }
+        },
+        "overlay_hash": "0d59d54f3ffa8e4bdea2307da581bf7a9fd0a486f7a849ce0af2b8b0d63bb13c",
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "review_round": 1,
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-capability-overlay.v1",
+        "semantic_approval": false,
+        "source_class": "CLEANROOM_SYNTHETIC",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_reviewed_content_hash": "e53b00e8ebe7230f9ab677606109093786e66a894b665bf2687837a9dce4ed95",
+        "source_reviewed_hash": "aec822d0467819181a783c59c714289b58da21bbdb71c04d4d99f7ec36bf9803",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "ACCEPTED"
+      },
+      "plan_unit_ref": "U004",
+      "review_round": 1,
+      "review_status": "ACCEPTED",
+      "reviewed": {
+        "candidate_ref": "C004",
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "plan_unit_ref": "U004",
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "request": {
+          "cardinality_hint": "MULTIPLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请为这项完全虚构任务记录多名现场负责人的姓名，并判断现有单值字段能否直接复用。",
+          "value_type_hint": "string"
+        },
+        "reviewed_hash": "aec822d0467819181a783c59c714289b58da21bbdb71c04d4d99f7ec36bf9803",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "scenario_family": "CARDINALITY_CONFLICT",
+        "scenario_target_stage": "RECOMMENDATION",
+        "schema_version": "scenario-review-record.v1",
+        "semantic_approval": false,
+        "source_action_hash": "3e311a51849e12f385d0804f23fd125a6e2bb717cecd879f05fcf2a35e53001d",
+        "source_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "source_candidate_hash": "c29d2738f32b3927908284d16e2a90dc648b5236eae3a5e6ef52a631d546d751",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "source_projection_hash": "84abf896fbb192e5c1059f5191d7df737f5c895665b45dd45e7c945343503690",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "APPROVED_FOR_VALIDATION"
+      },
+      "rubric_passed": [
+        "DATA_BOUNDARY",
+        "SOURCE_BINDING",
+        "INDEPENDENCE",
+        "ANSWERABILITY",
+        "COVERAGE_VALUE",
+        "INTENT_CORRECTNESS",
+        "RETRIEVAL_CORRECTNESS",
+        "RECOMMENDATION_CORRECTNESS",
+        "ORACLE_HIDING",
+        "DETERMINISM"
+      ],
+      "scenario_ref": "M4-U004",
+      "source_coverage_cell": "B05"
+    },
+    {
+      "action": {
+        "decision": "APPROVE_FOR_VALIDATION",
+        "expected_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "expected_candidate_hash": "f564a990dc315fbafabd312796a99750d9a0c1fbc320644c169aae51ae3b9064",
+        "expected_candidate_ref": "C005",
+        "expected_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "expected_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "expected_projection_hash": "c30bc9c89219878c7733478f7edad184d20a13b42bb329fbb9e2802f3aeb3359",
+        "expected_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "final_request": {
+          "cardinality_hint": "UNKNOWN",
+          "node_kind_hint": "UNKNOWN",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请为这项完全虚构任务补充现场负责人相关信息。",
+          "value_type_hint": null
+        },
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "observable_oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "NEEDS_CLARIFICATION",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-review-action.v1",
+        "semantic_approval": false
+      },
+      "candidate_digest": "f564a990dc315fbafabd312796a99750d9a0c1fbc320644c169aae51ae3b9064",
+      "candidate_ref": "C005",
+      "execution_coverage_cell": "B08",
+      "execution_eligible": true,
+      "finding_codes": [],
+      "overlay": {
+        "derived_from_real": false,
+        "fictional": true,
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "acceptable_intent_profiles": [
+            {
+              "field_expectations": [
+                {
+                  "acceptable_values": [],
+                  "field_name": "assumptions",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "UNKNOWN"
+                  ],
+                  "field_name": "cardinality",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "clarification_question",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "confirmed_facts",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "evidence_gaps",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "UNKNOWN"
+                  ],
+                  "field_name": "node_kind",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "ownership",
+                  "policy": "NOT_COMPARED"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "role",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "scenario",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "subject",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    null
+                  ],
+                  "field_name": "value_type",
+                  "policy": "EXACT_ONE_OF"
+                }
+              ],
+              "profile_ref": "P001"
+            }
+          ],
+          "expected_route": "CLARIFY",
+          "recommendation": {
+            "acceptable_outcomes": [],
+            "applicable": false
+          },
+          "retrieval": {
+            "acceptable_node_ids": [],
+            "allowed_statuses": [],
+            "applicable": false,
+            "top_k": null
+          }
+        },
+        "overlay_hash": "d6bf16dec6c5e62fe1765d3d239e00c8012df9200398f0681444ef2d41da86ea",
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "review_round": 1,
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-capability-overlay.v1",
+        "semantic_approval": false,
+        "source_class": "CLEANROOM_SYNTHETIC",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_reviewed_content_hash": "8cd4d491c258132383380042fbefe6b07ba84eb912e439573cca9c258d8f56b1",
+        "source_reviewed_hash": "463c65eab1d63738e3a623d1ac0b87e80acc0e99676c04f98e513587eef73fa0",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "ACCEPTED"
+      },
+      "plan_unit_ref": "U005",
+      "review_round": 1,
+      "review_status": "ACCEPTED",
+      "reviewed": {
+        "candidate_ref": "C005",
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "NEEDS_CLARIFICATION",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "plan_unit_ref": "U005",
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "request": {
+          "cardinality_hint": "UNKNOWN",
+          "node_kind_hint": "UNKNOWN",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请为这项完全虚构任务补充现场负责人相关信息。",
+          "value_type_hint": null
+        },
+        "reviewed_hash": "463c65eab1d63738e3a623d1ac0b87e80acc0e99676c04f98e513587eef73fa0",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "scenario_family": "INSUFFICIENT_EVIDENCE",
+        "scenario_target_stage": "INTENT",
+        "schema_version": "scenario-review-record.v1",
+        "semantic_approval": false,
+        "source_action_hash": "5047799534274327e297ca79d2087b39c93796f749acb735bb039e796d9b9d43",
+        "source_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "source_candidate_hash": "f564a990dc315fbafabd312796a99750d9a0c1fbc320644c169aae51ae3b9064",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "source_projection_hash": "c30bc9c89219878c7733478f7edad184d20a13b42bb329fbb9e2802f3aeb3359",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "APPROVED_FOR_VALIDATION"
+      },
+      "rubric_passed": [
+        "DATA_BOUNDARY",
+        "SOURCE_BINDING",
+        "INDEPENDENCE",
+        "ANSWERABILITY",
+        "COVERAGE_VALUE",
+        "INTENT_CORRECTNESS",
+        "RETRIEVAL_CORRECTNESS",
+        "RECOMMENDATION_CORRECTNESS",
+        "ORACLE_HIDING",
+        "DETERMINISM"
+      ],
+      "scenario_ref": "M4-U005",
+      "source_coverage_cell": "B08-CANDIDATE-A"
+    },
+    {
+      "action": {
+        "decision": "APPROVE_FOR_VALIDATION",
+        "expected_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "expected_candidate_hash": "b4658b0d388d10f7e6f13b58846954e127ef6337454d96bfc50544c26293afa3",
+        "expected_candidate_ref": "C006",
+        "expected_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "expected_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "expected_projection_hash": "ecc25ad34a2f570baeeb72fd5f29d09e7cd74064ffb7658fc4c2a9f839b7ec90",
+        "expected_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "final_request": {
+          "cardinality_hint": "UNKNOWN",
+          "node_kind_hint": "UNKNOWN",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请把这项完全虚构任务中的人员、处置过程和资源信息组合成一个新字段。",
+          "value_type_hint": null
+        },
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "observable_oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "NEEDS_CLARIFICATION",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-review-action.v1",
+        "semantic_approval": false
+      },
+      "candidate_digest": "b4658b0d388d10f7e6f13b58846954e127ef6337454d96bfc50544c26293afa3",
+      "candidate_ref": "C006",
+      "execution_coverage_cell": null,
+      "execution_eligible": false,
+      "finding_codes": [],
+      "overlay": null,
+      "plan_unit_ref": "U006",
+      "review_round": 1,
+      "review_status": "ACCEPTED",
+      "reviewed": {
+        "candidate_ref": "C006",
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "NEEDS_CLARIFICATION",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "plan_unit_ref": "U006",
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "request": {
+          "cardinality_hint": "UNKNOWN",
+          "node_kind_hint": "UNKNOWN",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请把这项完全虚构任务中的人员、处置过程和资源信息组合成一个新字段。",
+          "value_type_hint": null
+        },
+        "reviewed_hash": "1cb06414cdd48048fd63d843e09038774dd84688c2872df619932fddd34cfdb6",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "scenario_family": "UNBOUNDED_COMBINATION",
+        "scenario_target_stage": "INTENT",
+        "schema_version": "scenario-review-record.v1",
+        "semantic_approval": false,
+        "source_action_hash": "b4a01a65c1e4d41dc2a8cb925b83581d00514aa55b7f96752fc6167fcc97ae80",
+        "source_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "source_candidate_hash": "b4658b0d388d10f7e6f13b58846954e127ef6337454d96bfc50544c26293afa3",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "source_projection_hash": "ecc25ad34a2f570baeeb72fd5f29d09e7cd74064ffb7658fc4c2a9f839b7ec90",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "APPROVED_FOR_VALIDATION"
+      },
+      "rubric_passed": [
+        "DATA_BOUNDARY",
+        "SOURCE_BINDING",
+        "INDEPENDENCE",
+        "ANSWERABILITY",
+        "COVERAGE_VALUE",
+        "INTENT_CORRECTNESS",
+        "RETRIEVAL_CORRECTNESS",
+        "RECOMMENDATION_CORRECTNESS",
+        "ORACLE_HIDING",
+        "DETERMINISM"
+      ],
+      "scenario_ref": "M4-U006",
+      "source_coverage_cell": "B08-CANDIDATE-B"
+    },
+    {
+      "action": {
+        "decision": "APPROVE_FOR_VALIDATION",
+        "expected_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "expected_candidate_hash": "36906f187d58ed337bd18939d6d8e07b62fef6b011127231d258631d71a7b1cb",
+        "expected_candidate_ref": "C007",
+        "expected_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "expected_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "expected_projection_hash": "d566a390775bbc20cb3b96e05a5ff21cb9cc2be929be7d58fe0d235ff44fe47e",
+        "expected_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "final_request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的救援车辆数量。",
+          "value_type_hint": "integer"
+        },
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "observable_oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-review-action.v1",
+        "semantic_approval": false
+      },
+      "candidate_digest": "36906f187d58ed337bd18939d6d8e07b62fef6b011127231d258631d71a7b1cb",
+      "candidate_ref": "C007",
+      "execution_coverage_cell": "B02",
+      "execution_eligible": true,
+      "finding_codes": [],
+      "overlay": {
+        "derived_from_real": false,
+        "fictional": true,
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "acceptable_intent_profiles": [
+            {
+              "field_expectations": [
+                {
+                  "acceptable_values": [],
+                  "field_name": "assumptions",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "SINGLE"
+                  ],
+                  "field_name": "cardinality",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [
+                    null
+                  ],
+                  "field_name": "clarification_question",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "confirmed_facts",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "evidence_gaps",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "PROPERTY"
+                  ],
+                  "field_name": "node_kind",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "ownership",
+                  "policy": "NOT_COMPARED"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "role",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "scenario",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "subject",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "integer"
+                  ],
+                  "field_name": "value_type",
+                  "policy": "EXACT_ONE_OF"
+                }
+              ],
+              "profile_ref": "P001"
+            }
+          ],
+          "expected_route": "PROCEED",
+          "recommendation": {
+            "acceptable_outcomes": [
+              {
+                "action": "USE_EXISTING_NODE",
+                "relation": "SEMANTICALLY_EQUIVALENT",
+                "target_node_id": "ffv-core-013"
+              }
+            ],
+            "applicable": true
+          },
+          "retrieval": {
+            "acceptable_node_ids": [
+              "ffv-core-013"
+            ],
+            "allowed_statuses": [
+              "CANDIDATES_READY"
+            ],
+            "applicable": true,
+            "top_k": 8
+          }
+        },
+        "overlay_hash": "098e4592c606958ad009cbf66af72de7c2f85f886e5c55fff9e206d19203108f",
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "review_round": 1,
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-capability-overlay.v1",
+        "semantic_approval": false,
+        "source_class": "CLEANROOM_SYNTHETIC",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_reviewed_content_hash": "5d6a56067fc2d6c9b14f4062e392d8a5f2b50edbaee5927b7f6e9517ce79bbb1",
+        "source_reviewed_hash": "6faa201198079fb6fe3b15bbade9c3d39e4557172cd5544f074ed8c365bfab79",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "ACCEPTED"
+      },
+      "plan_unit_ref": "U007",
+      "review_round": 1,
+      "review_status": "ACCEPTED",
+      "reviewed": {
+        "candidate_ref": "C007",
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "plan_unit_ref": "U007",
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的救援车辆数量。",
+          "value_type_hint": "integer"
+        },
+        "reviewed_hash": "6faa201198079fb6fe3b15bbade9c3d39e4557172cd5544f074ed8c365bfab79",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "scenario_family": "CLEAR_EXISTING_REUSE",
+        "scenario_target_stage": "RETRIEVAL",
+        "schema_version": "scenario-review-record.v1",
+        "semantic_approval": false,
+        "source_action_hash": "e7c4648d3aee9b853c54c3e5ea20fd53380002b142728e3e5c60d3d1c05bd644",
+        "source_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "source_candidate_hash": "36906f187d58ed337bd18939d6d8e07b62fef6b011127231d258631d71a7b1cb",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "source_projection_hash": "d566a390775bbc20cb3b96e05a5ff21cb9cc2be929be7d58fe0d235ff44fe47e",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "APPROVED_FOR_VALIDATION"
+      },
+      "rubric_passed": [
+        "DATA_BOUNDARY",
+        "SOURCE_BINDING",
+        "INDEPENDENCE",
+        "ANSWERABILITY",
+        "COVERAGE_VALUE",
+        "INTENT_CORRECTNESS",
+        "RETRIEVAL_CORRECTNESS",
+        "RECOMMENDATION_CORRECTNESS",
+        "ORACLE_HIDING",
+        "DETERMINISM"
+      ],
+      "scenario_ref": "M4-U007",
+      "source_coverage_cell": "B02"
+    },
+    {
+      "action": {
+        "decision": "APPROVE_FOR_VALIDATION",
+        "expected_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "expected_candidate_hash": "912c5dec9e7f4bda5cf03b7a956aca524dea2cc23de9279ee5d7da82834b9223",
+        "expected_candidate_ref": "C008",
+        "expected_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "expected_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "expected_projection_hash": "2c5dda48d9669bfd793207a5f381947609803ba773b23479e7b165f8b63bfea0",
+        "expected_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "final_request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的到场时间。",
+          "value_type_hint": "time_code"
+        },
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "observable_oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-review-action.v1",
+        "semantic_approval": false
+      },
+      "candidate_digest": "912c5dec9e7f4bda5cf03b7a956aca524dea2cc23de9279ee5d7da82834b9223",
+      "candidate_ref": "C008",
+      "execution_coverage_cell": "B06",
+      "execution_eligible": true,
+      "finding_codes": [],
+      "overlay": {
+        "derived_from_real": false,
+        "fictional": true,
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "acceptable_intent_profiles": [
+            {
+              "field_expectations": [
+                {
+                  "acceptable_values": [],
+                  "field_name": "assumptions",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "SINGLE"
+                  ],
+                  "field_name": "cardinality",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [
+                    null
+                  ],
+                  "field_name": "clarification_question",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "confirmed_facts",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "evidence_gaps",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "PROPERTY"
+                  ],
+                  "field_name": "node_kind",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "ownership",
+                  "policy": "NOT_COMPARED"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "role",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "scenario",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "subject",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "time_code"
+                  ],
+                  "field_name": "value_type",
+                  "policy": "EXACT_ONE_OF"
+                }
+              ],
+              "profile_ref": "P001"
+            }
+          ],
+          "expected_route": "PROCEED",
+          "recommendation": {
+            "acceptable_outcomes": [
+              {
+                "action": "USE_EXISTING_NODE",
+                "relation": "SEMANTICALLY_EQUIVALENT",
+                "target_node_id": "ffv-core-017"
+              }
+            ],
+            "applicable": true
+          },
+          "retrieval": {
+            "acceptable_node_ids": [
+              "ffv-core-017"
+            ],
+            "allowed_statuses": [
+              "CANDIDATES_READY"
+            ],
+            "applicable": true,
+            "top_k": 8
+          }
+        },
+        "overlay_hash": "d493726cbbf1da0b9ee5caa11741b63221cf077749f41944a0005050d8e7f64e",
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "review_round": 1,
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-capability-overlay.v1",
+        "semantic_approval": false,
+        "source_class": "CLEANROOM_SYNTHETIC",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_reviewed_content_hash": "c8fb30c02254346ccbf40652812bf8209977816a79c46343a8898389ff485a38",
+        "source_reviewed_hash": "eabfb5414cf8c69744c0c87c7b1392e7f407ec887b52522b4a57351c9aa3ca43",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "ACCEPTED"
+      },
+      "plan_unit_ref": "U008",
+      "review_round": 1,
+      "review_status": "ACCEPTED",
+      "reviewed": {
+        "candidate_ref": "C008",
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "plan_unit_ref": "U008",
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的到场时间。",
+          "value_type_hint": "time_code"
+        },
+        "reviewed_hash": "eabfb5414cf8c69744c0c87c7b1392e7f407ec887b52522b4a57351c9aa3ca43",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "scenario_family": "CLEAR_EXISTING_REUSE",
+        "scenario_target_stage": "RETRIEVAL",
+        "schema_version": "scenario-review-record.v1",
+        "semantic_approval": false,
+        "source_action_hash": "c13621f344428a56f72618e5f822eedc380df7cc796ce3026e1768b48e8ebac7",
+        "source_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "source_candidate_hash": "912c5dec9e7f4bda5cf03b7a956aca524dea2cc23de9279ee5d7da82834b9223",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "source_projection_hash": "2c5dda48d9669bfd793207a5f381947609803ba773b23479e7b165f8b63bfea0",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "APPROVED_FOR_VALIDATION"
+      },
+      "rubric_passed": [
+        "DATA_BOUNDARY",
+        "SOURCE_BINDING",
+        "INDEPENDENCE",
+        "ANSWERABILITY",
+        "COVERAGE_VALUE",
+        "INTENT_CORRECTNESS",
+        "RETRIEVAL_CORRECTNESS",
+        "RECOMMENDATION_CORRECTNESS",
+        "ORACLE_HIDING",
+        "DETERMINISM"
+      ],
+      "scenario_ref": "M4-U008",
+      "source_coverage_cell": "B06"
+    },
+    {
+      "action": {
+        "decision": "APPROVE_FOR_VALIDATION",
+        "expected_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "expected_candidate_hash": "1082028881574e83e6c4f14672fa4274c4d38681a7d2aa88c1663539cf4343f0",
+        "expected_candidate_ref": "C009",
+        "expected_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "expected_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "expected_projection_hash": "0e6e50bf102221e2b4097a8dae0189c79e3b2a3fe9bde9294970e2aa9a1d887c",
+        "expected_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "final_request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的事发场所类型。",
+          "value_type_hint": "string"
+        },
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "observable_oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-review-action.v1",
+        "semantic_approval": false
+      },
+      "candidate_digest": "1082028881574e83e6c4f14672fa4274c4d38681a7d2aa88c1663539cf4343f0",
+      "candidate_ref": "C009",
+      "execution_coverage_cell": "B07",
+      "execution_eligible": true,
+      "finding_codes": [],
+      "overlay": {
+        "derived_from_real": false,
+        "fictional": true,
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "acceptable_intent_profiles": [
+            {
+              "field_expectations": [
+                {
+                  "acceptable_values": [],
+                  "field_name": "assumptions",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "SINGLE"
+                  ],
+                  "field_name": "cardinality",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [
+                    null
+                  ],
+                  "field_name": "clarification_question",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "confirmed_facts",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "evidence_gaps",
+                  "policy": "EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "PROPERTY"
+                  ],
+                  "field_name": "node_kind",
+                  "policy": "EXACT_ONE_OF"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "ownership",
+                  "policy": "NOT_COMPARED"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "role",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "scenario",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [],
+                  "field_name": "subject",
+                  "policy": "NON_EMPTY"
+                },
+                {
+                  "acceptable_values": [
+                    "string"
+                  ],
+                  "field_name": "value_type",
+                  "policy": "EXACT_ONE_OF"
+                }
+              ],
+              "profile_ref": "P001"
+            }
+          ],
+          "expected_route": "PROCEED",
+          "recommendation": {
+            "acceptable_outcomes": [
+              {
+                "action": "USE_EXISTING_NODE",
+                "relation": "SEMANTICALLY_EQUIVALENT",
+                "target_node_id": "ffv-core-005"
+              }
+            ],
+            "applicable": true
+          },
+          "retrieval": {
+            "acceptable_node_ids": [
+              "ffv-core-005"
+            ],
+            "allowed_statuses": [
+              "CANDIDATES_READY"
+            ],
+            "applicable": true,
+            "top_k": 8
+          }
+        },
+        "overlay_hash": "5d6b227f44a7baa0af58ad74ed78887115034ed6de2f783b3c901a9cc18f0d13",
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "review_round": 1,
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-capability-overlay.v1",
+        "semantic_approval": false,
+        "source_class": "CLEANROOM_SYNTHETIC",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_reviewed_content_hash": "3c09743497a082df375a6aa6fec6be882289a9864f2dcce26e57b9a9bc6c144c",
+        "source_reviewed_hash": "7865d06d841a55b36c532422b31917c12887bab9f897cb6569665c61edb9f3b2",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "ACCEPTED"
+      },
+      "plan_unit_ref": "U009",
+      "review_round": 1,
+      "review_status": "ACCEPTED",
+      "reviewed": {
+        "candidate_ref": "C009",
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "plan_unit_ref": "U009",
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的事发场所类型。",
+          "value_type_hint": "string"
+        },
+        "reviewed_hash": "7865d06d841a55b36c532422b31917c12887bab9f897cb6569665c61edb9f3b2",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "scenario_family": "CLEAR_EXISTING_REUSE",
+        "scenario_target_stage": "RETRIEVAL",
+        "schema_version": "scenario-review-record.v1",
+        "semantic_approval": false,
+        "source_action_hash": "a768f67cb6b8c7eb4acf4406177be59851d786da98967c52e7db601b236037cd",
+        "source_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "source_candidate_hash": "1082028881574e83e6c4f14672fa4274c4d38681a7d2aa88c1663539cf4343f0",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "source_projection_hash": "0e6e50bf102221e2b4097a8dae0189c79e3b2a3fe9bde9294970e2aa9a1d887c",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "APPROVED_FOR_VALIDATION"
+      },
+      "rubric_passed": [
+        "DATA_BOUNDARY",
+        "SOURCE_BINDING",
+        "INDEPENDENCE",
+        "ANSWERABILITY",
+        "COVERAGE_VALUE",
+        "INTENT_CORRECTNESS",
+        "RETRIEVAL_CORRECTNESS",
+        "RECOMMENDATION_CORRECTNESS",
+        "ORACLE_HIDING",
+        "DETERMINISM"
+      ],
+      "scenario_ref": "M4-U009",
+      "source_coverage_cell": "B07"
+    },
+    {
+      "action": {
+        "decision": "APPROVE_FOR_VALIDATION",
+        "expected_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "expected_candidate_hash": "18e32409326e3e1f895bce09fe6e46b5d6821104a85a775febc7b5510f1d84fe",
+        "expected_candidate_ref": "C010",
+        "expected_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "expected_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "expected_projection_hash": "2e896d082c0ba7f31fbc94e3056c59b0b8005cb8fc223c225c6413a6898aa3e9",
+        "expected_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "final_request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的特殊任务类型。",
+          "value_type_hint": "string"
+        },
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "observable_oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-review-action.v1",
+        "semantic_approval": false
+      },
+      "candidate_digest": "18e32409326e3e1f895bce09fe6e46b5d6821104a85a775febc7b5510f1d84fe",
+      "candidate_ref": "C010",
+      "execution_coverage_cell": null,
+      "execution_eligible": false,
+      "finding_codes": [],
+      "overlay": null,
+      "plan_unit_ref": "U010",
+      "review_round": 1,
+      "review_status": "ACCEPTED",
+      "reviewed": {
+        "candidate_ref": "C010",
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "plan_unit_ref": "U010",
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的特殊任务类型。",
+          "value_type_hint": "string"
+        },
+        "reviewed_hash": "9d77e0b9b9701446050684cedbdc0400d857267efe37feb7b1bc845b3c98af53",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "scenario_family": "CLEAR_EXISTING_REUSE",
+        "scenario_target_stage": "RETRIEVAL",
+        "schema_version": "scenario-review-record.v1",
+        "semantic_approval": false,
+        "source_action_hash": "3ff52acbd895700d5455feb2ed2f67bc1f628380983e871a370e9b4c4f5e46c0",
+        "source_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "source_candidate_hash": "18e32409326e3e1f895bce09fe6e46b5d6821104a85a775febc7b5510f1d84fe",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "source_projection_hash": "2e896d082c0ba7f31fbc94e3056c59b0b8005cb8fc223c225c6413a6898aa3e9",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "APPROVED_FOR_VALIDATION"
+      },
+      "rubric_passed": [
+        "DATA_BOUNDARY",
+        "SOURCE_BINDING",
+        "INDEPENDENCE",
+        "ANSWERABILITY",
+        "COVERAGE_VALUE",
+        "INTENT_CORRECTNESS",
+        "RETRIEVAL_CORRECTNESS",
+        "RECOMMENDATION_CORRECTNESS",
+        "ORACLE_HIDING",
+        "DETERMINISM"
+      ],
+      "scenario_ref": "M4-U010",
+      "source_coverage_cell": "B08F-SPARE-A"
+    },
+    {
+      "action": {
+        "decision": "APPROVE_FOR_VALIDATION",
+        "expected_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "expected_candidate_hash": "5bae51a841c391402df2f06ae454df66a2b235999325cea4d86ece69f536419d",
+        "expected_candidate_ref": "C011",
+        "expected_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "expected_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "expected_projection_hash": "1e3ad49d2ff1a277107104e797f3284148b5af36853bf7648e71a73f87e37f20",
+        "expected_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "final_request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的任务名称。",
+          "value_type_hint": "string"
+        },
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "observable_oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "schema_version": "scenario-review-action.v1",
+        "semantic_approval": false
+      },
+      "candidate_digest": "5bae51a841c391402df2f06ae454df66a2b235999325cea4d86ece69f536419d",
+      "candidate_ref": "C011",
+      "execution_coverage_cell": null,
+      "execution_eligible": false,
+      "finding_codes": [],
+      "overlay": null,
+      "plan_unit_ref": "U011",
+      "review_round": 1,
+      "review_status": "ACCEPTED",
+      "reviewed": {
+        "candidate_ref": "C011",
+        "gold_eligible": false,
+        "identity_status": "UNVERIFIED_FILE_ASSERTION",
+        "oracle": {
+          "candidate_status": null,
+          "clarification_status": null,
+          "draft_status": "READY_FOR_HUMAN_REVIEW",
+          "recommendation_status": null
+        },
+        "patch_eligible": false,
+        "plan_unit_ref": "U011",
+        "recorded_at": "2026-08-03T02:07:23Z",
+        "request": {
+          "cardinality_hint": "SINGLE",
+          "node_kind_hint": "PROPERTY",
+          "proposed_parent_node_id": null,
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的任务名称。",
+          "value_type_hint": "string"
+        },
+        "reviewed_hash": "1ac2f3479460315075f5d72392c42cfc463896d266acd1dd881665e271c5d804",
+        "reviewer_ref": "m4-authorized-reviewer-01",
+        "scenario_family": "CLEAR_EXISTING_REUSE",
+        "scenario_target_stage": "RETRIEVAL",
+        "schema_version": "scenario-review-record.v1",
+        "semantic_approval": false,
+        "source_action_hash": "b4f3693598b94b33f22a6350a24b74ba571c769c668d764932c95ee1e7c9aebd",
+        "source_batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+        "source_candidate_hash": "5bae51a841c391402df2f06ae454df66a2b235999325cea4d86ece69f536419d",
+        "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+        "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+        "source_projection_hash": "1e3ad49d2ff1a277107104e797f3284148b5af36853bf7648e71a73f87e37f20",
+        "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+        "status": "APPROVED_FOR_VALIDATION"
+      },
+      "rubric_passed": [
+        "DATA_BOUNDARY",
+        "SOURCE_BINDING",
+        "INDEPENDENCE",
+        "ANSWERABILITY",
+        "COVERAGE_VALUE",
+        "INTENT_CORRECTNESS",
+        "RETRIEVAL_CORRECTNESS",
+        "RECOMMENDATION_CORRECTNESS",
+        "ORACLE_HIDING",
+        "DETERMINISM"
+      ],
+      "scenario_ref": "M4-U011",
+      "source_coverage_cell": "B08F-SPARE-B"
+    }
+  ],
+  "lifecycle_status": "FROZEN",
+  "patch_eligible": false,
+  "recorded_at": "2026-08-03T02:07:23Z",
+  "resource_id": "fictional-fire-02-medium",
+  "review_round": 1,
+  "review_status": "ACCEPTED",
+  "reviewer_ref": "m4-authorized-reviewer-01",
+  "rubric_version": "fire-m4-blind-human-review.v1",
+  "scenario_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+  "scenario_preparation_batch": {
+    "attempted_unit_count": 11,
+    "batch_hash": "391b938378f0f6d29cb3c777bd2767c8eb267c3431b5986e3e565b1e41fd843b",
+    "branch_coverage": {
+      "candidate_ready_branch_node_ids": [
+        "ffv-branch-actions",
+        "ffv-branch-people",
+        "ffv-branch-resources",
+        "ffv-branch-situation",
+        "ffv-branch-special",
+        "ffv-branch-task"
+      ],
+      "failed_branch_node_ids": [],
+      "not_executed_branch_node_ids": [],
+      "omitted_budget_branch_node_ids": []
+    },
+    "candidates": [
+      {
+        "candidate_ref": "C001",
+        "draft": {
+          "cardinality_hint": null,
+          "draft_hash": "92daab44efe2fe43a0932c05845b5f4d35af5e004e4954547ef77cf7ba08d66c",
+          "evidence_gaps": [],
+          "gold_eligible": false,
+          "model_capability": "DETERMINISTIC_CANDIDATE_AUTHORING",
+          "model_name": "treeguard-m4-cleanroom-local",
+          "model_provenance_status": "UNVERIFIED_MODEL_OUTPUT",
+          "model_provider": "CODEX_CLEANROOM_GENERATOR",
+          "node_kind_hint": null,
+          "patch_eligible": false,
+          "plan_unit_ref": "U001",
+          "planning_mode": "BRANCH_LOCAL",
+          "prompt_version": "treeguard.m4-cleanroom-candidate-authoring.v1",
+          "proposed_parent_ref": null,
+          "rationale": "该请求只需要判断一个明确的人员属性是否已经存在。",
+          "requested_aspects": [
+            {
+              "aspect": "核对现场负责人姓名是否已有语义等价字段",
+              "supporting_node_refs": [
+                "N003"
+              ]
+            }
+          ],
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的现场负责人姓名。",
+          "review_status": "PENDING_HUMAN_REVIEW",
+          "scenario_family": "CLEAR_EXISTING_REUSE",
+          "scenario_ref": "S001",
+          "schema_version": "scenario-preparation-candidate.v1",
+          "semantic_approval": false,
+          "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+          "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+          "source_projection_hash": "d6b58ad4e742863cbad65953abadb5d13ed20ad73130b23a3649c1dda6ea34d2",
+          "source_signal_refs": [],
+          "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+          "supporting_node_refs": [
+            "N003"
+          ],
+          "target_stage": "RETRIEVAL",
+          "uncertainties": [],
+          "value_type_hint": null
+        },
+        "local_scenario_ref": "S001",
+        "plan_unit_ref": "U001",
+        "source_draft_hash": "92daab44efe2fe43a0932c05845b5f4d35af5e004e4954547ef77cf7ba08d66c"
+      },
+      {
+        "candidate_ref": "C002",
+        "draft": {
+          "cardinality_hint": null,
+          "draft_hash": "aad17d7eb964d283335c201d4ec593a9e831ff06992cdf3786cabcd76f0e7598",
+          "evidence_gaps": [],
+          "gold_eligible": false,
+          "model_capability": "DETERMINISTIC_CANDIDATE_AUTHORING",
+          "model_name": "treeguard-m4-cleanroom-local",
+          "model_provenance_status": "UNVERIFIED_MODEL_OUTPUT",
+          "model_provider": "CODEX_CLEANROOM_GENERATOR",
+          "node_kind_hint": null,
+          "patch_eligible": false,
+          "plan_unit_ref": "U002",
+          "planning_mode": "CONTRAST",
+          "prompt_version": "treeguard.m4-cleanroom-candidate-authoring.v1",
+          "proposed_parent_ref": "N002",
+          "rationale": "该请求用于检验错误父级提示是否会遮蔽跨分支的现有等价字段。",
+          "requested_aspects": [
+            {
+              "aspect": "判断给定父级与人员属性是否属于同一结构范围",
+              "supporting_node_refs": [
+                "N002"
+              ]
+            },
+            {
+              "aspect": "核对现场负责人姓名是否已有语义等价字段",
+              "supporting_node_refs": [
+                "N004"
+              ]
+            }
+          ],
+          "requirement_text": "请记录这项完全虚构任务的现场负责人姓名；给出的父级位于处置过程分支，请根据整棵树判断是否已有更合适的字段。",
+          "review_status": "PENDING_HUMAN_REVIEW",
+          "scenario_family": "WRONG_PARENT_OR_CROSS_BRANCH",
+          "scenario_ref": "S001",
+          "schema_version": "scenario-preparation-candidate.v1",
+          "semantic_approval": false,
+          "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+          "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+          "source_projection_hash": "92ac85e34096af365a7f8ec4c614faf9f53d7f6cc1ea5064f264d24bab75db1a",
+          "source_signal_refs": [],
+          "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+          "supporting_node_refs": [
+            "N002",
+            "N004"
+          ],
+          "target_stage": "RECOMMENDATION",
+          "uncertainties": [],
+          "value_type_hint": null
+        },
+        "local_scenario_ref": "S001",
+        "plan_unit_ref": "U002",
+        "source_draft_hash": "aad17d7eb964d283335c201d4ec593a9e831ff06992cdf3786cabcd76f0e7598"
+      },
+      {
+        "candidate_ref": "C003",
+        "draft": {
+          "cardinality_hint": null,
+          "draft_hash": "14892ecda759194df96877af13c2c70f9abac99f930db794163607d951d2b01d",
+          "evidence_gaps": [],
+          "gold_eligible": false,
+          "model_capability": "DETERMINISTIC_CANDIDATE_AUTHORING",
+          "model_name": "treeguard-m4-cleanroom-local",
+          "model_provenance_status": "UNVERIFIED_MODEL_OUTPUT",
+          "model_provider": "CODEX_CLEANROOM_GENERATOR",
+          "node_kind_hint": "CONCEPT",
+          "patch_eligible": false,
+          "plan_unit_ref": "U003",
+          "planning_mode": "BRANCH_LOCAL",
+          "prompt_version": "treeguard.m4-cleanroom-candidate-authoring.v1",
+          "proposed_parent_ref": null,
+          "rationale": "该请求用于检验类型提示冲突时是否仍能识别树中的结构证据。",
+          "requested_aspects": [
+            {
+              "aspect": "区分冲突的节点类型提示与现有人员属性",
+              "supporting_node_refs": [
+                "N003"
+              ]
+            }
+          ],
+          "requirement_text": "请为这项完全虚构任务记录现场负责人姓名；请求把它描述为概念，同时判断树中是否已经存在可复用的同义字段。",
+          "review_status": "PENDING_HUMAN_REVIEW",
+          "scenario_family": "KIND_CONFLICT",
+          "scenario_ref": "S001",
+          "schema_version": "scenario-preparation-candidate.v1",
+          "semantic_approval": false,
+          "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+          "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+          "source_projection_hash": "2a5b74118ea21b357b1e2512b7f2e03f742430be57780bebebd38884a9fcbe95",
+          "source_signal_refs": [],
+          "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+          "supporting_node_refs": [
+            "N003"
+          ],
+          "target_stage": "RECOMMENDATION",
+          "uncertainties": [],
+          "value_type_hint": null
+        },
+        "local_scenario_ref": "S001",
+        "plan_unit_ref": "U003",
+        "source_draft_hash": "14892ecda759194df96877af13c2c70f9abac99f930db794163607d951d2b01d"
+      },
+      {
+        "candidate_ref": "C004",
+        "draft": {
+          "cardinality_hint": "MULTIPLE",
+          "draft_hash": "c29d2738f32b3927908284d16e2a90dc648b5236eae3a5e6ef52a631d546d751",
+          "evidence_gaps": [],
+          "gold_eligible": false,
+          "model_capability": "DETERMINISTIC_CANDIDATE_AUTHORING",
+          "model_name": "treeguard-m4-cleanroom-local",
+          "model_provenance_status": "UNVERIFIED_MODEL_OUTPUT",
+          "model_provider": "CODEX_CLEANROOM_GENERATOR",
+          "node_kind_hint": null,
+          "patch_eligible": false,
+          "plan_unit_ref": "U004",
+          "planning_mode": "BRANCH_LOCAL",
+          "prompt_version": "treeguard.m4-cleanroom-candidate-authoring.v1",
+          "proposed_parent_ref": null,
+          "rationale": "该请求用于检验基数冲突是否会被错误地当成直接复用。",
+          "requested_aspects": [
+            {
+              "aspect": "核对多人诉求与现有单值人员字段的基数冲突",
+              "supporting_node_refs": [
+                "N003"
+              ]
+            }
+          ],
+          "requirement_text": "请为这项完全虚构任务记录多名现场负责人的姓名，并判断现有单值字段能否直接复用。",
+          "review_status": "PENDING_HUMAN_REVIEW",
+          "scenario_family": "CARDINALITY_CONFLICT",
+          "scenario_ref": "S001",
+          "schema_version": "scenario-preparation-candidate.v1",
+          "semantic_approval": false,
+          "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+          "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+          "source_projection_hash": "84abf896fbb192e5c1059f5191d7df737f5c895665b45dd45e7c945343503690",
+          "source_signal_refs": [],
+          "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+          "supporting_node_refs": [
+            "N003"
+          ],
+          "target_stage": "RECOMMENDATION",
+          "uncertainties": [],
+          "value_type_hint": null
+        },
+        "local_scenario_ref": "S001",
+        "plan_unit_ref": "U004",
+        "source_draft_hash": "c29d2738f32b3927908284d16e2a90dc648b5236eae3a5e6ef52a631d546d751"
+      },
+      {
+        "candidate_ref": "C005",
+        "draft": {
+          "cardinality_hint": null,
+          "draft_hash": "f564a990dc315fbafabd312796a99750d9a0c1fbc320644c169aae51ae3b9064",
+          "evidence_gaps": [
+            "缺少能够唯一确定目标字段的属性说明。"
+          ],
+          "gold_eligible": false,
+          "model_capability": "DETERMINISTIC_CANDIDATE_AUTHORING",
+          "model_name": "treeguard-m4-cleanroom-local",
+          "model_provenance_status": "UNVERIFIED_MODEL_OUTPUT",
+          "model_provider": "CODEX_CLEANROOM_GENERATOR",
+          "node_kind_hint": null,
+          "patch_eligible": false,
+          "plan_unit_ref": "U005",
+          "planning_mode": "AMBIGUITY",
+          "prompt_version": "treeguard.m4-cleanroom-candidate-authoring.v1",
+          "proposed_parent_ref": null,
+          "rationale": "当前请求没有说明需要姓名、联系方式还是其他负责人属性。",
+          "requested_aspects": [
+            {
+              "aspect": "识别尚未说明的负责人信息种类",
+              "supporting_node_refs": [
+                "N003"
+              ]
+            }
+          ],
+          "requirement_text": "请为这项完全虚构任务补充现场负责人相关信息。",
+          "review_status": "PENDING_HUMAN_REVIEW",
+          "scenario_family": "INSUFFICIENT_EVIDENCE",
+          "scenario_ref": "S001",
+          "schema_version": "scenario-preparation-candidate.v1",
+          "semantic_approval": false,
+          "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+          "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+          "source_projection_hash": "c30bc9c89219878c7733478f7edad184d20a13b42bb329fbb9e2802f3aeb3359",
+          "source_signal_refs": [],
+          "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+          "supporting_node_refs": [
+            "N003"
+          ],
+          "target_stage": "INTENT",
+          "uncertainties": [
+            "所需的负责人信息种类尚未限定。"
+          ],
+          "value_type_hint": null
+        },
+        "local_scenario_ref": "S001",
+        "plan_unit_ref": "U005",
+        "source_draft_hash": "f564a990dc315fbafabd312796a99750d9a0c1fbc320644c169aae51ae3b9064"
+      },
+      {
+        "candidate_ref": "C006",
+        "draft": {
+          "cardinality_hint": null,
+          "draft_hash": "b4658b0d388d10f7e6f13b58846954e127ef6337454d96bfc50544c26293afa3",
+          "evidence_gaps": [],
+          "gold_eligible": false,
+          "model_capability": "DETERMINISTIC_CANDIDATE_AUTHORING",
+          "model_name": "treeguard-m4-cleanroom-local",
+          "model_provenance_status": "UNVERIFIED_MODEL_OUTPUT",
+          "model_provider": "CODEX_CLEANROOM_GENERATOR",
+          "node_kind_hint": null,
+          "patch_eligible": false,
+          "plan_unit_ref": "U006",
+          "planning_mode": "AMBIGUITY",
+          "prompt_version": "treeguard.m4-cleanroom-candidate-authoring.v1",
+          "proposed_parent_ref": null,
+          "rationale": "三个分支都包含多个可选属性，未给出有界组合规则。",
+          "requested_aspects": [
+            {
+              "aspect": "限定处置过程信息的组合范围",
+              "supporting_node_refs": [
+                "N002"
+              ]
+            },
+            {
+              "aspect": "限定人员信息的组合范围",
+              "supporting_node_refs": [
+                "N003"
+              ]
+            },
+            {
+              "aspect": "限定资源信息的组合范围",
+              "supporting_node_refs": [
+                "N004"
+              ]
+            }
+          ],
+          "requirement_text": "请把这项完全虚构任务中的人员、处置过程和资源信息组合成一个新字段。",
+          "review_status": "PENDING_HUMAN_REVIEW",
+          "scenario_family": "UNBOUNDED_COMBINATION",
+          "scenario_ref": "S001",
+          "schema_version": "scenario-preparation-candidate.v1",
+          "semantic_approval": false,
+          "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+          "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+          "source_projection_hash": "ecc25ad34a2f570baeeb72fd5f29d09e7cd74064ffb7658fc4c2a9f839b7ec90",
+          "source_signal_refs": [],
+          "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+          "supporting_node_refs": [
+            "N002",
+            "N003",
+            "N004"
+          ],
+          "target_stage": "INTENT",
+          "uncertainties": [
+            "组合成员、用途和边界均未限定。"
+          ],
+          "value_type_hint": null
+        },
+        "local_scenario_ref": "S001",
+        "plan_unit_ref": "U006",
+        "source_draft_hash": "b4658b0d388d10f7e6f13b58846954e127ef6337454d96bfc50544c26293afa3"
+      },
+      {
+        "candidate_ref": "C007",
+        "draft": {
+          "cardinality_hint": null,
+          "draft_hash": "36906f187d58ed337bd18939d6d8e07b62fef6b011127231d258631d71a7b1cb",
+          "evidence_gaps": [],
+          "gold_eligible": false,
+          "model_capability": "DETERMINISTIC_CANDIDATE_AUTHORING",
+          "model_name": "treeguard-m4-cleanroom-local",
+          "model_provenance_status": "UNVERIFIED_MODEL_OUTPUT",
+          "model_provider": "CODEX_CLEANROOM_GENERATOR",
+          "node_kind_hint": null,
+          "patch_eligible": false,
+          "plan_unit_ref": "U007",
+          "planning_mode": "BRANCH_LOCAL",
+          "prompt_version": "treeguard.m4-cleanroom-candidate-authoring.v1",
+          "proposed_parent_ref": null,
+          "rationale": "该请求提供第二分支上的明确数量属性完整链路。",
+          "requested_aspects": [
+            {
+              "aspect": "核对救援车辆数量是否已有语义等价字段",
+              "supporting_node_refs": [
+                "N003"
+              ]
+            }
+          ],
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的救援车辆数量。",
+          "review_status": "PENDING_HUMAN_REVIEW",
+          "scenario_family": "CLEAR_EXISTING_REUSE",
+          "scenario_ref": "S001",
+          "schema_version": "scenario-preparation-candidate.v1",
+          "semantic_approval": false,
+          "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+          "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+          "source_projection_hash": "d566a390775bbc20cb3b96e05a5ff21cb9cc2be929be7d58fe0d235ff44fe47e",
+          "source_signal_refs": [],
+          "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+          "supporting_node_refs": [
+            "N003"
+          ],
+          "target_stage": "RETRIEVAL",
+          "uncertainties": [],
+          "value_type_hint": null
+        },
+        "local_scenario_ref": "S001",
+        "plan_unit_ref": "U007",
+        "source_draft_hash": "36906f187d58ed337bd18939d6d8e07b62fef6b011127231d258631d71a7b1cb"
+      },
+      {
+        "candidate_ref": "C008",
+        "draft": {
+          "cardinality_hint": null,
+          "draft_hash": "912c5dec9e7f4bda5cf03b7a956aca524dea2cc23de9279ee5d7da82834b9223",
+          "evidence_gaps": [],
+          "gold_eligible": false,
+          "model_capability": "DETERMINISTIC_CANDIDATE_AUTHORING",
+          "model_name": "treeguard-m4-cleanroom-local",
+          "model_provenance_status": "UNVERIFIED_MODEL_OUTPUT",
+          "model_provider": "CODEX_CLEANROOM_GENERATOR",
+          "node_kind_hint": null,
+          "patch_eligible": false,
+          "plan_unit_ref": "U008",
+          "planning_mode": "BRANCH_LOCAL",
+          "prompt_version": "treeguard.m4-cleanroom-candidate-authoring.v1",
+          "proposed_parent_ref": null,
+          "rationale": "该请求提供处置过程分支上的明确时间属性完整链路。",
+          "requested_aspects": [
+            {
+              "aspect": "核对到场时间是否已有语义等价字段",
+              "supporting_node_refs": [
+                "N003"
+              ]
+            }
+          ],
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的到场时间。",
+          "review_status": "PENDING_HUMAN_REVIEW",
+          "scenario_family": "CLEAR_EXISTING_REUSE",
+          "scenario_ref": "S001",
+          "schema_version": "scenario-preparation-candidate.v1",
+          "semantic_approval": false,
+          "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+          "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+          "source_projection_hash": "2c5dda48d9669bfd793207a5f381947609803ba773b23479e7b165f8b63bfea0",
+          "source_signal_refs": [],
+          "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+          "supporting_node_refs": [
+            "N003"
+          ],
+          "target_stage": "RETRIEVAL",
+          "uncertainties": [],
+          "value_type_hint": null
+        },
+        "local_scenario_ref": "S001",
+        "plan_unit_ref": "U008",
+        "source_draft_hash": "912c5dec9e7f4bda5cf03b7a956aca524dea2cc23de9279ee5d7da82834b9223"
+      },
+      {
+        "candidate_ref": "C009",
+        "draft": {
+          "cardinality_hint": null,
+          "draft_hash": "1082028881574e83e6c4f14672fa4274c4d38681a7d2aa88c1663539cf4343f0",
+          "evidence_gaps": [],
+          "gold_eligible": false,
+          "model_capability": "DETERMINISTIC_CANDIDATE_AUTHORING",
+          "model_name": "treeguard-m4-cleanroom-local",
+          "model_provenance_status": "UNVERIFIED_MODEL_OUTPUT",
+          "model_provider": "CODEX_CLEANROOM_GENERATOR",
+          "node_kind_hint": null,
+          "patch_eligible": false,
+          "plan_unit_ref": "U009",
+          "planning_mode": "BRANCH_LOCAL",
+          "prompt_version": "treeguard.m4-cleanroom-candidate-authoring.v1",
+          "proposed_parent_ref": null,
+          "rationale": "该请求提供事件情况分支上的明确分类属性完整链路。",
+          "requested_aspects": [
+            {
+              "aspect": "核对事发场所类型是否已有语义等价字段",
+              "supporting_node_refs": [
+                "N003"
+              ]
+            }
+          ],
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的事发场所类型。",
+          "review_status": "PENDING_HUMAN_REVIEW",
+          "scenario_family": "CLEAR_EXISTING_REUSE",
+          "scenario_ref": "S001",
+          "schema_version": "scenario-preparation-candidate.v1",
+          "semantic_approval": false,
+          "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+          "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+          "source_projection_hash": "0e6e50bf102221e2b4097a8dae0189c79e3b2a3fe9bde9294970e2aa9a1d887c",
+          "source_signal_refs": [],
+          "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+          "supporting_node_refs": [
+            "N003"
+          ],
+          "target_stage": "RETRIEVAL",
+          "uncertainties": [],
+          "value_type_hint": null
+        },
+        "local_scenario_ref": "S001",
+        "plan_unit_ref": "U009",
+        "source_draft_hash": "1082028881574e83e6c4f14672fa4274c4d38681a7d2aa88c1663539cf4343f0"
+      },
+      {
+        "candidate_ref": "C010",
+        "draft": {
+          "cardinality_hint": null,
+          "draft_hash": "18e32409326e3e1f895bce09fe6e46b5d6821104a85a775febc7b5510f1d84fe",
+          "evidence_gaps": [],
+          "gold_eligible": false,
+          "model_capability": "DETERMINISTIC_CANDIDATE_AUTHORING",
+          "model_name": "treeguard-m4-cleanroom-local",
+          "model_provenance_status": "UNVERIFIED_MODEL_OUTPUT",
+          "model_provider": "CODEX_CLEANROOM_GENERATOR",
+          "node_kind_hint": null,
+          "patch_eligible": false,
+          "plan_unit_ref": "U010",
+          "planning_mode": "BRANCH_LOCAL",
+          "prompt_version": "treeguard.m4-cleanroom-candidate-authoring.v1",
+          "proposed_parent_ref": null,
+          "rationale": "该请求是澄清格不适用时可选的计划内完整链路回填。",
+          "requested_aspects": [
+            {
+              "aspect": "核对特殊任务类型是否已有语义等价字段",
+              "supporting_node_refs": [
+                "N003"
+              ]
+            }
+          ],
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的特殊任务类型。",
+          "review_status": "PENDING_HUMAN_REVIEW",
+          "scenario_family": "CLEAR_EXISTING_REUSE",
+          "scenario_ref": "S001",
+          "schema_version": "scenario-preparation-candidate.v1",
+          "semantic_approval": false,
+          "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+          "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+          "source_projection_hash": "2e896d082c0ba7f31fbc94e3056c59b0b8005cb8fc223c225c6413a6898aa3e9",
+          "source_signal_refs": [],
+          "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+          "supporting_node_refs": [
+            "N003"
+          ],
+          "target_stage": "RETRIEVAL",
+          "uncertainties": [],
+          "value_type_hint": null
+        },
+        "local_scenario_ref": "S001",
+        "plan_unit_ref": "U010",
+        "source_draft_hash": "18e32409326e3e1f895bce09fe6e46b5d6821104a85a775febc7b5510f1d84fe"
+      },
+      {
+        "candidate_ref": "C011",
+        "draft": {
+          "cardinality_hint": null,
+          "draft_hash": "5bae51a841c391402df2f06ae454df66a2b235999325cea4d86ece69f536419d",
+          "evidence_gaps": [],
+          "gold_eligible": false,
+          "model_capability": "DETERMINISTIC_CANDIDATE_AUTHORING",
+          "model_name": "treeguard-m4-cleanroom-local",
+          "model_provenance_status": "UNVERIFIED_MODEL_OUTPUT",
+          "model_provider": "CODEX_CLEANROOM_GENERATOR",
+          "node_kind_hint": null,
+          "patch_eligible": false,
+          "plan_unit_ref": "U011",
+          "planning_mode": "BRANCH_LOCAL",
+          "prompt_version": "treeguard.m4-cleanroom-candidate-authoring.v1",
+          "proposed_parent_ref": null,
+          "rationale": "该请求是第二个计划内完整链路回填余量。",
+          "requested_aspects": [
+            {
+              "aspect": "核对任务名称是否已有语义等价字段",
+              "supporting_node_refs": [
+                "N003"
+              ]
+            }
+          ],
+          "requirement_text": "请复用信息树已有字段，记录这项完全虚构任务的任务名称。",
+          "review_status": "PENDING_HUMAN_REVIEW",
+          "scenario_family": "CLEAR_EXISTING_REUSE",
+          "scenario_ref": "S001",
+          "schema_version": "scenario-preparation-candidate.v1",
+          "semantic_approval": false,
+          "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+          "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+          "source_projection_hash": "1e3ad49d2ff1a277107104e797f3284148b5af36853bf7648e71a73f87e37f20",
+          "source_signal_refs": [],
+          "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+          "supporting_node_refs": [
+            "N003"
+          ],
+          "target_stage": "RETRIEVAL",
+          "uncertainties": [],
+          "value_type_hint": null
+        },
+        "local_scenario_ref": "S001",
+        "plan_unit_ref": "U011",
+        "source_draft_hash": "5bae51a841c391402df2f06ae454df66a2b235999325cea4d86ece69f536419d"
+      }
+    ],
+    "completed_unit_count": 11,
+    "failed_unit_count": 0,
+    "failures": [],
+    "family_outcomes": {
+      "CARDINALITY_CONFLICT": "CANDIDATE_READY",
+      "CLEAR_EXISTING_REUSE": "CANDIDATE_READY",
+      "HOMONYM_CLARIFICATION": "NOT_APPLICABLE",
+      "INSUFFICIENT_EVIDENCE": "CANDIDATE_READY",
+      "KIND_CONFLICT": "CANDIDATE_READY",
+      "NEW_NODE_PLACEMENT": "NOT_APPLICABLE",
+      "UNBOUNDED_COMBINATION": "CANDIDATE_READY",
+      "WRONG_PARENT_OR_CROSS_BRANCH": "CANDIDATE_READY"
+    },
+    "gold_eligible": false,
+    "not_executed": [],
+    "not_executed_unit_count": 0,
+    "omitted_branch_node_ids": [],
+    "omitted_family_refs": [],
+    "omitted_target_count": 0,
+    "patch_eligible": false,
+    "planned_unit_count": 11,
+    "preparation_source_status": "UNVERIFIED_MODEL_GENERATION",
+    "projected_node_coverage": {
+      "coverage_complete": false,
+      "included_node_count": 283,
+      "omitted_node_count": 118,
+      "total_node_count": 401
+    },
+    "review_status": "PENDING_HUMAN_REVIEW",
+    "schema_version": "scenario-preparation-batch.v1",
+    "semantic_approval": false,
+    "source_plan_hash": "b5364de36637719ab75215b20c6b55cefd4ae1a5c11d38aa8bc985a7400dba5b",
+    "source_profile_hash": "e80f2ce2ba8f64c92736433ab18cbbbd35a8ae67e5b9198f8e192ca166dd27d1",
+    "source_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+    "status": "SUCCESS",
+    "target_stage_coverage": {
+      "INTENT": {
+        "candidate_ready_unit_count": 2,
+        "failed_unit_count": 0,
+        "not_executed_unit_count": 0,
+        "planned_unit_count": 2,
+        "validation_status": "NOT_RUN"
+      },
+      "RECOMMENDATION": {
+        "candidate_ready_unit_count": 3,
+        "failed_unit_count": 0,
+        "not_executed_unit_count": 0,
+        "planned_unit_count": 3,
+        "validation_status": "NOT_RUN"
+      },
+      "RETRIEVAL": {
+        "candidate_ready_unit_count": 6,
+        "failed_unit_count": 0,
+        "not_executed_unit_count": 0,
+        "planned_unit_count": 6,
+        "validation_status": "NOT_RUN"
+      }
+    }
+  },
+  "schema_version": "fire-m4-blind-oracle-sidecar.v1",
+  "source_candidate_batch_sha256": "02a95c2af49f82ae3577d6dff6d4974304ea7312a4f327cd0a116f9c26c9391f",
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "source_review_packet_sha256": "4342da50a910b4a41ebe7c93428b9264a631e5c77ecec8b3ae6ac571164f0547",
+  "time_limit_minutes": 150,
+  "tree_fixture_sha256": "d4ffbc91c462d94cc2daa5246859e8ea0f3d02fd20f1761e8f910a1fcb1d5b0b",
+  "tree_snapshot_hash": "50e6ed21679e105651136d05262434ea56c3beefdf03a2c4941136430e003352",
+  "tree_version": "FFV-MEDIUM-V2",
+  "variant_ref": "medium"
+}

@@ -499,6 +499,17 @@ class AIReviewTests(unittest.TestCase):
             invalid_model_error.exception.code,
             "BAILIAN_MODEL_INVALID",
         )
+        for value in (-1, 2, True):
+            with self.subTest(max_transport_retries=value):
+                with self.assertRaises(BailianProviderError) as retry_error:
+                    BailianConfig(
+                        api_key="secret",
+                        max_transport_retries=value,
+                    )
+                self.assertEqual(
+                    retry_error.exception.code,
+                    "BAILIAN_TRANSPORT_RETRIES_INVALID",
+                )
         with self.assertRaises(BailianProviderError):
             BailianConfig(
                 api_key="secret",

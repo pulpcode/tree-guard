@@ -101,6 +101,35 @@
 28. 24 条场景各执行三次；分别统计首发与重试后合同合法率、逐阶段 Oracle 匹配率、
     每轮端到端匹配率、场景级 3/3 稳定数及澄清 precision/recall，不采用最好一次或
     多数票替代波动结论。
+29. M4.6 只在已暴露 M4.5 Silver 上校准评分合同，不修改模型 Prompt，也不恢复
+    holdout 身份。新增评分必须与 v1 overlay/run 逐字节兼容，并把召回明确分为
+    `TARGET_HIT`、`BOUNDED_EVIDENCE`、`EMPTY_RESULT`；Semantic 结果明确分为
+    `PREFERRED_MATCH`、`SAFE_ALTERNATIVE`、`UNSAFE_MISMATCH`。校准政策必须在
+    重评分前独立冻结、绑定原 overlay，固定为 Codex-assisted Silver、非 Gold、
+    非门禁；不得引用具体模型输出、临时候选编号或为单条结果增加例外。
+30. M4.6 的 7 条非首选正向动作采用独立的 Codex 辅助 Silver 复核；复核只允许输出
+    来源绑定的私有逐项 sidecar 与固定 code 聚合，不改写原模型结果、原 Oracle 或
+    预注册主评分。事后发现的可接受答案只能形成未来合同候选，不能回填本轮分数。
+31. M4.7 采用独立 Semantic v4 实验政策，不替换产品默认 v3。v4 要求先按业务对象、
+    路径/场景和确认事实判断语义，再判断结构合同；候选排序不得被解释为语义优先级，
+    存在语义等价候选时优先 `USE_EXISTING_NODE`，`ADD_NODE_FROM_CONTRACT` 不得用来
+    绕过显式 `node_kind/value_type/cardinality` 冲突。
+32. M4.7 保持 v3 请求与存储草案可信回放兼容；新增确定性合同只对 v4 Prompt 版本
+    生效。A/B 固定复用 M4.6 的 44 个 Semantic 可达观测和原 Intent/候选集，执行前
+    生成精确请求计划并绑定 SHA-256；全部结果仍为已揭盲 Silver 校准，非 Gold、非
+    门禁、非 Patch，不能作为泛化结论。
+33. M4.7b 只对 M4.7 的 2 条 `RUN_FAILED` 各做 2 次独立重复，不改 Prompt、Intent、
+    候选集、Oracle 或评分合同；精确请求沿用已冻结正文并增加独立重复计划和调用上限。
+    结果仅判断格式/传输波动，不回填 M4.7 主结果，也不承担政策晋升。
+34. M4.8 在不修改 v4 Prompt 的前提下增加 Semantic Provider 连接恢复合同：
+    `BailianConfig.max_transport_retries` 默认 0、只允许 0 或 1；仅
+    `*_CONNECTION_FAILED` 可消费该预算，重发同一逻辑合同尝试的逐字节相同请求。
+    每次实际外发仍形成独立 trace/调用记账，合同重试预算保持独立，组合上限可预先
+    计算；HTTP、请求编码、响应超限和本地合同错误不得冒充连接重试。
+35. Semantic 模型顶层字段错误保留兼容主码 `SEMANTIC_MODEL_FIELDS_INVALID`，同时
+    产生不含字段名或模型原文的安全细分码：非对象、缺字段、多字段、缺且多字段。
+    细分码只用于 trace/诊断和最终 Provider error 属性，不修改 retry Prompt、Oracle
+    或历史草案回放。
 
 ## Acceptance Criteria
 
@@ -147,6 +176,30 @@
   或 trace；
 - [ ] 聚焦测试、完整后端测试、前端回归/构建、Trellis task validate 和
   `git diff --check` 通过。
+- [x] M4.6 校准政策具有独立 Schema、严格 parser、规范 hash、来源绑定和公开聚合
+  报告；旧 v1 overlay/run/report 不变，且同一冻结观测能同时产生严格基线与校准
+  评分，不把 `NOT_RUN` 推断成模型正确；
+- [x] M4.6 A/B 在任何新增模型调用前完成离线重评分，公开结果只含固定 code、分母和
+  聚合计数；若严格召回短路导致 Semantic 未执行，必须单列为覆盖缺口，不能补记为
+  `SAFE_ALTERNATIVE` 或完整路径通过。
+- [x] M4.6 的 7 条 `UNSAFE_MISMATCH` 已完成 Codex 辅助 Silver 逐项复核；私有结果
+  绑定原完成工件，公开层只记录 0 条可接受替代、1 条证据正确但动作错误、6 条实质
+  错误及 0 条 Oracle 扩宽建议，原主评分保持不变。
+- [x] M4.7 v4 Provider 与 v3 并存，v3 请求政策和历史草案可原样重放；v4 的
+  `ADD_NODE_FROM_CONTRACT` 结构冲突在本地以固定错误码拒绝并最多完整重试一次。
+- [x] M4.7 精确请求计划只包含 44 个来源重放通过的 Semantic 投影，不包含 Oracle、
+  稳定节点 ID、Prompt 之外的模型原文或评分答案；计划、执行结果均为私有 `0600`
+  且不可覆盖。
+- [x] M4.7 聚合 A/B 单列最终合同合法率、首发/重试、v3→v4 分类迁移、原 7 条错误
+  变化和新增不安全回归；候选政策只有在最终合同合法至少 43/44、v3 首选/安全结果
+  零新增 `UNSAFE_MISMATCH`、v4 首选不少于 12 且总不安全少于 7 时记为
+  `PROMISING_FOR_SEALED_VALIDATION`。
+- [x] M4.7b 重复计划只含主结果中的 2 条 `RUN_FAILED`，每条固定重复 2 次、每次最多
+  一次合同重试；私有结果明确 `DIAGNOSTIC_ONLY` 和 `rescores_main_result=false`。
+- [x] M4.8 默认配置保持历史“连接失败立即终止”；显式设置一次连接恢复时，连接失败
+  后重发相同正文并继续本地合同校验，成功/预算耗尽/非连接错误和调用上限均有测试。
+- [x] M4.8 字段错误细分覆盖非对象、缺字段、多字段、缺且多字段；主错误码保持兼容，
+  trace 中的细分码与最终错误文本不包含字段名、模型正文、请求、凭据或内部来源。
 
 ## Definition of Done
 
@@ -185,6 +238,18 @@
   — 冻结下一轮新未见数据的规模、隔离、三次重复性、门槛和停线规则，不含隐藏正文。
 - [`research/m45-repeatability-contract.md`](research/m45-repeatability-contract.md)
   — 记录 v1 只支持 8 条的合同缺口，并定义保持 v1 兼容的 24×3 聚合报告。
+- [`research/m46-calibration-contract.md`](research/m46-calibration-contract.md) — 预注册
+  Retrieval 三类语义、Semantic 首选/安全/不安全分层及防过拟合约束。
+- [`research/m46-calibration-result.md`](research/m46-calibration-result.md) — 记录 M4.6
+  离线 A/B、补充 Semantic 聚合结果、执行环境诊断和能力边界，不含模型正文。
+- [`research/m46-codex-silver-action-review.md`](research/m46-codex-silver-action-review.md)
+  — 记录 7 条非首选正向动作的 Codex 辅助 Silver 聚合复核、来源绑定与限制。
+- [`research/m47-semantic-action-policy.md`](research/m47-semantic-action-policy.md) — 冻结
+  v4 混合动作政策、v3 兼容边界、44 单元 A/B 分母和防过拟合判定。
+- [`research/m47-semantic-action-result.md`](research/m47-semantic-action-result.md) — 记录
+  44 单元百炼 A/B、合同失败归因、Codex 辅助 Silver 复核和冻结门槛结论。
+- [`research/m48-provider-reliability-contract.md`](research/m48-provider-reliability-contract.md)
+  — 冻结连接恢复、字段安全诊断、兼容边界与后续密封验证要求。
 
 ## Technical Approach
 
@@ -248,6 +313,16 @@
     独立 24×3 聚合报告；严格验证三轮场景集合/route 一致、round 内唯一、18+6 组成，
     并按冻结的 98% 合同合法率、100% 实际召回、每轮 18/24、稳定 18/24 和零硬冲突
     错误复用门槛给出 `GO_SHADOW/NO_GO`。
+16. **M4.6 评分合同校准**：保留 M4.5 原始 run 和严格结果，新增来源绑定的 Silver
+    calibration policy 与离线 A/B 报告；先区分目标命中、证据可用和空召回，再把
+    推荐结果分为首选、安全替代和不安全错误。只允许按场景族冻结通用政策，禁止查看
+    单条模型输出后增补答案；校准完成后再决定是否需要补跑被旧召回短路的 Semantic。
+17. **M4.6 Codex Silver 行动复核**：对 7 条 `ADD_NODE_FROM_CONTRACT` 逐项区分
+    证据选择错误与动作选择错误；私有 sidecar 保存来源绑定和逐项固定 code，仓库只
+    保存聚合。复核不得事后改变 Oracle、主评分、Gold 或门禁资格。
+18. **M4.7 Semantic 动作政策 A/B**：保留 v3 默认 Provider 和历史 replay，新增
+    显式 v4 实验 Provider与版本化本地门禁；先冻结 44 个精确请求，再以相同模型、
+    Intent 和候选集运行 v4，按预注册迁移与回归指标形成私有结果和公开聚合。
 
 ## Decision (ADR-lite)
 

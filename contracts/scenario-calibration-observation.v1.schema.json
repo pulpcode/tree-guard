@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-calibration-observation.v1.schema.json",
+  "title": "TreeGuard M4.6 Silver Calibration Observation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observation_ref",
+    "source_run_hash",
+    "source_policy_hash",
+    "strict_full_path_status",
+    "strict_retrieval_status",
+    "calibrated_retrieval_status",
+    "calibrated_retrieval_reason",
+    "semantic_status",
+    "semantic_observation_source",
+    "source_recommendation_draft_hash",
+    "newly_semantic_eligible",
+    "result_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-calibration-observation.v1"},
+    "observation_ref": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:@/-]{0,127}$"
+    },
+    "source_run_hash": {"$ref": "#/$defs/digest"},
+    "source_policy_hash": {"$ref": "#/$defs/digest"},
+    "strict_full_path_status": {"enum": ["MATCH", "MISMATCH", "RUN_FAILED"]},
+    "strict_retrieval_status": {"$ref": "#/$defs/stageStatus"},
+    "calibrated_retrieval_status": {"$ref": "#/$defs/stageStatus"},
+    "calibrated_retrieval_reason": {
+      "enum": [
+        "CALIBRATION_TARGET_HIT",
+        "CALIBRATION_BOUNDED_EVIDENCE_READY",
+        "CALIBRATION_EMPTY_RESULT",
+        "CALIBRATION_RETRIEVAL_MISMATCH",
+        "CALIBRATION_RETRIEVAL_RUN_FAILED",
+        "UPSTREAM_INTENT_MISMATCH",
+        "UPSTREAM_INTENT_RUN_FAILED"
+      ]
+    },
+    "semantic_status": {
+      "enum": [
+        "PREFERRED_MATCH",
+        "SAFE_ALTERNATIVE",
+        "UNSAFE_MISMATCH",
+        "NOT_OBSERVED",
+        "RUN_FAILED"
+      ]
+    },
+    "semantic_observation_source": {
+      "enum": ["NONE", "ORIGINAL_RUN", "SUPPLEMENTAL_CALIBRATION"]
+    },
+    "source_recommendation_draft_hash": {
+      "oneOf": [
+        {"$ref": "#/$defs/digest"},
+        {"type": "null"}
+      ]
+    },
+    "newly_semantic_eligible": {"type": "boolean"},
+    "result_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "stageStatus": {
+      "enum": ["MATCH", "MISMATCH", "NOT_RUN", "RUN_FAILED"]
+    }
+  }
+}

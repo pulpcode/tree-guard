@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-calibration-comparison-report.v1.schema.json",
+  "title": "TreeGuard M4.6 Silver Calibration Comparison Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_version",
+    "quality_tier",
+    "evaluation_role",
+    "gate_eligible",
+    "gold_eligible",
+    "observation_count",
+    "policy_count",
+    "strict_full_path_counts",
+    "strict_retrieval_counts",
+    "calibrated_retrieval_counts",
+    "calibrated_retrieval_match_kinds",
+    "semantic_counts",
+    "semantic_source_counts",
+    "newly_semantic_eligible_count",
+    "full_path_reassessment_status",
+    "report_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-calibration-comparison-report.v1"},
+    "policy_version": {"const": "treeguard.m46-silver-calibration.v1"},
+    "quality_tier": {"const": "SILVER"},
+    "evaluation_role": {"const": "CALIBRATION_ONLY"},
+    "gate_eligible": {"const": false},
+    "gold_eligible": {"const": false},
+    "observation_count": {"type": "integer", "minimum": 1},
+    "policy_count": {"type": "integer", "minimum": 1},
+    "strict_full_path_counts": {"$ref": "#/$defs/fullPathCounts"},
+    "strict_retrieval_counts": {"$ref": "#/$defs/stageCounts"},
+    "calibrated_retrieval_counts": {"$ref": "#/$defs/stageCounts"},
+    "calibrated_retrieval_match_kinds": {"$ref": "#/$defs/matchKindCounts"},
+    "semantic_counts": {"$ref": "#/$defs/semanticCounts"},
+    "semantic_source_counts": {"$ref": "#/$defs/semanticSourceCounts"},
+    "newly_semantic_eligible_count": {"type": "integer", "minimum": 0},
+    "full_path_reassessment_status": {
+      "enum": ["COMPLETE", "INCOMPLETE_SEMANTIC_COVERAGE"]
+    },
+    "report_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "count": {"type": "integer", "minimum": 0},
+    "fullPathCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["MATCH", "MISMATCH", "RUN_FAILED"],
+      "properties": {
+        "MATCH": {"$ref": "#/$defs/count"},
+        "MISMATCH": {"$ref": "#/$defs/count"},
+        "RUN_FAILED": {"$ref": "#/$defs/count"}
+      }
+    },
+    "stageCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["MATCH", "MISMATCH", "NOT_RUN", "RUN_FAILED"],
+      "properties": {
+        "MATCH": {"$ref": "#/$defs/count"},
+        "MISMATCH": {"$ref": "#/$defs/count"},
+        "NOT_RUN": {"$ref": "#/$defs/count"},
+        "RUN_FAILED": {"$ref": "#/$defs/count"}
+      }
+    },
+    "matchKindCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "CALIBRATION_TARGET_HIT",
+        "CALIBRATION_BOUNDED_EVIDENCE_READY",
+        "CALIBRATION_EMPTY_RESULT"
+      ],
+      "properties": {
+        "CALIBRATION_TARGET_HIT": {"$ref": "#/$defs/count"},
+        "CALIBRATION_BOUNDED_EVIDENCE_READY": {"$ref": "#/$defs/count"},
+        "CALIBRATION_EMPTY_RESULT": {"$ref": "#/$defs/count"}
+      }
+    },
+    "semanticCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "PREFERRED_MATCH",
+        "SAFE_ALTERNATIVE",
+        "UNSAFE_MISMATCH",
+        "NOT_OBSERVED",
+        "RUN_FAILED"
+      ],
+      "properties": {
+        "PREFERRED_MATCH": {"$ref": "#/$defs/count"},
+        "SAFE_ALTERNATIVE": {"$ref": "#/$defs/count"},
+        "UNSAFE_MISMATCH": {"$ref": "#/$defs/count"},
+        "NOT_OBSERVED": {"$ref": "#/$defs/count"},
+        "RUN_FAILED": {"$ref": "#/$defs/count"}
+      }
+    },
+    "semanticSourceCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["NONE", "ORIGINAL_RUN", "SUPPLEMENTAL_CALIBRATION"],
+      "properties": {
+        "NONE": {"$ref": "#/$defs/count"},
+        "ORIGINAL_RUN": {"$ref": "#/$defs/count"},
+        "SUPPLEMENTAL_CALIBRATION": {"$ref": "#/$defs/count"}
+      }
+    }
+  }
+}

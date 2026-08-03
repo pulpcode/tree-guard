@@ -11,6 +11,7 @@ from treeguard.ai_review import (
     BailianConfig,
     BailianProviderError,
     BailianSemanticRecommendationProvider,
+    BailianSemanticRecommendationV4Provider,
 )
 from treeguard.change_intent import (
     ChangeIntentDraft,
@@ -152,7 +153,14 @@ def _model_payload(
     }
 
 
-def _draft(payload, tree, confirmation, candidate_set):
+def _draft(
+    payload,
+    tree,
+    confirmation,
+    candidate_set,
+    *,
+    prompt_version="treeguard.semantic-recommendation.zh.v1",
+):
     return SemanticRecommendationDraft.from_model_dict(
         payload,
         confirmation,
@@ -161,7 +169,7 @@ def _draft(payload, tree, confirmation, candidate_set):
         model_provider="UNVERIFIED_MODEL_OUTPUT_FILE",
         model_capability="JSON_OBJECT",
         model_name="fixture-model",
-        prompt_version="treeguard.semantic-recommendation.zh.v1",
+        prompt_version=prompt_version,
     )
 
 
@@ -204,6 +212,120 @@ class SemanticRecommendationTests(unittest.TestCase):
         self.assertEqual(
             captured.exception.code,
             "SEMANTIC_SELECTED_CANDIDATE_CONTRACT_CONFLICT",
+        )
+
+    def test_v4_add_contract_requires_compatible_structure_but_v3_replays(
+        self,
+    ) -> None:
+        tree, confirmation, candidate_set = _sources(cardinality="MULTIPLE")
+        projection = build_semantic_candidate_projection(
+            confirmation,
+            candidate_set,
+            tree,
+        )
+        payload = _model_payload(
+            projection,
+            action="ADD_NODE_FROM_CONTRACT",
+            selected_relation="REUSES_CONTRACT",
+        )
+
+        v3 = _draft(
+            payload,
+            tree,
+            confirmation,
+            candidate_set,
+            prompt_version="treeguard.semantic-recommendation.zh.v3",
+        )
+        self.assertEqual(
+            SemanticRecommendationDraft.from_dict(
+                v3.to_dict(),
+                confirmation,
+                candidate_set,
+                tree,
+            ),
+            v3,
+        )
+
+        with self.assertRaises(SemanticRecommendationError) as captured:
+            _draft(
+                payload,
+                tree,
+                confirmation,
+                candidate_set,
+                prompt_version="treeguard.semantic-recommendation.zh.v4",
+            )
+        self.assertEqual(
+            captured.exception.code,
+            "SEMANTIC_SELECTED_CANDIDATE_CONTRACT_CONFLICT",
+        )
+
+    def test_v4_provider_freezes_action_order_and_retries_conflicting_add(
+        self,
+    ) -> None:
+        tree, confirmation, candidate_set = _sources(cardinality="MULTIPLE")
+        projection = build_semantic_candidate_projection(
+            confirmation,
+            candidate_set,
+            tree,
+        )
+        conflicting = _model_payload(
+            projection,
+            action="ADD_NODE_FROM_CONTRACT",
+            selected_relation="REUSES_CONTRACT",
+        )
+        safe = _model_payload(
+            projection,
+            action="ABSTAIN",
+            selected_relation="NOT_EQUIVALENT",
+        )
+
+        class RecordingProvider(BailianSemanticRecommendationV4Provider):
+            def __init__(self):
+                super().__init__(
+                    BailianConfig(api_key="fixture-key", max_attempts=2)
+                )
+                self.bodies = []
+
+            def _post_json(self, body):
+                self.bodies.append(body)
+                payload = conflicting if len(self.bodies) == 1 else safe
+                return {
+                    "choices": [
+                        {
+                            "finish_reason": "stop",
+                            "message": {"content": json.dumps(payload)},
+                        }
+                    ]
+                }
+
+        provider = RecordingProvider()
+        draft = provider.recommend(confirmation, candidate_set, tree)
+        first = json.loads(provider.bodies[0]["messages"][1]["content"])
+        second = json.loads(provider.bodies[1]["messages"][1]["content"])
+
+        self.assertEqual(draft.recommended_action, "ABSTAIN")
+        self.assertEqual(
+            draft.prompt_version,
+            "treeguard.semantic-recommendation.zh.v4",
+        )
+        self.assertFalse(
+            first["deterministic_policy"][
+                "candidate_order_is_semantic_preference"
+            ]
+        )
+        self.assertEqual(
+            first["deterministic_policy"][
+                "add_node_from_contract_requires_compatible_fields"
+            ],
+            ["node_kind", "value_type", "cardinality"],
+        )
+        self.assertEqual(
+            second["previous_validation_error"],
+            "SEMANTIC_SELECTED_CANDIDATE_CONTRACT_CONFLICT",
+        )
+        self.assertIn(
+            "候选顺序或分数不代表语义优先级",
+            provider.bodies[0]["messages"][0]["content"],
         )
 
         tree, confirmation, candidate_set = _sources(value_type="integer")
@@ -402,6 +524,10 @@ class SemanticRecommendationTests(unittest.TestCase):
         self.assertEqual(
             context.exception.code,
             "SEMANTIC_MODEL_FIELDS_INVALID",
+        )
+        self.assertEqual(
+            context.exception.detail_code,
+            "SEMANTIC_MODEL_FIELDS_EXTRA",
         )
 
         wrong_relation = copy.deepcopy(valid)
@@ -740,6 +866,170 @@ class SemanticRecommendationTests(unittest.TestCase):
             context.exception.code,
             "SEMANTIC_MODEL_FIELDS_INVALID",
         )
+        self.assertEqual(
+            context.exception.detail_code,
+            "SEMANTIC_MODEL_FIELDS_MISSING",
+        )
+        self.assertNotIn("schema_version", str(context.exception))
+        self.assertNotIn("candidate_assessments", str(context.exception))
+        self.assertNotIn(
+            "semantic-recommendation-model-output.v1",
+            str(context.exception),
+        )
+
+    def test_model_field_diagnostics_preserve_the_compatible_main_code(self) -> None:
+        tree, confirmation, candidate_set = _sources()
+        projection = build_semantic_candidate_projection(
+            confirmation,
+            candidate_set,
+            tree,
+        )
+        valid = _model_payload(projection)
+        cases = (
+            ([], "SEMANTIC_MODEL_FIELDS_NOT_OBJECT"),
+            (
+                {key: value for key, value in valid.items() if key != "rationale"},
+                "SEMANTIC_MODEL_FIELDS_MISSING",
+            ),
+            (
+                {**valid, "unexpected": None},
+                "SEMANTIC_MODEL_FIELDS_EXTRA",
+            ),
+            (
+                {
+                    **{
+                        key: value
+                        for key, value in valid.items()
+                        if key != "rationale"
+                    },
+                    "unexpected": None,
+                },
+                "SEMANTIC_MODEL_FIELDS_MISSING_AND_EXTRA",
+            ),
+        )
+        for payload, detail_code in cases:
+            with self.subTest(detail_code=detail_code):
+                with self.assertRaises(SemanticRecommendationError) as context:
+                    _draft(payload, tree, confirmation, candidate_set)
+                self.assertEqual(
+                    context.exception.code,
+                    "SEMANTIC_MODEL_FIELDS_INVALID",
+                )
+                self.assertEqual(context.exception.detail_code, detail_code)
+                self.assertNotIn("rationale", detail_code.lower())
+                self.assertNotIn("unexpected", detail_code.lower())
+
+    def test_provider_can_retry_one_connection_without_consuming_contract_retry(self) -> None:
+        tree, confirmation, candidate_set = _sources()
+        projection = build_semantic_candidate_projection(
+            confirmation,
+            candidate_set,
+            tree,
+        )
+        valid = _model_payload(projection)
+        traces = []
+
+        class RecoveringProvider(BailianSemanticRecommendationProvider):
+            def __init__(self):
+                super().__init__(
+                    BailianConfig(
+                        api_key="fixture-key",
+                        max_attempts=2,
+                        max_transport_retries=1,
+                    ),
+                    trace_sink=traces.append,
+                )
+                self.bodies = []
+
+            def _post_json(self, body):
+                self.bodies.append(copy.deepcopy(body))
+                if len(self.bodies) == 1:
+                    return {
+                        "choices": [
+                            {
+                                "finish_reason": "stop",
+                                "message": {
+                                    "content": json.dumps(
+                                        {
+                                            "schema_version": (
+                                                "semantic-recommendation-"
+                                                "model-output.v1"
+                                            )
+                                        }
+                                    )
+                                },
+                            }
+                        ]
+                    }
+                if len(self.bodies) == 2:
+                    raise BailianProviderError(
+                        "BAILIAN_CONNECTION_FAILED",
+                        "fictional connection failure",
+                    )
+                return {
+                    "choices": [
+                        {
+                            "finish_reason": "stop",
+                            "message": {"content": json.dumps(valid)},
+                        }
+                    ]
+                }
+
+        provider = RecoveringProvider()
+        draft = provider.recommend(confirmation, candidate_set, tree)
+
+        self.assertEqual(draft.recommended_action, "USE_EXISTING_NODE")
+        self.assertEqual(len(provider.bodies), 3)
+        self.assertNotEqual(provider.bodies[0], provider.bodies[1])
+        self.assertEqual(provider.bodies[1], provider.bodies[2])
+        retry_payload = json.loads(provider.bodies[1]["messages"][1]["content"])
+        self.assertEqual(
+            retry_payload["previous_validation_error"],
+            "SEMANTIC_MODEL_FIELDS_INVALID",
+        )
+        self.assertEqual(
+            [trace.validation_error_code for trace in traces],
+            [
+                "SEMANTIC_MODEL_FIELDS_MISSING",
+                "BAILIAN_CONNECTION_FAILED",
+                None,
+            ],
+        )
+        self.assertEqual([trace.attempt for trace in traces], [1, 2, 3])
+
+    def test_provider_transport_retry_is_opt_in_bounded_and_connection_only(self) -> None:
+        tree, confirmation, candidate_set = _sources()
+
+        class FailingProvider(BailianSemanticRecommendationProvider):
+            def __init__(self, *, retries, code):
+                super().__init__(
+                    BailianConfig(
+                        api_key="fixture-key",
+                        max_attempts=2,
+                        max_transport_retries=retries,
+                    )
+                )
+                self.code = code
+                self.bodies = []
+
+            def _post_json(self, body):
+                self.bodies.append(copy.deepcopy(body))
+                raise BailianProviderError(self.code, "fictional provider failure")
+
+        for retries, code, expected_calls in (
+            (0, "BAILIAN_CONNECTION_FAILED", 1),
+            (1, "BAILIAN_CONNECTION_FAILED", 2),
+            (1, "BAILIAN_HTTP_503", 1),
+            (1, "BAILIAN_RESPONSE_NOT_JSON", 1),
+        ):
+            with self.subTest(retries=retries, code=code):
+                provider = FailingProvider(retries=retries, code=code)
+                with self.assertRaises(BailianProviderError) as context:
+                    provider.recommend(confirmation, candidate_set, tree)
+                self.assertEqual(context.exception.code, code)
+                self.assertEqual(len(provider.bodies), expected_calls)
+                if expected_calls == 2:
+                    self.assertEqual(provider.bodies[0], provider.bodies[1])
 
     def test_human_confirm_revise_reject_are_operational_records_only(self) -> None:
         tree, confirmation, candidate_set = _sources()

@@ -119,7 +119,8 @@ Provider transport 必须显式启用并 fail-closed：
 - 禁止 URL credential、自定义 port、query、fragment、redirect 和继承 proxy；
 - response 大小有界，并严格解析 JSON；
 - authorization token 只在 header；
-- 最多两次顺序尝试；
+- 模型合同最多两次逻辑尝试；默认每次只外发一次。Bailian Semantic 可显式增加全局
+  一次连接恢复，因此实际 wire 上限为三次，且每次都必须独立记账；
 - 读取/发送真实、外部导入、来源不明或非 clean-room 文件前取得明确数据批准；本项目
   自编且可信分类为 `CLEANROOM_SYNTHETIC / fictional=true /
   derived_from_real=false` 的测试数据已有常设 LLM 授权，无需逐次批准；
@@ -133,6 +134,93 @@ clean-room 常设授权内的数据。内网 Qwen
 
 模型投影不等于外传权限。去掉内部 ID 和 `VALUE` 后，真实字段名、路径和结构
 仍可能敏感；必须遵守开发数据边界。
+
+## Scenario：Semantic Provider 有界连接恢复
+
+### 1. Scope / Trigger
+
+修改 Bailian Semantic 的连接失败处理、尝试预算、trace 或实验调用上限时适用。
+连接恢复属于 Provider 副作用边界，不能塞进 `semantic_recommendation.py` 的确定性
+合同，也不能作为隐藏的 HTTP 内循环绕过调用记账。
+
+### 2. Signatures
+
+```python
+BailianConfig(
+    api_key=token,
+    max_attempts=2,
+    max_transport_retries=0,  # 只允许 0 或 1
+)
+```
+
+`max_attempts` 是模型输出合同的逻辑尝试数；`max_transport_retries` 是整个一次
+Semantic 调用可消费的连接恢复数。默认 0 保持历史行为。
+
+### 3. Contracts
+
+- 只有 `BailianProviderError.code` 以后缀 `_CONNECTION_FAILED` 结束时可恢复；
+- 连接恢复不推进合同尝试，必须重发同一 request body；
+- 每次 `_post_json()` 都是一个 wire 尝试，产生连续独立 trace；
+- 全局最多消费一次连接恢复，因此 `2 + 1 = 3` 是当前最大实际调用数；
+- HTTP 状态、请求编码、响应过大/非 JSON 和本地合同错误不消费连接恢复；
+- 顶层字段主码保持 `SEMANTIC_MODEL_FIELDS_INVALID`。trace 可使用不含字段名的
+  `NOT_OBJECT / MISSING / EXTRA / MISSING_AND_EXTRA` 细分码，retry Prompt 仍使用
+  主码；最终 Provider error 可通过 `detail_code` 暴露同一安全类别。
+
+### 4. Validation & Error Matrix
+
+| 条件 | 结果 |
+|---|---|
+| `max_transport_retries` 不是整数 0/1，含 `bool` | `BAILIAN_TRANSPORT_RETRIES_INVALID` |
+| 默认配置遇到连接失败 | 一次 wire 后原码失败 |
+| 显式预算 1，首次连接失败 | 同正文再发一次，合同尝试不增加 |
+| 第二次连接也失败 | 两次 wire 后原连接码失败 |
+| HTTP 503、响应非 JSON或本地合同失败 | 不使用连接恢复预算 |
+| 模型顶层不是对象/缺字段/多字段/缺且多 | 主码不变，产生对应安全细分码 |
+
+### 5. Good/Base/Bad Cases
+
+- Good：第一次合同输出缺字段，第二逻辑请求遇到连接失败，第三次以完全相同的第二
+  请求恢复并通过；trace attempt 为 1/2/3。
+- Base：默认 `max_transport_retries=0`，保持历史最多两次合同请求和连接失败立即终止。
+- Bad：在 `_post_json_with_prefix()` 内静默循环，导致实验报告只记一条 trace，却实际
+  发送多次；或把 HTTP 503 当连接失败即时重试。
+
+### 6. Tests Required
+
+- 配置拒绝负数、2 和 `bool`；
+- 默认立即失败、显式恢复成功、预算耗尽和非连接错误不重试；
+- 恢复前后 request body 深度相等，trace attempt 与实际 wire 次数一致；
+- 合同错误后连接恢复不丢失原 retry code；
+- 四类字段细分保留主码，细分码与最终错误文本不含字段名、模型正文或来源；
+- 历史冻结请求计划在默认配置下仍可逐字节重建。
+
+### 7. Wrong vs Correct
+
+Wrong：
+
+```python
+def _post_json(body):
+    for _ in range(3):  # trace 和审批层看不到真实外发次数
+        try:
+            return send(body)
+        except OSError:
+            pass
+```
+
+Correct：
+
+```python
+config = BailianConfig(
+    api_key=token,
+    max_attempts=2,
+    max_transport_retries=1,
+)
+draft = BailianSemanticRecommendationV4Provider(config).recommend(
+    confirmation, candidate_set, tree
+)
+# Provider 的每次 _post_json 都被 harness/trace 独立记账。
+```
 
 ## Scenario：协议级 Clean-room 仿真
 

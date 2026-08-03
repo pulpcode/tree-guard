@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-calibration-policy.v1.schema.json",
+  "title": "TreeGuard M4.6 Silver Calibration Policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_version",
+    "quality_tier",
+    "assessment_authority",
+    "evaluation_role",
+    "gate_eligible",
+    "gold_eligible",
+    "source_overlay_hash",
+    "source_oracle_digest",
+    "retrieval_mode",
+    "semantic_safe_action_policy",
+    "policy_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-calibration-policy.v1"},
+    "policy_version": {"const": "treeguard.m46-silver-calibration.v1"},
+    "quality_tier": {"const": "SILVER"},
+    "assessment_authority": {"const": "CODEX_ASSISTED"},
+    "evaluation_role": {"const": "CALIBRATION_ONLY"},
+    "gate_eligible": {"const": false},
+    "gold_eligible": {"const": false},
+    "source_overlay_hash": {"$ref": "#/$defs/digest"},
+    "source_oracle_digest": {"$ref": "#/$defs/digest"},
+    "retrieval_mode": {
+      "enum": ["TARGET_HIT", "BOUNDED_EVIDENCE", "EMPTY_RESULT"]
+    },
+    "semantic_safe_action_policy": {
+      "const": "treeguard.non-targeting-safe-alternative.v1"
+    },
+    "policy_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

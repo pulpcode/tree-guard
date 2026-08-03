@@ -2454,6 +2454,19 @@ def _retrieval_matches(
     candidate_set: CandidateSet,
     oracle: RetrievalOracle,
 ) -> bool:
+    return retrieval_matches_oracle(candidate_set, oracle)
+
+
+def retrieval_matches_oracle(
+    candidate_set: CandidateSet,
+    oracle: RetrievalOracle,
+) -> bool:
+    """Evaluate the strict v1 Hit@K retrieval contract."""
+
+    if not isinstance(candidate_set, CandidateSet) or not isinstance(
+        oracle, RetrievalOracle
+    ):
+        raise TypeError("retrieval evaluation requires trusted contract objects")
     if candidate_set.status not in oracle.allowed_statuses:
         return False
     if not oracle.acceptable_node_ids:
@@ -2470,6 +2483,19 @@ def _recommendation_matches(
     candidate_set: CandidateSet,
     oracle: RecommendationOracle,
 ) -> bool:
+    return recommendation_matches_oracle(draft, candidate_set, oracle)
+
+
+def recommendation_outcome_from_draft(
+    draft: SemanticRecommendationDraft,
+    candidate_set: CandidateSet,
+) -> RecommendationOracleOutcome:
+    """Resolve a run-scoped recommendation back to one stable joint outcome."""
+
+    if not isinstance(draft, SemanticRecommendationDraft) or not isinstance(
+        candidate_set, CandidateSet
+    ):
+        raise TypeError("recommendation evaluation requires trusted contract objects")
     candidate_by_ref = {
         f"C{candidate.rank:03d}": candidate
         for candidate in candidate_set.candidates[:8]
@@ -2485,11 +2511,23 @@ def _recommendation_matches(
         else None
     )
     relation = relation_by_ref.get(selected_ref) if selected_ref is not None else None
-    actual = RecommendationOracleOutcome(
+    return RecommendationOracleOutcome(
         action=draft.recommended_action,
         target_node_id=target_node_id,
         relation=relation,
     )
+
+
+def recommendation_matches_oracle(
+    draft: SemanticRecommendationDraft,
+    candidate_set: CandidateSet,
+    oracle: RecommendationOracle,
+) -> bool:
+    """Evaluate the strict v1 joint recommendation contract."""
+
+    if not isinstance(oracle, RecommendationOracle):
+        raise TypeError("recommendation evaluation requires a trusted Oracle")
+    actual = recommendation_outcome_from_draft(draft, candidate_set)
     return actual in oracle.acceptable_outcomes
 
 
@@ -2766,6 +2804,9 @@ __all__ = [
     "build_capability_gate_report",
     "freeze_capability_overlay",
     "freeze_silver_capability_authorization",
+    "recommendation_matches_oracle",
+    "recommendation_outcome_from_draft",
+    "retrieval_matches_oracle",
     "run_reviewed_capability_scenario",
     "run_silver_capability_scenario",
     "verify_capability_oracle_against_reviewed_request",

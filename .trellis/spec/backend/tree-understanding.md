@@ -123,6 +123,30 @@ build_capability_gate_report(
     preparation, runs, *,
     clarification_coverage_status, hard_failure_codes,
 ) -> CapabilityGateReport
+
+ScenarioCalibrationPolicy.create(
+    *, source_overlay_hash, oracle, retrieval_mode,
+) -> ScenarioCalibrationPolicy
+
+score_calibration_observation(
+    run, oracle, policy, *, observation_ref,
+    candidate_set, recommendation_draft,
+    semantic_observation_source=None,
+    semantic_provider_failed=False,
+) -> CalibrationObservationResult
+
+build_calibration_comparison_report(
+    observations,
+) -> CalibrationComparisonReport
+
+python scripts/rescore_m46_silver_calibration.py \
+  --dataset-dir <cleanroom_dataset_dir> \
+  --result-file <private_m45_result> \
+  --expected-result-sha256 <sha256> \
+  --private-output <new_private_file> \
+  [--complete-semantic-live \
+   --preflight-file <private_offline_rescore> \
+   --expected-preflight-sha256 <sha256>]
 ```
 
 `from_dict(payload, projection, profile, tree)` 必须从可信来源重建整个草案，不能只
@@ -344,6 +368,30 @@ build_capability_gate_report(
 - 报告 parser 只能验证聚合自洽和固定政策，不能从聚合值反推出逐场景交集或权威来源；
   完整执行 harness 必须先可信重放各单条 run，再构建报告。匹配报告不是签名或 Gold。
 
+### M4.6 已暴露 Silver 评分校准
+
+- M4.6 只消费已经揭盲的 Silver run，不修改 M4 v1 overlay/run/report 或 M4.5 原始
+  聚合；policy 固定 `CODEX_ASSISTED`、`SILVER`、`CALIBRATION_ONLY`、非 Gold、非
+  门禁，并同时绑定 source overlay hash 与完整 Oracle digest；
+- Retrieval mode 只取：
+  - `TARGET_HIT`：继续执行 v1 稳定 node ID Hit@K；
+  - `BOUNDED_EVIDENCE`：只证明确定性召回产生了非空、有界候选，不把任意 Top-1
+    候选冻结成唯一目标；
+  - `EMPTY_RESULT`：只接受 `NO_CANDIDATES`/`INSUFFICIENT_SIGNAL` 和空候选；
+- Semantic 首先按原 Oracle 的完整 action-target-relation 联合结果判断
+  `PREFERRED_MATCH`；非首选且无目标的 `NEED_CLARIFICATION`、`NEED_EVIDENCE`、
+  `ABSTAIN` 统一记为 `SAFE_ALTERNATIVE`；其余非首选正向动作记为
+  `UNSAFE_MISMATCH`。这里的 unsafe 表示校准评分中的非首选正向建议，不代表已经
+  应用 Patch；
+- 原 run 已有 Semantic 时来源为 `ORIGINAL_RUN`。只有严格 Retrieval 为 MISMATCH、
+  原推荐为 NOT_RUN、校准 Retrieval 为 MATCH 时，才允许
+  `SUPPLEMENTAL_CALIBRATION`；补充草案单独绑定 hash，不能伪装成原 run 内容；
+- 离线重评分必须先于任何补充调用。新增可达但未执行的 Semantic 只能记
+  `NOT_OBSERVED` 和覆盖缺口；补充调用必须绑定离线 preflight 的精确 SHA-256，继续
+  使用同一模型、Prompt 和已保存 Intent，不允许重新抽样 Intent；
+- comparison report 只保存固定分类和聚合计数，不含 observation ref、source hash、
+  request、Oracle、节点、Prompt、模型文本或 trace，也不产生 go/no-go 决策。
+
 ### 内网 Qwen
 
 只允许 `InternalQwenConfig`。请求沿用现有隔离 transport：禁 proxy/redirect、
@@ -414,6 +462,11 @@ clean-room 测试数据已有常设 LLM 授权；真实树、真实节点名称�
 | M4 run 存储重放来源不一致 | `CAPABILITY_RUN_SOURCE_MISMATCH` 或 `CAPABILITY_RUN_REVIEWED_SOURCE_MISMATCH` |
 | M4 公开 hard failure code 不在四项允许列表 | `CAPABILITY_HARD_FAILURE_CODES_INVALID` |
 | M4 任一硬失败、候选门或执行门失败 | `NO_GO` |
+| M4.6 policy 改写 Silver/Gold/gate 固定边界或 hash | 本地 `ValueError`，零模型调用 |
+| M4.6 policy 与 overlay/Oracle 或 retrieval mode 语义不一致 | 本地 `ValueError`，零模型调用 |
+| M4.6 补充 Semantic 没有精确离线 preflight 或 digest 不匹配 | `M46_LIVE_PREFLIGHT_*`，零模型调用 |
+| M4.6 原 run、Intent、候选集或补充草案来源不一致 | `M46_*_SOURCE_MISMATCH`，停止本轮 |
+| M4.6 使用没有 CA trust store 的非项目 Python | `BAILIAN_CONNECTION_FAILED`；作为运行环境失败单列，不判模型语义 |
 
 ## 5. Good / Base / Bad Cases
 
@@ -434,6 +487,13 @@ clean-room 测试数据已有常设 LLM 授权；真实树、真实节点名称�
   policy 失败，保留为诊断而不调用模型。
 - M4 request-policy Bad：仅凭 requirement text 非空就要求 role/scenario
   `NON_EMPTY`，或仅凭 `PROCEED` 就要求 assumptions/evidence gaps `EMPTY`。
+- M4.6 Good：hard negative 的确定性候选用于有界语义对照，Retrieval 记
+  `BOUNDED_EVIDENCE`；模型 `ABSTAIN` 记首选，模型 `NEED_CLARIFICATION` 记安全但
+  非首选，两者不混为同一正确率。
+- M4.6 Base：旧严格 Retrieval 短路了推荐；离线 A/B 只记新增可达和
+  `INCOMPLETE_SEMANTIC_COVERAGE`，之后用相同 Intent/候选补充 Semantic 并单列来源。
+- M4.6 Bad：看到模型选择另一个节点后把该节点追加到 TARGET_HIT Oracle，或把未调用
+  Semantic 的单元直接补判安全/正确。
 
 ## 6. Tests Required
 
@@ -487,6 +547,17 @@ clean-room 测试数据已有常设 LLM 授权；真实树、真实节点名称�
   runs 重排不改变公开报告；
 - 公开报告使用 request、Oracle、node ID、source hash、Prompt、模型文本和 trace
   canary 做允许列表泄漏测试；M3 v1 序列化与完整原有 suite 保持不变。
+- M4.6 policy/observation/report 的 Schema required 与 serializer 精确一致；固定
+  Silver 边界、mode/Oracle 组合、source hash、补充来源、重复 observation、count
+  reconciliation 和 report hash 均有篡改负例；
+- `TARGET_HIT` 与 v1 结果一致，`BOUNDED_EVIDENCE` 不要求任意目标 ID，
+  `EMPTY_RESULT` 拒绝 ready candidates；Semantic 首选、安全退让和非首选正向动作
+  分别有断言；
+- 原 Retrieval 短路时先产生 `NOT_OBSERVED`，补充草案必须用
+  `SUPPLEMENTAL_CALIBRATION` 单独绑定，不能改变原 run hash；公开 A/B report 的泄漏
+  canary 覆盖 source run/policy hash、request、node ID、Prompt 和 trace；
+- live rescore 缺失/篡改离线 preflight 时在 Provider 配置和网络前失败；unit suite
+  只 mock transport，真实调用只走显式实验入口。
 
 ## 7. Wrong vs Correct
 
@@ -596,3 +667,52 @@ assert report.gold_eligible is False
 
 执行前还必须调用 `verify_capability_overlay_for_execution()`；历史 overlay 的
 `from_dict()` 成功只表示形状、哈希和来源可重放，不授予门控执行资格。
+
+M4.6 Wrong：
+
+```python
+# 任意冻结 Top-1 不是 hard-negative 的唯一 Gold，且缺失 Semantic 不能补判成功。
+oracle.acceptable_node_ids += (observed_candidate.node_id,)
+semantic_status = "SAFE_ALTERNATIVE"
+```
+
+M4.6 Correct：
+
+```python
+policy = ScenarioCalibrationPolicy.create(
+    source_overlay_hash=run.source_overlay_hash,
+    oracle=oracle,
+    retrieval_mode="BOUNDED_EVIDENCE",
+)
+observation = score_calibration_observation(
+    run,
+    oracle,
+    policy,
+    observation_ref=observation_ref,
+    candidate_set=candidate_set,
+    recommendation_draft=None,
+)
+assert observation.semantic_status == "NOT_OBSERVED"
+assert observation.newly_semantic_eligible is True
+```
+
+M4.7 Wrong：
+
+```python
+# 用候选排名代替业务对象判断，或在结构冲突时借 ADD 绕过合同。
+selected = candidate_set.candidates[0]
+action = "ADD_NODE_FROM_CONTRACT"
+```
+
+M4.7 Correct：
+
+```python
+provider = BailianSemanticRecommendationV4Provider(config)
+draft = provider.recommend(confirmation, candidate_set, tree)
+# v4 先比较业务对象、路径和确认事实；排名不表示语义优先级。
+# USE 与 ADD 都不能绕过显式 node_kind/value_type/cardinality 冲突。
+```
+
+v4 仅是校准候选政策；默认产品 Provider 和历史草案仍使用 v3。M4.7 请求必须先冻结
+精确 wire hash，隐藏 Oracle 只用于本地评分。已揭盲 Silver 上改善不能替代新密封
+数据验证，也不能自动晋升 Gold、门禁或 Patch 资格。

@@ -61,6 +61,9 @@ _POSITIVE_ACTION_RELATIONS = {
     "ADD_NODE_FROM_CONTRACT": "REUSES_CONTRACT",
     "ADD_CONTEXT_FIELD": "CONTEXTUALLY_RELATED",
 }
+_CONTRACT_COMPATIBLE_ADD_PROMPT_VERSIONS = frozenset(
+    {"treeguard.semantic-recommendation.zh.v4"}
+)
 _MODEL_OUTPUT_KEYS = {
     "schema_version",
     "candidate_assessments",
@@ -134,9 +137,28 @@ _MAX_PATH_ITEMS = 128
 class SemanticRecommendationError(ValueError):
     """A semantic recommendation failed its deterministic local contract."""
 
-    def __init__(self, code: str, message: str) -> None:
+    def __init__(
+        self,
+        code: str,
+        message: str,
+        *,
+        detail_code: str | None = None,
+    ) -> None:
         self.code = code
+        self.detail_code = detail_code
         super().__init__(message)
+
+
+def _model_field_detail_code(payload: Any) -> str:
+    if not isinstance(payload, dict):
+        return "SEMANTIC_MODEL_FIELDS_NOT_OBJECT"
+    missing = bool(_MODEL_OUTPUT_KEYS - set(payload))
+    extra = bool(set(payload) - _MODEL_OUTPUT_KEYS)
+    if missing and extra:
+        return "SEMANTIC_MODEL_FIELDS_MISSING_AND_EXTRA"
+    if missing:
+        return "SEMANTIC_MODEL_FIELDS_MISSING"
+    return "SEMANTIC_MODEL_FIELDS_EXTRA"
 
 
 @dataclass(frozen=True, slots=True)
@@ -417,6 +439,7 @@ class SemanticRecommendationDraft:
             raise SemanticRecommendationError(
                 "SEMANTIC_MODEL_FIELDS_INVALID",
                 "semantic model output must use the exact contract fields",
+                detail_code=_model_field_detail_code(payload),
             )
         if payload["schema_version"] != MODEL_OUTPUT_SCHEMA_VERSION:
             raise SemanticRecommendationError(
@@ -449,6 +472,10 @@ class SemanticRecommendationDraft:
             payload["clarification_question"],
             "clarification_question",
         )
+        parsed_prompt_version = _parse_required_text(
+            prompt_version,
+            "prompt_version",
+        )
         _validate_source_policy(
             action,
             selected_candidate_ref,
@@ -456,6 +483,7 @@ class SemanticRecommendationDraft:
             evidence_gaps,
             clarification_question,
             projection,
+            parsed_prompt_version,
         )
         _reject_internal_ids(
             (
@@ -481,10 +509,7 @@ class SemanticRecommendationDraft:
                 "model_capability",
             ),
             "model_name": _parse_required_text(model_name, "model_name"),
-            "prompt_version": _parse_required_text(
-                prompt_version,
-                "prompt_version",
-            ),
+            "prompt_version": parsed_prompt_version,
         }
         draft_payload = {
             "schema_version": DRAFT_SCHEMA_VERSION,
@@ -1208,6 +1233,7 @@ def _validate_source_policy(
     evidence_gaps: tuple[str, ...],
     clarification_question: str | None,
     projection: SemanticCandidateProjection,
+    prompt_version: str,
 ) -> None:
     try:
         _validate_action_shape(
@@ -1241,7 +1267,14 @@ def _validate_source_policy(
             "all-evidence-gap candidates cannot support a positive action",
         )
     if (
-        action == "USE_EXISTING_NODE"
+        (
+            action == "USE_EXISTING_NODE"
+            or (
+                action == "ADD_NODE_FROM_CONTRACT"
+                and prompt_version
+                in _CONTRACT_COMPATIBLE_ADD_PROMPT_VERSIONS
+            )
+        )
         and selected_candidate_ref is not None
         and _candidate_contract_conflicts(
             projection,

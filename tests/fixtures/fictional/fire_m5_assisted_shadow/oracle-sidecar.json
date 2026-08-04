@@ -1,0 +1,3714 @@
+{
+  "dataset_ref": "fictional-fire-m5-assisted-shadow",
+  "derived_from_real": false,
+  "fictional": true,
+  "gate_eligible": false,
+  "gold_eligible": false,
+  "items": [
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "entity_code"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0029"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0029"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0029"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "警戒组织依赖条件",
+        "value_type": "entity_code"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "TARGET_UNCERTAINTY_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S001"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "MULTIPLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "space_code"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0205"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0205"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0205"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "MULTIPLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "作业区域空间范围",
+        "value_type": "space_code"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "TARGET_UNCERTAINTY_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S002"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "boolean"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0382"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0382"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0382"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "季节影响时间窗口",
+        "value_type": "boolean"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "TARGET_UNCERTAINTY_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S003"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "time_code"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0416"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0416"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0416"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "水源保障关联资源",
+        "value_type": "time_code"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "TARGET_UNCERTAINTY_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S004"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "MULTIPLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "float"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0618"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0618"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0618"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "MULTIPLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "复测确认触发条件",
+        "value_type": "float"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "TARGET_UNCERTAINTY_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S005"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0708"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0805"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0708",
+            "M5N0805"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0708",
+        "M5N0805"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "岗位训练证据要求 复盘改进证据要求",
+        "value_type": "string"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "TARGET_UNCERTAINTY_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S006"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "time_code"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0834"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0860"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0834",
+            "M5N0860"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0834",
+        "M5N0860"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "升级条件生效范围 资源请求生效范围",
+        "value_type": "time_code"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "TARGET_UNCERTAINTY_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S007"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0953"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0991"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0953",
+            "M5N0991"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0953",
+        "M5N0991"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "个人防护通知策略 通信器材通知策略",
+        "value_type": "string"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "TARGET_UNCERTAINTY_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S008"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N1163"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N1163"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N1163"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "验证抽样维护主体 交通资源启停规则",
+        "value_type": "string"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "TARGET_UNCERTAINTY_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S009"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "space_code"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N1348"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N1348"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N1348"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "信息报送关联资源 终止确认反馈渠道",
+        "value_type": "space_code"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "TARGET_UNCERTAINTY_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S010"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0030"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0030"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0030"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "警戒组织交接节点 通行节点依赖条件",
+        "value_type": "string"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "TARGET_UNCERTAINTY_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S011"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "cardinality",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0004"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0027"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0093"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0118"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0234"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0324"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0004",
+            "M5N0027",
+            "M5N0093",
+            "M5N0118",
+            "M5N0234",
+            "M5N0324"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0004",
+        "M5N0027",
+        "M5N0093",
+        "M5N0118",
+        "M5N0234",
+        "M5N0324"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "UNKNOWN",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "责任边界",
+        "value_type": null
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "BOUNDARY_TARGET_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S012"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "cardinality",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0026"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0111"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0266"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0307"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0340"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0369"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0427"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0550"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0026",
+            "M5N0111",
+            "M5N0266",
+            "M5N0307",
+            "M5N0340",
+            "M5N0369",
+            "M5N0427",
+            "M5N0550"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0026",
+        "M5N0111",
+        "M5N0266",
+        "M5N0307",
+        "M5N0340",
+        "M5N0369",
+        "M5N0427",
+        "M5N0550"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "UNKNOWN",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "启停规则",
+        "value_type": null
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "BOUNDARY_TARGET_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S013"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "CONCEPT"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "entity_code"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "NEED_CLARIFICATION",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0417"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0417"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "CONCEPT",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "水源保障确认方式",
+        "value_type": "entity_code"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "ABSTAIN"
+        ],
+        "rationale_code": "CONTRACT_CONFLICT_REQUIRES_REVIEW"
+      },
+      "scenario_ref": "M5S014"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "MULTIPLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "NEED_CLARIFICATION",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0619"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0619"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "MULTIPLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "复测确认关联资源",
+        "value_type": "string"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "ABSTAIN"
+        ],
+        "rationale_code": "CONTRACT_CONFLICT_REQUIRES_REVIEW"
+      },
+      "scenario_ref": "M5S015"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "MULTIPLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "float"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "NEED_CLARIFICATION",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0792"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0792"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "MULTIPLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "承包商告知时间窗口",
+        "value_type": "float"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "ABSTAIN"
+        ],
+        "rationale_code": "CONTRACT_CONFLICT_REQUIRES_REVIEW"
+      },
+      "scenario_ref": "M5S016"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "NEED_EVIDENCE",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [
+            "NO_CANDIDATES"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "m5voidalpha",
+        "value_type": "string"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "NEED_EVIDENCE",
+          "ABSTAIN"
+        ],
+        "rationale_code": "EXTERNAL_EVIDENCE_REQUIRED"
+      },
+      "scenario_ref": "M5S017"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "ABSTAIN",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [
+            "NO_CANDIDATES"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "m5voidbeta",
+        "value_type": "string"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "NEED_EVIDENCE",
+          "ABSTAIN"
+        ],
+        "rationale_code": "EXTERNAL_EVIDENCE_REQUIRED"
+      },
+      "scenario_ref": "M5S018"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "cardinality",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "node_kind",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "evidence_node_ids": [],
+      "expected_route": "CLARIFY",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "UNKNOWN",
+        "clarification_question": "请明确当前需求所指的结构范围。",
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "UNKNOWN",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "巡检治理域",
+        "value_type": null
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION"
+        ],
+        "rationale_code": "AMBIGUITY_REQUIRES_USER_INPUT"
+      },
+      "scenario_ref": "M5S019"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "cardinality",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "node_kind",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "evidence_node_ids": [],
+      "expected_route": "CLARIFY",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "UNKNOWN",
+        "clarification_question": "请明确当前需求所指的结构范围。",
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "UNKNOWN",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "训练演练域",
+        "value_type": null
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION"
+        ],
+        "rationale_code": "AMBIGUITY_REQUIRES_USER_INPUT"
+      },
+      "scenario_ref": "M5S020"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "cardinality",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "node_kind",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "evidence_node_ids": [],
+      "expected_route": "CLARIFY",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "UNKNOWN",
+        "clarification_question": "请明确当前需求所指的结构范围。",
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "UNKNOWN",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "事件协作域",
+        "value_type": null
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION"
+        ],
+        "rationale_code": "AMBIGUITY_REQUIRES_USER_INPUT"
+      },
+      "scenario_ref": "M5S021"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "cardinality",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "node_kind",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "evidence_node_ids": [],
+      "expected_route": "CLARIFY",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "UNKNOWN",
+        "clarification_question": "请明确当前需求所指的结构范围。",
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "UNKNOWN",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "物资保障域",
+        "value_type": null
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION"
+        ],
+        "rationale_code": "AMBIGUITY_REQUIRES_USER_INPUT"
+      },
+      "scenario_ref": "M5S022"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "cardinality",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "node_kind",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "evidence_node_ids": [],
+      "expected_route": "CLARIFY",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "UNKNOWN",
+        "clarification_question": "请明确当前需求所指的结构范围。",
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "UNKNOWN",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "整改闭环域",
+        "value_type": null
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION"
+        ],
+        "rationale_code": "AMBIGUITY_REQUIRES_USER_INPUT"
+      },
+      "scenario_ref": "M5S023"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "cardinality",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "node_kind",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "evidence_node_ids": [],
+      "expected_route": "CLARIFY",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "UNKNOWN",
+        "clarification_question": "请明确当前需求所指的结构范围。",
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "UNKNOWN",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "外部衔接域",
+        "value_type": null
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION"
+        ],
+        "rationale_code": "AMBIGUITY_REQUIRES_USER_INPUT"
+      },
+      "scenario_ref": "M5S024"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "integer"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0021"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0021"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0021"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "先遣侦察归档方式",
+        "value_type": "integer"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "TARGET_UNCERTAINTY_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S025"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "time_code"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M5N0182"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0182"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0182"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "竖向连通数据口径 压力容器关联资源",
+        "value_type": "time_code"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "TARGET_UNCERTAINTY_REQUIRES_HUMAN"
+      },
+      "scenario_ref": "M5S026"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "MULTIPLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "boolean"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "NEED_CLARIFICATION",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M5N0339"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [
+        "M5N0339"
+      ],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "MULTIPLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "高处作业记录来源",
+        "value_type": "boolean"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "CONTRACT_CONFLICT_REQUIRES_REVIEW"
+      },
+      "scenario_ref": "M5S027"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "NEED_EVIDENCE",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [
+            "NO_CANDIDATES"
+          ],
+          "applicable": true,
+          "top_k": 8
+        }
+      },
+      "evidence_node_ids": [],
+      "expected_route": "PROCEED",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "SINGLE",
+        "clarification_question": null,
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "PROPERTY",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "m5voidgamma",
+        "value_type": "string"
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION",
+          "ABSTAIN"
+        ],
+        "rationale_code": "EXTERNAL_EVIDENCE_REQUIRED"
+      },
+      "scenario_ref": "M5S028"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "cardinality",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "node_kind",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "evidence_node_ids": [],
+      "expected_route": "CLARIFY",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "UNKNOWN",
+        "clarification_question": "请明确当前需求所指的结构范围。",
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "UNKNOWN",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "巡检治理域",
+        "value_type": null
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION"
+        ],
+        "rationale_code": "AMBIGUITY_REQUIRES_USER_INPUT"
+      },
+      "scenario_ref": "M5S029"
+    },
+    {
+      "capability_oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "cardinality",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "node_kind",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "evidence_node_ids": [],
+      "expected_route": "CLARIFY",
+      "retrieval_seed": {
+        "assumptions": [],
+        "cardinality": "UNKNOWN",
+        "clarification_question": "请明确当前需求所指的结构范围。",
+        "confirmed_facts": [],
+        "evidence_gaps": [],
+        "lifecycle": null,
+        "node_kind": "UNKNOWN",
+        "ownership": "UNKNOWN",
+        "role": null,
+        "scenario": null,
+        "subject": "训练演练域",
+        "value_type": null
+      },
+      "safe_alternative": {
+        "allowed_actions": [
+          "NEED_CLARIFICATION"
+        ],
+        "rationale_code": "AMBIGUITY_REQUIRES_USER_INPUT"
+      },
+      "scenario_ref": "M5S030"
+    }
+  ],
+  "model_input_forbidden": true,
+  "oracle_digest": "a427f6938b6a474fe3e187df624d18581f83438c5b4d93ba07674e5f117d0ee0",
+  "patch_eligible": false,
+  "quality_tier": "PROPOSED",
+  "review_authority": "NOT_REVIEWED",
+  "schema_version": "m5-assisted-shadow-oracle-sidecar.v1",
+  "source_candidate_set_digest": "3d8e5491f4e0be4fbe3e33efc25d7c89315d013b6b6ab3b1187dc55b73a2e936",
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "source_tree_digest": "a220cee95ccb9443e53186de3f6b6b0536a654f193b41f0d6a4d6a8500e6fe8d"
+}

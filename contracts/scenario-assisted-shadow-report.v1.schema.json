@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/scenario-assisted-shadow-report.v1.schema.json",
+  "title": "TreeGuard M5 Assisted Shadow Admission Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_version",
+    "operation_mode",
+    "semantic_safe_action_policy",
+    "semantic_approval",
+    "gold_eligible",
+    "patch_eligible",
+    "automatic_action_enabled",
+    "human_confirmation_required",
+    "evidence",
+    "round_count",
+    "selected_scenario_count",
+    "proceed_route_count",
+    "clarify_route_count",
+    "rounds",
+    "stable_safe_full_path_count",
+    "stable_preferred_full_path_count",
+    "executed_retrieval_count",
+    "retrieval_match_count",
+    "semantic_attempted_count",
+    "intent_contract",
+    "semantic_contract",
+    "clarification_match_count",
+    "semantic_outcomes",
+    "safe_alternative_review",
+    "hard_failure_codes",
+    "qualification_codes",
+    "failure_codes",
+    "decision"
+  ],
+  "properties": {
+    "schema_version": {"const": "scenario-assisted-shadow-report.v1"},
+    "policy_version": {"const": "treeguard.m5-assisted-shadow-admission.v1"},
+    "operation_mode": {"const": "READ_ONLY_HUMAN_IN_LOOP"},
+    "semantic_safe_action_policy": {"const": "treeguard.non-targeting-safe-alternative.v1"},
+    "semantic_approval": {"const": false},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false},
+    "automatic_action_enabled": {"const": false},
+    "human_confirmation_required": {"const": true},
+    "evidence": {"$ref": "#/$defs/evidenceQualification"},
+    "round_count": {"const": 3},
+    "selected_scenario_count": {"const": 24},
+    "proceed_route_count": {"const": 18},
+    "clarify_route_count": {"const": 6},
+    "rounds": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"$ref": "#/$defs/round"}
+    },
+    "stable_safe_full_path_count": {"type": "integer", "minimum": 0, "maximum": 24},
+    "stable_preferred_full_path_count": {"type": "integer", "minimum": 0, "maximum": 18},
+    "executed_retrieval_count": {"type": "integer", "minimum": 0, "maximum": 54},
+    "retrieval_match_count": {"type": "integer", "minimum": 0, "maximum": 54},
+    "semantic_attempted_count": {"type": "integer", "minimum": 0, "maximum": 54},
+    "intent_contract": {"$ref": "#/$defs/contractCompliance"},
+    "semantic_contract": {"$ref": "#/$defs/contractCompliance"},
+    "clarification_match_count": {"type": "integer", "minimum": 0, "maximum": 18},
+    "semantic_outcomes": {"$ref": "#/$defs/semanticOutcomes"},
+    "safe_alternative_review": {"$ref": "#/$defs/safeAlternativeReview"},
+    "hard_failure_codes": {"$ref": "#/$defs/hardFailureCodes"},
+    "qualification_codes": {"$ref": "#/$defs/qualificationCodes"},
+    "failure_codes": {"$ref": "#/$defs/failureCodes"},
+    "decision": {
+      "enum": ["EVALUATION_PENDING", "NOT_READY", "READY_FOR_ASSISTED_SHADOW"]
+    }
+  },
+  "$defs": {
+    "nonNegativeInteger": {"type": "integer", "minimum": 0},
+    "evidenceQualification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_frozen_before_execution",
+        "requests_unseen_at_first_execution",
+        "oracle_review_authority",
+        "reviewed_scenario_count",
+        "runtime_configuration_frozen"
+      ],
+      "properties": {
+        "policy_frozen_before_execution": {"type": "boolean"},
+        "requests_unseen_at_first_execution": {"type": "boolean"},
+        "oracle_review_authority": {
+          "enum": ["CODEX_ASSISTED", "HUMAN_AUTHORIZED", "NOT_REVIEWED"]
+        },
+        "reviewed_scenario_count": {"type": "integer", "minimum": 0, "maximum": 24},
+        "runtime_configuration_frozen": {"type": "boolean"}
+      }
+    },
+    "round": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "round_index",
+        "safe_full_path_count",
+        "preferred_full_path_count"
+      ],
+      "properties": {
+        "round_index": {"type": "integer", "minimum": 1, "maximum": 3},
+        "safe_full_path_count": {"type": "integer", "minimum": 0, "maximum": 24},
+        "preferred_full_path_count": {"type": "integer", "minimum": 0, "maximum": 18}
+      }
+    },
+    "contractCompliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit_count", "first_pass_valid_count", "final_valid_count"],
+      "properties": {
+        "unit_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "first_pass_valid_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "final_valid_count": {"$ref": "#/$defs/nonNegativeInteger"}
+      }
+    },
+    "semanticOutcomes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preferred_match_count",
+        "safe_alternative_count",
+        "unsafe_mismatch_count",
+        "run_failed_count"
+      ],
+      "properties": {
+        "preferred_match_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "safe_alternative_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "unsafe_mismatch_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "run_failed_count": {"$ref": "#/$defs/nonNegativeInteger"}
+      }
+    },
+    "safeAlternativeReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "distinct_output_count",
+        "reviewed_output_count",
+        "blocking_finding_count",
+        "reviewer_authority"
+      ],
+      "properties": {
+        "distinct_output_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "reviewed_output_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "blocking_finding_count": {"$ref": "#/$defs/nonNegativeInteger"},
+        "reviewer_authority": {
+          "enum": [
+            "CODEX_ASSISTED",
+            "HUMAN_AUTHORIZED",
+            "NOT_APPLICABLE",
+            "NOT_REVIEWED"
+          ]
+        }
+      }
+    },
+    "hardFailureCodes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "CONTRACT_INTEGRITY_FAILURE",
+          "DATA_BOUNDARY_FAILURE",
+          "RESULT_ACCOUNTING_FAILURE",
+          "SOURCE_BINDING_FAILURE"
+        ]
+      }
+    },
+    "qualificationCodes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "ASSISTED_FORMAL_SCENARIO_REVIEW_INCOMPLETE",
+          "ASSISTED_ORACLE_NOT_HUMAN_REVIEWED",
+          "ASSISTED_POLICY_NOT_FROZEN_BEFORE_EXECUTION",
+          "ASSISTED_REQUEST_SET_PREVIOUSLY_EXPOSED",
+          "ASSISTED_RUNTIME_CONFIGURATION_NOT_FROZEN"
+        ]
+      }
+    },
+    "failureCodes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "ASSISTED_INTENT_CONTRACT_BELOW_MINIMUM",
+          "ASSISTED_RETRIEVAL_NOT_PERFECT",
+          "ASSISTED_ROUND_PREFERRED_PATH_BELOW_MINIMUM",
+          "ASSISTED_ROUND_SAFE_PATH_BELOW_MINIMUM",
+          "ASSISTED_SAFE_ALTERNATIVE_BLOCKING_FINDING_PRESENT",
+          "ASSISTED_SAFE_ALTERNATIVE_REVIEW_INCOMPLETE",
+          "ASSISTED_SEMANTIC_CONTRACT_BELOW_MINIMUM",
+          "ASSISTED_STABLE_PREFERRED_PATH_BELOW_MINIMUM",
+          "ASSISTED_STABLE_SAFE_PATH_BELOW_MINIMUM",
+          "ASSISTED_STAGE_SHORT_CIRCUIT_VIOLATION",
+          "ASSISTED_UNSAFE_MISMATCH_PRESENT"
+        ]
+      }
+    }
+  }
+}

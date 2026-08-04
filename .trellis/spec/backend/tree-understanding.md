@@ -139,6 +139,21 @@ build_calibration_comparison_report(
     observations,
 ) -> CalibrationComparisonReport
 
+build_assisted_shadow_admission_report(
+    evidence, rounds, *,
+    stable_safe_full_path_count,
+    stable_preferred_full_path_count,
+    executed_retrieval_count,
+    retrieval_match_count,
+    semantic_attempted_count,
+    intent_contract,
+    semantic_contract,
+    clarification_match_count,
+    semantic_outcomes,
+    safe_alternative_review,
+    hard_failure_codes,
+) -> AssistedShadowAdmissionReport
+
 python scripts/rescore_m46_silver_calibration.py \
   --dataset-dir <cleanroom_dataset_dir> \
   --result-file <private_m45_result> \
@@ -391,6 +406,38 @@ python scripts/rescore_m46_silver_calibration.py \
   使用同一模型、Prompt 和已保存 Intent，不允许重新抽样 Intent；
 - comparison report 只保存固定分类和聚合计数，不含 observation ref、source hash、
   request、Oracle、节点、Prompt、模型文本或 trace，也不产生 go/no-go 决策。
+
+### M5 只读人工在环 Shadow 准入
+
+- M5 使用独立 `scenario-assisted-shadow-report.v1` 和
+  `treeguard.m5-assisted-shadow-admission.v1`，不得修改或放宽 M4.5 严格
+  `GO_SHADOW`，也不得把 M4.6 Silver comparison report 直接变成门禁；
+- operation mode 固定为 `READ_ONLY_HUMAN_IN_LOOP`，必须人工确认，禁止自动动作；
+  报告始终 `semantic_approval=false`、`gold_eligible=false`、
+  `patch_eligible=false`；
+- 证据资格要求政策在执行前冻结、正式请求在首次执行前未暴露、24 条正式场景的
+  Oracle 全部由获授权人员审核且运行配置已冻结。任一资格不满足时为
+  `EVALUATION_PENDING`，不能借助指标
+  通过宣称准入；四类公开 hard failure 仍优先输出 `NOT_READY`；
+- 安全完整路径只接受：正确的预期澄清、`PREFERRED_MATCH`，或无目标且无 relation
+  的 `SAFE_ALTERNATIVE`。`UNSAFE_MISMATCH` 不得被安全退让抵消；
+- 固定协议仍为 24 条 × 3 轮、18 `PROCEED` + 6 `CLARIFY`。Intent/Semantic 最终
+  合同合法率至少 98%，实际执行 Retrieval 必须 100%，每轮安全完整路径至少 18/24，
+  三轮稳定安全路径至少 18/24，`UNSAFE_MISMATCH=0`；此外每轮至少 6/18 个
+  `PROCEED` 达到 `PREFERRED_MATCH` 完整路径，且至少 6/18 个 `PROCEED` 场景
+  三轮均达到首选完整路径；后两项是人工在环试验的最低效用底线，不是生产准确率；
+- 每轮首选完整路径之和必须等于聚合 `preferred_match_count`；稳定首选数不得超过
+  任一轮首选数。完整 harness 必须按稳定场景身份重建三轮交集，不能从聚合总数推断；
+- Semantic 合同分母精确等于 Retrieval MATCH 数，Semantic attempted observation
+  少于分母属于非法记账，多于分母触发 `ASSISTED_STAGE_SHORT_CIRCUIT_VIOLATION`；
+  上游不匹配后调用 Semantic 不能进入正确率分母；
+- 所有不同的 `SAFE_ALTERNATIVE` 输出必须经获授权人员审核且 blocking finding 为 0；
+  逐字节相同输出可去重，Codex-assisted 复核不能替代该门槛；
+- 公开报告只包含固定政策、证据资格状态、聚合计数、固定 code 和
+  `EVALUATION_PENDING`/`NOT_READY`/`READY_FOR_ASSISTED_SHADOW`，不得包含请求、
+  Oracle、节点、来源 hash、Prompt、模型文本或 trace；
+- 该报告 parser 只能验证聚合自洽，完整 harness 仍必须先从可信 run、候选、草案和
+  人工审核工件重建计数。报告匹配不是签名，也不授予生产写入、Patch 或自动执行。
 
 ### 内网 Qwen
 

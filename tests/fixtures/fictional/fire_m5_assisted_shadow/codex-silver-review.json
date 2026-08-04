@@ -1,0 +1,164 @@
+{
+  "accepted_candidate_count": 30,
+  "assessment_authority": "CODEX_ASSISTED",
+  "blocking_finding_count": 0,
+  "dataset_ref": "fictional-fire-m5-assisted-shadow",
+  "execution_eligible": false,
+  "gold_eligible": false,
+  "items": [
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S001",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S002",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S003",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S004",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S005",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S006",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S007",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S008",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S009",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S010",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S011",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S012",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S013",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S014",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S015",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S016",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S017",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S018",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S019",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S020",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S021",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S022",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S023",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S024",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S025",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S026",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S027",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S028",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S029",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "finding_codes": [],
+      "scenario_ref": "M5S030",
+      "status": "SILVER_ACCEPTED"
+    }
+  ],
+  "patch_eligible": false,
+  "quality_tier": "SILVER",
+  "reviewed_candidate_count": 30,
+  "schema_version": "m5-assisted-shadow-codex-silver-review.v1"
+}

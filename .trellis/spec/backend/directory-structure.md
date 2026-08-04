@@ -57,6 +57,8 @@ worker、queue、vector index、Spring/MongoDB 直连或生产 Patch publisher�
   记录回放。
 - `tree_understanding.py`：全树结构画像、M2 有界投影，以及 M3 稀疏场景计划、
   逐单元投影、待审候选与部分失败批次的可信来源合同；
+- `scenario_assisted_shadow_validation.py`：M5 只读人工在环 Shadow 的聚合准入合同，
+  与 M4.5 严格门禁和 M4.6 Silver 校准保持独立；
 - `model_safety.py`：模型文本不得回显内部节点标识的共享纯函数检查。
 
 这些模块必须保持确定性，不得自行发起网络或文件系统副作用。

@@ -42,6 +42,8 @@ workflow 版本，同样是缺陷。
   `contracts/recommendation-review-action.v1.schema.json`
 - `RecommendationRecord` ↔
   `contracts/recommendation-record.v1.schema.json`
+- `AssistedShadowAdmissionReport` ↔
+  `contracts/scenario-assisted-shadow-report.v1.schema.json`
 
 当前没有运行时 `jsonschema` 依赖。JSON Schema 是跨边界合同，Python 自己做
 精确字段与语义校验；现有测试只验证 Schema 可解析和必填字段与序列化对象

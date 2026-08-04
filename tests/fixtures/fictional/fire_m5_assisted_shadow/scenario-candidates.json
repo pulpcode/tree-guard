@@ -1,0 +1,579 @@
+{
+  "candidate_set_digest": "3d8e5491f4e0be4fbe3e33efc25d7c89315d013b6b6ab3b1187dc55b73a2e936",
+  "candidates": [
+    {
+      "analysis_tags": [
+        "EXACT_NAME"
+      ],
+      "coverage_cell": "P01",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "协同任务域",
+      "primary_branch_ref": "M5N0002",
+      "primary_risk": "UNIQUE_EXISTING_TARGET",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0028",
+        "requirement_text": "复用“警戒组织依赖条件”既有属性合同，不新增同义字段。",
+        "value_type_hint": "entity_code"
+      },
+      "scenario_ref": "M5S001",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "EXACT_NAME"
+      ],
+      "coverage_cell": "P01",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "场所画像域",
+      "primary_branch_ref": "M5N0140",
+      "primary_risk": "UNIQUE_EXISTING_TARGET",
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "复用“作业区域空间范围”既有属性合同，不新增同义字段。",
+        "value_type_hint": "space_code"
+      },
+      "scenario_ref": "M5S002",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "EXACT_NAME"
+      ],
+      "coverage_cell": "P01",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "风险描述域",
+      "primary_branch_ref": "M5N0269",
+      "primary_risk": "UNIQUE_EXISTING_TARGET",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0377",
+        "requirement_text": "复用“季节影响时间窗口”既有属性合同，不新增同义字段。",
+        "value_type_hint": "boolean"
+      },
+      "scenario_ref": "M5S003",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "EXACT_NAME"
+      ],
+      "coverage_cell": "P01",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "设施能力域",
+      "primary_branch_ref": "M5N0404",
+      "primary_risk": "UNIQUE_EXISTING_TARGET",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "复用“水源保障关联资源”既有属性合同，不新增同义字段。",
+        "value_type_hint": "time_code"
+      },
+      "scenario_ref": "M5S004",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "EXACT_NAME"
+      ],
+      "coverage_cell": "P01",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "巡检治理域",
+      "primary_branch_ref": "M5N0557",
+      "primary_risk": "UNIQUE_EXISTING_TARGET",
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0617",
+        "requirement_text": "复用“复测确认触发条件”既有属性合同，不新增同义字段。",
+        "value_type_hint": "float"
+      },
+      "scenario_ref": "M5S005",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "EQUIVALENT_SCOPE"
+      ],
+      "coverage_cell": "P02",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "训练演练域",
+      "primary_branch_ref": "M5N0705",
+      "primary_risk": "MULTIPLE_ACCEPTABLE_TARGETS",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "“岗位训练证据要求”或“复盘改进证据要求”具有相同类型与基数，任一既有合同均可复用，不新增第三份定义。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "M5S006",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "EQUIVALENT_SCOPE"
+      ],
+      "coverage_cell": "P02",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "事件协作域",
+      "primary_branch_ref": "M5N0821",
+      "primary_risk": "MULTIPLE_ACCEPTABLE_TARGETS",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "“升级条件生效范围”或“资源请求生效范围”具有相同类型与基数，任一既有合同均可复用，不新增第三份定义。",
+        "value_type_hint": "time_code"
+      },
+      "scenario_ref": "M5S007",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "EQUIVALENT_SCOPE"
+      ],
+      "coverage_cell": "P02",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "物资保障域",
+      "primary_branch_ref": "M5N0949",
+      "primary_risk": "MULTIPLE_ACCEPTABLE_TARGETS",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "“个人防护通知策略”或“通信器材通知策略”具有相同类型与基数，任一既有合同均可复用，不新增第三份定义。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "M5S008",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "DISTRACTOR_PRESENT"
+      ],
+      "coverage_cell": "P03",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "整改闭环域",
+      "primary_branch_ref": "M5N1085",
+      "primary_risk": "CROSS_BRANCH_INTERFERENCE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "在“整改闭环域”语境复用“验证抽样维护主体”，不要误用另一分支的“交通资源启停规则”。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "M5S009",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "DISTRACTOR_PRESENT"
+      ],
+      "coverage_cell": "P03",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "外部衔接域",
+      "primary_branch_ref": "M5N1227",
+      "primary_risk": "CROSS_BRANCH_INTERFERENCE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "在“外部衔接域”语境复用“信息报送关联资源”，不要误用另一分支的“终止确认反馈渠道”。",
+        "value_type_hint": "space_code"
+      },
+      "scenario_ref": "M5S010",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "DISTRACTOR_PRESENT"
+      ],
+      "coverage_cell": "P03",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "协同任务域",
+      "primary_branch_ref": "M5N0002",
+      "primary_risk": "CROSS_BRANCH_INTERFERENCE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "在“协同任务域”语境复用“警戒组织交接节点”，不要误用另一分支的“通行节点依赖条件”。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "M5S011",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "EXACT_BOUNDARY"
+      ],
+      "coverage_cell": "P04",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "场所画像域",
+      "primary_branch_ref": "M5N0140",
+      "primary_risk": "TOP_K_BOUNDARY",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要在全域只读字典中复用任一现有责任边界合同，不新增同义字段。",
+        "value_type_hint": null
+      },
+      "scenario_ref": "M5S012",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "EXACT_BOUNDARY"
+      ],
+      "coverage_cell": "P04",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "风险描述域",
+      "primary_branch_ref": "M5N0269",
+      "primary_risk": "TOP_K_BOUNDARY",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要在全域只读字典中复用任一现有启停规则合同，不新增同义字段。",
+        "value_type_hint": null
+      },
+      "scenario_ref": "M5S013",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "EXPLICIT_CONTRACT_CONFLICT"
+      ],
+      "coverage_cell": "P05",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "设施能力域",
+      "primary_branch_ref": "M5N0404",
+      "primary_risk": "KIND_CONFLICT",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "CONCEPT",
+        "proposed_parent_node_id": "M5N0415",
+        "requirement_text": "复用“水源保障确认方式”，但请求中的kind提示与现有合同冲突。",
+        "value_type_hint": "entity_code"
+      },
+      "scenario_ref": "M5S014",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "EXPLICIT_CONTRACT_CONFLICT"
+      ],
+      "coverage_cell": "P05",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "巡检治理域",
+      "primary_branch_ref": "M5N0557",
+      "primary_risk": "VALUE_TYPE_CONFLICT",
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0617",
+        "requirement_text": "复用“复测确认关联资源”，但请求中的value_type提示与现有合同冲突。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "M5S015",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "EXPLICIT_CONTRACT_CONFLICT"
+      ],
+      "coverage_cell": "P05",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "训练演练域",
+      "primary_branch_ref": "M5N0705",
+      "primary_risk": "CARDINALITY_CONFLICT",
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0791",
+        "requirement_text": "复用“承包商告知时间窗口”，但请求中的cardinality提示与现有合同冲突。",
+        "value_type_hint": "float"
+      },
+      "scenario_ref": "M5S016",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "HARD_NEGATIVE"
+      ],
+      "coverage_cell": "P06",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "事件协作域",
+      "primary_branch_ref": "M5N0821",
+      "primary_risk": "INSUFFICIENT_EXTERNAL_EVIDENCE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要定义“m5voidalpha”，当前树与外部来源均未提供可复用证据。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "M5S017",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "HARD_NEGATIVE"
+      ],
+      "coverage_cell": "P06",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "物资保障域",
+      "primary_branch_ref": "M5N0949",
+      "primary_risk": "INSUFFICIENT_EXTERNAL_EVIDENCE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要定义“m5voidbeta”，当前树与外部来源均未提供可复用证据。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "M5S018",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "USER_ANSWERABLE"
+      ],
+      "coverage_cell": "C01",
+      "expected_route": "CLARIFY",
+      "primary_branch_name": "巡检治理域",
+      "primary_branch_ref": "M5N0557",
+      "primary_risk": "主体归属",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "请为巡检治理域补充一项协同定义，但当前描述没有说明主体归属。",
+        "value_type_hint": null
+      },
+      "scenario_ref": "M5S019",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "USER_ANSWERABLE"
+      ],
+      "coverage_cell": "C01",
+      "expected_route": "CLARIFY",
+      "primary_branch_name": "训练演练域",
+      "primary_branch_ref": "M5N0705",
+      "primary_risk": "对象边界",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "请为训练演练域补充一项协同定义，但当前描述没有说明对象边界。",
+        "value_type_hint": null
+      },
+      "scenario_ref": "M5S020",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "USER_ANSWERABLE"
+      ],
+      "coverage_cell": "C02",
+      "expected_route": "CLARIFY",
+      "primary_branch_name": "事件协作域",
+      "primary_branch_ref": "M5N0821",
+      "primary_risk": "采用单体还是成员集合",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "请为事件协作域补充一项协同定义，但当前描述没有说明采用单体还是成员集合。",
+        "value_type_hint": null
+      },
+      "scenario_ref": "M5S021",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "USER_ANSWERABLE"
+      ],
+      "coverage_cell": "C02",
+      "expected_route": "CLARIFY",
+      "primary_branch_name": "物资保障域",
+      "primary_branch_ref": "M5N0949",
+      "primary_risk": "采用成员集合还是聚合口径",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "请为物资保障域补充一项协同定义，但当前描述没有说明采用成员集合还是聚合口径。",
+        "value_type_hint": null
+      },
+      "scenario_ref": "M5S022",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "USER_ANSWERABLE"
+      ],
+      "coverage_cell": "C03",
+      "expected_route": "CLARIFY",
+      "primary_branch_name": "整改闭环域",
+      "primary_branch_ref": "M5N1085",
+      "primary_risk": "决定动作的确认事实",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "请为整改闭环域补充一项协同定义，但当前描述没有说明决定动作的确认事实。",
+        "value_type_hint": null
+      },
+      "scenario_ref": "M5S023",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "USER_ANSWERABLE"
+      ],
+      "coverage_cell": "C03",
+      "expected_route": "CLARIFY",
+      "primary_branch_name": "外部衔接域",
+      "primary_branch_ref": "M5N1227",
+      "primary_risk": "决定目标的确认事实",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "请为外部衔接域补充一项协同定义，但当前描述没有说明决定目标的确认事实。",
+        "value_type_hint": null
+      },
+      "scenario_ref": "M5S024",
+      "selection_status": "EXECUTION"
+    },
+    {
+      "analysis_tags": [
+        "BOUNDED_RESERVE"
+      ],
+      "coverage_cell": "P01",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "协同任务域",
+      "primary_branch_ref": "M5N0002",
+      "primary_risk": "UNIQUE_EXISTING_TARGET",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "备用验证：复用“先遣侦察归档方式”且不新增同义合同。",
+        "value_type_hint": "integer"
+      },
+      "scenario_ref": "M5S025",
+      "selection_status": "RESERVE"
+    },
+    {
+      "analysis_tags": [
+        "BOUNDED_RESERVE"
+      ],
+      "coverage_cell": "P03",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "场所画像域",
+      "primary_branch_ref": "M5N0140",
+      "primary_risk": "CROSS_BRANCH_INTERFERENCE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "备用验证：在“场所画像域”复用“竖向连通数据口径”，不要误用“压力容器关联资源”。",
+        "value_type_hint": "time_code"
+      },
+      "scenario_ref": "M5S026",
+      "selection_status": "RESERVE"
+    },
+    {
+      "analysis_tags": [
+        "BOUNDED_RESERVE"
+      ],
+      "coverage_cell": "P05",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "风险描述域",
+      "primary_branch_ref": "M5N0269",
+      "primary_risk": "VALUE_TYPE_CONFLICT",
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "备用验证：复用“高处作业记录来源”，但 value_type 提示与现有合同冲突。",
+        "value_type_hint": "boolean"
+      },
+      "scenario_ref": "M5S027",
+      "selection_status": "RESERVE"
+    },
+    {
+      "analysis_tags": [
+        "BOUNDED_RESERVE",
+        "HARD_NEGATIVE"
+      ],
+      "coverage_cell": "P06",
+      "expected_route": "PROCEED",
+      "primary_branch_name": "设施能力域",
+      "primary_branch_ref": "M5N0404",
+      "primary_risk": "INSUFFICIENT_EXTERNAL_EVIDENCE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要定义“m5voidgamma”，但没有现有树证据或外部来源。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "M5S028",
+      "selection_status": "RESERVE"
+    },
+    {
+      "analysis_tags": [
+        "BOUNDED_RESERVE"
+      ],
+      "coverage_cell": "C01",
+      "expected_route": "CLARIFY",
+      "primary_branch_name": "巡检治理域",
+      "primary_branch_ref": "M5N0557",
+      "primary_risk": "主体归属",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "请在巡检治理域补充协同结构，但仍需用户明确主体归属。",
+        "value_type_hint": null
+      },
+      "scenario_ref": "M5S029",
+      "selection_status": "RESERVE"
+    },
+    {
+      "analysis_tags": [
+        "BOUNDED_RESERVE"
+      ],
+      "coverage_cell": "C03",
+      "expected_route": "CLARIFY",
+      "primary_branch_name": "训练演练域",
+      "primary_branch_ref": "M5N0705",
+      "primary_risk": "决定目标的确认事实",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "请在训练演练域补充协同结构，但仍需用户明确决定目标的确认事实。",
+        "value_type_hint": null
+      },
+      "scenario_ref": "M5S030",
+      "selection_status": "RESERVE"
+    }
+  ],
+  "dataset_ref": "fictional-fire-m5-assisted-shadow",
+  "schema_version": "m5-assisted-shadow-scenario-candidates.v1",
+  "source_tree_digest": "a220cee95ccb9443e53186de3f6b6b0536a654f193b41f0d6a4d6a8500e6fe8d"
+}

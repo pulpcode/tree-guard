@@ -1,0 +1,31 @@
+{
+  "blocking_finding_count": 0,
+  "candidate_count": 30,
+  "clarify_count": 6,
+  "covered_execution_branch_count": 10,
+  "dataset_ref": "fictional-fire-m5-assisted-shadow",
+  "derived_from_real": false,
+  "execution_count": 24,
+  "fictional": true,
+  "human_review_status": "NOT_STARTED",
+  "maximum_execution_scenarios_per_branch": 3,
+  "model_called": false,
+  "model_projection_count": 30,
+  "model_projection_leak_count": 0,
+  "node_count": 1357,
+  "proceed_count": 18,
+  "reserve_count": 6,
+  "retrieval_replay_match_count": 22,
+  "schema_version": "m5-assisted-shadow-data-preflight.v1",
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "status": "PASS",
+  "structure_metrics": {
+    "largest_repeated_structural_signature": 1,
+    "largest_repeated_suffix_set": 1,
+    "maximum_depth": 4,
+    "maximum_direct_child_count": 10,
+    "numbered_name_count": 0
+  },
+  "top_level_branch_count": 10,
+  "value_envelope_count": 0
+}

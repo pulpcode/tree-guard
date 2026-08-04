@@ -2366,6 +2366,19 @@ def _intent_matches(draft: ChangeIntentDraft, oracle: CapabilityOracle) -> bool:
     )
 
 
+def intent_matches_oracle(
+    draft: ChangeIntentDraft,
+    oracle: CapabilityOracle,
+) -> bool:
+    """Evaluate the trusted Intent route/profile contract for an existing draft."""
+
+    if not isinstance(draft, ChangeIntentDraft) or not isinstance(
+        oracle, CapabilityOracle
+    ):
+        raise TypeError("intent evaluation requires trusted contract objects")
+    return _intent_matches(draft, oracle)
+
+
 def _validate_oracle_request_support(
     oracle: CapabilityOracle,
     request: IntentRequest,
@@ -2809,6 +2822,7 @@ __all__ = [
     "retrieval_matches_oracle",
     "run_reviewed_capability_scenario",
     "run_silver_capability_scenario",
+    "intent_matches_oracle",
     "verify_capability_oracle_against_reviewed_request",
     "verify_capability_overlay_against_sources",
     "verify_capability_overlay_for_execution",

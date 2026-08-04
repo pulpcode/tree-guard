@@ -727,6 +727,7 @@ __all__ = [
     "CALIBRATION_POLICY_SCHEMA_VERSION",
     "CALIBRATION_POLICY_VERSION",
     "CALIBRATION_REPORT_SCHEMA_VERSION",
+    "SEMANTIC_SAFE_ACTION_POLICY",
     "CalibrationComparisonReport",
     "CalibrationObservationResult",
     "ScenarioCalibrationPolicy",

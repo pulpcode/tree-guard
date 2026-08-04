@@ -1,0 +1,326 @@
+{
+  "accepted_count": 30,
+  "assessment_authority": "CODEX_ASSISTED",
+  "authoritative_gold_review": false,
+  "dataset_ref": "fictional-fire-m49-sealed-v1",
+  "execution_eligible": false,
+  "gate_eligible": false,
+  "gold_eligible": false,
+  "items": [
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "7fca595704786070f7489908258108ed0fe07fcadc824ec463aad62ad61a566d",
+      "scenario_ref": "P01",
+      "severity": "NONE",
+      "source_candidate_digest": "15c607552ee3d2abb35ef876f6543a50a8a4b5a76a2166b47f0f268bf04e63d1",
+      "source_oracle_item_digest": "e04c8b80b453b7d7e1002cbf2b6eb7c2a3182b3851081646ae2a026ba04c6126"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "cf40bb3c2b5c8f19de41c8921e6f74ca8428b402626c122b9b36772bcbbd31b7",
+      "scenario_ref": "P02",
+      "severity": "NONE",
+      "source_candidate_digest": "b255d1fbad69683ac4c4748c0bbd0cdd5e6c94d5e357f20196df3e4badc19cd8",
+      "source_oracle_item_digest": "e6d63a637ed747ec0577f187bbd277e5491c65b25de3d82fd50a356240f09b2e"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "2e2f39cd311db429202d68bebc239efda00e907eebf05ca2a1f69803f07df099",
+      "scenario_ref": "P03",
+      "severity": "NONE",
+      "source_candidate_digest": "1fc006a7fe5acb675ed4f623e097e593bee7a22e95e461b2c7dacfc1a4fd038d",
+      "source_oracle_item_digest": "43108a9affc01f56b372f9c17dc6baf68a4283f0647eade4585ca6ee92d19e8f"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "6c065451905df842f3b8a27a444f51a9f7be53a563845a1bccfdf132bbf6e0b5",
+      "scenario_ref": "P04",
+      "severity": "NONE",
+      "source_candidate_digest": "9892748bce2104995b02ede3ba0389a009cdc86982ba1cd921678e30107487d6",
+      "source_oracle_item_digest": "2e5d2776dd9ed9b96127fb7d331d047307cbd6ee6b5ef418ab6994e11a214620"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "261592688e4ebcddc6f44a4239769a13360c4c74a48c4e2c491ee490586c0b62",
+      "scenario_ref": "P05",
+      "severity": "NONE",
+      "source_candidate_digest": "b30d0c8912269f4d71f2b5400faacfaea792923ec3c5825a7aae818ff18b685b",
+      "source_oracle_item_digest": "5f9c9103df606d1c0c0a454d8f82f7520e9ab8b337ba6491d02bc67f03a8353a"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "dbac840f87d7e2d0df52d058ccac71067043877b5b5dec363fe84c93958996dc",
+      "scenario_ref": "P06",
+      "severity": "NONE",
+      "source_candidate_digest": "9fde4043c44f744dfdb798cb8ef43e48dd9cc130268db26aa3f7d134831b2c59",
+      "source_oracle_item_digest": "5dc58f9f9e77497e8a54d07dfbcbda3e087c6ec2fe66a6b7389df1b52af9db5d"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "c6b5875d386798e6c679ae52b22b0fd575598b1e5dc20ce07e889ee924a96f19",
+      "scenario_ref": "P07",
+      "severity": "NONE",
+      "source_candidate_digest": "5d8ba2c782b1c64f4dc0ea8b2488d5d1999cc46dfad7cc06fbefbf9e71bf0a56",
+      "source_oracle_item_digest": "f1738b4b3ec1f5ab3ac174bebcb4f843a203d402d11791c651c6a2bac3a6c9cd"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "14a51e2858ccdfc7ea15b447fb05b1fc0c7716a63259fce0266682258cc67968",
+      "scenario_ref": "P08",
+      "severity": "NONE",
+      "source_candidate_digest": "d53a40a2623f31853a208d687850f06c269c8f233bfefbddffdabebebc89064f",
+      "source_oracle_item_digest": "3688e46366865f81cab54ab8af040c70bde156f64a745e72dc5d75b1af5dd6d3"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "a01d05960076491a68728add0d3607b151f69fca5cbea851a0de1962ed86e405",
+      "scenario_ref": "P09",
+      "severity": "NONE",
+      "source_candidate_digest": "7ef7026bd1b2e6a85d06f23ef7a422ad14468247e7a75c72d0a861779769e720",
+      "source_oracle_item_digest": "6252fdd1b3ec1c209556de1f7d90d29a525efc1c48495e63f21d113da20eecea"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "e446b7cdd124d7e326152911de7b0a092e31df4bd911daaf6b70574e6e6f4ed2",
+      "scenario_ref": "P10",
+      "severity": "NONE",
+      "source_candidate_digest": "deab203c4892bf9f920a44ba2217bac4af9fcd22f3d9c0daf48f3925b9e1077f",
+      "source_oracle_item_digest": "f3c4f3dce1e8b01fd0be6530e3dd9f5733767d5dea1644c46477b5c85897dd5a"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "5369bfde70902f0fab7589907dd187f6162be964f053dbea183db83bbd1e8cf7",
+      "scenario_ref": "P11",
+      "severity": "NONE",
+      "source_candidate_digest": "f2e8b74a12dcfe2ea2ad5fa0e972c1b12a96c9bd51e19067725760a111b52f87",
+      "source_oracle_item_digest": "8e5bc5481e12631a233577d0934bf56c0bf7a88854fb7ff1729528d99d68492f"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "ae7bf667406f5f526db833106c313ab85879cfac75d08faf35aefc2a68f4ef88",
+      "scenario_ref": "P12",
+      "severity": "NONE",
+      "source_candidate_digest": "f105dd85702c7067156c42d024a442023e8957ba01c9d5923ddf18b89fd7ecaf",
+      "source_oracle_item_digest": "d59c19496fd8a200af656d3651f2f0a61a70a3eeeb70225e0221fb83b1babf81"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "b493485771044ede4840b99163a53bb011266bfd64a26b3d5caba5a82a6799f3",
+      "scenario_ref": "P13",
+      "severity": "NONE",
+      "source_candidate_digest": "2229d979e26631d8cbca87f7da71a874789872f15fb10376b4f726a4c11f69fc",
+      "source_oracle_item_digest": "4b93686f368483257202227534982d5a21ee848503a367f29e0b5d31fd0ac16b"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "2fb55aff1e5fe4e4284310436dff166aba135e748fa26adc51fdb076197f19c5",
+      "scenario_ref": "P14",
+      "severity": "NONE",
+      "source_candidate_digest": "ebe10d2053b039508bb143ccf6a46ad3e497b9acf2113bf60d02f42a430f33d0",
+      "source_oracle_item_digest": "9dbcc3697a45cbd42669c13ebed7d8bca66febc7d19fa5d4cf71a3065c40f1c2"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "4e93ab95c8736b267b963629c0f40b82a5e52d791736b223dab4221ed267c2c7",
+      "scenario_ref": "P15",
+      "severity": "NONE",
+      "source_candidate_digest": "928e7edfff68971f8438e336a66f9ce963f3c910f703beea42d776ffe3e8b591",
+      "source_oracle_item_digest": "c0d21feb6a7aaa0caa1bb989b56b050757d9647865b402400a0daca2fb3729ad"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "2177f017224629cb5ffe0ff349db97a0e03d790082d07e412600e2211ca6c56d",
+      "scenario_ref": "P16",
+      "severity": "NONE",
+      "source_candidate_digest": "764a62de2950350875338d4a5058807306ee80898576018259c99669f5a42b66",
+      "source_oracle_item_digest": "ccb57c87c6f1527e8ee2a1334e8a26928f3a5812a4a66f6bfc0dde034fba5505"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "435c03b3d9bc31ea215e39652bf80107095b1a7940b6b6923df5187aa4afbd24",
+      "scenario_ref": "P17",
+      "severity": "NONE",
+      "source_candidate_digest": "4cd118b99c9dc3211c1d32d02ee8a4afc4edd0cc43b542282af3f3ed404f240a",
+      "source_oracle_item_digest": "3cb1ac3d995398e0de5c37cea93571f754de6ef3da45f319fcd22eafcefc319b"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "19d8e7119d07d209f2da9192abf1242057c7c8b7a08d2a5f4247e9cc5ea5ea16",
+      "scenario_ref": "P18",
+      "severity": "NONE",
+      "source_candidate_digest": "715046d757c079f560299989ba347206274e53c6d949cf2acb662d6ec049f69a",
+      "source_oracle_item_digest": "1505b134928c7b23d7cced339f8ef99340a27a9ea3d5c394fa41223e20fd95e1"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "000ed809abd10573c15d9a8ce9aa43fa7c6bedb7c9eb8d9c2d3e7620667b8d24",
+      "scenario_ref": "C01",
+      "severity": "NONE",
+      "source_candidate_digest": "6fcde03b5f5492764048b43d0c39abd7984cdd4278f148536aaea64b035a029d",
+      "source_oracle_item_digest": "cca6662886b8c824903566dfd01c6f60e3f33d2b27c7a7e284b06b99e5dda923"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "18cb86bbfdaa5406198083df2cdf2ac3b9d602825bd0003fb7a0a8cb8ac920dd",
+      "scenario_ref": "C02",
+      "severity": "NONE",
+      "source_candidate_digest": "d2984851ac4f467b3ddb220b53a6a4a0319757162cbc29e0dc69c104ac1c12f4",
+      "source_oracle_item_digest": "8a779342638bde68d0bf73c43f0c0262319f5a436565f9c07d8063ba54cdaa4c"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "8be98c593d4acedbc03e3f51eaf217b9e3c2b0d09b39bb07bece3df1b4d846f5",
+      "scenario_ref": "C03",
+      "severity": "NONE",
+      "source_candidate_digest": "59d4b73ac18361eaeeb52066cc5511add10061c8e8d50362935f2e1d9acf04a5",
+      "source_oracle_item_digest": "2122df21bf5cc9d39d2640d5e9101bd982841357f8902c5b86f2f59df7169e0a"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "554584717522fad6d3a4392b55ba93b3fa0f41aaf496b52a9ba5ca571ea238fa",
+      "scenario_ref": "C04",
+      "severity": "NONE",
+      "source_candidate_digest": "d4711c486deadad64736911f5238e97a9813aa272c3c343135cbd9d89e352e17",
+      "source_oracle_item_digest": "1e85ba02cfff7f62f7d98ae2d4f77608afc7dcebd418994ba9cf6559a30a685f"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "2b530599185bc019b73582f06ef7c758731048c613c2937b375cf6d4aca86719",
+      "scenario_ref": "C05",
+      "severity": "NONE",
+      "source_candidate_digest": "70984c84b125985e07746482e755d5c6163d0dc834f9c7bf13ba47d67cada073",
+      "source_oracle_item_digest": "f6b8058089d2dfcbcf3897369f59982f272ecc7449f1db4f85ee1aa275a2b139"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "46d2a4256f61fd33e5f1123303fc0df4f72608eb176b15b01fc91bb78a23b729",
+      "scenario_ref": "C06",
+      "severity": "NONE",
+      "source_candidate_digest": "f889db2ff4ac5f379348841ce1da95e4b330c462d25c2e64c5acfa010a5682ce",
+      "source_oracle_item_digest": "e5404b4cadefd5a41ce63bf0c09701cc09f76d4561b2422ae32d4a549bc94f35"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "d2fcc96c0ad6e159739ff6939cdc122f511d9b2244ca26ea66cf8e8c614e4d95",
+      "scenario_ref": "R01",
+      "severity": "NONE",
+      "source_candidate_digest": "d5b34405773c082a3c6229bbbdc589e8692939c22b68a07eebf62cc7b6bd5945",
+      "source_oracle_item_digest": "f01da9f56acce0b3e06b0b3db8307ade6d2bb7eb3cce0507918ffaa2de85919c"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "a7ea863be39dad0f9389e75ccf6f8b2e7e26f7a0250a46aa01e71a6f183ad8a5",
+      "scenario_ref": "R02",
+      "severity": "NONE",
+      "source_candidate_digest": "8e96962be58c6528cbf32cfdfafec55f1b2822ff5c0f8d4163e78278d4a8ace4",
+      "source_oracle_item_digest": "1f998131adf26e18372a346e11c95782783edcdaba9654abd102a35116fc0867"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "28fd9c41bbbee4e6937fbd28c86e3571fac38014ab71036974b7beedaaa501ff",
+      "scenario_ref": "R03",
+      "severity": "NONE",
+      "source_candidate_digest": "71baf49248bbb2c6085418a3e567bc96825bd2a52cd5617ae0f012a1d5ddabcd",
+      "source_oracle_item_digest": "7dce2d74a38d07b9ad68e7d1b429c9cae187b370ad73c78e428d5726e18dc8e4"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "d149b513aa2b81dbcc6367a96a786db482b914ffcbe293efcf773d704173356b",
+      "scenario_ref": "R04",
+      "severity": "NONE",
+      "source_candidate_digest": "9391d72860253c808330c2cfdff283b5ba37d19e31f6ee689456b8d7b915dd60",
+      "source_oracle_item_digest": "9672bf43e3f7e2e7f3c970563772a489c1884956151a6f3619aaadb40e416c5e"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "0a575eba9c2c554ab80e06e0101d8c8ef3a0ff311dfda9674707e0d63f6da079",
+      "scenario_ref": "R05",
+      "severity": "NONE",
+      "source_candidate_digest": "8874c72568648db1e6027555968dc4d5b07188e6bf04a7c09bb34ea45cc06d70",
+      "source_oracle_item_digest": "305b6eeb62215ab1fa5e45a2dce90db6a4f28ac694f2203232e92cf5d5a2cd48"
+    },
+    {
+      "decision": "ACCEPTED",
+      "execution_eligible": false,
+      "finding_codes": [],
+      "review_item_digest": "894f7826f1bce6fa5a73d20b516571c3875ffdab98d15b806889bad897021a56",
+      "scenario_ref": "R06",
+      "severity": "NONE",
+      "source_candidate_digest": "b05903f677ccf2a49d3675c5abe3e1b5139726132d1543c6358bf86ebfe03ed7",
+      "source_oracle_item_digest": "8190fd89703560c627bd615858c5fcca2c17d06859a9dbeb4c89f3e09ff4fe43"
+    }
+  ],
+  "patch_eligible": false,
+  "quality_tier": "CODEX_ASSISTED_SILVER",
+  "recorded_at": "2026-08-04T00:00:00Z",
+  "rejected_count": 0,
+  "review_digest": "71bc8ff7e3ba3a48c282c01c2810e5af3a8ceb02935dd48d6c66f09ef6557d00",
+  "review_round": 4,
+  "reviewed_count": 30,
+  "reviewer_independence": false,
+  "reviewer_ref": "codex-m49-silver-review",
+  "schema_version": "fire-m49-sealed-silver-review.v1",
+  "semantic_approval": false,
+  "source_candidate_batch_digest": "b2772c1d70a776b38efc326eb09470f0eaebb45d9c026a705c948eddf84faeca",
+  "source_oracle_sidecar_digest": "8abbb62eb00be8491c056aa15f48c52f9350140cf906c26e7e5146fa311214bd",
+  "source_tree_snapshot_hash": "65c5c9d06ffefe36433b1ec233f128658aa83422414c3ac681249dce7ad4d2b6",
+  "status": "SILVER_ACCEPTED"
+}

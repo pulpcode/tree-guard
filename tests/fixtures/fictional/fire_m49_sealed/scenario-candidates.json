@@ -1,0 +1,596 @@
+{
+  "dataset_ref": "fictional-fire-m49-sealed-v1",
+  "derived_from_real": false,
+  "fictional": true,
+  "formal_scenario_count": 24,
+  "gate_eligible": false,
+  "gold_eligible": false,
+  "items": [
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "15c607552ee3d2abb35ef876f6543a50a8a4b5a76a2166b47f0f268bf04e63d1",
+      "coverage_cell": "P01",
+      "execution_eligible": false,
+      "primary_risk": "UNIQUE_TARGET",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B01-S01",
+        "requirement_text": "管理委员会授权状态",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P01",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B01"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "b255d1fbad69683ac4c4748c0bbd0cdd5e6c94d5e357f20196df3e4badc19cd8",
+      "coverage_cell": "P02",
+      "execution_eligible": false,
+      "primary_risk": "UNIQUE_TARGET",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B02-S02",
+        "requirement_text": "裙楼共享空间通行限制",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P02",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B02"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "1fc006a7fe5acb675ed4f623e097e593bee7a22e95e461b2c7dacfc1a4fd038d",
+      "coverage_cell": "P03",
+      "execution_eligible": false,
+      "primary_risk": "UNIQUE_TARGET",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B03-S03",
+        "requirement_text": "手动报警接口联动目标",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P03",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B03"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "9892748bce2104995b02ede3ba0389a009cdc86982ba1cd921678e30107487d6",
+      "coverage_cell": "P04",
+      "execution_eligible": false,
+      "primary_risk": "UNIQUE_TARGET",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B04-S04",
+        "requirement_text": "避难等候区障碍标识",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "boolean"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P04",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B04"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "b30d0c8912269f4d71f2b5400faacfaea792923ec3c5825a7aae818ff18b685b",
+      "coverage_cell": "P05",
+      "execution_eligible": false,
+      "primary_risk": "MULTIPLE_ACCEPTABLE_TARGETS",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "本次只识别复用候选，目标可落在管理委员会授权状态或消防责任人授权状态任一同构字段，后续上下文再选择",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P05",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B01"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "9fde4043c44f744dfdb798cb8ef43e48dd9cc130268db26aa3f7d134831b2c59",
+      "coverage_cell": "P06",
+      "execution_eligible": false,
+      "primary_risk": "MULTIPLE_ACCEPTABLE_TARGETS",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "本次只识别复用候选，目标可落在烟雾探测回路运行状态或温度探测回路运行状态任一同构字段，后续上下文再选择",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P06",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B03"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "5d8ba2c782b1c64f4dc0ea8b2488d5d1999cc46dfad7cc06fbefbf9e71bf0a56",
+      "coverage_cell": "P07",
+      "execution_eligible": false,
+      "primary_risk": "HARD_NEGATIVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B05-S03",
+        "requirement_text": "气体灭火区启停模式",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "integer"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P07",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B05"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "d53a40a2623f31853a208d687850f06c269c8f233bfefbddffdabebebc89064f",
+      "coverage_cell": "P08",
+      "execution_eligible": false,
+      "primary_risk": "HARD_NEGATIVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B06-S04",
+        "requirement_text": "送风机组控制优先级",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P08",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B06"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "7ef7026bd1b2e6a85d06f23ef7a422ad14468247e7a75c72d0a861779769e720",
+      "coverage_cell": "P09",
+      "execution_eligible": false,
+      "primary_risk": "TOP_K_BOUNDARY",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "应急响应结束后的状态复核",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P09",
+      "secondary_tags": [
+        "LEXICAL_INTERFERENCE"
+      ],
+      "top_level_branch_ref": "M49-B10"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "deab203c4892bf9f920a44ba2217bac4af9fcd22f3d9c0daf48f3925b9e1077f",
+      "coverage_cell": "P10",
+      "execution_eligible": false,
+      "primary_risk": "TOP_K_BOUNDARY",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "事件整改任务状态核验",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P10",
+      "secondary_tags": [
+        "LEXICAL_INTERFERENCE"
+      ],
+      "top_level_branch_ref": "M49-B12"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "f2e8b74a12dcfe2ea2ad5fa0e972c1b12a96c9bd51e19067725760a111b52f87",
+      "coverage_cell": "P11",
+      "execution_eligible": false,
+      "primary_risk": "CROSS_BRANCH_WRONG_PARENT",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B12-S01",
+        "requirement_text": "商户协调组升级条件",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P11",
+      "secondary_tags": [
+        "PARENT_INTERFERENCE"
+      ],
+      "top_level_branch_ref": "M49-B01"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "f105dd85702c7067156c42d024a442023e8957ba01c9d5923ddf18b89fd7ecaf",
+      "coverage_cell": "P12",
+      "execution_eligible": false,
+      "primary_risk": "CROSS_BRANCH_WRONG_PARENT",
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B02-S01",
+        "requirement_text": "访客引导组清点方式",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P12",
+      "secondary_tags": [
+        "PARENT_INTERFERENCE"
+      ],
+      "top_level_branch_ref": "M49-B04"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "2229d979e26631d8cbca87f7da71a874789872f15fb10376b4f726a4c11f69fc",
+      "coverage_cell": "P13",
+      "execution_eligible": false,
+      "primary_risk": "CROSS_BRANCH_WRONG_PARENT",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B03-S01",
+        "requirement_text": "服务商协同组执行周期",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "time_code"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P13",
+      "secondary_tags": [
+        "PARENT_INTERFERENCE"
+      ],
+      "top_level_branch_ref": "M49-B08"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "ebe10d2053b039508bb143ccf6a46ad3e497b9acf2113bf60d02f42a430f33d0",
+      "coverage_cell": "P14",
+      "execution_eligible": false,
+      "primary_risk": "KIND_CONFLICT",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "CONCEPT",
+        "proposed_parent_node_id": "M49-B06-S08",
+        "requirement_text": "手动控制点责任班组",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": null
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P14",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B06"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "928e7edfff68971f8438e336a66f9ce963f3c910f703beea42d776ffe3e8b591",
+      "coverage_cell": "P15",
+      "execution_eligible": false,
+      "primary_risk": "KIND_CONFLICT",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "CONCEPT",
+        "proposed_parent_node_id": "M49-B09-S08",
+        "requirement_text": "风险复核组暂停条件",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": null
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P15",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B09"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "764a62de2950350875338d4a5058807306ee80898576018259c99669f5a42b66",
+      "coverage_cell": "P16",
+      "execution_eligible": false,
+      "primary_risk": "CARDINALITY_SCOPE_CONFLICT",
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B05-S09",
+        "requirement_text": "备用介质库设施状态",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P16",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B05"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "4cd118b99c9dc3211c1d32d02ee8a4afc4edd0cc43b542282af3f3ed404f240a",
+      "coverage_cell": "P17",
+      "execution_eligible": false,
+      "primary_risk": "CARDINALITY_SCOPE_CONFLICT",
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B07-S09",
+        "requirement_text": "远程控制链路供电状态",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P17",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B07"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "715046d757c079f560299989ba347206274e53c6d949cf2acb662d6ec049f69a",
+      "coverage_cell": "P18",
+      "execution_eligible": false,
+      "primary_risk": "NO_SAFE_REUSE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B10-S10",
+        "requirement_text": "参考跨区支援组启动条件新增跨组织实时态势可信度联合指数",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "float"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "P18",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B10"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "6fcde03b5f5492764048b43d0c39abd7984cdd4278f148536aaea64b035a029d",
+      "coverage_cell": "C01",
+      "execution_eligible": false,
+      "primary_risk": "SUBJECT_AMBIGUITY",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要增加事件责任状态，但没有说明对应哪一个复盘治理主体。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": null
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "C01",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B12"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "d2984851ac4f467b3ddb220b53a6a4a0319757162cbc29e0dc69c104ac1c12f4",
+      "coverage_cell": "C02",
+      "execution_eligible": false,
+      "primary_risk": "OWNERSHIP_AMBIGUITY",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "请记录培训维护结论，但未说明由内部班组还是服务商负责。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": null
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "C02",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B11"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "59d4b73ac18361eaeeb52066cc5511add10061c8e8d50362935f2e1d9acf04a5",
+      "coverage_cell": "C03",
+      "execution_eligible": false,
+      "primary_risk": "SCOPE_AMBIGUITY",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要标记分区状态，尚未说明针对单一区域还是全部区域。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": null
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "C03",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B02"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "d4711c486deadad64736911f5238e97a9813aa272c3c343135cbd9d89e352e17",
+      "coverage_cell": "C04",
+      "execution_eligible": false,
+      "primary_risk": "AGGREGATION_AMBIGUITY",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要统计疏散人数，未说明按路线、楼层还是整栋汇总。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": null
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "C04",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B04"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "70984c84b125985e07746482e755d5c6163d0dc834f9c7bf13ba47d67cada073",
+      "coverage_cell": "C05",
+      "execution_eligible": false,
+      "primary_risk": "CARDINALITY_AMBIGUITY",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要记录灭火介质类别，未说明只能一个还是可以多个。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": null
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "C05",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B05"
+    },
+    {
+      "batch": "FORMAL",
+      "candidate_digest": "f889db2ff4ac5f379348841ce1da95e4b330c462d25c2e64c5acfa010a5682ce",
+      "coverage_cell": "C06",
+      "execution_eligible": false,
+      "primary_risk": "COMBINATION_AMBIGUITY",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要建立应急协同记录，但参与角色和适用事件均未确定。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": null
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "C06",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B10"
+    },
+    {
+      "batch": "RESERVE",
+      "candidate_digest": "d5b34405773c082a3c6229bbbdc589e8692939c22b68a07eebf62cc7b6bd5945",
+      "coverage_cell": "R01",
+      "execution_eligible": false,
+      "primary_risk": "CLARIFICATION_RESERVE",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要补充报警确认信息，但未说明报警回路和确认主体。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": null
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "R01",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B03"
+    },
+    {
+      "batch": "RESERVE",
+      "candidate_digest": "8e96962be58c6528cbf32cfdfafec55f1b2822ff5c0f8d4163e78278d4a8ace4",
+      "coverage_cell": "R02",
+      "execution_eligible": false,
+      "primary_risk": "CLARIFICATION_RESERVE",
+      "request": {
+        "cardinality_hint": "UNKNOWN",
+        "node_kind_hint": "UNKNOWN",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要补充演练结果，但未说明演练类型和适用人员。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": null
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "R02",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B11"
+    },
+    {
+      "batch": "RESERVE",
+      "candidate_digest": "71baf49248bbb2c6085418a3e567bc96825bd2a52cd5617ae0f012a1d5ddabcd",
+      "coverage_cell": "R03",
+      "execution_eligible": false,
+      "primary_risk": "TOP_K_RESERVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "事件整改状态验证",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "R03",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B12"
+    },
+    {
+      "batch": "RESERVE",
+      "candidate_digest": "9391d72860253c808330c2cfdff283b5ba37d19e31f6ee689456b8d7b915dd60",
+      "coverage_cell": "R04",
+      "execution_eligible": false,
+      "primary_risk": "CROSS_BRANCH_RESERVE",
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B02-S01",
+        "requirement_text": "复位检查组控制范围",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "space_code"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "R04",
+      "secondary_tags": [
+        "PARENT_INTERFERENCE"
+      ],
+      "top_level_branch_ref": "M49-B06"
+    },
+    {
+      "batch": "RESERVE",
+      "candidate_digest": "8874c72568648db1e6027555968dc4d5b07188e6bf04a7c09bb34ea45cc06d70",
+      "coverage_cell": "R05",
+      "execution_eligible": false,
+      "primary_risk": "KIND_CONFLICT_RESERVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "CONCEPT",
+        "proposed_parent_node_id": "M49-B07-S10",
+        "requirement_text": "联动复核组供电状态",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": null
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "R05",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B07"
+    },
+    {
+      "batch": "RESERVE",
+      "candidate_digest": "b05903f677ccf2a49d3675c5abe3e1b5139726132d1543c6358bf86ebfe03ed7",
+      "coverage_cell": "R06",
+      "execution_eligible": false,
+      "primary_risk": "CARDINALITY_RESERVE",
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M49-B09-S10",
+        "requirement_text": "完工恢复组许可状态",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "review_status": "PENDING_SILVER_REVIEW",
+      "scenario_ref": "R06",
+      "secondary_tags": [],
+      "top_level_branch_ref": "M49-B09"
+    }
+  ],
+  "patch_eligible": false,
+  "reserve_scenario_count": 6,
+  "schema_version": "fire-m49-sealed-candidates.v1",
+  "source_class": "CLEANROOM_SYNTHETIC"
+}

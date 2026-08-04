@@ -1,0 +1,3753 @@
+{
+  "assessment_authority": "NONE",
+  "dataset_ref": "fictional-fire-m49-sealed-v1",
+  "gate_eligible": false,
+  "gold_eligible": false,
+  "items": [
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B01-S01-P02",
+          "M49-B01-S01-R01-F03",
+          "M49-B01-S01-P01",
+          "M49-B01-S01-P05",
+          "M49-B01-S01-P06",
+          "M49-B01-S01-P04",
+          "M49-B01-S01-P07",
+          "M49-B01-S01-P03",
+          "M49-B01-S01-R01",
+          "M49-B01-S01-R01-F02",
+          "M49-B01-S01-R01-F01",
+          "M49-B01-S06-P06",
+          "M49-B01-S01",
+          "M49-B01-S07-P05",
+          "M49-B01-S02-P01",
+          "M49-B01-S08-P04",
+          "M49-B01-S09-P03",
+          "M49-B01-S10-P02",
+          "M49-B01-S06-R01-F04",
+          "M49-B08-S06-R01-F03"
+        ],
+        "candidate_set_hash": "0e5ce88c8b47e78ba0b9cd84cbc1bb964cef38a588e9e44b1fb21af2272a74a3",
+        "oracle_target_ranks": {
+          "M49-B01-S01-P02": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B01-S01-P02"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B01-S01-P02"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "e04c8b80b453b7d7e1002cbf2b6eb7c2a3182b3851081646ae2a026ba04c6126",
+      "retrieval_mode": "TARGET_HIT",
+      "scenario_ref": "P01",
+      "source_candidate_digest": "15c607552ee3d2abb35ef876f6543a50a8a4b5a76a2166b47f0f268bf04e63d1"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B02-S02-P03",
+          "M49-B02-S02-R01-F03",
+          "M49-B02-S02-P02",
+          "M49-B02-S02-P04",
+          "M49-B02-S02-P05",
+          "M49-B02-S02-P01",
+          "M49-B02-S02-P06",
+          "M49-B02-S02-R01",
+          "M49-B02-S02-R01-F01",
+          "M49-B02-S02-R01-F02",
+          "M49-B02-S02",
+          "M49-B02-S08-P06",
+          "M49-B02-S01-P04",
+          "M49-B02-S03-P02",
+          "M49-B02-S04-P01",
+          "M49-B02-S09-P05",
+          "M49-B02-S10-P04",
+          "M49-B09-S04-P03",
+          "M49-B09-S04-P06",
+          "M49-B09-S04-R01-F01"
+        ],
+        "candidate_set_hash": "df0d5d9b37a0d4bde330d38f1a567789c88dcbb8468f23020462d518035aff69",
+        "oracle_target_ranks": {
+          "M49-B02-S02-P03": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B02-S02-P03"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B02-S02-P03"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "e6d63a637ed747ec0577f187bbd277e5491c65b25de3d82fd50a356240f09b2e",
+      "retrieval_mode": "TARGET_HIT",
+      "scenario_ref": "P02",
+      "source_candidate_digest": "b255d1fbad69683ac4c4748c0bbd0cdd5e6c94d5e357f20196df3e4badc19cd8"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B03-S03-P04",
+          "M49-B03-S03-P03",
+          "M49-B03-S03-R01-F03",
+          "M49-B03-S03-P01",
+          "M49-B03-S03-P02",
+          "M49-B03-S03-P05",
+          "M49-B03-S03-R01",
+          "M49-B03-S03-R01-F01",
+          "M49-B03-S03-R01-F02",
+          "M49-B03-S03",
+          "M49-B03-S05-P02",
+          "M49-B03-S04-P03",
+          "M49-B07-S05-P03",
+          "M49-B07-S06-P02",
+          "M49-B07-S08-P01",
+          "M49-B07-S08-P03",
+          "M49-B07-S08-R01-F02",
+          "M49-B07-S08-P02",
+          "M49-B07-S08-R01-F01",
+          "M49-B07-S08-R01-F04"
+        ],
+        "candidate_set_hash": "71ed9005e47168cb1ec72a622b86adabf0d204385bf954669e9d8e97ccab8574",
+        "oracle_target_ranks": {
+          "M49-B03-S03-P04": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B03-S03-P04"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B03-S03-P04"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "43108a9affc01f56b372f9c17dc6baf68a4283f0647eade4585ca6ee92d19e8f",
+      "retrieval_mode": "TARGET_HIT",
+      "scenario_ref": "P03",
+      "source_candidate_digest": "1fc006a7fe5acb675ed4f623e097e593bee7a22e95e461b2c7dacfc1a4fd038d"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B04-S04-P05",
+          "M49-B04-S04-P01",
+          "M49-B04-S04-P04",
+          "M49-B04-S04-P02",
+          "M49-B04-S04-P03",
+          "M49-B04-S04-P06",
+          "M49-B04-S04-P07",
+          "M49-B04-S04-R01",
+          "M49-B04-S04-R01-F02",
+          "M49-B04-S04-R01-F03",
+          "M49-B04-S04-R01-F01",
+          "M49-B04-S04",
+          "M49-B04-S05-P04",
+          "M49-B04-S03-P06",
+          "M49-B04-S06-P03",
+          "M49-B04-S07-P02",
+          "M49-B04-S08-P01",
+          "M49-B03-S08-P07",
+          "M49-B03-S04-P02",
+          "M49-B06-S02-P06"
+        ],
+        "candidate_set_hash": "440b7c233898793097c314402191aff46f46e27f960b8d1ee8be1dc249f00ee0",
+        "oracle_target_ranks": {
+          "M49-B04-S04-P05": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "boolean"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B04-S04-P05"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B04-S04-P05"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "2e5d2776dd9ed9b96127fb7d331d047307cbd6ee6b5ef418ab6994e11a214620",
+      "retrieval_mode": "TARGET_HIT",
+      "scenario_ref": "P04",
+      "source_candidate_digest": "9892748bce2104995b02ede3ba0389a009cdc86982ba1cd921678e30107487d6"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B01-S01-P02",
+          "M49-B01-S02-P01",
+          "M49-B01-S01-R01-F03",
+          "M49-B01-S02-R01-F02",
+          "M49-B01-S01-P01",
+          "M49-B01-S01-P05",
+          "M49-B01-S01-R01-F02",
+          "M49-B01-S01-P06",
+          "M49-B01-S01-P04",
+          "M49-B01-S01-P07",
+          "M49-B01-S01-P03",
+          "M49-B01-S01-R01",
+          "M49-B01-S01-R01-F01",
+          "M49-B01-S02-R01",
+          "M49-B01-S02-P04",
+          "M49-B01-S02-P05",
+          "M49-B01-S02-R01-F01",
+          "M49-B01-S02-R01-F04",
+          "M49-B01-S02-P03",
+          "M49-B01-S02-R01-F03"
+        ],
+        "candidate_set_hash": "30d84818449b309cef21b701fa2f8afc57c0860983d6efe861eb0df8694652f4",
+        "oracle_target_ranks": {
+          "M49-B01-S01-P02": 1,
+          "M49-B01-S02-P01": 2
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B01-S01-P02"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B01-S02-P01"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B01-S01-P02",
+            "M49-B01-S02-P01"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 2
+        }
+      },
+      "oracle_item_digest": "5f9c9103df606d1c0c0a454d8f82f7520e9ab8b337ba6491d02bc67f03a8353a",
+      "retrieval_mode": "TARGET_HIT",
+      "scenario_ref": "P05",
+      "source_candidate_digest": "b30d0c8912269f4d71f2b5400faacfaea792923ec3c5825a7aae818ff18b685b"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B03-S01-P02",
+          "M49-B03-S02-P01",
+          "M49-B03-S01-R01-F01",
+          "M49-B03-S01-P06",
+          "M49-B03-S02-P05",
+          "M49-B03-S01-P05",
+          "M49-B03-S02-P04",
+          "M49-B03-S01-R01-F03",
+          "M49-B03-S02-P07",
+          "M49-B03-S02-R01-F02",
+          "M49-B03-S01-P03",
+          "M49-B03-S02-P02",
+          "M49-B03-S01-R01-F04",
+          "M49-B03-S02-R01-F03",
+          "M49-B03-S02-R01-F05",
+          "M49-B03-S01-P04",
+          "M49-B03-S01-R01-F02",
+          "M49-B03-S02-P03",
+          "M49-B03-S02-P06",
+          "M49-B03-S02-R01-F01"
+        ],
+        "candidate_set_hash": "c85164b05e37f26311cb85574f9cc41e48c04a509036f5adb25c05d0a18b3bfe",
+        "oracle_target_ranks": {
+          "M49-B03-S01-P02": 1,
+          "M49-B03-S02-P01": 2
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B03-S01-P02"
+            },
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B03-S02-P01"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B03-S01-P02",
+            "M49-B03-S02-P01"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 2
+        }
+      },
+      "oracle_item_digest": "5dc58f9f9e77497e8a54d07dfbcbda3e087c6ec2fe66a6b7389df1b52af9db5d",
+      "retrieval_mode": "TARGET_HIT",
+      "scenario_ref": "P06",
+      "source_candidate_digest": "9fde4043c44f744dfdb798cb8ef43e48dd9cc130268db26aa3f7d134831b2c59"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B05-S03-P03",
+          "M49-B05-S03-P02",
+          "M49-B05-S03-P01",
+          "M49-B05-S03-P04",
+          "M49-B05-S03-P05",
+          "M49-B05-S03-P06",
+          "M49-B05-S03-P07",
+          "M49-B05-S03-R01",
+          "M49-B05-S03-R01-F02",
+          "M49-B05-S03-R01-F03",
+          "M49-B05-S03-R01-F04",
+          "M49-B05-S03-R01-F01",
+          "M49-B05-S04-P02",
+          "M49-B05-S03",
+          "M49-B05-S02-P04",
+          "M49-B05-S01-P05",
+          "M49-B05-S05-P01",
+          "M49-B05-S09-P06",
+          "M49-B05-S10-P05",
+          "M49-B06-S01-P02"
+        ],
+        "candidate_set_hash": "b159e396b870adeb599c680851329e851ed5d31e45d50615bc721ab4d068e99e",
+        "oracle_target_ranks": {
+          "M49-B05-S03-P03": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "integer"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "ABSTAIN",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B05-S03-P03"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "f1738b4b3ec1f5ab3ac174bebcb4f843a203d402d11791c651c6a2bac3a6c9cd",
+      "retrieval_mode": "BOUNDED_EVIDENCE",
+      "scenario_ref": "P07",
+      "source_candidate_digest": "5d8ba2c782b1c64f4dc0ea8b2488d5d1999cc46dfad7cc06fbefbf9e71bf0a56"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B06-S04-P03",
+          "M49-B06-S05-P02",
+          "M49-B06-S06-P01",
+          "M49-B06-S10-P06",
+          "M49-B06-S05-P06",
+          "M49-B06-S04-P01",
+          "M49-B06-S04-P05",
+          "M49-B06-S04-P06",
+          "M49-B06-S04-P02",
+          "M49-B06-S04-P04",
+          "M49-B06-S04-R01",
+          "M49-B06-S04-R01-F01",
+          "M49-B06-S04-R01-F03",
+          "M49-B06-S04-R01-F04",
+          "M49-B06-S04-R01-F02",
+          "M49-B06-S01-P06",
+          "M49-B06-S02-P05",
+          "M49-B06-S03-P04",
+          "M49-B06-S04",
+          "M49-B06-S05-P04"
+        ],
+        "candidate_set_hash": "2b28cb386f15b589960f791b46eacd3ba3041b275452b5abbc83af5d6ee243d1",
+        "oracle_target_ranks": {
+          "M49-B06-S04-P03": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "ABSTAIN",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B06-S04-P03"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "3688e46366865f81cab54ab8af040c70bde156f64a745e72dc5d75b1af5dd6d3",
+      "retrieval_mode": "BOUNDED_EVIDENCE",
+      "scenario_ref": "P08",
+      "source_candidate_digest": "d53a40a2623f31853a208d687850f06c269c8f233bfefbddffdabebebc89064f"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B07-S02-R01-F02",
+          "M49-B10-S09-R01-F04",
+          "M49-B10-S01-P07",
+          "M49-B10-S03-R01-F04",
+          "M49-B10-S04-R01-F03",
+          "M49-B10-S05-R01-F02",
+          "M49-B10-S06-R01-F01",
+          "M49-B10-S10-R01-F03",
+          "M49-B12-S03-R01-F02",
+          "M49-B03-S07-P05",
+          "M49-B03-S07-R01-F01",
+          "M49-B07-S10-P01",
+          "M49-B08-S03-P02",
+          "M49-B09-S08-P03",
+          "M49-B11-S10-P04",
+          "M49-B11-S10-R01-F02",
+          "M49-B12-S05-P01",
+          "M49-B10-S09-P03",
+          "M49-B06-S10-R01-F01",
+          "M49-B08-S10-R01-F05"
+        ],
+        "candidate_set_hash": "432290a247d2576fed13a16b6ae62a8446cadb39288082f52ef4e42a785d6dc6",
+        "oracle_target_ranks": {
+          "M49-B10-S09-R01-F04": 2
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B10-S09-R01-F04"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B10-S09-R01-F04"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 2
+        }
+      },
+      "oracle_item_digest": "6252fdd1b3ec1c209556de1f7d90d29a525efc1c48495e63f21d113da20eecea",
+      "retrieval_mode": "TARGET_HIT",
+      "scenario_ref": "P09",
+      "source_candidate_digest": "7ef7026bd1b2e6a85d06f23ef7a422ad14468247e7a75c72d0a861779769e720"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B12-S04-R01-F01",
+          "M49-B12-S04-P02",
+          "M49-B12-S04-P05",
+          "M49-B12-S01-P05",
+          "M49-B12-S05-P01",
+          "M49-B12-S04-R01-F03",
+          "M49-B12-S04-R01-F04",
+          "M49-B12-S04-P01",
+          "M49-B12-S04-P03",
+          "M49-B12-S04-P04",
+          "M49-B12-S04-R01-F02",
+          "M49-B12-S04-P06",
+          "M49-B12-S04-R01",
+          "M49-B12-S10-P05",
+          "M49-B12-S01-R01-F04",
+          "M49-B12-S04",
+          "M49-B12-S02-P04",
+          "M49-B12-S03-P03",
+          "M49-B12-S08-P07",
+          "M49-B12-S05-P06"
+        ],
+        "candidate_set_hash": "fe60ddc5e23df668d61054380afa91caf5055046429f585de81fec405f07f01f",
+        "oracle_target_ranks": {
+          "M49-B12-S04-P02": 2
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B12-S04-P02"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B12-S04-P02"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 2
+        }
+      },
+      "oracle_item_digest": "f3c4f3dce1e8b01fd0be6530e3dd9f5733767d5dea1644c46477b5c85897dd5a",
+      "retrieval_mode": "TARGET_HIT",
+      "scenario_ref": "P10",
+      "source_candidate_digest": "deab203c4892bf9f920a44ba2217bac4af9fcd22f3d9c0daf48f3925b9e1077f"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B01-S05-P04",
+          "M49-B01-S05-P01",
+          "M49-B01-S05-R01-F02",
+          "M49-B01-S05-P02",
+          "M49-B01-S05-P05",
+          "M49-B01-S05-R01-F01",
+          "M49-B01-S05-R01-F04",
+          "M49-B01-S05-P03",
+          "M49-B01-S05-R01",
+          "M49-B01-S05-R01-F03",
+          "M49-B08-S07-P01",
+          "M49-B08-S06-P02",
+          "M49-B01-S03-P06",
+          "M49-B01-S04-P05",
+          "M49-B01-S05",
+          "M49-B08-S02-P06",
+          "M49-B08-S03-P05",
+          "M49-B08-S04-P04",
+          "M49-B08-S05-P03",
+          "M49-B01-S06-P03"
+        ],
+        "candidate_set_hash": "47747fce8e683c1549621557c2179a4047be17263070209d200469ab23c3e7e9",
+        "oracle_target_ranks": {
+          "M49-B01-S05-P04": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B01-S05-P04"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B01-S05-P04"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "8e5bc5481e12631a233577d0934bf56c0bf7a88854fb7ff1729528d99d68492f",
+      "retrieval_mode": "TARGET_HIT",
+      "scenario_ref": "P11",
+      "source_candidate_digest": "f2e8b74a12dcfe2ea2ad5fa0e972c1b12a96c9bd51e19067725760a111b52f87"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B04-S06-P04",
+          "M49-B04-S06-P01",
+          "M49-B04-S06-P06",
+          "M49-B04-S06-R01-F01",
+          "M49-B04-S06-R01-F03",
+          "M49-B04-S06-R01-F04",
+          "M49-B04-S06-P05",
+          "M49-B04-S06-R01",
+          "M49-B04-S06-R01-F05",
+          "M49-B04-S06-P02",
+          "M49-B04-S06-P03",
+          "M49-B04-S06-R01-F02",
+          "M49-B04-S05-P05",
+          "M49-B04-S06",
+          "M49-B04-S09-P01",
+          "M49-B04-S09-P05",
+          "M49-B04-S04-P06",
+          "M49-B04-S07-P03",
+          "M49-B04-S08-P02",
+          "M49-B04-S09-R01-F03"
+        ],
+        "candidate_set_hash": "bb615941a560d83c3517342d51a53f2f26ff321ca6d9dff3297862b77eab3f89",
+        "oracle_target_ranks": {
+          "M49-B04-S06-P04": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "MULTIPLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B04-S06-P04"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B04-S06-P04"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "d59c19496fd8a200af656d3651f2f0a61a70a3eeeb70225e0221fb83b1babf81",
+      "retrieval_mode": "TARGET_HIT",
+      "scenario_ref": "P12",
+      "source_candidate_digest": "f105dd85702c7067156c42d024a442023e8957ba01c9d5923ddf18b89fd7ecaf"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B08-S07-P04",
+          "M49-B08-S07-R01-F04",
+          "M49-B08-S07-R01-F03",
+          "M49-B08-S07-P02",
+          "M49-B08-S07-P03",
+          "M49-B08-S07-R01-F01",
+          "M49-B08-S07-R01-F02",
+          "M49-B08-S07-R01-F05",
+          "M49-B08-S07-P01",
+          "M49-B08-S07-P05",
+          "M49-B08-S07-R01",
+          "M49-B08-S07",
+          "M49-B01-S10-R01-F02",
+          "M49-B08-S01-P01",
+          "M49-B08-S05-P06",
+          "M49-B08-S06-P05",
+          "M49-B08-S08-P03",
+          "M49-B08-S09-P02",
+          "M49-B08-S10-P01",
+          "M49-B01-S10-P07"
+        ],
+        "candidate_set_hash": "eeb0c1d8cab2f7baf2710a428a4ce2ca0a93f8d985a8a3460ccced5b123e73bc",
+        "oracle_target_ranks": {
+          "M49-B08-S07-P04": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "time_code"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B08-S07-P04"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B08-S07-P04"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "4b93686f368483257202227534982d5a21ee848503a367f29e0b5d31fd0ac16b",
+      "retrieval_mode": "TARGET_HIT",
+      "scenario_ref": "P13",
+      "source_candidate_digest": "2229d979e26631d8cbca87f7da71a874789872f15fb10376b4f726a4c11f69fc"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B06-S08-P01",
+          "M49-B07-S04-P05",
+          "M49-B06-S08-P02",
+          "M49-B06-S08-P04",
+          "M49-B06-S08-P05",
+          "M49-B06-S08-P06",
+          "M49-B06-S08-P07",
+          "M49-B06-S08-P03",
+          "M49-B06-S08-R01",
+          "M49-B06-S08-R01-F03",
+          "M49-B06-S08-R01-F04",
+          "M49-B06-S08-R01-F01",
+          "M49-B06-S08-R01-F02",
+          "M49-B06-S08-R01-F05",
+          "M49-B06-S08",
+          "M49-B05-S04-P05",
+          "M49-B05-S08-P01",
+          "M49-B06-S04-P05",
+          "M49-B06-S05-P04",
+          "M49-B06-S06-P03"
+        ],
+        "candidate_set_hash": "5fe5e9d4a0eb222fbe38e808262e9695ac92c2d02865351c59087243e3172547",
+        "oracle_target_ranks": {
+          "M49-B06-S08-P01": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "CONCEPT"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "ABSTAIN",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B06-S08-P01"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "9dbcc3697a45cbd42669c13ebed7d8bca66febc7d19fa5d4cf71a3065c40f1c2",
+      "retrieval_mode": "BOUNDED_EVIDENCE",
+      "scenario_ref": "P14",
+      "source_candidate_digest": "ebe10d2053b039508bb143ccf6a46ad3e497b9acf2113bf60d02f42a430f33d0"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B09-S08-P01",
+          "M49-B09-S08-P02",
+          "M49-B09-S08-P03",
+          "M49-B09-S08-P05",
+          "M49-B09-S08-P04",
+          "M49-B09-S08-P06",
+          "M49-B09-S08-P07",
+          "M49-B09-S08-R01",
+          "M49-B09-S08-R01-F01",
+          "M49-B09-S08-R01-F03",
+          "M49-B09-S08-R01-F02",
+          "M49-B09-S08-R01-F04",
+          "M49-B09-S08-R01-F05",
+          "M49-B09-S08",
+          "M49-B03-S07-P02",
+          "M49-B08-S03-P05",
+          "M49-B09-S05-P04",
+          "M49-B12-S05-P06",
+          "M49-B09-S02-P07",
+          "M49-B09-S04-P05"
+        ],
+        "candidate_set_hash": "5a45b09a356a695b5816b89cee8ca6efe9fb6f5ea9432f253550b38e7f9a9dc7",
+        "oracle_target_ranks": {
+          "M49-B09-S08-P01": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "CONCEPT"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "ABSTAIN",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B09-S08-P01"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "c0d21feb6a7aaa0caa1bb989b56b050757d9647865b402400a0daca2fb3729ad",
+      "retrieval_mode": "BOUNDED_EVIDENCE",
+      "scenario_ref": "P15",
+      "source_candidate_digest": "928e7edfff68971f8438e336a66f9ce963f3c910f703beea42d776ffe3e8b591"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B05-S09-P02",
+          "M49-B05-S09-R01-F03",
+          "M49-B05-S09-P06",
+          "M49-B05-S09-P03",
+          "M49-B05-S09-R01",
+          "M49-B05-S09-P01",
+          "M49-B05-S09-P04",
+          "M49-B05-S09-P05",
+          "M49-B05-S09-P07",
+          "M49-B05-S09-R01-F02",
+          "M49-B05-S09-R01-F01",
+          "M49-B05-S09-R01-F04",
+          "M49-B05-S09",
+          "M49-B05-S01-P01",
+          "M49-B05-S05-P06",
+          "M49-B05-S06-P05",
+          "M49-B05-S07-P04",
+          "M49-B05-S08-P03",
+          "M49-B05-S10-P01",
+          "M49-B05-S02-P06"
+        ],
+        "candidate_set_hash": "4cfeaa45835d77947068ef50782508ca0b13c4b44a789d6059bded38ff7c5c0c",
+        "oracle_target_ranks": {
+          "M49-B05-S09-P02": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "MULTIPLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "ABSTAIN",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B05-S09-P02"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "ccb57c87c6f1527e8ee2a1334e8a26928f3a5812a4a66f6bfc0dde034fba5505",
+      "retrieval_mode": "BOUNDED_EVIDENCE",
+      "scenario_ref": "P16",
+      "source_candidate_digest": "764a62de2950350875338d4a5058807306ee80898576018259c99669f5a42b66"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B07-S09-P02",
+          "M49-B07-S09-R01-F01",
+          "M49-B07-S09-P01",
+          "M49-B07-S09-P05",
+          "M49-B07-S09-P03",
+          "M49-B07-S09-R01",
+          "M49-B07-S09-P04",
+          "M49-B07-S09-P06",
+          "M49-B07-S09-R01-F03",
+          "M49-B07-S09-R01-F04",
+          "M49-B07-S09-R01-F05",
+          "M49-B07-S09-R01-F02",
+          "M49-B07-S09",
+          "M49-B07-S04-P07",
+          "M49-B07-S01-P01",
+          "M49-B07-S06-P05",
+          "M49-B07-S07-P04",
+          "M49-B07-S08-P03",
+          "M49-B07-S10-P01",
+          "M49-B03-S06-R01-F02"
+        ],
+        "candidate_set_hash": "15946fd5c56e4590f5e0d8f6ef96b88b20fb90cc9c176b56eebd2df9bb33d542",
+        "oracle_target_ranks": {
+          "M49-B07-S09-P02": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "MULTIPLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "ABSTAIN",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B07-S09-P02"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "3cb1ac3d995398e0de5c37cea93571f754de6ef3da45f319fcd22eafcefc319b",
+      "retrieval_mode": "BOUNDED_EVIDENCE",
+      "scenario_ref": "P17",
+      "source_candidate_digest": "4cd118b99c9dc3211c1d32d02ee8a4afc4edd0cc43b542282af3f3ed404f240a"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B10-S10-P01",
+          "M49-B10-S10-P05",
+          "M49-B10-S10-P07",
+          "M49-B10-S10-R01-F03",
+          "M49-B10-S10-R01-F01",
+          "M49-B10-S10-P02",
+          "M49-B10-S10-P03",
+          "M49-B10-S10-P04",
+          "M49-B10-S10-P06",
+          "M49-B10-S10-R01",
+          "M49-B10-S10-R01-F02",
+          "M49-B10-S07-P04",
+          "M49-B10-S10",
+          "M49-B10-S01-P01",
+          "M49-B10-S04-P07",
+          "M49-B10-S06-P05",
+          "M49-B10-S08-P03",
+          "M49-B10-S09-P02",
+          "M49-B06-S09-P01",
+          "M49-B04-S05-P02"
+        ],
+        "candidate_set_hash": "17a6d756d6f3561e237534358d9e2d94b6b7990b85035a20a9ca960d1ce1b5c6",
+        "oracle_target_ranks": {
+          "M49-B10-S10-P01": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "float"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "ABSTAIN",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B10-S10-P01"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "1505b134928c7b23d7cced339f8ef99340a27a9ea3d5c394fa41223e20fd95e1",
+      "retrieval_mode": "BOUNDED_EVIDENCE",
+      "scenario_ref": "P18",
+      "source_candidate_digest": "715046d757c079f560299989ba347206274e53c6d949cf2acb662d6ec049f69a"
+    },
+    {
+      "clarification_rubric": {
+        "minimum_question_count": 1,
+        "required_distinctions": [
+          "target_subject",
+          "applicable_scope"
+        ]
+      },
+      "deterministic_preview": null,
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "oracle_item_digest": "cca6662886b8c824903566dfd01c6f60e3f33d2b27c7a7e284b06b99e5dda923",
+      "retrieval_mode": "NOT_APPLICABLE",
+      "scenario_ref": "C01",
+      "source_candidate_digest": "6fcde03b5f5492764048b43d0c39abd7984cdd4278f148536aaea64b035a029d"
+    },
+    {
+      "clarification_rubric": {
+        "minimum_question_count": 1,
+        "required_distinctions": [
+          "target_subject",
+          "applicable_scope"
+        ]
+      },
+      "deterministic_preview": null,
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "oracle_item_digest": "8a779342638bde68d0bf73c43f0c0262319f5a436565f9c07d8063ba54cdaa4c",
+      "retrieval_mode": "NOT_APPLICABLE",
+      "scenario_ref": "C02",
+      "source_candidate_digest": "d2984851ac4f467b3ddb220b53a6a4a0319757162cbc29e0dc69c104ac1c12f4"
+    },
+    {
+      "clarification_rubric": {
+        "minimum_question_count": 1,
+        "required_distinctions": [
+          "target_subject",
+          "applicable_scope"
+        ]
+      },
+      "deterministic_preview": null,
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "oracle_item_digest": "2122df21bf5cc9d39d2640d5e9101bd982841357f8902c5b86f2f59df7169e0a",
+      "retrieval_mode": "NOT_APPLICABLE",
+      "scenario_ref": "C03",
+      "source_candidate_digest": "59d4b73ac18361eaeeb52066cc5511add10061c8e8d50362935f2e1d9acf04a5"
+    },
+    {
+      "clarification_rubric": {
+        "minimum_question_count": 1,
+        "required_distinctions": [
+          "target_subject",
+          "applicable_scope"
+        ]
+      },
+      "deterministic_preview": null,
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "oracle_item_digest": "1e85ba02cfff7f62f7d98ae2d4f77608afc7dcebd418994ba9cf6559a30a685f",
+      "retrieval_mode": "NOT_APPLICABLE",
+      "scenario_ref": "C04",
+      "source_candidate_digest": "d4711c486deadad64736911f5238e97a9813aa272c3c343135cbd9d89e352e17"
+    },
+    {
+      "clarification_rubric": {
+        "minimum_question_count": 1,
+        "required_distinctions": [
+          "target_subject",
+          "applicable_scope"
+        ]
+      },
+      "deterministic_preview": null,
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "oracle_item_digest": "f6b8058089d2dfcbcf3897369f59982f272ecc7449f1db4f85ee1aa275a2b139",
+      "retrieval_mode": "NOT_APPLICABLE",
+      "scenario_ref": "C05",
+      "source_candidate_digest": "70984c84b125985e07746482e755d5c6163d0dc834f9c7bf13ba47d67cada073"
+    },
+    {
+      "clarification_rubric": {
+        "minimum_question_count": 1,
+        "required_distinctions": [
+          "target_subject",
+          "applicable_scope"
+        ]
+      },
+      "deterministic_preview": null,
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "oracle_item_digest": "e5404b4cadefd5a41ce63bf0c09701cc09f76d4561b2422ae32d4a549bc94f35",
+      "retrieval_mode": "NOT_APPLICABLE",
+      "scenario_ref": "C06",
+      "source_candidate_digest": "f889db2ff4ac5f379348841ce1da95e4b330c462d25c2e64c5acfa010a5682ce"
+    },
+    {
+      "clarification_rubric": {
+        "minimum_question_count": 1,
+        "required_distinctions": [
+          "target_subject",
+          "applicable_scope"
+        ]
+      },
+      "deterministic_preview": null,
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "oracle_item_digest": "f01da9f56acce0b3e06b0b3db8307ade6d2bb7eb3cce0507918ffaa2de85919c",
+      "retrieval_mode": "NOT_APPLICABLE",
+      "scenario_ref": "R01",
+      "source_candidate_digest": "d5b34405773c082a3c6229bbbdc589e8692939c22b68a07eebf62cc7b6bd5945"
+    },
+    {
+      "clarification_rubric": {
+        "minimum_question_count": 1,
+        "required_distinctions": [
+          "target_subject",
+          "applicable_scope"
+        ]
+      },
+      "deterministic_preview": null,
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "clarification_question",
+                "policy": "NON_EMPTY"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "UNKNOWN"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "CLARIFY",
+        "recommendation": {
+          "acceptable_outcomes": [],
+          "applicable": false
+        },
+        "retrieval": {
+          "acceptable_node_ids": [],
+          "allowed_statuses": [],
+          "applicable": false,
+          "top_k": null
+        }
+      },
+      "oracle_item_digest": "1f998131adf26e18372a346e11c95782783edcdaba9654abd102a35116fc0867",
+      "retrieval_mode": "NOT_APPLICABLE",
+      "scenario_ref": "R02",
+      "source_candidate_digest": "8e96962be58c6528cbf32cfdfafec55f1b2822ff5c0f8d4163e78278d4a8ace4"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B12-S01-P05",
+          "M49-B12-S10-P05",
+          "M49-B12-S02-P04",
+          "M49-B12-S03-P03",
+          "M49-B12-S04-P02",
+          "M49-B12-S05-P01",
+          "M49-B12-S08-P07",
+          "M49-B12-S01-R01-F04",
+          "M49-B12-S04-R01-F01",
+          "M49-B12-S04-P05",
+          "M49-B12-S09-R01-F02",
+          "M49-B12-S10-R01-F01",
+          "M49-B12-S06-P05",
+          "M49-B12-S09-P02",
+          "M49-B12-S10-P01",
+          "M49-B12-S01-R01-F03",
+          "M49-B12-S06-P03",
+          "M49-B12",
+          "M49-B12-S01-P03",
+          "M49-B12-S01-R01-F01"
+        ],
+        "candidate_set_hash": "507c4cce9283d14d426f40ea3dd82c0f092a28b673656455cbfff65ff9a9b3c2",
+        "oracle_target_ranks": {
+          "M49-B12-S04-P02": 5
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B12-S04-P02"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B12-S04-P02"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 5
+        }
+      },
+      "oracle_item_digest": "7dce2d74a38d07b9ad68e7d1b429c9cae187b370ad73c78e428d5726e18dc8e4",
+      "retrieval_mode": "TARGET_HIT",
+      "scenario_ref": "R03",
+      "source_candidate_digest": "71baf49248bbb2c6085418a3e567bc96825bd2a52cd5617ae0f012a1d5ddabcd"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B06-S10-P01",
+          "M49-B06-S10-P06",
+          "M49-B06-S10-R01",
+          "M49-B06-S10-P02",
+          "M49-B06-S10-P03",
+          "M49-B06-S10-P04",
+          "M49-B06-S10-P05",
+          "M49-B06-S10-R01-F01",
+          "M49-B06-S10-R01-F02",
+          "M49-B06-S10-R01-F03",
+          "M49-B06-S10-R01-F04",
+          "M49-B06-S05-P06",
+          "M49-B06-S06-P05",
+          "M49-B06-S09-P02",
+          "M49-B06-S10",
+          "M49-B06-S01-P01",
+          "M49-B06-S07-P04",
+          "M49-B06-S08-P03",
+          "M49-B01-S09-P06",
+          "M49-B01-S09-R01-F01"
+        ],
+        "candidate_set_hash": "0370e0bfd5c2f88d1e5ecfec11f82281855caf0357350b1de6eed2442b232bd3",
+        "oracle_target_ranks": {
+          "M49-B06-S10-P01": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "MULTIPLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "space_code"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "USE_EXISTING_NODE",
+              "relation": "SEMANTICALLY_EQUIVALENT",
+              "target_node_id": "M49-B06-S10-P01"
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B06-S10-P01"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "9672bf43e3f7e2e7f3c970563772a489c1884956151a6f3619aaadb40e416c5e",
+      "retrieval_mode": "TARGET_HIT",
+      "scenario_ref": "R04",
+      "source_candidate_digest": "9391d72860253c808330c2cfdff283b5ba37d19e31f6ee689456b8d7b915dd60"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B07-S10-P01",
+          "M49-B07-S10-P03",
+          "M49-B07-S10-P04",
+          "M49-B07-S10-P05",
+          "M49-B07-S10-P06",
+          "M49-B07-S10-P07",
+          "M49-B07-S10-P02",
+          "M49-B07-S10-R01",
+          "M49-B07-S10-R01-F01",
+          "M49-B07-S10-R01-F02",
+          "M49-B07-S10-R01-F03",
+          "M49-B07-S10",
+          "M49-B07-S04-P07",
+          "M49-B07-S08-P03",
+          "M49-B07-S07-P04",
+          "M49-B06-S09-R01-F02",
+          "M49-B07-S08-R01-F02",
+          "M49-B07-S03-R01-F01",
+          "M49-B11-S05-R01-F01",
+          "M49-B03-S07-P05"
+        ],
+        "candidate_set_hash": "670b192f4b16aa8b71d8a34da99b417cc87335fd536a6c1e0a6c7c0de37fc193",
+        "oracle_target_ranks": {
+          "M49-B07-S10-P01": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "SINGLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "CONCEPT"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "value_type",
+                "policy": "NOT_COMPARED"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "ABSTAIN",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B07-S10-P01"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "305b6eeb62215ab1fa5e45a2dce90db6a4f28ac694f2203232e92cf5d5a2cd48",
+      "retrieval_mode": "BOUNDED_EVIDENCE",
+      "scenario_ref": "R05",
+      "source_candidate_digest": "8874c72568648db1e6027555968dc4d5b07188e6bf04a7c09bb34ea45cc06d70"
+    },
+    {
+      "clarification_rubric": null,
+      "deterministic_preview": {
+        "candidate_node_ids": [
+          "M49-B09-S10-P01",
+          "M49-B09-S10-R01-F04",
+          "M49-B09-S10-P05",
+          "M49-B09-S10-P06",
+          "M49-B09-S10-P02",
+          "M49-B09-S10-P04",
+          "M49-B09-S10-R01",
+          "M49-B09-S10-P03",
+          "M49-B09-S10-R01-F01",
+          "M49-B09-S10-R01-F03",
+          "M49-B09-S10-R01-F02",
+          "M49-B09-S08-P03",
+          "M49-B09-S10",
+          "M49-B09-S09-P02",
+          "M49-B08-S10-P04",
+          "M49-B08-S10-R01-F05",
+          "M49-B10-S09-R01-F04",
+          "M49-B09-S01-P01",
+          "M49-B09-S01-R01-F01",
+          "M49-B09-S04-R01-F04"
+        ],
+        "candidate_set_hash": "465a0ac5937e394b43b97f8f0d2d6a9055899659c94f05699a46f4c9a46d0c73",
+        "oracle_target_ranks": {
+          "M49-B09-S10-P01": 1
+        },
+        "status": "CANDIDATES_READY"
+      },
+      "oracle": {
+        "acceptable_intent_profiles": [
+          {
+            "field_expectations": [
+              {
+                "acceptable_values": [],
+                "field_name": "assumptions",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "MULTIPLE"
+                ],
+                "field_name": "cardinality",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [
+                  null
+                ],
+                "field_name": "clarification_question",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "confirmed_facts",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "evidence_gaps",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "lifecycle",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "PROPERTY"
+                ],
+                "field_name": "node_kind",
+                "policy": "EXACT_ONE_OF"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "ownership",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "role",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "scenario",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [],
+                "field_name": "subject",
+                "policy": "NOT_COMPARED"
+              },
+              {
+                "acceptable_values": [
+                  "string"
+                ],
+                "field_name": "value_type",
+                "policy": "EXACT_ONE_OF"
+              }
+            ],
+            "profile_ref": "P001"
+          }
+        ],
+        "expected_route": "PROCEED",
+        "recommendation": {
+          "acceptable_outcomes": [
+            {
+              "action": "ABSTAIN",
+              "relation": null,
+              "target_node_id": null
+            }
+          ],
+          "applicable": true
+        },
+        "retrieval": {
+          "acceptable_node_ids": [
+            "M49-B09-S10-P01"
+          ],
+          "allowed_statuses": [
+            "CANDIDATES_READY"
+          ],
+          "applicable": true,
+          "top_k": 1
+        }
+      },
+      "oracle_item_digest": "8190fd89703560c627bd615858c5fcca2c17d06859a9dbeb4c89f3e09ff4fe43",
+      "retrieval_mode": "BOUNDED_EVIDENCE",
+      "scenario_ref": "R06",
+      "source_candidate_digest": "b05903f677ccf2a49d3675c5abe3e1b5139726132d1543c6358bf86ebfe03ed7"
+    }
+  ],
+  "patch_eligible": false,
+  "quality_tier": "UNREVIEWED_CANDIDATE",
+  "schema_version": "fire-m49-sealed-oracle-sidecar.v1",
+  "source_candidate_batch_digest": "b2772c1d70a776b38efc326eb09470f0eaebb45d9c026a705c948eddf84faeca",
+  "source_tree_snapshot_hash": "65c5c9d06ffefe36433b1ec233f128658aa83422414c3ac681249dce7ad4d2b6"
+}

@@ -18,7 +18,9 @@
   "commit": null,
   "pr_url": null,
   "subtasks": [],
-  "children": [],
+  "children": [
+    "08-04-governance-architecture-convergence"
+  ],
   "parent": "08-03-m49-sealed-validation-data",
   "relatedFiles": [],
   "notes": "",

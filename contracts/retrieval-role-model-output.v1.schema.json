@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/retrieval-role-model-output.v1.schema.json",
+  "title": "Retrieval Role Model Output v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "spans"],
+  "properties": {
+    "schema_version": {
+      "const": "retrieval-role-model-output.v1"
+    },
+    "spans": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "text"],
+        "properties": {
+          "role": {
+            "enum": ["TARGET", "SCOPE", "EXCLUSION"]
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

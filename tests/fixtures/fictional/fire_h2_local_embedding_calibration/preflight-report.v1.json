@@ -1,0 +1,42 @@
+{
+  "a_baseline_status": "NOT_RUN",
+  "candidate_category_counts": {
+    "BOUNDARY_VARIATION": 4,
+    "CROSS_BRANCH_INTERFERENCE": 5,
+    "EXPLICIT_EMPTY": 5,
+    "HARD_NEGATIVE": 5,
+    "LEXICAL_BASELINE": 5,
+    "NON_LITERAL": 12
+  },
+  "candidate_count": 36,
+  "derived_from_real": false,
+  "embedding_used": false,
+  "execution_category_counts": {
+    "BOUNDARY_VARIATION": 3,
+    "CROSS_BRANCH_INTERFERENCE": 3,
+    "EXPLICIT_EMPTY": 4,
+    "HARD_NEGATIVE": 4,
+    "LEXICAL_BASELINE": 4,
+    "NON_LITERAL": 10
+  },
+  "execution_count": 28,
+  "fictional": true,
+  "gold_eligible": false,
+  "non_literal_subtype_counts": {
+    "ABBREVIATION": 2,
+    "COLLOQUIAL_PURPOSE": 2,
+    "CROSS_LEVEL": 2,
+    "MINOR_TYPO": 2,
+    "SYNONYM": 2
+  },
+  "patch_eligible": false,
+  "preflight_hash": "db56bdb355c9298fcc8389ffdfa8ffde92dc496e6d8226f5ac604e411757809f",
+  "production_qualification": false,
+  "schema_version": "treeguard.h2-local-data-preflight.v1",
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "source_manifest_hash": "61533ab2dcd7c5d982da9c994076484e689c1de56b726ddf2ff508f94dd3712f",
+  "status": "FROZEN_CODEX_SILVER",
+  "tree_node_count": 733,
+  "valid": true,
+  "value_envelope_count": 0
+}

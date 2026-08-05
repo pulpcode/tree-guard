@@ -248,3 +248,23 @@ super/sub-span 与非字面表达的最小检索表示，角色合同保持不�
 R2 已在不修改模型、Prompt、角色合同和分母的前提下，把相同 super-span 下的小模型
 结果恢复到五视图 Recall@8=16/16、MRR=1.0、空目标2/2。该结果冻结 R2 为开发期候选，
 但仍是暴露校准集结论；下一步不得继续使用该集合调参，必须转入新的未见确认。
+
+## R2 未见密封 runner
+
+- 数据提交固定为 `bcdb9718785af08f68f73814899b8af953af05ea`；runner 必须提交在该
+  commit 之后，并在首次读取私有请求前由调用方提供精确 `runner_commit`。
+- runner 只允许在当前 HEAD 精确等于 `runner_commit`、数据提交为其祖先、工作树
+  干净且数据白名单文件从 data commit 到 runner commit 零变化时继续。
+- 首次运行前重新验证 v3 final freeze、execution binding、28 条 execution input
+  和五视图合同；任何不一致均在模型调用前停线。
+- CLI 必须显式选择 `--preflight-only` 或 `--live`；preflight 模式不要求输出目录、
+  不创建实验工件且绝不调用模型，live 模式另行要求全新私有输出目录。
+- 每条每轮只做一次角色抽取流程，允许一次合同纠错重试；同一角色输出重新绑定到
+  五个视图，并同时送入确定性 R1/R2。两轮总调用上限固定为 112。
+- 每个视图报告 R1/R2 Recall@8/20、MRR、空目标、hard negative、非字面类别和
+  确定性重放；只有 R2 进入冻结 gate，R1 仅作诊断对照。
+- 完整请求、响应、角色 span、候选和 Oracle 只写入新建的 `0700` 私有目录下
+  `0600` 不可覆盖文件；stdout 只含固定 code、聚合计数和指标。
+- 两轮均通过且非字面 Recall@20 均至少 3/4，决策为 `R2_SHADOW_CANDIDATE`；
+  总门槛通过但非字面不足为 `R2_LEXICAL_LEG_ONLY`；角色合同失败为
+  `ROLE_EXTRACTION_NOT_STABLE`；其他召回失败为 `VECTOR_OR_HYBRID_REQUIRED`。

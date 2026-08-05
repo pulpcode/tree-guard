@@ -1,0 +1,281 @@
+{
+  "dataset_ref": "fictional-fire-h1-hybrid-calibration",
+  "entries": [
+    {
+      "acceptable_node_ids": [
+        "M5N0016"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "NON_LITERAL",
+      "scenario_ref": "H1S001"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N0416"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "NON_LITERAL",
+      "scenario_ref": "H1S002"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N0792"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "NON_LITERAL",
+      "scenario_ref": "H1S003"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N1337"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "NON_LITERAL",
+      "scenario_ref": "H1S004"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N1351"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "NON_LITERAL",
+      "scenario_ref": "H1S005"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N0953"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "NON_LITERAL",
+      "scenario_ref": "H1S006"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N1163"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "NON_LITERAL",
+      "scenario_ref": "H1S007"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N0834"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "NON_LITERAL",
+      "scenario_ref": "H1S008"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N0029"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "LEXICAL_BASELINE",
+      "scenario_ref": "H1S009"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N0205"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "LEXICAL_BASELINE",
+      "scenario_ref": "H1S010"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N0382"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "LEXICAL_BASELINE",
+      "scenario_ref": "H1S011"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N0618"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "LEXICAL_BASELINE",
+      "scenario_ref": "H1S012"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N0030"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "BOUNDARY_VARIATION",
+      "scenario_ref": "H1S013"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N1354"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "BOUNDARY_VARIATION",
+      "scenario_ref": "H1S014"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N1308"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [
+        "M5N0026"
+      ],
+      "primary_category": "CROSS_BRANCH_INTERFERENCE",
+      "scenario_ref": "H1S015"
+    },
+    {
+      "acceptable_node_ids": [
+        "M5N0124"
+      ],
+      "allowed_statuses": [
+        "CANDIDATES_READY"
+      ],
+      "excluded_node_ids": [
+        "M5N0956"
+      ],
+      "primary_category": "CROSS_BRANCH_INTERFERENCE",
+      "scenario_ref": "H1S016"
+    },
+    {
+      "acceptable_node_ids": [],
+      "allowed_statuses": [
+        "CANDIDATES_READY",
+        "NO_CANDIDATES"
+      ],
+      "excluded_node_ids": [
+        "M5N1308"
+      ],
+      "primary_category": "EXCLUSION_HARD_NEGATIVE",
+      "scenario_ref": "H1S017"
+    },
+    {
+      "acceptable_node_ids": [],
+      "allowed_statuses": [
+        "CANDIDATES_READY",
+        "NO_CANDIDATES"
+      ],
+      "excluded_node_ids": [
+        "M5N1337"
+      ],
+      "primary_category": "EXCLUSION_HARD_NEGATIVE",
+      "scenario_ref": "H1S018"
+    },
+    {
+      "acceptable_node_ids": [],
+      "allowed_statuses": [
+        "CANDIDATES_READY",
+        "NO_CANDIDATES"
+      ],
+      "excluded_node_ids": [
+        "M5N0792"
+      ],
+      "primary_category": "EXCLUSION_HARD_NEGATIVE",
+      "scenario_ref": "H1S019"
+    },
+    {
+      "acceptable_node_ids": [],
+      "allowed_statuses": [
+        "CANDIDATES_READY",
+        "NO_CANDIDATES"
+      ],
+      "excluded_node_ids": [
+        "M5N0416"
+      ],
+      "primary_category": "EXCLUSION_HARD_NEGATIVE",
+      "scenario_ref": "H1S020"
+    },
+    {
+      "acceptable_node_ids": [],
+      "allowed_statuses": [
+        "INSUFFICIENT_SIGNAL",
+        "NO_CANDIDATES"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "EXPLICIT_EMPTY",
+      "scenario_ref": "H1S021"
+    },
+    {
+      "acceptable_node_ids": [],
+      "allowed_statuses": [
+        "INSUFFICIENT_SIGNAL",
+        "NO_CANDIDATES"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "EXPLICIT_EMPTY",
+      "scenario_ref": "H1S022"
+    },
+    {
+      "acceptable_node_ids": [],
+      "allowed_statuses": [
+        "INSUFFICIENT_SIGNAL",
+        "NO_CANDIDATES"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "EXPLICIT_EMPTY",
+      "scenario_ref": "H1S023"
+    },
+    {
+      "acceptable_node_ids": [],
+      "allowed_statuses": [
+        "INSUFFICIENT_SIGNAL",
+        "NO_CANDIDATES"
+      ],
+      "excluded_node_ids": [],
+      "primary_category": "EXPLICIT_EMPTY",
+      "scenario_ref": "H1S024"
+    }
+  ],
+  "gold_eligible": false,
+  "model_input_forbidden": true,
+  "oracle_digest": "a58c2c04b7de0337ec0d5bc0fc1ae95054a58c2e33b5c85818dd8dd299ffc343",
+  "patch_eligible": false,
+  "quality_tier": "CODEX_SILVER_DEVELOPMENT",
+  "schema_version": "treeguard.fire-h1-hybrid-calibration-oracle.v1",
+  "source_scenario_digest": "ded103e1935e511e43a6a0927e40fffc190442dce1f48ca9de20057128e39902",
+  "source_tree_digest": "a220cee95ccb9443e53186de3f6b6b0536a654f193b41f0d6a4d6a8500e6fe8d"
+}

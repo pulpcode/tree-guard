@@ -1,0 +1,572 @@
+{
+  "dataset_ref": "fictional-fire-h1-hybrid-calibration",
+  "scenario_digest": "ded103e1935e511e43a6a0927e40fffc190442dce1f48ca9de20057128e39902",
+  "scenarios": [
+    {
+      "primary_category": "NON_LITERAL",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0015",
+        "requirement_text": "请在先遣侦查范围复用材料需要保存多久的属性定义。",
+        "value_type_hint": "class"
+      },
+      "scenario_ref": "H1S001",
+      "silver_roles": [
+        {
+          "end": 6,
+          "role": "SCOPE",
+          "start": 2,
+          "text": "先遣侦查"
+        },
+        {
+          "end": 18,
+          "role": "TARGET",
+          "start": 10,
+          "text": "材料需要保存多久"
+        }
+      ]
+    },
+    {
+      "primary_category": "NON_LITERAL",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0415",
+        "requirement_text": "为水源保障记录可关联的外部资源标识，复用现有属性。",
+        "value_type_hint": "time_code"
+      },
+      "scenario_ref": "H1S002",
+      "silver_roles": [
+        {
+          "end": 5,
+          "role": "SCOPE",
+          "start": 1,
+          "text": "水源保障"
+        },
+        {
+          "end": 17,
+          "role": "TARGET",
+          "start": 7,
+          "text": "可关联的外部资源标识"
+        }
+      ]
+    },
+    {
+      "primary_category": "NON_LITERAL",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0791",
+        "requirement_text": "承包方接受演练通知应记录在哪个时间段，复用已有属性。",
+        "value_type_hint": "float"
+      },
+      "scenario_ref": "H1S003",
+      "silver_roles": [
+        {
+          "end": 3,
+          "role": "SCOPE",
+          "start": 0,
+          "text": "承包方"
+        },
+        {
+          "end": 18,
+          "role": "TARGET",
+          "start": 3,
+          "text": "接受演练通知应记录在哪个时间段"
+        }
+      ]
+    },
+    {
+      "primary_category": "NON_LITERAL",
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N1333",
+        "requirement_text": "社区联络未成功时如何处置，复用已有多值属性。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "H1S004",
+      "silver_roles": [
+        {
+          "end": 2,
+          "role": "SCOPE",
+          "start": 0,
+          "text": "社区"
+        },
+        {
+          "end": 12,
+          "role": "TARGET",
+          "start": 2,
+          "text": "联络未成功时如何处置"
+        }
+      ]
+    },
+    {
+      "primary_category": "NON_LITERAL",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N1347",
+        "requirement_text": "对外报送完成后采用什么确认办法，复用已有属性。",
+        "value_type_hint": "entity_code"
+      },
+      "scenario_ref": "H1S005",
+      "silver_roles": [
+        {
+          "end": 4,
+          "role": "SCOPE",
+          "start": 0,
+          "text": "对外报送"
+        },
+        {
+          "end": 15,
+          "role": "TARGET",
+          "start": 4,
+          "text": "完成后采用什么确认办法"
+        }
+      ]
+    },
+    {
+      "primary_category": "NON_LITERAL",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0950",
+        "requirement_text": "个人防护用品需要采用哪种提醒规则，复用已有属性。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "H1S006",
+      "silver_roles": [
+        {
+          "end": 6,
+          "role": "SCOPE",
+          "start": 0,
+          "text": "个人防护用品"
+        },
+        {
+          "end": 16,
+          "role": "TARGET",
+          "start": 6,
+          "text": "需要采用哪种提醒规则"
+        }
+      ]
+    },
+    {
+      "primary_category": "NON_LITERAL",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N1161",
+        "requirement_text": "整改复查抽样由哪个维护责任方负责，复用已有属性。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "H1S007",
+      "silver_roles": [
+        {
+          "end": 6,
+          "role": "SCOPE",
+          "start": 0,
+          "text": "整改复查抽样"
+        },
+        {
+          "end": 16,
+          "role": "TARGET",
+          "start": 6,
+          "text": "由哪个维护责任方负责"
+        }
+      ]
+    },
+    {
+      "primary_category": "NON_LITERAL",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0833",
+        "requirement_text": "事件升级条件对哪些范围有效，复用已有属性。",
+        "value_type_hint": "time_code"
+      },
+      "scenario_ref": "H1S008",
+      "silver_roles": [
+        {
+          "end": 6,
+          "role": "SCOPE",
+          "start": 0,
+          "text": "事件升级条件"
+        },
+        {
+          "end": 13,
+          "role": "TARGET",
+          "start": 6,
+          "text": "对哪些范围有效"
+        }
+      ]
+    },
+    {
+      "primary_category": "LEXICAL_BASELINE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0028",
+        "requirement_text": "复用警戒组织依赖条件，不新增同义属性。",
+        "value_type_hint": "entity_code"
+      },
+      "scenario_ref": "H1S009",
+      "silver_roles": [
+        {
+          "end": 10,
+          "role": "TARGET",
+          "start": 2,
+          "text": "警戒组织依赖条件"
+        }
+      ]
+    },
+    {
+      "primary_category": "LEXICAL_BASELINE",
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0203",
+        "requirement_text": "复用作业区域空间范围，不新增同义属性。",
+        "value_type_hint": "space_code"
+      },
+      "scenario_ref": "H1S010",
+      "silver_roles": [
+        {
+          "end": 10,
+          "role": "TARGET",
+          "start": 2,
+          "text": "作业区域空间范围"
+        }
+      ]
+    },
+    {
+      "primary_category": "LEXICAL_BASELINE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0377",
+        "requirement_text": "复用季节影响时间窗口，不新增同义属性。",
+        "value_type_hint": "boolean"
+      },
+      "scenario_ref": "H1S011",
+      "silver_roles": [
+        {
+          "end": 10,
+          "role": "TARGET",
+          "start": 2,
+          "text": "季节影响时间窗口"
+        }
+      ]
+    },
+    {
+      "primary_category": "LEXICAL_BASELINE",
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0617",
+        "requirement_text": "复用复测确认触发条件，不新增同义属性。",
+        "value_type_hint": "float"
+      },
+      "scenario_ref": "H1S012",
+      "silver_roles": [
+        {
+          "end": 10,
+          "role": "TARGET",
+          "start": 2,
+          "text": "复测确认触发条件"
+        }
+      ]
+    },
+    {
+      "primary_category": "BOUNDARY_VARIATION",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0028",
+        "requirement_text": "复用警戒组织任务交接所使用的节点标识。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "H1S013",
+      "silver_roles": [
+        {
+          "end": 6,
+          "role": "SCOPE",
+          "start": 2,
+          "text": "警戒组织"
+        },
+        {
+          "end": 18,
+          "role": "TARGET",
+          "start": 6,
+          "text": "任务交接所使用的节点标识"
+        }
+      ]
+    },
+    {
+      "primary_category": "BOUNDARY_VARIATION",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N1347",
+        "requirement_text": "复用信息报送流程结束前的交接节点记录。",
+        "value_type_hint": "time_code"
+      },
+      "scenario_ref": "H1S014",
+      "silver_roles": [
+        {
+          "end": 6,
+          "role": "SCOPE",
+          "start": 2,
+          "text": "信息报送"
+        },
+        {
+          "end": 18,
+          "role": "TARGET",
+          "start": 6,
+          "text": "流程结束前的交接节点记录"
+        }
+      ]
+    },
+    {
+      "primary_category": "CROSS_BRANCH_INTERFERENCE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N1307",
+        "requirement_text": "在外部衔接域的交通资源下复用启停规则，不要使用先遣侦察启停规则。",
+        "value_type_hint": "float"
+      },
+      "scenario_ref": "H1S015",
+      "silver_roles": [
+        {
+          "end": 6,
+          "role": "SCOPE",
+          "start": 1,
+          "text": "外部衔接域"
+        },
+        {
+          "end": 18,
+          "role": "TARGET",
+          "start": 7,
+          "text": "交通资源下复用启停规则"
+        },
+        {
+          "end": 31,
+          "role": "EXCLUSION",
+          "start": 23,
+          "text": "先遣侦察启停规则"
+        }
+      ]
+    },
+    {
+      "primary_category": "CROSS_BRANCH_INTERFERENCE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": "M5N0117",
+        "requirement_text": "在终止确认流程复用反馈渠道，不要使用个人防护反馈渠道。",
+        "value_type_hint": "boolean"
+      },
+      "scenario_ref": "H1S016",
+      "silver_roles": [
+        {
+          "end": 7,
+          "role": "SCOPE",
+          "start": 1,
+          "text": "终止确认流程"
+        },
+        {
+          "end": 13,
+          "role": "TARGET",
+          "start": 7,
+          "text": "复用反馈渠道"
+        },
+        {
+          "end": 26,
+          "role": "EXCLUSION",
+          "start": 18,
+          "text": "个人防护反馈渠道"
+        }
+      ]
+    },
+    {
+      "primary_category": "EXCLUSION_HARD_NEGATIVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要建立接驳路线停用审批口径，不要将交通资源启停规则作为已有目标。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "H1S017",
+      "silver_roles": [
+        {
+          "end": 14,
+          "role": "TARGET",
+          "start": 4,
+          "text": "接驳路线停用审批口径"
+        },
+        {
+          "end": 26,
+          "role": "EXCLUSION",
+          "start": 18,
+          "text": "交通资源启停规则"
+        }
+      ]
+    },
+    {
+      "primary_category": "EXCLUSION_HARD_NEGATIVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要建立居民通知失败补偿口径，不要将社区沟通失败处置作为已有目标。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "H1S018",
+      "silver_roles": [
+        {
+          "end": 14,
+          "role": "TARGET",
+          "start": 4,
+          "text": "居民通知失败补偿口径"
+        },
+        {
+          "end": 26,
+          "role": "EXCLUSION",
+          "start": 18,
+          "text": "社区沟通失败处置"
+        }
+      ]
+    },
+    {
+      "primary_category": "EXCLUSION_HARD_NEGATIVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要建立演练供应商回执编号，不要将承包商告知时间窗口作为已有目标。",
+        "value_type_hint": "entity_code"
+      },
+      "scenario_ref": "H1S019",
+      "silver_roles": [
+        {
+          "end": 13,
+          "role": "TARGET",
+          "start": 4,
+          "text": "演练供应商回执编号"
+        },
+        {
+          "end": 26,
+          "role": "EXCLUSION",
+          "start": 17,
+          "text": "承包商告知时间窗口"
+        }
+      ]
+    },
+    {
+      "primary_category": "EXCLUSION_HARD_NEGATIVE",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要建立水池补给来源编号，不要将水源保障关联资源作为已有目标。",
+        "value_type_hint": "entity_code"
+      },
+      "scenario_ref": "H1S020",
+      "silver_roles": [
+        {
+          "end": 12,
+          "role": "TARGET",
+          "start": 4,
+          "text": "水池补给来源编号"
+        },
+        {
+          "end": 24,
+          "role": "EXCLUSION",
+          "start": 16,
+          "text": "水源保障关联资源"
+        }
+      ]
+    },
+    {
+      "primary_category": "EXPLICIT_EMPTY",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要定义h1voidalpha占位合同。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "H1S021",
+      "silver_roles": [
+        {
+          "end": 15,
+          "role": "TARGET",
+          "start": 4,
+          "text": "h1voidalpha"
+        }
+      ]
+    },
+    {
+      "primary_category": "EXPLICIT_EMPTY",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要定义h1voidbeta占位合同。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "H1S022",
+      "silver_roles": [
+        {
+          "end": 14,
+          "role": "TARGET",
+          "start": 4,
+          "text": "h1voidbeta"
+        }
+      ]
+    },
+    {
+      "primary_category": "EXPLICIT_EMPTY",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要定义h1voidgamma占位合同。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "H1S023",
+      "silver_roles": [
+        {
+          "end": 15,
+          "role": "TARGET",
+          "start": 4,
+          "text": "h1voidgamma"
+        }
+      ]
+    },
+    {
+      "primary_category": "EXPLICIT_EMPTY",
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "需要定义h1voiddelta占位合同。",
+        "value_type_hint": "string"
+      },
+      "scenario_ref": "H1S024",
+      "silver_roles": [
+        {
+          "end": 15,
+          "role": "TARGET",
+          "start": 4,
+          "text": "h1voiddelta"
+        }
+      ]
+    }
+  ],
+  "schema_version": "treeguard.fire-h1-hybrid-calibration-scenarios.v1",
+  "source_tree_digest": "a220cee95ccb9443e53186de3f6b6b0536a654f193b41f0d6a4d6a8500e6fe8d"
+}

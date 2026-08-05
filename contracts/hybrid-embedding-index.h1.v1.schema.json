@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/hybrid-embedding-index.h1.v1.schema.json",
+  "title": "TreeGuard Private H1 Hybrid Embedding Index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_snapshot_hash",
+    "model_id",
+    "dimensions",
+    "document_version",
+    "entries",
+    "index_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "treeguard.hybrid-embedding-index.h1.v1"
+    },
+    "source_snapshot_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "model_id": {
+      "const": "text-embedding-v4"
+    },
+    "dimensions": {
+      "const": 512
+    },
+    "document_version": {
+      "const": "treeguard.hybrid-node-document.h1.v1"
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    },
+    "index_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "source_document_hash",
+        "values"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_document_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "values": {
+          "type": "array",
+          "minItems": 512,
+          "maxItems": 512,
+          "items": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

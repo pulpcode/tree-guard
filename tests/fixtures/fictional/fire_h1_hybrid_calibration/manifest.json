@@ -1,0 +1,32 @@
+{
+  "benchmark_role": "HYBRID_RETRIEVAL_DEVELOPMENT_CALIBRATION",
+  "category_counts": {
+    "BOUNDARY_VARIATION": 2,
+    "CROSS_BRANCH_INTERFERENCE": 2,
+    "EXCLUSION_HARD_NEGATIVE": 4,
+    "EXPLICIT_EMPTY": 4,
+    "LEXICAL_BASELINE": 4,
+    "NON_LITERAL": 8
+  },
+  "dataset_ref": "fictional-fire-h1-hybrid-calibration",
+  "derived_from_real": false,
+  "explicit_empty_count": 4,
+  "fictional": true,
+  "generator_version": "treeguard.fire-h1-hybrid-calibration-generator.v1",
+  "gold_eligible": false,
+  "hard_negative_count": 4,
+  "node_count": 1357,
+  "oracle_file": "oracle-sidecar.json",
+  "oracle_file_sha256": "7cb7efa2bd0f79ffefe16ce8fc1bf5633245e1ce77267d27db4f482ab531621f",
+  "patch_eligible": false,
+  "positive_count": 16,
+  "scenario_count": 24,
+  "scenario_file": "scenarios.json",
+  "scenario_file_sha256": "772bdaa4caf7a0552590dcf67cfd3c3b0ff25b56addd19e155676db37af0c063",
+  "schema_version": "treeguard.fire-h1-hybrid-calibration-manifest.v1",
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "source_tree_canonical_digest": "a220cee95ccb9443e53186de3f6b6b0536a654f193b41f0d6a4d6a8500e6fe8d",
+  "source_tree_file": "../fire_m5_assisted_shadow/tree.json",
+  "source_tree_file_sha256": "4baae2209aeed5c048a9d3353d356ef09cb1cba5de1f17ea567a0a0d4121a32a",
+  "value_envelope_count": 0
+}

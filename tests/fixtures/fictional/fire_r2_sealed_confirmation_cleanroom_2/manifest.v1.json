@@ -1,0 +1,27 @@
+{
+  "candidate_limit": 36,
+  "data_commit_binding": "PRIVATE_FREEZE_LEDGER",
+  "dataset_id": "fire-r2-sealed-confirmation-cleanroom-2-v1",
+  "derived_from_real": false,
+  "fictional": true,
+  "frozen_count": 28,
+  "function_baseline_commit": "03faee0a7a33e0ee413a4d91b70e8f577085751f",
+  "gold_eligible": false,
+  "model_execution_allowed": false,
+  "network_execution_allowed": false,
+  "patch_eligible": false,
+  "positive_count": 24,
+  "quota": {
+    "BOUNDARY_VARIATION": 6,
+    "CROSS_BRANCH_INTERFERENCE": 4,
+    "EXCLUSION_HARD_NEGATIVE": 4,
+    "EXPLICIT_EMPTY": 4,
+    "LEXICAL_BASELINE": 6,
+    "NON_LITERAL": 4
+  },
+  "schema_version": "treeguard.fire-r2-sealed-cleanroom-2-manifest.v1",
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "tree_file": "tests/fixtures/fictional/fire_r2_sealed_confirmation_cleanroom_2/tree.v1.json",
+  "tree_node_count": 521,
+  "tree_profile": "resource"
+}

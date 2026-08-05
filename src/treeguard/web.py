@@ -49,6 +49,7 @@ from treeguard.workbench_navigation_copilot import (
     WorkbenchNavigationCopilotError,
     WorkbenchNavigationCopilotService,
     navigation_copilot_enabled_from_env,
+    shadow_run_binding_from_env,
 )
 from treeguard.workbench_sidecar import WorkbenchSidecarError
 from treeguard.workbench_validation import (
@@ -231,6 +232,11 @@ class NavigationCopilotOutcomeInput(BaseModel):
         default=None,
         pattern=r"^N[0-9]{6}$",
     )
+    rejection_disposition: Literal[
+        "PRESENT_NOT_FOUND",
+        "ABSENT",
+        "UNKNOWN",
+    ] | None = None
 
 
 class NavigationCopilotInterpretationView(BaseModel):
@@ -655,6 +661,7 @@ def _navigation_copilot_from_environment(
     repository: Any,
 ) -> WorkbenchNavigationCopilotService | None:
     if navigation_copilot_enabled_from_env():
+        shadow_run_manifest, participant_ref = shadow_run_binding_from_env()
         return WorkbenchNavigationCopilotService(
             repository=repository,
             sidecar_root=default_sidecar_root(),
@@ -665,6 +672,8 @@ def _navigation_copilot_from_environment(
                 )
             ),
             diagnostics_enabled=model_diagnostics_enabled_from_env(),
+            shadow_run_manifest=shadow_run_manifest,
+            participant_ref=participant_ref,
         )
     return None
 
@@ -986,6 +995,7 @@ def create_app(
             action=payload.action,
             selected_candidate_ref=payload.selected_candidate_ref,
             selected_node_ref=payload.selected_node_ref,
+            rejection_disposition=payload.rejection_disposition,
         )
 
     @application.get(

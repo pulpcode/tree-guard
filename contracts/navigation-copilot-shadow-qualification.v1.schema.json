@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-shadow-qualification.v1.schema.json",
+  "title": "Navigation Copilot Shadow Qualification v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_semantics", "run_hash", "participant_ref", "source_outcome_hash", "target_disposition", "confident", "clarification_used", "model_degraded", "evidence_covered", "duration_ms", "safe_termination", "snapshot_bound", "production_write_occurred", "semantic_approval", "gold_eligible", "patch_eligible", "qualification_hash"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-shadow-qualification.v1"},
+    "record_semantics": {"const": "OPERATIONAL_SHADOW_ONLY"},
+    "run_hash": {"$ref": "#/$defs/digest"},
+    "participant_ref": {"type": "string", "pattern": "^P[0-9]{2,4}$"},
+    "source_outcome_hash": {"$ref": "#/$defs/digest"},
+    "target_disposition": {"enum": ["FOUND_TOP8", "FOUND_OUTSIDE", "PRESENT_NOT_FOUND", "ABSENT", "UNKNOWN", "EXITED"]},
+    "confident": {"type": "boolean"},
+    "clarification_used": {"type": "boolean"},
+    "model_degraded": {"type": "boolean"},
+    "evidence_covered": {"type": "boolean"},
+    "duration_ms": {"type": "integer", "minimum": 0},
+    "safe_termination": {"const": true},
+    "snapshot_bound": {"const": true},
+    "production_write_occurred": {"const": false},
+    "semantic_approval": {"const": false},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false},
+    "qualification_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {"digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

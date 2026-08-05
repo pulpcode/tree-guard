@@ -16,7 +16,11 @@ import {
   type TreeViewNode,
   WorkbenchAPIError,
 } from "./api";
-import { canUseOutsideCandidate, copilotStatusMessage } from "./navigation-copilot";
+import {
+  canUseOutsideCandidate,
+  copilotStatusMessage,
+  SHADOW_REJECTION_OPTIONS,
+} from "./navigation-copilot";
 
 interface Props {
   resourceId?: string;
@@ -147,6 +151,25 @@ export default function NavigationCopilotPanel({
       });
       setCaseValue(value);
       onNavigate(candidate.node_ref);
+    } catch (error) {
+      setFailure(errorCode(error));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const reject = async (
+    disposition: "PRESENT_NOT_FOUND" | "ABSENT" | "UNKNOWN",
+  ) => {
+    if (!caseRef) return;
+    setBusy(true);
+    try {
+      setCaseValue(await completeNavigationCopilotCase(caseRef, {
+        action: "REJECT_ALL",
+        selected_candidate_ref: null,
+        selected_node_ref: null,
+        rejection_disposition: disposition,
+      }));
     } catch (error) {
       setFailure(errorCode(error));
     } finally {
@@ -312,26 +335,15 @@ export default function NavigationCopilotPanel({
           >
             候选都不对，采用左侧当前节点
           </Button>
-          <Button
-            disabled={busy}
-            onClick={async () => {
-              if (!caseRef) return;
-              setBusy(true);
-              try {
-                setCaseValue(await completeNavigationCopilotCase(caseRef, {
-                  action: "REJECT_ALL",
-                  selected_candidate_ref: null,
-                  selected_node_ref: null,
-                }));
-              } catch (error) {
-                setFailure(errorCode(error));
-              } finally {
-                setBusy(false);
-              }
-            }}
-          >
-            暂无合适节点
-          </Button>
+          {SHADOW_REJECTION_OPTIONS.map((option) => (
+            <Button
+              key={option.disposition}
+              disabled={busy}
+              onClick={() => void reject(option.disposition)}
+            >
+              {option.label}
+            </Button>
+          ))}
           <Button
             disabled={busy}
             onClick={async () => {

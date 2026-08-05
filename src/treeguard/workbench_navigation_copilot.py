@@ -44,7 +44,13 @@ from treeguard.navigation_copilot import (
     build_navigation_semantic_projection,
     navigation_shadow_aggregate,
 )
-from treeguard.private_io import write_private_json
+from treeguard.navigation_shadow_run import (
+    NavigationShadowQualification,
+    NavigationShadowRunError,
+    NavigationShadowRunManifest,
+    build_shadow_qualification,
+)
+from treeguard.private_io import read_private_json, write_private_json
 from treeguard.simulator import SIMULATOR_BEARER_TOKEN
 from treeguard.workbench import (
     ReadOnlyTreeRepository,
@@ -53,8 +59,10 @@ from treeguard.workbench import (
 )
 from treeguard.workbench_governance import MODEL_MODES
 from treeguard.workbench_sidecar import (
+    WorkbenchSidecarError,
     create_private_directory,
     ensure_private_directory,
+    validate_private_directory,
 )
 
 
@@ -175,6 +183,7 @@ class _CopilotCase:
     semantic_draft: NavigationSemanticDraft | None = None
     decision: NavigationPolicyDecision | None = None
     outcome: NavigationOutcome | None = None
+    qualification: NavigationShadowQualification | None = None
     degradation_codes: list[str] = field(default_factory=list)
     model_traces: list[ModelTraceAttempt] = field(default_factory=list)
 
@@ -194,6 +203,8 @@ class WorkbenchNavigationCopilotService:
     sidecar_root: Path
     provider_factory: NavigationProviderFactory
     diagnostics_enabled: bool = False
+    shadow_run_manifest: NavigationShadowRunManifest | None = None
+    participant_ref: str | None = None
     executor: OperationExecutor = field(
         default_factory=lambda: ThreadPoolExecutor(
             max_workers=2,
@@ -218,6 +229,21 @@ class WorkbenchNavigationCopilotService:
         default_factory=threading.RLock,
         init=False,
     )
+
+    def __post_init__(self) -> None:
+        if (self.shadow_run_manifest is None) != (self.participant_ref is None):
+            raise WorkbenchNavigationCopilotError(
+                "COPILOT_SHADOW_RUN_CONFIG_INVALID",
+                "Shadow run manifest and participant must be configured together",
+            )
+        if (
+            self.shadow_run_manifest is not None
+            and self.participant_ref not in self.shadow_run_manifest.participant_refs
+        ):
+            raise WorkbenchNavigationCopilotError(
+                "COPILOT_SHADOW_PARTICIPANT_INVALID",
+                "participant is not registered in the frozen Shadow run",
+            )
 
     def capability_view(self) -> dict[str, Any]:
         return {
@@ -246,6 +272,14 @@ class WorkbenchNavigationCopilotService:
             raise WorkbenchNavigationCopilotError(
                 "COPILOT_MODEL_MODE_INVALID",
                 "unsupported Copilot model mode",
+            )
+        if (
+            self.shadow_run_manifest is not None
+            and model_mode != self.shadow_run_manifest.provider_mode
+        ):
+            raise WorkbenchNavigationCopilotError(
+                "COPILOT_SHADOW_PROVIDER_MISMATCH",
+                "case provider does not match the frozen Shadow run",
             )
         if model_mode == "BAILIAN_LIVE" and not external_data_approved:
             raise WorkbenchNavigationCopilotError(
@@ -340,6 +374,7 @@ class WorkbenchNavigationCopilotService:
         action: str,
         selected_candidate_ref: str | None,
         selected_node_ref: str | None,
+        rejection_disposition: str | None = None,
     ) -> dict[str, Any]:
         with self._lock:
             case = self._require_case(case_ref)
@@ -370,8 +405,32 @@ class WorkbenchNavigationCopilotService:
                 selected_node_id=selected_node_id,
                 duration_ms=max(0, self.clock_ms() - case.started_ms),
             )
+            qualification = None
+            if self.shadow_run_manifest is not None:
+                try:
+                    qualification = build_shadow_qualification(
+                        self.shadow_run_manifest,
+                        self.participant_ref or "",
+                        case.decision,
+                        outcome,
+                        rejection_disposition=rejection_disposition,
+                        clarification_used=case.clarification_answer is not None,
+                        model_degraded=bool(case.degradation_codes),
+                    )
+                except NavigationShadowRunError as exc:
+                    raise WorkbenchNavigationCopilotError(
+                        exc.code,
+                        "Shadow qualification rejected the final outcome",
+                    ) from None
             self._publish(case.directory, "09-outcome.json", outcome.to_dict())
+            if qualification is not None:
+                self._publish(
+                    case.directory,
+                    "10-shadow-qualification.json",
+                    qualification.to_dict(),
+                )
             case.outcome = outcome
+            case.qualification = qualification
             case.status = "COMPLETED"
             self._completed.append(
                 NavigationShadowObservation(
@@ -798,6 +857,56 @@ def navigation_copilot_enabled_from_env() -> bool:
     )
 
 
+def shadow_run_binding_from_env(
+) -> tuple[NavigationShadowRunManifest | None, str | None]:
+    manifest_path = os.environ.get(
+        "TREEGUARD_WORKBENCH_NAVIGATION_COPILOT_RUN_MANIFEST"
+    )
+    participant_ref = os.environ.get(
+        "TREEGUARD_WORKBENCH_NAVIGATION_COPILOT_PARTICIPANT_REF"
+    )
+    build_commit = os.environ.get("TREEGUARD_WORKBENCH_BUILD_COMMIT")
+    if manifest_path is None and participant_ref is None:
+        return None, None
+    if not manifest_path or not participant_ref or not build_commit:
+        raise WorkbenchNavigationCopilotError(
+            "COPILOT_SHADOW_RUN_CONFIG_INVALID",
+            "Shadow run configuration is incomplete",
+        )
+    path = Path(manifest_path)
+    if not path.is_absolute():
+        raise WorkbenchNavigationCopilotError(
+            "COPILOT_SHADOW_RUN_CONFIG_INVALID",
+            "Shadow run manifest path must be absolute",
+        )
+    try:
+        validate_private_directory(path.parent)
+        manifest = NavigationShadowRunManifest.from_dict(
+            read_private_json(path, max_bytes=64 * 1024)
+        )
+    except (
+        OSError,
+        UnicodeError,
+        NavigationShadowRunError,
+        WorkbenchSidecarError,
+    ):
+        raise WorkbenchNavigationCopilotError(
+            "COPILOT_SHADOW_RUN_CONFIG_INVALID",
+            "Shadow run manifest could not be verified",
+        ) from None
+    if manifest.contract_commit != build_commit:
+        raise WorkbenchNavigationCopilotError(
+            "COPILOT_SHADOW_BUILD_MISMATCH",
+            "running build does not match the frozen Shadow run",
+        )
+    if participant_ref not in manifest.participant_refs:
+        raise WorkbenchNavigationCopilotError(
+            "COPILOT_SHADOW_PARTICIPANT_INVALID",
+            "participant is not registered in the frozen Shadow run",
+        )
+    return manifest, participant_ref
+
+
 def _operation_error_code(exc: Exception) -> str:
     code = getattr(exc, "code", None)
     if isinstance(code, str) and code:
@@ -833,4 +942,5 @@ __all__ = [
     "WorkbenchNavigationCopilotError",
     "WorkbenchNavigationCopilotService",
     "navigation_copilot_enabled_from_env",
+    "shadow_run_binding_from_env",
 ]

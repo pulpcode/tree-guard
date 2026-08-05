@@ -15,11 +15,14 @@ from treeguard.change_understanding_v2 import ChangeUnderstandingV2
 from treeguard.navigation_copilot import (
     NavigationSemanticDraft,
 )
+from treeguard.navigation_shadow_run import NavigationShadowRunManifest
+from treeguard.private_io import read_private_json, write_private_json
 from treeguard.web import create_app
 from treeguard.workbench import WorkbenchService, build_tree_reference_index
 from treeguard.workbench_navigation_copilot import (
     WorkbenchNavigationCopilotService,
     navigation_copilot_enabled_from_env,
+    shadow_run_binding_from_env,
 )
 
 
@@ -154,6 +157,81 @@ def _create(service):
 
 
 class WorkbenchNavigationCopilotTests(unittest.TestCase):
+    def test_frozen_shadow_run_requires_disposition_and_publishes_qualification(self):
+        manifest = NavigationShadowRunManifest.create(
+            run_ref="SR0001",
+            contract_commit="0" * 40,
+            provider_mode="QWEN_LIVE",
+            participant_refs=("P01", "P02", "P03"),
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "sidecars"
+            service = WorkbenchNavigationCopilotService(
+                repository=FakeRepository(),
+                sidecar_root=root,
+                provider_factory=FakeFactory(),
+                executor=InlineExecutor(),
+                id_factory=_id_factory(),
+                shadow_run_manifest=manifest,
+                participant_ref="P01",
+            )
+            operation = _create(service)
+            case_ref = operation["case_ref"]
+            with self.assertRaisesRegex(RuntimeError, "qualification") as caught:
+                service.complete(
+                    case_ref,
+                    action="REJECT_ALL",
+                    selected_candidate_ref=None,
+                    selected_node_ref=None,
+                )
+            self.assertEqual(
+                caught.exception.code,
+                "SHADOW_TARGET_DISPOSITION_REQUIRED",
+            )
+            self.assertFalse((root / case_ref / "09-outcome.json").exists())
+
+            completed = service.complete(
+                case_ref,
+                action="REJECT_ALL",
+                selected_candidate_ref=None,
+                selected_node_ref=None,
+                rejection_disposition="ABSENT",
+            )
+            self.assertEqual(completed["status"], "COMPLETED")
+            qualification_path = root / case_ref / "10-shadow-qualification.json"
+            qualification = read_private_json(
+                qualification_path,
+                max_bytes=64 * 1024,
+            )
+            self.assertEqual(qualification["participant_ref"], "P01")
+            self.assertEqual(qualification["target_disposition"], "ABSENT")
+            self.assertEqual(stat.S_IMODE(qualification_path.stat().st_mode), 0o600)
+
+    def test_shadow_run_environment_binding_is_private_and_commit_bound(self):
+        manifest = NavigationShadowRunManifest.create(
+            run_ref="SR0001",
+            contract_commit="0" * 40,
+            provider_mode="QWEN_LIVE",
+            participant_refs=("P01", "P02", "P03"),
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "run.json"
+            self.assertTrue(write_private_json(path, manifest.to_dict()))
+            environment = {
+                "TREEGUARD_WORKBENCH_NAVIGATION_COPILOT_RUN_MANIFEST": str(path),
+                "TREEGUARD_WORKBENCH_NAVIGATION_COPILOT_PARTICIPANT_REF": "P02",
+                "TREEGUARD_WORKBENCH_BUILD_COMMIT": "0" * 40,
+            }
+            with patch.dict(os.environ, environment, clear=True):
+                loaded, participant = shadow_run_binding_from_env()
+            self.assertEqual(loaded, manifest)
+            self.assertEqual(participant, "P02")
+            environment["TREEGUARD_WORKBENCH_BUILD_COMMIT"] = "1" * 40
+            with patch.dict(os.environ, environment, clear=True):
+                with self.assertRaisesRegex(RuntimeError, "build") as caught:
+                    shadow_run_binding_from_env()
+            self.assertEqual(caught.exception.code, "COPILOT_SHADOW_BUILD_MISMATCH")
+
     def test_bailian_approval_fails_before_tree_read_or_sidecar(self):
         repository = FakeRepository()
         with tempfile.TemporaryDirectory() as temporary:

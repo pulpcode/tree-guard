@@ -508,6 +508,7 @@ export async function completeNavigationCopilotCase(
     action: "SELECT_CANDIDATE" | "SELECT_OUTSIDE_CANDIDATE" | "REJECT_ALL" | "EXIT";
     selected_candidate_ref: string | null;
     selected_node_ref: string | null;
+    rejection_disposition?: "PRESENT_NOT_FOUND" | "ABSENT" | "UNKNOWN" | null;
   },
 ): Promise<NavigationCopilotCase> {
   return requestJSON<NavigationCopilotCase>(

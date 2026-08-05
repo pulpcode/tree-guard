@@ -372,3 +372,15 @@ operation = validation.create_run(
 前端入口只在 capability 启用时出现，采用“一句需求—可选一次澄清—候选—最终处置”的短
 对话。页面当前节点是软上下文而非前提条件；用户可以不依赖选中节点发起需求，也可以用左侧
 当前节点纠正 Top-8 候选。最终动作只导航和高亮，不打开治理表单、不写源树。
+
+生产 Shadow 不能使用上述进程内 aggregate 直接作晋升判断。启用前必须通过私有
+`navigation-copilot-shadow-run.v1` 冻结部署提交、Provider、至少 30 个有效 case、至少
+3 个匿名参与者和 D10 阈值。manifest、参与者引用与部署提交三项配置缺一即拒绝启动 run；
+case Provider 必须与 manifest 一致。
+
+最终 outcome v1 保持导航职责不变；另写
+`navigation-copilot-shadow-qualification.v1`，把拒绝候选细分为目标存在但未找到、目标
+不存在和无法判断。资格记录只进入 `0600` 私有 sidecar，API case view 不返回 run hash、
+参与者引用或资格正文。`treeguard-navigation-shadow aggregate` 从一个或多个 `0700`
+sidecar 根目录严格回放资格记录，拒绝重复 outcome、错误 run、未注册参与者、公开权限和
+篡改记录；公开聚合不包含请求、节点、路径、hash 或参与者引用。

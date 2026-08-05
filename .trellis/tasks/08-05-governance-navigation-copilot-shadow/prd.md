@@ -249,6 +249,12 @@ Semantic 降级路径必须分开记账，后者不得计入关系判断成功�
 - [x] 最终选择只触发可信节点导航/高亮和私有 Shadow 记录，不触发治理表单或任何写入；
 - [x] Shadow 聚合至少记录候选覆盖、人工接受/纠正、错误自信、澄清次数、审查耗时和证据
   覆盖，不保存逐项敏感正文；
+- [x] 生产 Shadow run manifest 可冻结部署提交、Provider、计划 case 数、至少 3 个匿名
+  参与者和 D10 阈值，配置不完整、提交漂移、Provider 漂移或参与者未注册时失败关闭；
+- [x] 导航 outcome 保持不变，独立资格记录可区分目标存在但未找到、目标不存在、无法判断
+  和退出，使 Top-8 与导航完成率使用可解释的目标存在分母；
+- [x] 私有离线聚合可跨多个参与者实例严格回放资格记录，拒绝错误 run、重复 outcome、
+  超计划记录、公开权限和篡改，并且聚合不输出请求、节点、参与者引用、路径或 hash；
 - [ ] 首轮生产 Shadow 的30个有效 case、至少3名用户及 D10 的分母和阈值在启用前冻结，
   运行后不得调整；
 - [ ] 扩围门槛同时满足：安全终止/快照绑定/零写入100%，Top-8 覆盖不低于80%，人工导航
@@ -406,6 +412,17 @@ git diff --check
 完成代码和本地虚构验证后仍不自动启用生产 Shadow。启用前单独审核 feature flag、受保护
 sidecar 位置、Provider 模式、D10 计数起点、停线与回滚；获准后才收集30个有效 case。
 
+### Phase 7：修复生产 Shadow 分母与跨实例记账
+
+- 新增 `navigation_shadow_run.py`，把部署提交、Provider、计划 case 数、匿名参与者和 D10
+  阈值冻结为不可变 run manifest；
+- 保持 outcome v1 只表达导航动作，另以 qualification sidecar 区分目标存在但未找到、
+  目标不存在、无法判断和退出；
+- 新增 `treeguard-navigation-shadow prepare-run|aggregate`，只读取/写入受保护的 `0700`/
+  `0600` 工件，跨参与者实例输出正向允许列表聚合；
+- 生产采样仍需在受保护环境另行创建真实 run manifest 并审核 rollout/rollback，本阶段不
+  访问真实树、真实请求、真实人员身份或模型流量。
+
 ## Research References
 
 - [`research/repository-entry-points.md`](research/repository-entry-points.md) — 现有 Workbench、
@@ -414,6 +431,9 @@ sidecar 位置、Provider 模式、D10 计数起点、停线与回滚；获准�
   恢复路线的仓库证据、边界和推荐结论。
 - [`research/implementation-readiness-review.md`](research/implementation-readiness-review.md)
   — 实施前规范加载、职责所有权和澄清路径调用预算冲突。
+- [`research/production-shadow-readiness-audit.md`](research/production-shadow-readiness-audit.md)
+  — 基于已提交实现的启用前审计；说明现有 D10 分母、参与者绑定、跨进程聚合和运行冻结
+  的缺口，以及推荐的单参与者实例加私有离线汇总路径。
 - [`../08-04-governance-architecture-convergence/research/architecture-convergence-verdict.md`](../08-04-governance-architecture-convergence/research/architecture-convergence-verdict.md)
   — 已接受的 D1—D6、关闭路线和新任务进入条件。
 
@@ -426,3 +446,9 @@ sidecar 位置、Provider 模式、D10 计数起点、停线与回滚；获准�
 - 当前任务处于 `in_progress`；核心、Provider、隔离 Workbench/API、短对话前端和本地
   虚构验证已实现。生产 Shadow 的 30 个有效 case、3 名用户、D10 阈值运行及晋升决定仍未
   执行，feature flag 继续缺省关闭。
+- 提交 `95e8f99e9227e992a84e7ddd157588087d25436f` 的启用前审计结论为 `NO_GO`：现有
+  `REJECT_ALL` 无法区分目标存在、目标不存在和无法判断，参与者数量没有可信绑定，聚合又
+  只存在于单进程内存。正式采样前先实现冻结 run manifest、可计算目标存在性的终态合同和
+  私有离线汇总；该结论不否定单 case 安全演练能力，也不属于模型效果失败。
+- 上述仓库侧缺口已由 Phase 7 实现并通过完整回归；`NO_GO` 的剩余含义仅是尚未在受保护
+  环境冻结最终 run、审核 rollout/rollback 和完成 30 个有效 case，不再是分母合同缺失。

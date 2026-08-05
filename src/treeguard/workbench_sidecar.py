@@ -23,6 +23,10 @@ def ensure_private_directory(path: Path) -> None:
             "WORKBENCH_SIDECAR_DIRECTORY_UNSAFE",
             "private sidecar directory could not be created",
         ) from None
+    validate_private_directory(path)
+
+
+def validate_private_directory(path: Path) -> None:
     try:
         file_stat = os.lstat(path)
     except OSError:
@@ -57,4 +61,5 @@ __all__ = [
     "WorkbenchSidecarError",
     "create_private_directory",
     "ensure_private_directory",
+    "validate_private_directory",
 ]

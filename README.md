@@ -294,6 +294,53 @@ AI 只能高亮候选，用户确认后页面才导航；候选都不对时可�
 召回未命中。该入口只写私有运营反馈 sidecar，不打开治理表单、不修改树，也不产生 Gold、
 语义批准或 Patch。它尚未获准默认启用或进入生产 Shadow。
 
+正式 Shadow 采样前必须先冻结 run manifest，不能直接把开发模式的进程内 aggregate 当作
+D10 晋升证据。首轮推荐每名参与者使用一个受保护的 Workbench 实例，并使用不对应真实
+身份的运行内编号：
+
+```bash
+mkdir -m 700 /absolute/private/shadow-run
+treeguard-navigation-shadow prepare-run \
+  --run-ref SR0001 \
+  --contract-commit <deployed-commit> \
+  --provider-mode QWEN_LIVE \
+  --participant-ref P01 \
+  --participant-ref P02 \
+  --participant-ref P03 \
+  --output /absolute/private/shadow-run/run.json
+```
+
+每个实例同时设置 manifest、当前匿名参与者和实际部署提交。三项必须完整且与冻结内容精确
+匹配；正式 run 中拒绝全部候选时，页面必须区分“目标存在但未找到”“树中不存在”和
+“无法判断”。只有可判定 case 才进入对应 D10 分母。
+
+```bash
+TREEGUARD_WORKBENCH_NAVIGATION_COPILOT=1 \
+TREEGUARD_WORKBENCH_NAVIGATION_COPILOT_RUN_MANIFEST=/absolute/private/shadow-run/run.json \
+TREEGUARD_WORKBENCH_NAVIGATION_COPILOT_PARTICIPANT_REF=P01 \
+TREEGUARD_WORKBENCH_BUILD_COMMIT=<deployed-commit> \
+treeguard-workbench --port 8000
+```
+
+采样后在受保护环境离线合并各实例的私有 sidecar；聚合 stdout 和输出只含固定计数、比例
+与资格状态，不含请求、节点、参与者编号、路径或 hash：
+
+```bash
+treeguard-navigation-shadow aggregate \
+  --manifest /absolute/private/shadow-run/run.json \
+  --sidecar-root /absolute/private/participant-01-sidecars \
+  --sidecar-root /absolute/private/participant-02-sidecars \
+  --sidecar-root /absolute/private/participant-03-sidecars \
+  --output /absolute/private/shadow-run/aggregate.json
+```
+
+manifest、sidecar 根目录及聚合输出父目录必须为当前用户所有的 `0700` 目录，JSON 为
+不可覆盖的 `0600` 文件。`COLLECTING` 表示冻结分母尚未完成，`HOLD_NOT_QUALIFIED`
+表示分母完成但至少一个效果门槛未通过，`EXPANSION_ELIGIBLE` 也只允许进入扩围审核，
+不授予自动写入、Gold 或 Patch 资格。聚合只有在记录数精确等于 manifest 的
+`planned_case_count` 后才作门槛判断；需要容纳退出或无法判断的 case 时，应在采样前把
+计划数设为大于 30 的固定值，不能观察结果后临时追加。
+
 本地开发排查 Prompt 或模型合同失败时，可以显式开启模型交互诊断：
 
 ```bash

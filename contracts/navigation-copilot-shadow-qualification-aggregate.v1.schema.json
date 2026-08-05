@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-shadow-qualification-aggregate.v1.schema.json",
+  "title": "Navigation Copilot Shadow Qualification Aggregate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["report_version", "valid", "decision", "record_count", "valid_case_count", "participant_count", "target_present_case_count", "top8_direct_selection_count", "completed_navigation_count", "confident_case_count", "confident_error_count", "unknown_case_count", "exited_case_count", "safe_termination_rate_bps", "snapshot_binding_rate_bps", "zero_production_write_rate_bps", "top8_coverage_rate_bps", "navigation_completion_rate_bps", "confident_error_rate_bps", "median_completion_ms", "semantic_approval", "gold_eligible", "patch_eligible"],
+  "properties": {
+    "report_version": {"const": "navigation-copilot-shadow-qualification-aggregate.v1"},
+    "valid": {"const": true},
+    "decision": {"enum": ["COLLECTING", "HOLD_NOT_QUALIFIED", "EXPANSION_ELIGIBLE"]},
+    "record_count": {"$ref": "#/$defs/count"},
+    "valid_case_count": {"$ref": "#/$defs/count"},
+    "participant_count": {"$ref": "#/$defs/count"},
+    "target_present_case_count": {"$ref": "#/$defs/count"},
+    "top8_direct_selection_count": {"$ref": "#/$defs/count"},
+    "completed_navigation_count": {"$ref": "#/$defs/count"},
+    "confident_case_count": {"$ref": "#/$defs/count"},
+    "confident_error_count": {"$ref": "#/$defs/count"},
+    "unknown_case_count": {"$ref": "#/$defs/count"},
+    "exited_case_count": {"$ref": "#/$defs/count"},
+    "safe_termination_rate_bps": {"$ref": "#/$defs/rate"},
+    "snapshot_binding_rate_bps": {"$ref": "#/$defs/rate"},
+    "zero_production_write_rate_bps": {"$ref": "#/$defs/rate"},
+    "top8_coverage_rate_bps": {"$ref": "#/$defs/rate"},
+    "navigation_completion_rate_bps": {"$ref": "#/$defs/rate"},
+    "confident_error_rate_bps": {"$ref": "#/$defs/rate"},
+    "median_completion_ms": {"type": ["integer", "null"], "minimum": 0},
+    "semantic_approval": {"const": false},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false}
+  },
+  "$defs": {
+    "count": {"type": "integer", "minimum": 0},
+    "rate": {"type": ["integer", "null"], "minimum": 0, "maximum": 10000}
+  }
+}

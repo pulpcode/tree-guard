@@ -1,5 +1,11 @@
 import type { NavigationCopilotCandidate, NavigationCopilotCase } from "./api";
 
+export const SHADOW_REJECTION_OPTIONS = [
+  { disposition: "PRESENT_NOT_FOUND", label: "树中有目标，但未找到" },
+  { disposition: "ABSENT", label: "树中没有对应节点" },
+  { disposition: "UNKNOWN", label: "暂时无法判断" },
+] as const;
+
 export function canUseOutsideCandidate(
   selectedNodeRef: string | undefined,
   candidates: NavigationCopilotCandidate[],

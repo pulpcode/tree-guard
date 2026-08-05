@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import type { NavigationCopilotCandidate, NavigationCopilotCase } from "./api";
-import { canUseOutsideCandidate, copilotStatusMessage } from "./navigation-copilot";
+import {
+  canUseOutsideCandidate,
+  copilotStatusMessage,
+  SHADOW_REJECTION_OPTIONS,
+} from "./navigation-copilot";
 
 const candidate: NavigationCopilotCandidate = {
   candidate_ref: "C001",
@@ -45,5 +49,13 @@ describe("navigation Copilot presentation policy", () => {
     expect(canUseOutsideCandidate("N000001", [candidate])).toBe(false);
     expect(canUseOutsideCandidate("N000002", [candidate])).toBe(true);
     expect(canUseOutsideCandidate(undefined, [candidate])).toBe(false);
+  });
+
+  it("keeps target-present, absent, and unknown rejection denominators distinct", () => {
+    expect(SHADOW_REJECTION_OPTIONS.map((item) => item.disposition)).toEqual([
+      "PRESENT_NOT_FOUND",
+      "ABSENT",
+      "UNKNOWN",
+    ]);
   });
 });

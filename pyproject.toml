@@ -20,6 +20,7 @@ treeguard-governance = "treeguard.governance_cli:main"
 treeguard-governance-demo = "treeguard.demo_cli:main"
 treeguard-contract-simulator = "treeguard.simulator_cli:main"
 treeguard-workbench = "treeguard.workbench_cli:main"
+treeguard-navigation-shadow = "treeguard.navigation_shadow_cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

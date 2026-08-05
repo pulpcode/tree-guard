@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/hybrid-candidate-set.h2.v1.schema.json",
+  "title": "TreeGuard H2 Hybrid Candidate Set",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "algorithm_version",
+    "retrieval_semantics",
+    "source_evidence_hash",
+    "source_query_hash",
+    "source_snapshot_hash",
+    "source_lexical_candidate_set_hash",
+    "source_query_document_hash",
+    "source_profile_hash",
+    "source_index_hash",
+    "source_query_embedding_hash",
+    "status",
+    "vector_enabled",
+    "embedding_used",
+    "allows_addition",
+    "max_candidates",
+    "candidates",
+    "candidate_set_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "treeguard.hybrid-candidate-set.h2.v1"},
+    "algorithm_version": {"const": "treeguard.r2-vector-rrf-h2.v1"},
+    "retrieval_semantics": {"const": "R2_LEXICAL_PLUS_LOCAL_BGE_FIXED_RRF"},
+    "source_evidence_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_query_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_snapshot_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_lexical_candidate_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_query_document_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_profile_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_index_hash": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "source_query_embedding_hash": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "status": {"enum": ["CANDIDATES_READY", "NO_CANDIDATES", "INSUFFICIENT_SIGNAL"]},
+    "vector_enabled": {"type": "boolean"},
+    "embedding_used": {"type": "boolean"},
+    "allows_addition": {"const": false},
+    "max_candidates": {"type": "integer", "minimum": 1, "maximum": 40},
+    "candidates": {
+      "type": "array",
+      "maxItems": 40,
+      "items": {"$ref": "#/$defs/candidate"}
+    },
+    "candidate_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "score": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lexical_rank",
+        "vector_rank",
+        "vector_similarity_scaled",
+        "total"
+      ],
+      "properties": {
+        "lexical_rank": {"type": ["integer", "null"], "minimum": 1, "maximum": 40},
+        "vector_rank": {"type": ["integer", "null"], "minimum": 1, "maximum": 40},
+        "vector_similarity_scaled": {"type": ["integer", "null"], "minimum": -1000000, "maximum": 1000000},
+        "total": {"type": "integer", "minimum": 1}
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rank", "node_id", "score"],
+      "properties": {
+        "rank": {"type": "integer", "minimum": 1, "maximum": 40},
+        "node_id": {"type": "string", "minLength": 1},
+        "score": {"$ref": "#/$defs/score"}
+      }
+    }
+  }
+}

@@ -48,6 +48,7 @@
 | [错误处理](./error-handling.md) | 增加校验、错误码、异常转换或退出行为 |
 | [CLI 输出与诊断](./cli-output-and-diagnostics.md) | 修改 stdout、报告、敏感输出或模型执行 |
 | [新增需求意图、候选召回与语义推荐](./governance-intake-and-retrieval.md) | 修改 ChangeIntent、人工确认、全树召回、语义建议或治理 CLI |
+| [本地稠密向量召回](./local-embedding-retrieval.md) | 增加本地 embedding profile、索引、混合召回或离线 A/B runner |
 | [信息树理解与验证场景准备](./tree-understanding.md) | 修改全树画像、M3 场景准备、M4 完整能力 Oracle/门槛、审核门或可信回放 |
 | [只读 Workbench API](./workbench-api.md) | 修改 FastAPI、树视图 DTO、前端代理或工作台启动入口 |
 | [Workbench 治理 API](./workbench-governance-api.md) | 修改 Web case、operation、模型调用、人工动作或 sidecar |

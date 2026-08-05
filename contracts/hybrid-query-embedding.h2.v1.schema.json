@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/hybrid-query-embedding.h2.v1.schema.json",
+  "title": "TreeGuard H2 Query Embedding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_document_hash",
+    "source_profile_hash",
+    "values",
+    "embedding_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "treeguard.hybrid-query-embedding.h2.v1"},
+    "source_document_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_profile_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "values": {
+      "type": "array",
+      "minItems": 512,
+      "maxItems": 512,
+      "items": {"type": "number"}
+    },
+    "embedding_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -6,7 +6,7 @@ import math
 import re
 import unicodedata
 from dataclasses import dataclass
-from typing import Any, Mapping, Sequence
+from typing import Any, Mapping, Protocol, Sequence
 
 from treeguard.change_intent import IntentConfirmation, IntentRequest
 from treeguard.hashing import canonical_digest
@@ -53,6 +53,21 @@ class HybridRetrievalError(ValueError):
     def __init__(self, code: str, message: str = "hybrid retrieval rejected") -> None:
         super().__init__(message)
         self.code = code
+
+
+class DenseVectorEntry(Protocol):
+    node_id: str
+    values: tuple[float, ...]
+
+
+class DenseVectorSource(Protocol):
+    entries: tuple[DenseVectorEntry, ...]
+    index_hash: str
+
+
+class DenseQuerySource(Protocol):
+    values: tuple[float, ...]
+    embedding_hash: str
 
 
 def _digest(value: str) -> bool:
@@ -620,50 +635,67 @@ def build_hybrid_candidate_set(
     if not enabled:
         if index is not None or query_embedding is not None:
             raise HybridRetrievalError("HYBRID_UNEXPECTED_VECTOR_INPUT")
-        return _fuse(evidence, query_document, lexical, tree, None, None, max_candidates)
+        return fuse_hybrid_candidate_set(
+            evidence, query_document, lexical, tree, None, None, max_candidates
+        )
     if not isinstance(index, HybridEmbeddingIndex) or not isinstance(query_embedding, HybridQueryEmbedding):
         raise HybridRetrievalError("HYBRID_EMBEDDING_REQUIRED")
     _validate_vector_sources(tree, documents, query_document, index, query_embedding)
-    return _fuse(evidence, query_document, lexical, tree, index, query_embedding, max_candidates)
+    return fuse_hybrid_candidate_set(
+        evidence,
+        query_document,
+        lexical,
+        tree,
+        index,
+        query_embedding,
+        max_candidates,
+    )
 
 
-def _fuse(
+def fuse_hybrid_candidate_set(
     evidence: RetrievalRoleEvidence,
     query_document: HybridQueryDocument,
     lexical: BoundaryTolerantRoleCandidateSet,
     tree: CanonicalTree,
-    index: HybridEmbeddingIndex | None,
-    query_embedding: HybridQueryEmbedding | None,
+    index: DenseVectorSource | None,
+    query_embedding: DenseQuerySource | None,
     max_candidates: int,
 ) -> HybridCandidateSet:
-    lexical_ranks = {item.node_id: item.rank for item in lexical.candidates[:LEG_LIMIT]}
-    vector_ranks: dict[str, int] = {}
-    similarities: dict[str, int] = {}
+    if (
+        not isinstance(evidence, RetrievalRoleEvidence)
+        or not isinstance(query_document, HybridQueryDocument)
+        or not isinstance(lexical, BoundaryTolerantRoleCandidateSet)
+        or not isinstance(tree, CanonicalTree)
+        or not isinstance(max_candidates, int)
+        or isinstance(max_candidates, bool)
+        or not 1 <= max_candidates <= LEG_LIMIT
+        or (index is None) != (query_embedding is None)
+    ):
+        raise HybridRetrievalError("HYBRID_VECTOR_SOURCE_INVALID")
     if index is not None and query_embedding is not None:
-        excluded = _excluded_node_ids(evidence, tree)
-        scored = []
+        if (
+            not _digest(getattr(index, "index_hash", ""))
+            or not _digest(getattr(query_embedding, "embedding_hash", ""))
+            or not isinstance(getattr(index, "entries", None), tuple)
+        ):
+            raise HybridRetrievalError("HYBRID_VECTOR_SOURCE_INVALID")
+        expected_node_ids = {
+            document.node_id for document in build_hybrid_node_documents(tree)
+        }
+        actual_node_ids = {entry.node_id for entry in index.entries}
+        if actual_node_ids != expected_node_ids:
+            raise HybridRetrievalError("HYBRID_VECTOR_SOURCE_INVALID")
+        _finite_vector(query_embedding.values, EMBEDDING_DIMENSIONS)
         for entry in index.entries:
-            if entry.node_id in excluded:
-                continue
-            similarity = _cosine(query_embedding.values, entry.values)
-            scored.append((-similarity, entry.node_id, similarity))
-        scored.sort(key=lambda item: (item[0], item[1]))
-        for rank, (_, node_id, similarity) in enumerate(scored[:LEG_LIMIT], start=1):
-            vector_ranks[node_id] = rank
-            similarities[node_id] = max(-RRF_SCALE, min(RRF_SCALE, int(similarity * RRF_SCALE)))
-    scored_candidates = []
-    for node_id in set(lexical_ranks) | set(vector_ranks):
-        lexical_rank = lexical_ranks.get(node_id)
-        vector_rank = vector_ranks.get(node_id)
-        total = sum(RRF_SCALE // (RRF_K + rank) for rank in (lexical_rank, vector_rank) if rank is not None)
-        score = HybridCandidateScore(lexical_rank, vector_rank, similarities.get(node_id), total)
-        scored_candidates.append((-total, node_id, score))
-    scored_candidates.sort(key=lambda item: (item[0], item[1]))
-    candidates = tuple(
-        HybridCandidate(rank, node_id, score)
-        for rank, (_, node_id, score) in enumerate(scored_candidates[:max_candidates], start=1)
+            _finite_vector(entry.values, EMBEDDING_DIMENSIONS)
+    candidates, status = rank_hybrid_candidates(
+        evidence,
+        lexical,
+        tree,
+        index,
+        query_embedding,
+        max_candidates,
     )
-    status = "CANDIDATES_READY" if candidates else lexical.status
     payload = {
         "schema_version": RESULT_SCHEMA_VERSION,
         "algorithm_version": ALGORITHM_VERSION,
@@ -698,6 +730,49 @@ def _fuse(
     )
 
 
+def rank_hybrid_candidates(
+    evidence: RetrievalRoleEvidence,
+    lexical: BoundaryTolerantRoleCandidateSet,
+    tree: CanonicalTree,
+    index: DenseVectorSource | None,
+    query_embedding: DenseQuerySource | None,
+    max_candidates: int,
+) -> tuple[tuple[HybridCandidate, ...], str]:
+    """Return fixed RRF candidates without choosing an artifact version."""
+
+    lexical_ranks = {
+        item.node_id: item.rank for item in lexical.candidates[:LEG_LIMIT]
+    }
+    vector_ranks: dict[str, int] = {}
+    similarities: dict[str, int] = {}
+    if index is not None and query_embedding is not None:
+        excluded = _excluded_node_ids(evidence, tree)
+        scored = []
+        for entry in index.entries:
+            if entry.node_id in excluded:
+                continue
+            similarity = _cosine(query_embedding.values, entry.values)
+            scored.append((-similarity, entry.node_id, similarity))
+        scored.sort(key=lambda item: (item[0], item[1]))
+        for rank, (_, node_id, similarity) in enumerate(scored[:LEG_LIMIT], start=1):
+            vector_ranks[node_id] = rank
+            similarities[node_id] = max(-RRF_SCALE, min(RRF_SCALE, int(similarity * RRF_SCALE)))
+    scored_candidates = []
+    for node_id in set(lexical_ranks) | set(vector_ranks):
+        lexical_rank = lexical_ranks.get(node_id)
+        vector_rank = vector_ranks.get(node_id)
+        total = sum(RRF_SCALE // (RRF_K + rank) for rank in (lexical_rank, vector_rank) if rank is not None)
+        score = HybridCandidateScore(lexical_rank, vector_rank, similarities.get(node_id), total)
+        scored_candidates.append((-total, node_id, score))
+    scored_candidates.sort(key=lambda item: (item[0], item[1]))
+    candidates = tuple(
+        HybridCandidate(rank, node_id, score)
+        for rank, (_, node_id, score) in enumerate(scored_candidates[:max_candidates], start=1)
+    )
+    status = "CANDIDATES_READY" if candidates else lexical.status
+    return candidates, status
+
+
 __all__ = [
     "ALGORITHM_VERSION",
     "EMBEDDING_DIMENSIONS",
@@ -714,6 +789,8 @@ __all__ = [
     "build_hybrid_node_documents",
     "build_hybrid_query_document",
     "build_hybrid_query_embedding",
+    "fuse_hybrid_candidate_set",
+    "rank_hybrid_candidates",
     "validate_hybrid_embedding_vector",
     "vector_leg_enabled",
     "verify_hybrid_embedding_index",

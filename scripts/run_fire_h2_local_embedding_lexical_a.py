@@ -13,6 +13,7 @@ from typing import Any, Mapping
 from treeguard.adapter import adapt_tree_document
 from treeguard.change_intent import IntentConfirmation, IntentContent, IntentRequest
 from treeguard.hashing import canonical_digest
+from treeguard.json_utils import strict_json_loads
 from treeguard.retrieval_role_tolerant import (
     ALGORITHM_VERSION,
     build_boundary_tolerant_role_candidate_set,
@@ -31,6 +32,7 @@ _FIXED_ACTION_HASH = "1" * 64
 _FIXED_REVIEWER = "codex-silver-calibration"
 _FIXED_RECORDED_AT = "2026-08-05T00:00:00Z"
 _PUBLIC_FILES = ("manifest.v1.json", "tree.v1.json", "scenarios.v1.json")
+MAX_ARTIFACT_BYTES = 32_000_000
 _RESULT_KEYS = {
     "schema_version",
     "status",
@@ -62,30 +64,34 @@ class H2LexicalAError(ValueError):
         self.code = code
 
 
-def _load(path: Path, error_code: str) -> Any:
+def load_json_artifact(path: Path, error_code: str) -> Any:
     try:
         info = path.lstat()
-        if not stat.S_ISREG(info.st_mode) or path.is_symlink():
+        if (
+            not stat.S_ISREG(info.st_mode)
+            or path.is_symlink()
+            or info.st_size > MAX_ARTIFACT_BYTES
+        ):
             raise H2LexicalAError(error_code)
-        return json.loads(path.read_text(encoding="utf-8"))
+        return strict_json_loads(path.read_bytes().decode("utf-8"))
     except H2LexicalAError:
         raise
-    except (OSError, json.JSONDecodeError):
+    except (OSError, UnicodeError, ValueError):
         raise H2LexicalAError(error_code) from None
 
 
-def _verify_self_hash(artifact: Mapping[str, Any], field: str, code: str) -> None:
+def verify_self_hash(artifact: Mapping[str, Any], field: str, code: str) -> None:
     value = artifact.get(field)
     payload = {key: item for key, item in artifact.items() if key != field}
     if not isinstance(value, str) or canonical_digest(payload) != value:
         raise H2LexicalAError(code)
 
 
-def _load_public_inputs(dataset_dir: Path) -> tuple[Any, list[Mapping[str, Any]]]:
+def load_public_inputs(dataset_dir: Path) -> tuple[Any, list[Mapping[str, Any]]]:
     if not dataset_dir.is_dir() or dataset_dir.is_symlink():
         raise H2LexicalAError("H2_A_DATASET_INVALID")
     artifacts = {
-        name: _load(dataset_dir / name, "H2_A_DATASET_INVALID")
+        name: load_json_artifact(dataset_dir / name, "H2_A_DATASET_INVALID")
         for name in _PUBLIC_FILES
     }
     manifest = artifacts["manifest.v1.json"]
@@ -93,8 +99,8 @@ def _load_public_inputs(dataset_dir: Path) -> tuple[Any, list[Mapping[str, Any]]
     tree_document = artifacts["tree.v1.json"]
     if not isinstance(manifest, dict) or not isinstance(scenarios, dict):
         raise H2LexicalAError("H2_A_DATASET_INVALID")
-    _verify_self_hash(manifest, "manifest_hash", "H2_A_MANIFEST_INVALID")
-    _verify_self_hash(scenarios, "scenario_set_hash", "H2_A_DATASET_INVALID")
+    verify_self_hash(manifest, "manifest_hash", "H2_A_MANIFEST_INVALID")
+    verify_self_hash(scenarios, "scenario_set_hash", "H2_A_DATASET_INVALID")
     if manifest.get("manifest_hash") != MANIFEST_HASH:
         raise H2LexicalAError("H2_A_MANIFEST_MISMATCH")
     if (
@@ -117,7 +123,7 @@ def _load_public_inputs(dataset_dir: Path) -> tuple[Any, list[Mapping[str, Any]]
     return imported.tree, rows
 
 
-def _confirmation(request: IntentRequest, tree: Any) -> IntentConfirmation:
+def build_confirmation(request: IntentRequest, tree: Any) -> IntentConfirmation:
     intent = IntentContent(
         subject=None,
         role=None,
@@ -179,7 +185,7 @@ def retrieve_public_scenarios(
             result = build_boundary_tolerant_role_candidate_set(
                 evidence,
                 request,
-                _confirmation(request, tree),
+                build_confirmation(request, tree),
                 tree,
                 include_model_expansion=False,
                 max_candidates=LEXICAL_TOP_K,
@@ -248,10 +254,12 @@ def score_after_retrieval(
 ) -> dict[str, Any]:
     """Load the local Oracle only after retrieval, then discard item detail."""
 
-    oracle = _load(dataset_dir / "oracle-sidecar.v1.json", "H2_A_ORACLE_INVALID")
+    oracle = load_json_artifact(
+        dataset_dir / "oracle-sidecar.v1.json", "H2_A_ORACLE_INVALID"
+    )
     if not isinstance(oracle, dict):
         raise H2LexicalAError("H2_A_ORACLE_INVALID")
-    _verify_self_hash(oracle, "oracle_hash", "H2_A_ORACLE_INVALID")
+    verify_self_hash(oracle, "oracle_hash", "H2_A_ORACLE_INVALID")
     if oracle.get("oracle_hash") != "042ea1818541c17d8c2bd424da39e776d9a30b60dc0c117a62484b9c6881482c":
         raise H2LexicalAError("H2_A_ORACLE_INVALID")
     entries = oracle.get("entries")
@@ -305,7 +313,7 @@ def score_after_retrieval(
 
 
 def run(dataset_dir: Path) -> dict[str, Any]:
-    tree, scenarios = _load_public_inputs(dataset_dir)
+    tree, scenarios = load_public_inputs(dataset_dir)
     observations = retrieve_public_scenarios(tree, scenarios)
     return score_after_retrieval(dataset_dir, scenarios, observations)
 

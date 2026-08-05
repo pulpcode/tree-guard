@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/embedding-profile.h2.v1.schema.json",
+  "title": "TreeGuard H2 Local BGE Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "profile_version",
+    "model_id",
+    "model_revision",
+    "weights_sha256",
+    "artifact_manifest_hash",
+    "dimensions",
+    "max_tokens",
+    "pooling",
+    "normalization",
+    "dtype",
+    "device",
+    "query_instruction",
+    "batch_size",
+    "profile_hash"
+  ],
+  "properties": {
+    "profile_version": {"const": "treeguard.local-bge-small-zh-v1.5.h2.v1"},
+    "model_id": {"const": "BAAI/bge-small-zh-v1.5"},
+    "model_revision": {"const": "7999e1d3359715c523056ef9478215996d62a620"},
+    "weights_sha256": {"const": "354763b9b1357bc9c44f62c6be2276321081ed2567773608c0d0785b61d5a026"},
+    "artifact_manifest_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "dimensions": {"const": 512},
+    "max_tokens": {"const": 512},
+    "pooling": {"const": "CLS"},
+    "normalization": {"const": "L2"},
+    "dtype": {"const": "float32"},
+    "device": {"const": "cpu"},
+    "query_instruction": {"const": "为这个句子生成表示以用于检索相关文章："},
+    "batch_size": {"const": 16},
+    "profile_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

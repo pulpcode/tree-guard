@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 import secrets
-import stat
 import tempfile
 import threading
 from concurrent.futures import ThreadPoolExecutor
@@ -51,6 +50,10 @@ from treeguard.workbench import (
     ReadOnlyTreeRepository,
     WorkbenchError,
     build_tree_reference_index,
+)
+from treeguard.workbench_sidecar import (
+    create_private_directory,
+    ensure_private_directory,
 )
 
 
@@ -276,10 +279,10 @@ class WorkbenchGovernanceService:
             },
             tree,
         )
-        _ensure_private_directory(self.sidecar_root)
+        ensure_private_directory(self.sidecar_root)
         case_ref = self._new_ref("CASE")
         case_directory = self.sidecar_root / case_ref
-        _create_private_directory(case_directory)
+        create_private_directory(case_directory)
         self._publish(case_directory, "01-intent-request.json", request.to_dict())
         case = _GovernanceCase(
             case_ref=case_ref,
@@ -783,46 +786,6 @@ def _utc_now() -> str:
         .isoformat(timespec="seconds")
         .replace("+00:00", "Z")
     )
-
-
-def _ensure_private_directory(path: Path) -> None:
-    try:
-        os.mkdir(path, 0o700)
-    except FileExistsError:
-        pass
-    except OSError:
-        raise WorkbenchGovernanceError(
-            "WORKBENCH_SIDECAR_DIRECTORY_UNSAFE",
-            "private sidecar directory could not be created",
-        ) from None
-    try:
-        file_stat = os.lstat(path)
-    except OSError:
-        raise WorkbenchGovernanceError(
-            "WORKBENCH_SIDECAR_DIRECTORY_UNSAFE",
-            "private sidecar directory could not be inspected",
-        ) from None
-    current_uid = os.getuid() if hasattr(os, "getuid") else None
-    if (
-        not stat.S_ISDIR(file_stat.st_mode)
-        or file_stat.st_mode & 0o077
-        or (current_uid is not None and file_stat.st_uid != current_uid)
-    ):
-        raise WorkbenchGovernanceError(
-            "WORKBENCH_SIDECAR_DIRECTORY_UNSAFE",
-            "private sidecar directory is not private",
-        )
-
-
-def _create_private_directory(path: Path) -> None:
-    try:
-        os.mkdir(path, 0o700)
-    except OSError:
-        raise WorkbenchGovernanceError(
-            "WORKBENCH_SIDECAR_DIRECTORY_UNSAFE",
-            "private case directory could not be created",
-        ) from None
-    _ensure_private_directory(path)
 
 
 def _operation_error_code(exc: Exception) -> str:

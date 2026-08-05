@@ -9,7 +9,7 @@ from typing import Any
 
 from treeguard.change_intent import IntentConfirmation, IntentRequest
 from treeguard.hashing import canonical_digest
-from treeguard.models import CanonicalTree
+from treeguard.models import CanonicalNode, CanonicalTree
 from treeguard.retrieval import CandidateRetrievalError
 from treeguard.retrieval_query import (
     build_decoupled_candidate_set,
@@ -85,6 +85,41 @@ class BoundaryTolerantRoleScore:
             "scope_name_similarity": self.scope_name_similarity,
             "scope_path_similarity": self.scope_path_similarity,
             "total": self.total,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class BoundaryRoleFeatures:
+    """Reusable role similarities; callers decide whether they are soft or hard."""
+
+    target_name_similarity: int
+    target_path_similarity: int
+    scope_name_similarity: int
+    scope_path_similarity: int
+    exclusion_match: bool
+
+    def __post_init__(self) -> None:
+        values = (
+            self.target_name_similarity,
+            self.target_path_similarity,
+            self.scope_name_similarity,
+            self.scope_path_similarity,
+        )
+        if any(
+            not isinstance(value, int)
+            or isinstance(value, bool)
+            or not 0 <= value <= SIMILARITY_SCALE
+            for value in values
+        ) or not isinstance(self.exclusion_match, bool):
+            raise ValueError("boundary role features are invalid")
+
+    def to_dict(self) -> dict[str, int | bool]:
+        return {
+            "target_name_similarity": self.target_name_similarity,
+            "target_path_similarity": self.target_path_similarity,
+            "scope_name_similarity": self.scope_name_similarity,
+            "scope_path_similarity": self.scope_path_similarity,
+            "exclusion_match": self.exclusion_match,
         }
 
 
@@ -227,38 +262,19 @@ def build_boundary_tolerant_role_candidate_set(
             evidence, query.query_hash, tree, base.status, max_candidates, ()
         )
 
-    role_terms = {
-        role: tuple(
-            _boundary_terms(span.text)
-            for span in evidence.spans
-            if span.role == role
-        )
-        for role in ("TARGET", "SCOPE")
-    }
-    exclusions = {
-        _normalize_text(span.text)
-        for span in evidence.spans
-        if span.role == "EXCLUSION"
-    }
     node_by_id = {node.node_id: node for node in tree.nodes}
     scored = []
     for candidate in base.candidates:
         node = node_by_id[candidate.node_id]
-        name_texts = (_normalize_text(node.name), _normalize_text(node.label))
-        path_texts = tuple(_normalize_text(value) for value in node.path_labels)
-        exclusion_documents = name_texts + (
-            _normalize_text(" ".join(node.path_labels)),
-        )
-        if _contains_any(exclusions, exclusion_documents):
+        features = build_boundary_role_features(evidence, request, node)
+        if features.exclusion_match:
             continue
-        name_term_sets = tuple(_boundary_terms(value) for value in name_texts)
-        path_term_sets = tuple(_boundary_terms(value) for value in path_texts)
-        target_name = _best_similarity(role_terms["TARGET"], name_term_sets)
-        target_path = _best_similarity(role_terms["TARGET"], path_term_sets)
+        target_name = features.target_name_similarity
+        target_path = features.target_path_similarity
         if target_name == 0 and target_path == 0:
             continue
-        scope_name = _best_similarity(role_terms["SCOPE"], name_term_sets)
-        scope_path = _best_similarity(role_terms["SCOPE"], path_term_sets)
+        scope_name = features.scope_name_similarity
+        scope_path = features.scope_path_similarity
         weighted = sum(
             (
                 target_name * _TARGET_NAME_WEIGHT,
@@ -291,6 +307,54 @@ def build_boundary_tolerant_role_candidate_set(
     )
 
 
+def build_boundary_role_features(
+    evidence: RetrievalRoleEvidence,
+    request: IntentRequest,
+    node: CanonicalNode,
+) -> BoundaryRoleFeatures:
+    """Return source-bound similarities without imposing retrieval eligibility."""
+
+    verify_retrieval_role_evidence(evidence, request)
+    if not isinstance(node, CanonicalNode):
+        raise CandidateRetrievalError(
+            "CANDIDATE_ROLE_NODE_INVALID",
+            "role features require a canonical node",
+        )
+    role_terms = {
+        role: tuple(
+            _boundary_terms(span.text)
+            for span in evidence.spans
+            if span.role == role
+        )
+        for role in ("TARGET", "SCOPE")
+    }
+    exclusions = {
+        _normalize_text(span.text)
+        for span in evidence.spans
+        if span.role == "EXCLUSION"
+    }
+    name_texts = (_normalize_text(node.name), _normalize_text(node.label))
+    path_texts = tuple(_normalize_text(value) for value in node.path_labels)
+    name_term_sets = tuple(_boundary_terms(value) for value in name_texts)
+    path_term_sets = tuple(_boundary_terms(value) for value in path_texts)
+    return BoundaryRoleFeatures(
+        target_name_similarity=_best_similarity(
+            role_terms["TARGET"], name_term_sets
+        ),
+        target_path_similarity=_best_similarity(
+            role_terms["TARGET"], path_term_sets
+        ),
+        scope_name_similarity=_best_similarity(
+            role_terms["SCOPE"], name_term_sets
+        ),
+        scope_path_similarity=_best_similarity(
+            role_terms["SCOPE"], path_term_sets
+        ),
+        exclusion_match=_contains_any(
+            exclusions,
+            name_texts + (_normalize_text(" ".join(node.path_labels)),),
+        ),
+    )
 def _normalize_text(value: str) -> str:
     return _WHITESPACE.sub(" ", unicodedata.normalize("NFKC", value).casefold()).strip()
 
@@ -360,10 +424,12 @@ def _candidate_set(
 
 __all__ = [
     "ALGORITHM_VERSION",
+    "BoundaryRoleFeatures",
     "BoundaryTolerantRoleCandidate",
     "BoundaryTolerantRoleCandidateSet",
     "BoundaryTolerantRoleScore",
     "RESULT_SCHEMA_VERSION",
     "SIMILARITY_SCALE",
+    "build_boundary_role_features",
     "build_boundary_tolerant_role_candidate_set",
 ]

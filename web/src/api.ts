@@ -153,7 +153,10 @@ export interface GovernanceModelTraceAttempt {
   stage:
     | "INTENT_DRAFT"
     | "INTENT_CLARIFICATION"
-    | "SEMANTIC_RECOMMENDATION";
+    | "SEMANTIC_RECOMMENDATION"
+    | "CHANGE_UNDERSTANDING"
+    | "CHANGE_UNDERSTANDING_CLARIFICATION"
+    | "SEMANTIC_RELATION";
   attempt: number;
   provider: string;
   model: string;
@@ -177,6 +180,64 @@ export interface GovernanceModelTraceView {
   model_mode: GovernanceModelMode;
   thinking_status: "DISABLED";
   items: GovernanceModelTraceAttempt[];
+}
+
+export interface NavigationCopilotCapability {
+  schema_version: "navigation-copilot-capability.v1";
+  enabled: boolean;
+  shadow_only: true;
+  max_model_calls: 2;
+  max_display_candidates: 8;
+  production_write_enabled: false;
+}
+
+export interface NavigationCopilotCandidate {
+  candidate_ref: string;
+  rank: number;
+  node_ref: string;
+  name: string;
+  label: string;
+  kind: "CONCEPT" | "PROPERTY";
+  value_type: string | null;
+  cardinality: "SINGLE" | "MULTIPLE" | null;
+  path_names: string[];
+  parent_relation: string;
+  relation: string | null;
+  reason: string | null;
+}
+
+export interface NavigationCopilotCase {
+  schema_version: "navigation-copilot-case-view.v1";
+  case_ref: string;
+  status: string;
+  model_mode: GovernanceModelMode;
+  model_call_count: number;
+  interpretation: {
+    status: "MODEL_VALID" | "MODEL_DEGRADED";
+    node_kind: "CONCEPT" | "PROPERTY" | "UNKNOWN";
+    value_type: string | null;
+    cardinality: "SINGLE" | "MULTIPLE" | "UNKNOWN";
+    clarification_question: string | null;
+  } | null;
+  degradation_codes: string[];
+  candidate_status:
+    | "CANDIDATES_AVAILABLE"
+    | "AMBIGUOUS"
+    | "NONE"
+    | "NEED_EVIDENCE"
+    | null;
+  highlighted_candidate_ref: string | null;
+  candidates: NavigationCopilotCandidate[];
+  outcome: {
+    action: string;
+    candidate_miss: boolean;
+    user_corrected: boolean;
+    record_semantics: "OPERATIONAL_FEEDBACK_ONLY";
+    semantic_approval: false;
+    gold_eligible: false;
+    patch_eligible: false;
+  } | null;
+  navigation_target_ref: string | null;
 }
 
 export interface ValidationVariant {
@@ -397,6 +458,61 @@ export async function fetchGovernanceModelTraces(
 ): Promise<GovernanceModelTraceView> {
   return requestJSON<GovernanceModelTraceView>(
     `/api/v1/governance/cases/${encodeURIComponent(caseRef)}/model-traces`,
+  );
+}
+
+export async function fetchNavigationCopilotCapability(): Promise<NavigationCopilotCapability> {
+  return requestJSON<NavigationCopilotCapability>(
+    "/api/v1/navigation-copilot/capability",
+  );
+}
+
+export async function createNavigationCopilotCase(
+  input: GovernanceCaseCreateInput,
+): Promise<GovernanceOperation> {
+  return requestJSON<GovernanceOperation>(
+    "/api/v1/navigation-copilot/cases",
+    { method: "POST", body: JSON.stringify(input) },
+  );
+}
+
+export async function fetchNavigationCopilotOperation(
+  operationRef: string,
+): Promise<GovernanceOperation> {
+  return requestJSON<GovernanceOperation>(
+    `/api/v1/navigation-copilot/operations/${encodeURIComponent(operationRef)}`,
+  );
+}
+
+export async function fetchNavigationCopilotCase(
+  caseRef: string,
+): Promise<NavigationCopilotCase> {
+  return requestJSON<NavigationCopilotCase>(
+    `/api/v1/navigation-copilot/cases/${encodeURIComponent(caseRef)}`,
+  );
+}
+
+export async function clarifyNavigationCopilotCase(
+  caseRef: string,
+  answerText: string,
+): Promise<GovernanceOperation> {
+  return requestJSON<GovernanceOperation>(
+    `/api/v1/navigation-copilot/cases/${encodeURIComponent(caseRef)}/clarification`,
+    { method: "POST", body: JSON.stringify({ answer_text: answerText }) },
+  );
+}
+
+export async function completeNavigationCopilotCase(
+  caseRef: string,
+  input: {
+    action: "SELECT_CANDIDATE" | "SELECT_OUTSIDE_CANDIDATE" | "REJECT_ALL" | "EXIT";
+    selected_candidate_ref: string | null;
+    selected_node_ref: string | null;
+  },
+): Promise<NavigationCopilotCase> {
+  return requestJSON<NavigationCopilotCase>(
+    `/api/v1/navigation-copilot/cases/${encodeURIComponent(caseRef)}/outcome`,
+    { method: "POST", body: JSON.stringify(input) },
   );
 }
 

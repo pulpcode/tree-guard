@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-clarification-round.v1.schema.json",
+  "title": "Navigation Copilot Clarification Round v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source_initial_interpretation_hash", "source_answer_hash", "revised_interpretation", "round_hash"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-clarification-round.v1"},
+    "source_initial_interpretation_hash": {"$ref": "#/$defs/digest"},
+    "source_answer_hash": {"$ref": "#/$defs/digest"},
+    "revised_interpretation": {"$ref": "navigation-copilot-interpretation.v1.schema.json"},
+    "round_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {"digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

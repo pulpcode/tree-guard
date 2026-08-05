@@ -280,6 +280,20 @@ TREEGUARD_WORKBENCH_SIDECAR_DIR=/absolute/private/path \
 回退。四类只读接口、版本排序和内网冒烟边界见
 [内网仓库与 Qwen 适配](docs/internal-adapters.md)。
 
+导航 Copilot Shadow 是与上述治理闭环隔离的可选入口，缺省关闭。开发验证时可设置：
+
+```bash
+TREEGUARD_WORKBENCH_NAVIGATION_COPILOT=1 \
+  UV_CACHE_DIR=/tmp/treeguard-uv-cache uv run --frozen \
+  treeguard-workbench --port 8000
+```
+
+开启后页面增加一个短对话面板：一句需求、可选一次澄清、最多 8 个候选和一次最终
+定位。模型至多参与两个逻辑阶段；页面当前节点只是软参考，错误或缺失不会成为硬过滤。
+AI 只能高亮候选，用户确认后页面才导航；候选都不对时可用左侧当前节点纠正，并将其记为
+召回未命中。该入口只写私有运营反馈 sidecar，不打开治理表单、不修改树，也不产生 Gold、
+语义批准或 Patch。它尚未获准默认启用或进入生产 Shadow。
+
 本地开发排查 Prompt 或模型合同失败时，可以显式开启模型交互诊断：
 
 ```bash

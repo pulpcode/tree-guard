@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-outcome.v1.schema.json",
+  "title": "Navigation Copilot Outcome v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_semantics", "semantic_approval", "gold_eligible", "patch_eligible", "source_decision_hash", "action", "selected_candidate_ref", "selected_node_id", "candidate_miss", "user_corrected", "duration_ms", "outcome_hash"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-outcome.v1"},
+    "record_semantics": {"const": "OPERATIONAL_FEEDBACK_ONLY"},
+    "semantic_approval": {"const": false},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false},
+    "source_decision_hash": {"$ref": "#/$defs/digest"},
+    "action": {"enum": ["SELECT_CANDIDATE", "SELECT_OUTSIDE_CANDIDATE", "REJECT_ALL", "EXIT"]},
+    "selected_candidate_ref": {"type": ["string", "null"], "pattern": "^C[0-9]{3}$"},
+    "selected_node_id": {"type": ["string", "null"], "minLength": 1},
+    "candidate_miss": {"type": "boolean"},
+    "user_corrected": {"type": "boolean"},
+    "duration_ms": {"type": "integer", "minimum": 0},
+    "outcome_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {"digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

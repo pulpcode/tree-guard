@@ -60,6 +60,8 @@ worker、queue、vector index、Spring/MongoDB 直连或生产 Patch publisher�
   Provider、召回或动作；
 - `semantic_policy_v2.py`：隔离的 relation-only 候选投影、模型草稿与确定性动作
   策略；当前只迁移可信 v1 候选投影，不是默认产品入口。
+- `navigation_copilot.py`：导航 Shadow 的理解包装、宽召回软重排、relation-only
+  本地政策、人工终态与聚合合同；保持无网络和文件副作用。
 - `tree_understanding.py`：全树结构画像、M2 有界投影，以及 M3 稀疏场景计划、
   逐单元投影、待审候选与部分失败批次的可信来源合同；
 - `scenario_assisted_shadow_validation.py`：M5 只读人工在环 Shadow 的聚合准入合同，
@@ -97,6 +99,9 @@ Provider 可以执行网络 IO；返回 JSON 必须通过本地字段、枚举�
 - `workbench.py`：只读目录应用服务和浏览器树视图允许列表；
 - `workbench_governance.py`：Web case/operation、Core/Provider 编排和私有
   sidecar；
+- `workbench_navigation_copilot.py`：默认关闭的导航 Shadow case 状态机、两次模型
+  调用预算、私有 sidecar 与当前进程指标；
+- `workbench_sidecar.py`：Workbench 治理与导航服务共享的安全私有目录门禁；
 - `web.py`：FastAPI DTO、路由、固定错误和响应加固；
 - `workbench_cli.py`：只监听 loopback 的 Workbench API 入口；
 - `__main__.py`：分派基础一致性 CLI。

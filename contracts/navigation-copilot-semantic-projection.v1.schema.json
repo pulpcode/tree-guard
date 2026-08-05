@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-semantic-projection.v1.schema.json",
+  "title": "Navigation Copilot Semantic Projection v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source_interpretation_hash", "source_candidate_set_hash", "source_snapshot_hash", "model_input", "projection_hash"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-semantic-projection.v1"},
+    "source_interpretation_hash": {"$ref": "#/$defs/digest"},
+    "source_candidate_set_hash": {"$ref": "#/$defs/digest"},
+    "source_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "model_input": {"$ref": "navigation-copilot-semantic-input.v1.schema.json"},
+    "projection_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {"digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

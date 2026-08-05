@@ -43,6 +43,14 @@ from treeguard.workbench_governance import (
     default_sidecar_root,
     model_diagnostics_enabled_from_env,
 )
+from treeguard.navigation_copilot import NavigationCopilotError
+from treeguard.workbench_navigation_copilot import (
+    DefaultNavigationProviderFactory,
+    WorkbenchNavigationCopilotError,
+    WorkbenchNavigationCopilotService,
+    navigation_copilot_enabled_from_env,
+)
+from treeguard.workbench_sidecar import WorkbenchSidecarError
 from treeguard.workbench_validation import (
     ValidationWorkbenchError,
     ValidationWorkbenchService,
@@ -185,6 +193,131 @@ class GovernanceOperationResponse(BaseModel):
     case_status: str
 
 
+class NavigationCopilotCapabilityResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    schema_version: Literal["navigation-copilot-capability.v1"]
+    enabled: bool
+    shadow_only: Literal[True]
+    max_model_calls: Literal[2]
+    max_display_candidates: Literal[8]
+    production_write_enabled: Literal[False]
+
+
+class NavigationCopilotCaseCreate(GovernanceCaseCreate):
+    pass
+
+
+class NavigationCopilotClarificationInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    answer_text: str = Field(min_length=1, max_length=8_000)
+
+
+class NavigationCopilotOutcomeInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    action: Literal[
+        "SELECT_CANDIDATE",
+        "SELECT_OUTSIDE_CANDIDATE",
+        "REJECT_ALL",
+        "EXIT",
+    ]
+    selected_candidate_ref: str | None = Field(
+        default=None,
+        pattern=r"^C[0-9]{3}$",
+    )
+    selected_node_ref: str | None = Field(
+        default=None,
+        pattern=r"^N[0-9]{6}$",
+    )
+
+
+class NavigationCopilotInterpretationView(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    status: Literal["MODEL_VALID", "MODEL_DEGRADED"]
+    node_kind: Literal["CONCEPT", "PROPERTY", "UNKNOWN"]
+    value_type: str | None
+    cardinality: Literal["SINGLE", "MULTIPLE", "UNKNOWN"]
+    clarification_question: str | None
+
+
+class NavigationCopilotCandidateView(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    candidate_ref: str
+    rank: int = Field(ge=1, le=8)
+    node_ref: str
+    name: str
+    label: str
+    kind: Literal["CONCEPT", "PROPERTY"]
+    value_type: str | None
+    cardinality: Literal["SINGLE", "MULTIPLE"] | None
+    path_names: list[str]
+    parent_relation: str
+    relation: str | None
+    reason: str | None
+
+
+class NavigationCopilotOutcomeView(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    action: str
+    candidate_miss: bool
+    user_corrected: bool
+    record_semantics: Literal["OPERATIONAL_FEEDBACK_ONLY"]
+    semantic_approval: Literal[False]
+    gold_eligible: Literal[False]
+    patch_eligible: Literal[False]
+
+
+class NavigationCopilotCaseResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    schema_version: Literal["navigation-copilot-case-view.v1"]
+    case_ref: str
+    status: str
+    model_mode: Literal[
+        "SIMULATOR_LIVE",
+        "BAILIAN_LIVE",
+        "QWEN_LIVE",
+    ]
+    model_call_count: int = Field(ge=0, le=2)
+    interpretation: NavigationCopilotInterpretationView | None
+    degradation_codes: list[str]
+    candidate_status: Literal[
+        "CANDIDATES_AVAILABLE",
+        "AMBIGUOUS",
+        "NONE",
+        "NEED_EVIDENCE",
+    ] | None
+    highlighted_candidate_ref: str | None
+    candidates: list[NavigationCopilotCandidateView] = Field(max_length=8)
+    outcome: NavigationCopilotOutcomeView | None
+    navigation_target_ref: str | None
+
+
+class NavigationCopilotAggregateResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    report_version: Literal["navigation-copilot-shadow-aggregate.v1"]
+    valid: Literal[True]
+    case_count: int = Field(ge=0)
+    completed_navigation_count: int = Field(ge=0)
+    top8_direct_selection_count: int = Field(ge=0)
+    candidate_correction_count: int = Field(ge=0)
+    confident_case_count: int = Field(ge=0)
+    confident_error_count: int = Field(ge=0)
+    clarification_case_count: int = Field(ge=0)
+    degraded_case_count: int = Field(ge=0)
+    evidence_covered_case_count: int = Field(ge=0)
+    median_completion_ms: int | None = Field(default=None, ge=0)
+    semantic_approval: Literal[False]
+    gold_eligible: Literal[False]
+    patch_eligible: Literal[False]
+
+
 class GovernanceIntentContent(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -300,6 +433,9 @@ class GovernanceModelTraceAttempt(BaseModel):
         "INTENT_DRAFT",
         "INTENT_CLARIFICATION",
         "SEMANTIC_RECOMMENDATION",
+        "CHANGE_UNDERSTANDING",
+        "CHANGE_UNDERSTANDING_CLARIFICATION",
+        "SEMANTIC_RELATION",
     ]
     attempt: int = Field(ge=1, le=2)
     provider: str = Field(min_length=1, max_length=128)
@@ -515,16 +651,36 @@ def _services_from_environment() -> tuple[
     return workbench, governance, validation
 
 
+def _navigation_copilot_from_environment(
+    repository: Any,
+) -> WorkbenchNavigationCopilotService | None:
+    if navigation_copilot_enabled_from_env():
+        return WorkbenchNavigationCopilotService(
+            repository=repository,
+            sidecar_root=default_sidecar_root(),
+            provider_factory=DefaultNavigationProviderFactory(
+                simulator_base_url=os.environ.get(
+                    "TREEGUARD_WORKBENCH_SIMULATOR_MODEL_URL",
+                    DEFAULT_SIMULATOR_MODEL_BASE_URL,
+                )
+            ),
+            diagnostics_enabled=model_diagnostics_enabled_from_env(),
+        )
+    return None
+
+
 def create_app(
     service: WorkbenchService | None = None,
     governance_service: WorkbenchGovernanceService | None = None,
     validation_service: ValidationWorkbenchService | None = None,
+    navigation_copilot_service: WorkbenchNavigationCopilotService | None = None,
 ) -> FastAPI:
     """Create an app with an injectable read-only application service."""
 
     resolved_service = service
     resolved_governance_service = governance_service
     resolved_validation_service = validation_service
+    resolved_navigation_copilot_service = navigation_copilot_service
 
     @asynccontextmanager
     async def lifespan(application: FastAPI) -> AsyncIterator[None]:
@@ -533,6 +689,9 @@ def create_app(
             application.state.workbench_service = workbench
             application.state.governance_service = governance
             application.state.validation_service = validation
+            application.state.navigation_copilot_service = (
+                _navigation_copilot_from_environment(workbench.repository)
+            )
         else:
             application.state.workbench_service = resolved_service
             application.state.governance_service = (
@@ -540,6 +699,9 @@ def create_app(
             )
             application.state.validation_service = (
                 resolved_validation_service
+            )
+            application.state.navigation_copilot_service = (
+                resolved_navigation_copilot_service
             )
         yield
 
@@ -598,6 +760,39 @@ def create_app(
             status_code = 422
         return _error_response(status_code, exc.code)
 
+    @application.exception_handler(WorkbenchNavigationCopilotError)
+    async def navigation_copilot_error_handler(
+        request: Request,
+        exc: WorkbenchNavigationCopilotError,
+    ) -> JSONResponse:
+        if exc.code.endswith("_NOT_FOUND") or exc.code == "WORKBENCH_DIAGNOSTICS_DISABLED":
+            status_code = 404
+        elif exc.code in {
+            "COPILOT_CASE_STATE_INVALID",
+            "WORKBENCH_SIDECAR_DIRECTORY_UNSAFE",
+            "WORKBENCH_SIDECAR_WRITE_FAILED",
+        }:
+            status_code = 409
+        elif exc.code == "COPILOT_UNAVAILABLE":
+            status_code = 503
+        else:
+            status_code = 422
+        return _error_response(status_code, exc.code)
+
+    @application.exception_handler(WorkbenchSidecarError)
+    async def workbench_sidecar_error_handler(
+        request: Request,
+        exc: WorkbenchSidecarError,
+    ) -> JSONResponse:
+        return _error_response(409, exc.code)
+
+    @application.exception_handler(NavigationCopilotError)
+    async def navigation_copilot_contract_error_handler(
+        request: Request,
+        exc: NavigationCopilotError,
+    ) -> JSONResponse:
+        return _error_response(422, exc.code)
+
     @application.exception_handler(ValidationWorkbenchError)
     async def validation_workbench_error_handler(
         request: Request,
@@ -632,6 +827,29 @@ def create_app(
             "status": "OK",
             "api_version": WORKBENCH_API_VERSION,
         }
+
+    @application.get(
+        "/api/v1/navigation-copilot/capability",
+        response_model=NavigationCopilotCapabilityResponse,
+    )
+    async def navigation_copilot_capability(
+        request: Request,
+    ) -> dict[str, Any]:
+        service = getattr(
+            request.app.state,
+            "navigation_copilot_service",
+            None,
+        )
+        if service is None:
+            return {
+                "schema_version": "navigation-copilot-capability.v1",
+                "enabled": False,
+                "shadow_only": True,
+                "max_model_calls": 2,
+                "max_display_candidates": 8,
+                "production_write_enabled": False,
+            }
+        return service.capability_view()
 
     @application.get(
         "/api/v1/categories",
@@ -697,6 +915,97 @@ def create_app(
             model_mode=payload.model_mode,
             external_data_approved=payload.external_data_approved,
         )
+
+    @application.post(
+        "/api/v1/navigation-copilot/cases",
+        response_model=GovernanceOperationResponse,
+        status_code=202,
+    )
+    async def create_navigation_copilot_case(
+        request: Request,
+        payload: Annotated[NavigationCopilotCaseCreate, Body()],
+    ) -> dict[str, Any]:
+        return _copilot(request).create_case(
+            resource_id=payload.resource_id,
+            version=payload.version,
+            requirement_text=payload.requirement_text,
+            proposed_parent_ref=payload.proposed_parent_ref,
+            node_kind_hint=payload.node_kind_hint,
+            value_type_hint=payload.value_type_hint,
+            cardinality_hint=payload.cardinality_hint,
+            model_mode=payload.model_mode,
+            external_data_approved=payload.external_data_approved,
+        )
+
+    @application.get(
+        "/api/v1/navigation-copilot/cases/{case_ref}",
+        response_model=NavigationCopilotCaseResponse,
+    )
+    async def navigation_copilot_case(
+        request: Request,
+        case_ref: Annotated[str, APIPath(min_length=1, max_length=128)],
+    ) -> dict[str, Any]:
+        return _copilot(request).case_view(case_ref)
+
+    @application.get(
+        "/api/v1/navigation-copilot/operations/{operation_ref}",
+        response_model=GovernanceOperationResponse,
+    )
+    async def navigation_copilot_operation(
+        request: Request,
+        operation_ref: Annotated[str, APIPath(min_length=1, max_length=128)],
+    ) -> dict[str, Any]:
+        return _copilot(request).operation_view(operation_ref)
+
+    @application.post(
+        "/api/v1/navigation-copilot/cases/{case_ref}/clarification",
+        response_model=GovernanceOperationResponse,
+        status_code=202,
+    )
+    async def clarify_navigation_copilot_case(
+        request: Request,
+        case_ref: Annotated[str, APIPath(min_length=1, max_length=128)],
+        payload: Annotated[NavigationCopilotClarificationInput, Body()],
+    ) -> dict[str, Any]:
+        return _copilot(request).clarify(
+            case_ref,
+            answer_text=payload.answer_text,
+        )
+
+    @application.post(
+        "/api/v1/navigation-copilot/cases/{case_ref}/outcome",
+        response_model=NavigationCopilotCaseResponse,
+    )
+    async def complete_navigation_copilot_case(
+        request: Request,
+        case_ref: Annotated[str, APIPath(min_length=1, max_length=128)],
+        payload: Annotated[NavigationCopilotOutcomeInput, Body()],
+    ) -> dict[str, Any]:
+        return _copilot(request).complete(
+            case_ref,
+            action=payload.action,
+            selected_candidate_ref=payload.selected_candidate_ref,
+            selected_node_ref=payload.selected_node_ref,
+        )
+
+    @application.get(
+        "/api/v1/navigation-copilot/aggregate",
+        response_model=NavigationCopilotAggregateResponse,
+    )
+    async def navigation_copilot_aggregate(
+        request: Request,
+    ) -> dict[str, Any]:
+        return _copilot(request).aggregate_view()
+
+    @application.get(
+        "/api/v1/navigation-copilot/cases/{case_ref}/model-traces",
+        response_model=GovernanceModelTraceResponse,
+    )
+    async def navigation_copilot_model_traces(
+        request: Request,
+        case_ref: Annotated[str, APIPath(min_length=1, max_length=128)],
+    ) -> dict[str, Any]:
+        return _copilot(request).model_trace_view(case_ref)
 
     @application.get(
         "/api/v1/governance/cases/{case_ref}",
@@ -860,6 +1169,9 @@ def create_app(
         application.state.workbench_service = resolved_service
         application.state.governance_service = resolved_governance_service
         application.state.validation_service = resolved_validation_service
+        application.state.navigation_copilot_service = (
+            resolved_navigation_copilot_service
+        )
     return application
 
 
@@ -883,6 +1195,20 @@ def _validation(request: Request) -> ValidationWorkbenchService:
         raise ValidationWorkbenchError(
             "VALIDATION_UNAVAILABLE",
             "validation service is not configured",
+        )
+    return service
+
+
+def _copilot(request: Request) -> WorkbenchNavigationCopilotService:
+    service = getattr(
+        request.app.state,
+        "navigation_copilot_service",
+        None,
+    )
+    if service is None:
+        raise WorkbenchNavigationCopilotError(
+            "COPILOT_UNAVAILABLE",
+            "navigation Copilot is not enabled",
         )
     return service
 

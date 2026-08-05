@@ -201,6 +201,34 @@ input {
   gap: 22px;
 }
 
+.copilot-card > .ant-card-body,
+.copilot-compose,
+.copilot-clarification {
+  display: grid;
+  gap: 14px;
+}
+
+.copilot-candidates {
+  display: grid;
+}
+
+.copilot-candidate {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #ecece6;
+}
+
+.copilot-candidate .ant-typography {
+  margin-bottom: 0;
+}
+
+.copilot-candidate .ant-typography-secondary {
+  overflow-wrap: anywhere;
+}
+
 .governance-stage {
   display: grid;
   gap: 16px;

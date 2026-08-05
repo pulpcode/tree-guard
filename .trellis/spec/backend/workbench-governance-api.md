@@ -343,3 +343,32 @@ operation = validation.create_run(
 
 浏览器只提交引用；服务端从已注册的可信 Provider 重建输入，并把运行交给既有
 治理服务。
+
+## Scenario：Workbench 导航 Copilot Shadow
+
+导航 Copilot 使用独立的 `/api/v1/navigation-copilot/*`、
+`WorkbenchNavigationCopilotService` 和私有 case sidecar，不改变既有
+`/api/v1/governance/*` 状态机。`TREEGUARD_WORKBENCH_NAVIGATION_COPILOT` 只接受
+`0|1` 且缺省关闭；关闭时 capability 返回 `enabled=false`，不创建服务、case 或目录。
+
+浏览器创建请求复用治理请求的允许列表字段，但 case 视图只返回模型模式、调用次数、四字段
+理解摘要、固定降级码、最多 8 个临时候选、可选 AI 高亮、最终运营反馈和一次性 `N` 导航
+引用。不得返回需求原文、稳定节点 ID、hash、模型 envelope、sidecar 路径或自由文本回答。
+
+状态机固定为：
+
+1. 首次理解；失败时记录固定码并以原文召回；
+2. 无澄清时召回并执行一次 relation-only Semantic；有澄清时等待一次回答并重新理解，
+   随后不再调用 Semantic；
+3. 展示候选但不自动确认；仅唯一强证据允许高亮，降级、歧义和弱证据均不默认选择；
+4. 用户确认候选、选择 Top-8 外同快照节点、拒绝或退出；候选外选择记为
+   `candidate_miss=true` 与 `user_corrected=true`；
+5. 当前进程只聚合已终结记录，重启后重新计数，不把 sidecar 伪装为自动恢复。
+
+每个 case 最多两个逻辑模型调用；Provider 内部一次合同纠错不扩展产品阶段预算。模型或合同
+失败不能使 operation 泄漏异常文本。所有正式工件继续使用 `0700` case 目录和 `0600`
+不可覆盖 JSON；模型 trace 只在既有诊断开关启用时驻留当前进程内存。
+
+前端入口只在 capability 启用时出现，采用“一句需求—可选一次澄清—候选—最终处置”的短
+对话。页面当前节点是软上下文而非前提条件；用户可以不依赖选中节点发起需求，也可以用左侧
+当前节点纠正 Top-8 候选。最终动作只导航和高亮，不打开治理表单、不写源树。

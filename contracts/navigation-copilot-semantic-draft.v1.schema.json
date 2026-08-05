@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-semantic-draft.v1.schema.json",
+  "title": "Navigation Copilot Semantic Draft v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "model_provider", "model_name", "prompt_version", "semantic_approval", "patch_eligible", "source_projection_hash", "source_snapshot_hash", "candidate_assessments", "draft_hash"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-semantic-draft.v1"},
+    "model_provider": {"$ref": "#/$defs/text"},
+    "model_name": {"$ref": "#/$defs/text"},
+    "prompt_version": {"$ref": "#/$defs/text"},
+    "semantic_approval": {"const": false},
+    "patch_eligible": {"const": false},
+    "source_projection_hash": {"$ref": "#/$defs/digest"},
+    "source_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "candidate_assessments": {
+      "type": "array", "maxItems": 8,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["candidate_ref", "relation", "reason"],
+        "properties": {
+          "candidate_ref": {"type": "string", "pattern": "^C00[1-8]$"},
+          "relation": {"enum": ["SEMANTICALLY_EQUIVALENT", "REUSES_CONTRACT", "CONTEXTUALLY_RELATED", "NOT_EQUIVALENT", "NEED_EVIDENCE"]},
+          "reason": {"type": "string", "minLength": 1, "maxLength": 1000}
+        }
+      }
+    },
+    "draft_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 1000}
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-shadow-aggregate.v1.schema.json",
+  "title": "Navigation Copilot Shadow Aggregate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["report_version", "valid", "case_count", "completed_navigation_count", "top8_direct_selection_count", "candidate_correction_count", "confident_case_count", "confident_error_count", "clarification_case_count", "degraded_case_count", "evidence_covered_case_count", "median_completion_ms", "semantic_approval", "gold_eligible", "patch_eligible"],
+  "properties": {
+    "report_version": {"const": "navigation-copilot-shadow-aggregate.v1"},
+    "valid": {"const": true},
+    "case_count": {"$ref": "#/$defs/count"},
+    "completed_navigation_count": {"$ref": "#/$defs/count"},
+    "top8_direct_selection_count": {"$ref": "#/$defs/count"},
+    "candidate_correction_count": {"$ref": "#/$defs/count"},
+    "confident_case_count": {"$ref": "#/$defs/count"},
+    "confident_error_count": {"$ref": "#/$defs/count"},
+    "clarification_case_count": {"$ref": "#/$defs/count"},
+    "degraded_case_count": {"$ref": "#/$defs/count"},
+    "evidence_covered_case_count": {"$ref": "#/$defs/count"},
+    "median_completion_ms": {"type": ["integer", "null"], "minimum": 0},
+    "semantic_approval": {"const": false},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false}
+  },
+  "$defs": {"count": {"type": "integer", "minimum": 0}}
+}

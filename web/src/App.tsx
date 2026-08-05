@@ -27,6 +27,7 @@ import {
 } from "antd";
 
 import GovernancePanel from "./GovernancePanel";
+import NavigationCopilotPanel from "./NavigationCopilotPanel";
 import {
   fetchCategories,
   fetchResources,
@@ -187,6 +188,17 @@ function App() {
     setVersion(undefined);
     setSearchTerm("");
     setSelectedRef(undefined);
+  };
+
+  const navigateToNode = (nodeRef: string) => {
+    const nextExpanded = new Set<Key>(expandedKeys);
+    let cursor = nodeByRef.get(nodeRef)?.parent_ref;
+    while (cursor) {
+      nextExpanded.add(cursor);
+      cursor = nodeByRef.get(cursor)?.parent_ref ?? null;
+    }
+    setExpandedKeys([...nextExpanded]);
+    setSelectedRef(nodeRef);
   };
 
   const selectValidationResource = (
@@ -378,6 +390,12 @@ function App() {
               version={version}
               selectedNode={selectedNode}
               onSelectValidationResource={selectValidationResource}
+            />
+            <NavigationCopilotPanel
+              resourceId={resourceId}
+              version={version}
+              selectedNode={selectedNode}
+              onNavigate={navigateToNode}
             />
           </main>
 

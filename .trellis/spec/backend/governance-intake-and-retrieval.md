@@ -219,6 +219,29 @@ Top-20 策略生成的 `CandidateSet`，并固定取前 8 个候选映射为 `C0
 模型已经开始调用后的传输/输出失败使用 exit 3 且 `ai.called=true`；确定性输入、
 配置 preflight、批准或私有 IO 拒绝使用 exit 2。
 
+## Scenario：导航 Copilot 的宽召回与软语义排序
+
+导航 Copilot 是与既有治理纵切隔离的 Shadow 产品入口。它复用
+`IntentRequest`、`ChangeUnderstandingV2` 和词法召回原语，但不要求 v1 人工确认，
+也不产生复用、新增或 Patch 动作。
+
+- 原始 `requirement_text` 的正词面命中构成召回保底；模型 TARGET、SCOPE、EXCLUSION、
+  显式 hints 和页面选中节点只作为可解释加减分，不得硬删除原始池中的候选；
+- 内部候选最多 40 项，按总分降序、稳定 `node_id` 升序确定；模型与浏览器只看前 8 项
+  `C001`—`C008` 临时引用；
+- 理解失败时忽略模型角色，继续以原文和显式 hints 召回；Semantic 失败时保留候选并进入
+  `NEED_EVIDENCE`，不得默认选中；
+- Semantic 只逐项返回既有五类关系。本地策略仅在恰有一个结构兼容的
+  `SEMANTICALLY_EQUIVALENT` 时高亮，否则返回 `AMBIGUOUS` 或 `NEED_EVIDENCE`；
+- 清晰路径最多调用理解与 Semantic 两次；澄清路径只调用首次理解和回答后重新理解，随后
+  跳过 Semantic 并进入 `NEED_EVIDENCE`；
+- 最终处置仅允许候选定位、候选外纠正、拒绝全部或退出。记录固定为
+  `OPERATIONAL_FEEDBACK_ONLY`、非 Gold、非语义批准、非 Patch。
+
+对应核心合同使用 `navigation-copilot-*.v1` Schema，并逐级绑定原始需求、树快照、
+理解、候选、投影、模型草稿、本地决策和最终处置的规范哈希。候选外纠正必须属于同一
+可信快照且不在展示 Top-8 中；否则拒绝，不能把它记成召回命中。
+
 演示入口只生成与真实领域无关的固定虚构输入，并依次调用六个正式治理命令。它不
 复制召回、哈希、模型校验或回放策略。`--review-decision` 必须显式提供；首段意图
 确认固定只授权检索，不是语义审批。若 live 意图返回 `NEEDS_CLARIFICATION`，演示

@@ -541,6 +541,44 @@ def _model_output(
             ),
             "clarification_question": question,
         }
+    if schema_version == "change-understanding-model-output.v2":
+        intent_request = user_payload.get("intent_request")
+        requirement = (
+            intent_request.get("requirement_text")
+            if isinstance(intent_request, dict)
+            else None
+        )
+        if not isinstance(requirement, str) or not requirement:
+            requirement = "虚构导航目标"
+        is_clarification = "clarification" in user_payload
+        question = (
+            "需要补充哪项关键结构约束？"
+            if clarification and not is_clarification
+            else None
+        )
+        node_kind = (
+            intent_request.get("node_kind_hint", "UNKNOWN")
+            if isinstance(intent_request, dict)
+            else "UNKNOWN"
+        )
+        value_type = (
+            intent_request.get("value_type_hint")
+            if isinstance(intent_request, dict)
+            else None
+        )
+        cardinality = (
+            intent_request.get("cardinality_hint", "UNKNOWN")
+            if isinstance(intent_request, dict)
+            else "UNKNOWN"
+        )
+        return {
+            "schema_version": schema_version,
+            "node_kind": node_kind,
+            "value_type": value_type,
+            "cardinality": cardinality,
+            "clarification_question": question,
+            "spans": [{"role": "TARGET", "text": requirement}],
+        }
     if schema_version == "semantic-recommendation-model-output.v1":
         semantic_input = user_payload.get("semantic_input")
         candidates = (
@@ -604,6 +642,58 @@ def _model_output(
             "uncertainties": [],
             "evidence_gaps": [],
             "clarification_question": None,
+        }
+    if schema_version == "navigation-copilot-semantic-output.v1":
+        semantic_input = user_payload.get("semantic_input")
+        candidates = (
+            semantic_input.get("candidates", [])
+            if isinstance(semantic_input, dict)
+            else []
+        )
+        structural = (
+            semantic_input.get("structural_intent")
+            if isinstance(semantic_input, dict)
+            else None
+        )
+        selected_ref = next(
+            (
+                item["candidate_ref"]
+                for item in candidates
+                if isinstance(item, dict)
+                and isinstance(item.get("candidate_ref"), str)
+                and isinstance(structural, dict)
+                and (
+                    structural.get("node_kind") == "UNKNOWN"
+                    or item.get("kind") == structural.get("node_kind")
+                )
+                and (
+                    structural.get("value_type") is None
+                    or item.get("value_type") == structural.get("value_type")
+                )
+                and (
+                    structural.get("cardinality") == "UNKNOWN"
+                    or item.get("cardinality")
+                    == structural.get("cardinality")
+                )
+            ),
+            None,
+        )
+        return {
+            "schema_version": schema_version,
+            "candidate_assessments": [
+                {
+                    "candidate_ref": item["candidate_ref"],
+                    "relation": (
+                        "SEMANTICALLY_EQUIVALENT"
+                        if item.get("candidate_ref") == selected_ref
+                        else "NOT_EQUIVALENT"
+                    ),
+                    "reason": "已比较一个确定性的虚构候选。",
+                }
+                for item in candidates
+                if isinstance(item, dict)
+                and isinstance(item.get("candidate_ref"), str)
+            ],
         }
     return {"message": "hello", "valid": True}
 

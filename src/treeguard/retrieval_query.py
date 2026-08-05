@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Protocol
 
 from treeguard.change_intent import (
     CARDINALITIES,
@@ -19,6 +19,7 @@ from treeguard.retrieval import CandidateRetrievalError
 
 
 QUERY_SCHEMA_VERSION = "retrieval-query.v1"
+COPILOT_QUERY_SCHEMA_VERSION = "navigation-copilot-retrieval-query.v1"
 DOCUMENT_SCHEMA_VERSION = "node-search-document.v1"
 RESULT_SCHEMA_VERSION = "decoupled-candidate-set.v1"
 ALGORITHM_VERSION = "treeguard.decoupled-weighted-lexical-retrieval.v1"
@@ -32,6 +33,13 @@ _PARENT_RELATION_WEIGHT = {
     "SAME_BRANCH": 40,
 }
 _DIGEST = re.compile(r"^[0-9a-f]{64}$")
+
+
+class StructuralIntentLike(Protocol):
+    source_request_hash: str
+    node_kind: str
+    value_type: str | None
+    cardinality: str
 
 
 @dataclass(frozen=True, slots=True)
@@ -101,6 +109,73 @@ class RetrievalQuery:
         payload = self._payload()
         payload["query_hash"] = self.query_hash
         return payload
+
+
+@dataclass(frozen=True, slots=True)
+class CopilotRetrievalQuery:
+    """Raw-request retrieval query without a synthetic v1 confirmation."""
+
+    source_request_hash: str
+    source_interpretation_hash: str
+    source_snapshot_hash: str
+    requirement_terms: tuple[str, ...]
+    expansion_terms: tuple[str, ...]
+    node_kind: str
+    value_type: str | None
+    cardinality: str
+    proposed_parent_node_id: str | None
+    query_hash: str
+
+    def __post_init__(self) -> None:
+        for value in (
+            self.source_request_hash,
+            self.source_interpretation_hash,
+            self.source_snapshot_hash,
+            self.query_hash,
+        ):
+            if not isinstance(value, str) or _DIGEST.fullmatch(value) is None:
+                raise ValueError("copilot retrieval hashes must be SHA-256 digests")
+        for values in (self.requirement_terms, self.expansion_terms):
+            if (
+                not isinstance(values, tuple)
+                or values != tuple(sorted(set(values)))
+                or any(not isinstance(value, str) or not value for value in values)
+            ):
+                raise ValueError("copilot retrieval terms must be sorted and unique")
+        if set(self.requirement_terms) & set(self.expansion_terms):
+            raise ValueError("copilot retrieval term sources must be disjoint")
+        if self.node_kind not in NODE_KINDS:
+            raise ValueError("copilot retrieval node kind is invalid")
+        if self.cardinality not in CARDINALITIES:
+            raise ValueError("copilot retrieval cardinality is invalid")
+        if self.value_type is not None and (
+            not isinstance(self.value_type, str) or not self.value_type
+        ):
+            raise ValueError("copilot retrieval value type is invalid")
+        if self.proposed_parent_node_id is not None and (
+            not isinstance(self.proposed_parent_node_id, str)
+            or not self.proposed_parent_node_id
+        ):
+            raise ValueError("copilot retrieval parent is invalid")
+        if self.query_hash != canonical_digest(self._payload()):
+            raise ValueError("copilot retrieval hash does not match its payload")
+
+    def _payload(self) -> dict[str, Any]:
+        return {
+            "schema_version": COPILOT_QUERY_SCHEMA_VERSION,
+            "source_request_hash": self.source_request_hash,
+            "source_interpretation_hash": self.source_interpretation_hash,
+            "source_snapshot_hash": self.source_snapshot_hash,
+            "requirement_terms": list(self.requirement_terms),
+            "expansion_terms": list(self.expansion_terms),
+            "node_kind": self.node_kind,
+            "value_type": self.value_type,
+            "cardinality": self.cardinality,
+            "proposed_parent_node_id": self.proposed_parent_node_id,
+        }
+
+    def to_dict(self) -> dict[str, Any]:
+        return {**self._payload(), "query_hash": self.query_hash}
 
 
 @dataclass(frozen=True, slots=True)
@@ -392,6 +467,73 @@ def build_retrieval_query(
     )
 
 
+def build_copilot_retrieval_query(
+    request: IntentRequest,
+    structural_intent: StructuralIntentLike | None,
+    tree: CanonicalTree,
+    *,
+    source_interpretation_hash: str,
+) -> CopilotRetrievalQuery:
+    """Build the Copilot recall floor from raw text and trusted hints."""
+
+    if (
+        not isinstance(request, IntentRequest)
+        or not isinstance(tree, CanonicalTree)
+        or not tree.is_resource_map
+        or not isinstance(source_interpretation_hash, str)
+        or _DIGEST.fullmatch(source_interpretation_hash) is None
+    ):
+        raise CandidateRetrievalError(
+            "COPILOT_QUERY_SOURCE_INVALID",
+            "copilot retrieval requires trusted request and resource sources",
+        )
+    if structural_intent is not None and (
+        getattr(structural_intent, "source_request_hash", None)
+        != request.request_hash
+        or getattr(structural_intent, "node_kind", None) not in NODE_KINDS
+        or getattr(structural_intent, "cardinality", None) not in CARDINALITIES
+    ):
+        raise CandidateRetrievalError(
+            "COPILOT_QUERY_INTERPRETATION_MISMATCH",
+            "copilot structural intent does not bind the request",
+        )
+    requirement_terms = tuple(sorted(text_terms(request.requirement_text)))
+    node_kind = request.node_kind_hint
+    value_type = request.value_type_hint
+    cardinality = request.cardinality_hint
+    if structural_intent is not None:
+        if node_kind == "UNKNOWN":
+            node_kind = structural_intent.node_kind
+        if value_type is None:
+            value_type = structural_intent.value_type
+        if cardinality == "UNKNOWN":
+            cardinality = structural_intent.cardinality
+    payload = {
+        "schema_version": COPILOT_QUERY_SCHEMA_VERSION,
+        "source_request_hash": request.request_hash,
+        "source_interpretation_hash": source_interpretation_hash,
+        "source_snapshot_hash": tree.snapshot_hash,
+        "requirement_terms": list(requirement_terms),
+        "expansion_terms": [],
+        "node_kind": node_kind,
+        "value_type": value_type,
+        "cardinality": cardinality,
+        "proposed_parent_node_id": request.proposed_parent_node_id,
+    }
+    return CopilotRetrievalQuery(
+        source_request_hash=request.request_hash,
+        source_interpretation_hash=source_interpretation_hash,
+        source_snapshot_hash=tree.snapshot_hash,
+        requirement_terms=requirement_terms,
+        expansion_terms=(),
+        node_kind=node_kind,
+        value_type=value_type,
+        cardinality=cardinality,
+        proposed_parent_node_id=request.proposed_parent_node_id,
+        query_hash=canonical_digest(payload),
+    )
+
+
 def build_node_search_documents(tree: CanonicalTree) -> tuple[NodeSearchDocument, ...]:
     if not isinstance(tree, CanonicalTree) or tree.source_map_type != "resource":
         raise CandidateRetrievalError(
@@ -418,12 +560,12 @@ def build_node_search_documents(tree: CanonicalTree) -> tuple[NodeSearchDocument
 
 
 def build_decoupled_candidate_set(
-    query: RetrievalQuery,
+    query: RetrievalQuery | CopilotRetrievalQuery,
     tree: CanonicalTree,
     *,
     max_candidates: int = DEFAULT_MAX_CANDIDATES,
 ) -> DecoupledCandidateSet:
-    if not isinstance(query, RetrievalQuery):
+    if not isinstance(query, (RetrievalQuery, CopilotRetrievalQuery)):
         raise CandidateRetrievalError(
             "CANDIDATE_QUERY_INVALID",
             "decoupled retrieval requires a RetrievalQuery",
@@ -557,7 +699,7 @@ def _weighted_overlap(
 
 def _score_document(
     document: NodeSearchDocument,
-    query: RetrievalQuery,
+    query: RetrievalQuery | CopilotRetrievalQuery,
     frequencies: dict[str, int],
     document_count: int,
     node: CanonicalNode,
@@ -624,7 +766,7 @@ def _parent_relation(node: CanonicalNode, parent: CanonicalNode | None) -> str:
 
 
 def _candidate_set(
-    query: RetrievalQuery,
+    query: RetrievalQuery | CopilotRetrievalQuery,
     tree: CanonicalTree,
     status: str,
     max_candidates: int,
@@ -658,6 +800,8 @@ def _candidate_set(
 
 __all__ = [
     "ALGORITHM_VERSION",
+    "COPILOT_QUERY_SCHEMA_VERSION",
+    "CopilotRetrievalQuery",
     "DecoupledCandidateScore",
     "DecoupledCandidateSet",
     "DecoupledRetrievalCandidate",
@@ -666,6 +810,7 @@ __all__ = [
     "RESULT_SCHEMA_VERSION",
     "RetrievalQuery",
     "build_decoupled_candidate_set",
+    "build_copilot_retrieval_query",
     "build_node_search_documents",
     "build_retrieval_query",
 ]

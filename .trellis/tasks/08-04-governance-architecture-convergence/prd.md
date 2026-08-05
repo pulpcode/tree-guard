@@ -1,10 +1,21 @@
-# 治理助手检索与决策架构收敛 PRD（草案）
+# 治理助手检索与决策架构收敛 PRD（架构收敛判定）
 
 ## 背景
 
 M4.9 与 M5 已经把端到端失败拆分到 Intent、Retrieval 和 Semantic 三个阶段，证明现有实验具有诊断价值，但尚不足以证明产品链路可进入生产试验。当前主要不确定性已经不再是“是否继续调 Prompt”，而是四项彼此耦合的架构选择：最小 Intent 合同、稳定检索表示、候选召回方式，以及 Semantic 阶段的职责边界。
 
 本任务先使用已经暴露的完全虚构 M4.9/M5 数据做校准和 A/B，不新增盲测数据、不进行新的模型资格宣称。架构冻结后，才应使用新的未见数据做一次独立确认。
+
+## 2026-08-05 架构收敛回退
+
+H1 与 H2 均未达到各自预注册的召回增益门槛，其中 H2 的有效 A/B 对全部20个目标
+名次改善为0。原“候选方案至少改善召回主指标”的验收结果保持失败，不降低门槛、
+不回写实验，也不把工程可运行解释为能力通过。
+
+当前任务由 Execute 返回 Plan，并已完成对
+[`research/architecture-convergence-verdict.md`](research/architecture-convergence-verdict.md)
+中架构判定的审核与接受。不启动 H3、不准备 H2 未见资格数据、不修改默认产品入口，
+也不在本任务中实现治理/导航 Copilot；新的产品纵切使用独立任务规划和实施。
 
 ## 目标
 
@@ -156,6 +167,8 @@ M4.9 与 M5 已经把端到端失败拆分到 Intent、Retrieval 和 Semantic �
   本地开源 embedding 候选、开发机约束与 BGE small 选型。
 - [`research/retrieval-h2-local-pre-registration.md`](research/retrieval-h2-local-pre-registration.md)：
   H2 唯一变量、新数据配额、门槛、运行时边界与停止规则。
+- [`research/architecture-convergence-verdict.md`](research/architecture-convergence-verdict.md)：
+  保留原失败门槛，收敛 D1—D6、关闭路线与下一产品任务边界的已接受判定。
 - [`research/semantic-p1-relation-only-pre-registration.md`](research/semantic-p1-relation-only-pre-registration.md)：
   固定 M4.9 合法关系输出，比较模型动作与确定性动作策略的零调用职责收缩实验。
 - [`research/semantic-p1-relation-only-result.md`](research/semantic-p1-relation-only-result.md)：
@@ -217,19 +230,26 @@ M4.9 与 M5 已经把端到端失败拆分到 Intent、Retrieval 和 Semantic �
 - [ ] B3 晋升：FAIL，Recall@8=16/16、空目标 2/2，但 MRR=0.843750；
 - [x] 停止增加 B4 词法/句式语法，转入 target/scope 与 Semantic 职责边界设计。
 
-## Decision D2（候选）：Fact 与 Intent 的角色边界
+## Decision D2（已接受）：角色提议与 Intent 的可信边界
 
 **Context**：仓库没有独立 Fact 合同；`confirmed_facts` 仍是 Intent 内自由文本，缺少
-原文 span 与角色证明。B3 的5个第2名目标均暴露 context/scope 与 target 混权问题。
+绑定原文的独立角色表示，也未区分“来源可回放”与“角色语义可信”。B3 的5个第2名目标
+均暴露 context/scope 与 target 混权问题。
 
-**Candidate decision**：原始 requirement text 继续是权威来源；检索使用绑定原文的
-`TARGET / SCOPE / EXCLUSION` 角色证据，而不是把另一份自然语言摘要当作事实。
-Intent 负责操作解释、结构约束与澄清，角色 Fact 负责可回放的输入证据。两者未来可由
-同一次模型调用产生，但必须分别本地校验。
+**Candidate decision**：原始 requirement text 继续是权威来源；检索可使用绑定原文的
+`TARGET / SCOPE / EXCLUSION` 角色提议，而不是把另一份自然语言摘要当作事实。
+本地构造过程要求提议文本可在原文中唯一定位；持久化合同只验证指定 `start/end` 切片、
+角色枚举、顺序、数量和来源摘要，不重新证明文本全文唯一，也不验证角色语义正确。
+模型结果保持 `UNVERIFIED_MODEL_CALIBRATION`；Codex/Silver 标注也只作为
+非 Gold 校准。角色提议只能贡献有界加权和解释，不得单独硬裁剪原始需求的宽候选路径，
+也不得授权动作。它与 StructuralIntent 是否合并在一次调用中是可选实验，不是架构前提；
+无论调用形态如何都必须分别本地校验。
 
 **Qualification result**：Codex/Silver 角色上限实验已经 PASS。五种视图均为
-Recall@8=16/16、MRR=1.0、空目标2/2和重放18/18。该结果允许进入小模型角色抽取
-实验，但仅是已暴露校准集上的架构上限，不是泛化或生产资格。
+Recall@8=16/16、MRR=1.0、空目标2/2和重放18/18；这只证明人工校准角色在已暴露集合上
+形成了架构上限。小模型 v1/v2 虽均合同18/18，与 Silver 完整一致仅分别为12/18和8/18，
+下游 R1 均为 Recall@8=14/16。合同通过因此不能升级为角色语义可信，更不是泛化或
+生产资格。当前 R1 exact TARGET gate 只保留为实验实现，不进入默认产品路径。
 
 ## R1 角色上限状态
 
@@ -321,9 +341,10 @@ R2 已在不修改模型、Prompt、角色合同和分母的前提下，把相�
   Recall@8=4/4；
 - [x] 审核 H2 实现后完成首次且唯一一次有效 B：工程合同、向量重放、安全门和私有
   输出均通过，但 Recall@20=16/20、非字面 Recall@20=6/10，与 A 完全相同；
-- [ ] H2 晋升：`H2_REJECTED`。按预注册停止在该28条上更换模型、instruction、
+- [x] H2 资格判定完成：`H2_REJECTED`。按预注册停止在该28条上更换模型、instruction、
   pooling、权重、维度、量化或 reranker；
-- [ ] 候选冻结后再准备新的未见确认，不在开发集上宣称生产资格。
+- [x] H2 未通过开发门槛，因此不准备其未见资格集；只有未来候选先通过独立开发合同，
+  才允许准备新的未见确认，且不得在开发集上宣称生产资格。
 
 ## Semantic P1：关系判定与动作选择解耦
 
@@ -333,7 +354,7 @@ R2 已在不修改模型、Prompt、角色合同和分母的前提下，把相�
 - [x] 首次结果：首选19→41，安全退让32→10，不安全0，重放51/51；
 - [x] 形成 Decision D3 候选，不提前修改生产 Semantic 合同。
 
-## Decision D3（候选）：Semantic 只判关系，本地 Policy 选动作
+## Decision D3（已接受）：Semantic 只判关系，本地 Policy 选动作
 
 **Context**：当前模型同时输出逐候选 relation、selected candidate 和 action，本地又
 校验 action/relation 联合约束。P1 在同一51个合法关系输出上忽略模型动作后，确定性
@@ -349,26 +370,56 @@ Policy 负责目标选择、动作、空目标与安全降级。唯一且结构�
 模型仍承担最需要语义判断的候选关系，不把不确定性伪装成规则能力。现有 v1 合同与入口
 保持不变，待候选合同、迁移测试和用户确认后再实施下一版本纵切。
 
-## Decision D4（候选）：四字段 StructuralIntent + source-bound RoleEvidence
+## Decision D4（已接受）：固定四键 StructuralIntent + source-bound RoleEvidence
 
 **Context**：M4.9 的30个 Silver Oracle 只验收 `node_kind`、`value_type`、
 `cardinality` 和澄清问题；其余8个 Intent 字段全部 `NOT_COMPARED`。D1 已把原始需求
-冻结为权威查询，D2 已验证 source-bound `TARGET/SCOPE/EXCLUSION` 是更可靠的检索证据。
+冻结为权威查询；D2 的人工上限表明角色化原文可提供检索增益，但模型角色分类仍未验证。
 
-**Candidate decision**：v2 将模型理解拆为四字段 `StructuralIntent` 与独立
-`RetrievalRoleEvidence`。两者可由一次模型调用产生，但必须分别本地验证。移除字段不再
-进入结构合同、召回或动作授权；解释文本与机器决策合同分离。
+**Candidate decision**：v2 的机器决策合同固定序列化 `node_kind`、`value_type`、
+`cardinality`、`clarification_question` 四个键，并与独立的
+`RetrievalRoleEvidence` 分离。四键构成当前证据支持的最大机器语义面，并始终存在以服务
+Schema 和回放；这不表示每次都必须由模型生成确定值。字段取值依次采用：用户明确填写且
+经本地验证的结构提示；能从可信输入确定性推导的本地值；模型对仍缺失且下游必要字段的
+提议；最后保留 `UNKNOWN` 或 `null`。界面当前选中节点仍是低信任软上下文，不属于权威
+结构提示。
 
-**Consequences**：合同从12个语义字段缩到4个结构/控制字段，降低格式和语义漂移面；
-召回仍保留原始文本和可回放角色证据，不因“缩短 Intent”丢失业务词。v1 保持兼容，
-先实现不切默认入口的 v2 纵切，待独立确认后再晋升。
+检索前澄清只处理请求自身的互斥解释、范围或组合歧义；候选比较后才出现的歧义由
+Semantic/Policy 或 Copilot 阶段处理。结构字段与角色提议可分开调用，也可在一次调用中
+联合返回；两种形态须通过独立 A/B 决定，而不是在本决策中强制。任一模型部分非法时都
+不得把它静默补成合法输出。
+
+**Consequences**：合同从12个语义字段缩到固定4键的最大机器语义面，降低格式和语义漂移面；
+召回仍保留原始文本，不因“缩短 Intent”丢失业务词。当前隔离 v2 及单元测试只证明合同、
+来源绑定和篡改门禁可实现，不证明四字段联合调用的模型效果。v1 保持兼容；字段级来源
+优先级、角色容错与调用形态应在下一产品任务中实现并独立确认后再考虑晋升。
 
 ## D3/D4 隔离 v2 纵切实施状态
 
-- [x] 实现 `StructuralIntentV2` 和一次模型输出的 `ChangeUnderstandingV2`；
-- [x] 复用 source-bound `RetrievalRoleEvidence`，由本地确定 span 位置；
+- [x] 实现 `StructuralIntentV2` 和一次模型输出的 `ChangeUnderstandingV2` 合同原型；
+- [x] 复用 source-bound `RetrievalRoleEvidence`，由本地确定 span 位置；该校验不证明角色语义正确；
 - [x] 实现不含 v1 自由文本与动作字段的 relation-only Semantic 投影/输出；
 - [x] 实现只读、不可授予新增权限的确定性动作策略及可信回放；
 - [x] 增加版本化 Schema、来源错配、篡改、结构冲突和 v1 聚焦回归测试；
 - [x] 保持 v1 CLI、Workbench、Provider 和默认产品链路不变；
+- [ ] 尚未实现按字段来源优先级、角色软证据和宽候选恢复组成的产品纵切；
 - [ ] 在独立确认数据冻结前，不晋升 v2，不宣称生产资格。
+
+## 原验收处置与任务关闭条件（已接受）
+
+原验收标准中的召回增益要求未满足，结果保持 `FAILED`。本节不替换、不降低原门槛，
+只定义研究任务如何以明确负结果收尾：
+
+- [x] H1、H2 的原门槛、聚合结果、失败码和停止规则保持不变；
+- [x] 已形成并接受架构收敛判定，明确没有合格 Retrieval 候选；
+- [x] 已明确 R2 仅保留为开发期 lexical leg，H1/H2 不进入默认产品路径；
+- [x] 已明确下一产品方向是另立治理/导航 Copilot Shadow 任务，而不是在本任务启动 H3；
+- [x] D2/D4 已按证据边界收紧：角色仅为未验证提议，固定四键不强制模型输出确定值；
+- [x] 项目负责人接受 D1—D6、关闭路线和
+  `COMPLETED_WITH_NO_QUALIFIED_RETRIEVAL_CANDIDATE` 的任务结果语义；
+- [x] 接受后完成最终质量验证、数据边界审查和差异审核；
+- [ ] 工作提交获批并完成后，按 `trellis-finish-work` 单独归档与记录最小日志。
+
+上述任务结果只表示架构研究和负向实验已完成，不表示 Intent、Retrieval、Semantic、
+治理 Copilot、Shadow 或生产资格通过。新的 Copilot 输入输出、人工状态机、指标和内网
+Shadow 数据合同必须在独立任务中重新规划并获批。

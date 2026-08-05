@@ -20,11 +20,20 @@ from pathlib import Path
 from typing import Any
 
 from treeguard.adapter import adapt_tree_document
+from treeguard.change_intent import (
+    CARDINALITIES,
+    NODE_KINDS,
+    IntentContent,
+    IntentRequest,
+    IntentValidationError,
+    REQUEST_SCHEMA_VERSION,
+)
 from treeguard.json_utils import strict_json_loads
 from treeguard.private_io import read_private_json, write_private_json
 
 
 BASELINE = "03faee0a7a33e0ee413a4d91b70e8f577085751f"
+PREVIOUS_DATA_COMMIT = "16534dd870c8a23feeab4f4e549fe67f0dd6fa26"
 DATASET = "fire-r2-sealed-confirmation-cleanroom-2-v1"
 TASK_PREFIX = ".trellis/tasks/08-04-r2-sealed-confirmation-cleanroom-2/"
 PUBLIC_FILES = frozenset(
@@ -44,11 +53,14 @@ PRIVATE_FILES = (
     "05-frozen-set.v1.json",
     "06-precommit-handoff.v1.json",
 )
-FINAL_FREEZE_DIRECTORY = "07-final-freeze.v1"
+EXECUTION_INPUT_FILE = "07-execution-input.v1.json"
+LEDGER_PRIVATE_FILES = PRIVATE_FILES + (EXECUTION_INPUT_FILE,)
+FINAL_FREEZE_DIRECTORY = "08-final-freeze.v1"
 FINAL_FREEZE_FILES = ("binding-ledger.v1.json", "freeze-receipt.v1.json")
 LEDGER_SCHEMA = "treeguard.fire-r2-c2-binding-ledger.v1"
 RECEIPT_SCHEMA = "treeguard.fire-r2-c2-freeze-receipt.v1"
 EXECUTION_SCHEMA = "treeguard.fire-r2-c2-execution-binding.v1"
+EXECUTION_INPUT_SCHEMA = "treeguard.fire-r2-c2-execution-input.v1"
 EXECUTION_LOGICAL_NAME = "execution-binding.v1.json"
 CONTRACT_VERSION = "treeguard.fire-r2-sealed-confirmation-cleanroom-2.v1"
 INTEGRITY_SEMANTICS = "SHA256_INTEGRITY_ONLY_NOT_IDENTITY_GOLD_OR_PRODUCTION_QUALIFICATION"
@@ -84,6 +96,24 @@ FROZEN_QUOTA = {
     "LEXICAL_BASELINE": 6,
     "NON_LITERAL": 4,
 }
+FIVE_VIEW_NAMES = (
+    "V_CANONICAL",
+    "V_FREE_TEXT_DROPPED",
+    "V_PARENT_ABSENT",
+    "V_PARENT_WRONG_BRANCH",
+    "V_REQUIREMENT_ONLY",
+)
+EXECUTION_ROLE = "锁定请求的检索角色"
+EXECUTION_LIFECYCLE = "新需求确认阶段"
+EXECUTION_ASSUMPTION = "父节点仅依据锁定请求、场景说明和公开树编制"
+EXECUTION_GAP = "未执行模型、检索视图或功能实验"
+PREPARE_MUTABLE_FILES = frozenset(
+    {
+        ".trellis/tasks/08-04-r2-sealed-confirmation-cleanroom-2/prd.md",
+        "scripts/preflight_fire_r2_sealed_confirmation_cleanroom_2.py",
+        "tests/test_fire_r2_sealed_confirmation_data.py",
+    }
+)
 
 
 class GateError(ValueError):
@@ -128,12 +158,13 @@ def git(repo: Path, *arguments: str, check: bool = True) -> subprocess.Completed
 
 
 def validate_prepare_git(repo: Path) -> None:
-    require(git(repo, "rev-parse", "HEAD").stdout.strip() == BASELINE, "FIRE_R2_C2_HEAD_INVALID")
+    require(git(repo, "rev-parse", "HEAD").stdout.strip() == PREVIOUS_DATA_COMMIT, "FIRE_R2_C2_HEAD_INVALID")
     require(not git(repo, "diff", "--cached", "--name-only").stdout.strip(), "FIRE_R2_C2_INDEX_NOT_CLEAN")
     lines = git(repo, "status", "--porcelain=v1", "--untracked-files=all").stdout.splitlines()
     for line in lines:
-        require(line.startswith("?? "), "FIRE_R2_C2_TRACKED_CHANGE_FORBIDDEN")
-        require(allowed_public_path(line[3:]), "FIRE_R2_C2_FUNCTION_DIFF_FORBIDDEN")
+        require(len(line) >= 4 and line[:2] in {" M", "??"}, "FIRE_R2_C2_TRACKED_CHANGE_FORBIDDEN")
+        path = line[3:]
+        require(path in PREPARE_MUTABLE_FILES, "FIRE_R2_C2_FUNCTION_DIFF_FORBIDDEN")
 
 
 def validate_commit_binding(repo: Path, data_commit: str) -> tuple[str, ...]:
@@ -355,7 +386,7 @@ def build_binding_ledger(
         raw = _regular_file_bytes(repo / relative, max_bytes=12_000_000, private=False)
         public_records.append(_file_record(relative, raw))
     private_records = []
-    for filename in PRIVATE_FILES:
+    for filename in LEDGER_PRIVATE_FILES:
         raw = _regular_file_bytes(root / filename, max_bytes=2_000_000, private=True)
         private_records.append(_file_record(filename, raw))
     return {
@@ -419,7 +450,7 @@ def _validate_freeze_directory(directory: Path, expected_ledger: dict[str, Any])
     require(ledger == expected_ledger, "FIRE_R2_C2_LEDGER_BINDING_INVALID")
     require(ledger_raw == _private_json_bytes(ledger), "FIRE_R2_C2_LEDGER_BYTES_INVALID")
     require(tuple(item["path"] for item in ledger["public_files"]) == tuple(sorted(item["path"] for item in ledger["public_files"])), "FIRE_R2_C2_LEDGER_PUBLIC_ORDER_INVALID")
-    require(tuple(item["path"] for item in ledger["private_files"]) == PRIVATE_FILES, "FIRE_R2_C2_LEDGER_PRIVATE_ORDER_INVALID")
+    require(tuple(item["path"] for item in ledger["private_files"]) == LEDGER_PRIVATE_FILES, "FIRE_R2_C2_LEDGER_PRIVATE_ORDER_INVALID")
 
     receipt_raw = _regular_file_bytes(directory / FINAL_FREEZE_FILES[1], max_bytes=64_000, private=True)
     try:
@@ -527,6 +558,192 @@ def has_digest_field(value: Any) -> bool:
     if isinstance(value, list):
         return any(has_digest_field(item) for item in value)
     return False
+
+
+def _top_branch_node_id(node_id: str, nodes: dict[str, Any], root_id: str) -> str:
+    current = nodes[node_id]
+    require(current.node_id != root_id, "FIRE_R2_C2_EXECUTION_PARENT_ROOT_INVALID")
+    while current.parent_node_id != root_id:
+        require(current.parent_node_id in nodes, "FIRE_R2_C2_EXECUTION_PARENT_CHAIN_INVALID")
+        current = nodes[current.parent_node_id]
+    return current.node_id
+
+
+def build_execution_views(
+    entry: dict[str, Any],
+    source: dict[str, Any],
+    tree: Any,
+) -> tuple[tuple[str, IntentRequest, IntentContent, bool], ...]:
+    request_payload = {
+        "cardinality_hint": entry["cardinality_hint"],
+        "node_kind_hint": entry["node_kind_hint"],
+        "proposed_parent_node_id": entry["proposed_parent_node_id"],
+        "requirement_text": source["request_text"],
+        "schema_version": REQUEST_SCHEMA_VERSION,
+        "value_type_hint": entry["value_type_hint"],
+    }
+    seed_payload = entry["retrieval_seed"]
+    dropped_seed_payload = {
+        **seed_payload,
+        "subject": None,
+        "role": None,
+        "scenario": None,
+        "lifecycle": None,
+        "confirmed_facts": [],
+        "assumptions": [],
+        "evidence_gaps": [],
+        "clarification_question": None,
+    }
+    specifications = (
+        ("V_CANONICAL", request_payload, seed_payload, True),
+        ("V_FREE_TEXT_DROPPED", request_payload, dropped_seed_payload, True),
+        (
+            "V_PARENT_ABSENT",
+            {**request_payload, "proposed_parent_node_id": None},
+            seed_payload,
+            True,
+        ),
+        (
+            "V_PARENT_WRONG_BRANCH",
+            {
+                **request_payload,
+                "proposed_parent_node_id": entry["wrong_branch_parent_node_id"],
+            },
+            seed_payload,
+            True,
+        ),
+        ("V_REQUIREMENT_ONLY", request_payload, dropped_seed_payload, False),
+    )
+    return tuple(
+        (
+            view_name,
+            IntentRequest.from_dict(view_request, tree),
+            IntentContent.from_dict(
+                view_seed,
+                error_code="FIRE_R2_C2_EXECUTION_SEED_INVALID",
+            ),
+            include_expansion,
+        )
+        for view_name, view_request, view_seed, include_expansion in specifications
+    )
+
+
+def validate_execution_input(
+    repo: Path,
+    root: Path,
+    locked: dict[str, Any],
+    frozen: dict[str, Any],
+) -> dict[str, int]:
+    execution = exact_object(
+        private_json(root, EXECUTION_INPUT_FILE),
+        {
+            "dataset_id",
+            "entries",
+            "entry_count",
+            "schema_version",
+            "source_stage",
+            "stage",
+            "view_names",
+        },
+        "FIRE_R2_C2_EXECUTION_INPUT_FIELDS_INVALID",
+    )
+    require(execution["schema_version"] == EXECUTION_INPUT_SCHEMA, "FIRE_R2_C2_EXECUTION_INPUT_SCHEMA_INVALID")
+    require(
+        execution["dataset_id"] == DATASET
+        and execution["source_stage"] == "FROZEN_SELECTION"
+        and execution["stage"] == "EXECUTION_INPUT_LOCKED",
+        "FIRE_R2_C2_EXECUTION_INPUT_HEADER_INVALID",
+    )
+    require(type(execution["entry_count"]) is int and execution["entry_count"] == 28, "FIRE_R2_C2_EXECUTION_INPUT_COUNT_INVALID")
+    require(execution["view_names"] == list(FIVE_VIEW_NAMES), "FIRE_R2_C2_EXECUTION_VIEW_ORDER_INVALID")
+    require(isinstance(execution["entries"], list) and len(execution["entries"]) == 28, "FIRE_R2_C2_EXECUTION_INPUT_COUNT_INVALID")
+
+    generator = load_generator(repo)
+    tree_document = public_json(repo / generator.TREE_FILE, 10_000_000)
+    imported = adapt_tree_document(tree_document, source_hint="fire-r2-cleanroom-two-execution-input")
+    require(imported.tree is not None and not imported.issues, "FIRE_R2_C2_EXECUTION_TREE_INVALID")
+    nodes = {node.node_id: node for node in imported.tree.nodes}
+    roots = tuple(node.node_id for node in imported.tree.nodes if node.parent_node_id is None)
+    require(len(roots) == 1, "FIRE_R2_C2_EXECUTION_TREE_ROOT_INVALID")
+    root_id = roots[0]
+    known_value_types = {
+        node.value_contract.value_type
+        for node in imported.tree.nodes
+        if node.value_contract is not None
+    }
+    candidates = {
+        item["candidate_id"]: item
+        for item in locked["candidates"]
+    }
+    require(tuple(frozen["selected_candidate_ids"]) == FROZEN_IDS, "FIRE_R2_C2_EXECUTION_FROZEN_SOURCE_INVALID")
+
+    for entry, expected_id in zip(execution["entries"], FROZEN_IDS, strict=True):
+        entry = exact_object(
+            entry,
+            {
+                "candidate_id",
+                "cardinality_hint",
+                "node_kind_hint",
+                "proposed_parent_node_id",
+                "retrieval_seed",
+                "value_type_hint",
+                "wrong_branch_parent_node_id",
+            },
+            "FIRE_R2_C2_EXECUTION_ENTRY_FIELDS_INVALID",
+        )
+        require(entry["candidate_id"] == expected_id, "FIRE_R2_C2_EXECUTION_ENTRY_ORDER_INVALID")
+        proposed_id = entry["proposed_parent_node_id"]
+        wrong_id = entry["wrong_branch_parent_node_id"]
+        require(type(proposed_id) is str and proposed_id in nodes, "FIRE_R2_C2_EXECUTION_PARENT_INVALID")
+        require(type(wrong_id) is str and wrong_id in nodes, "FIRE_R2_C2_EXECUTION_WRONG_PARENT_INVALID")
+        require(nodes[proposed_id].kind == "CONCEPT" and nodes[wrong_id].kind == "CONCEPT", "FIRE_R2_C2_EXECUTION_PARENT_KIND_INVALID")
+        require(
+            _top_branch_node_id(proposed_id, nodes, root_id)
+            != _top_branch_node_id(wrong_id, nodes, root_id),
+            "FIRE_R2_C2_EXECUTION_WRONG_BRANCH_INVALID",
+        )
+        require(type(entry["node_kind_hint"]) is str and entry["node_kind_hint"] in NODE_KINDS - {"UNKNOWN"}, "FIRE_R2_C2_EXECUTION_NODE_KIND_INVALID")
+        require(type(entry["value_type_hint"]) is str and entry["value_type_hint"] in known_value_types, "FIRE_R2_C2_EXECUTION_VALUE_TYPE_INVALID")
+        require(type(entry["cardinality_hint"]) is str and entry["cardinality_hint"] in CARDINALITIES - {"UNKNOWN"}, "FIRE_R2_C2_EXECUTION_CARDINALITY_INVALID")
+        try:
+            seed = IntentContent.from_dict(
+                entry["retrieval_seed"],
+                error_code="FIRE_R2_C2_EXECUTION_SEED_INVALID",
+            )
+        except IntentValidationError as error:
+            raise GateError("FIRE_R2_C2_EXECUTION_SEED_INVALID") from error
+        source = candidates[expected_id]
+        try:
+            views = build_execution_views(entry, source, imported.tree)
+        except IntentValidationError as error:
+            raise GateError("FIRE_R2_C2_EXECUTION_REQUEST_INVALID") from error
+        require(tuple(item[0] for item in views) == FIVE_VIEW_NAMES, "FIRE_R2_C2_EXECUTION_VIEW_ORDER_INVALID")
+        views_by_name = {item[0]: item for item in views}
+        require(views_by_name["V_CANONICAL"][1].proposed_parent_node_id == proposed_id, "FIRE_R2_C2_EXECUTION_CANONICAL_VIEW_INVALID")
+        require(views_by_name["V_PARENT_ABSENT"][1].proposed_parent_node_id is None, "FIRE_R2_C2_EXECUTION_PARENT_ABSENT_VIEW_INVALID")
+        require(views_by_name["V_PARENT_WRONG_BRANCH"][1].proposed_parent_node_id == wrong_id, "FIRE_R2_C2_EXECUTION_WRONG_PARENT_VIEW_INVALID")
+        require(views_by_name["V_FREE_TEXT_DROPPED"][2].subject is None and views_by_name["V_FREE_TEXT_DROPPED"][3] is True, "FIRE_R2_C2_EXECUTION_FREE_TEXT_VIEW_INVALID")
+        require(views_by_name["V_REQUIREMENT_ONLY"][2].subject is None and views_by_name["V_REQUIREMENT_ONLY"][3] is False, "FIRE_R2_C2_EXECUTION_REQUIREMENT_VIEW_INVALID")
+        require(
+            seed.subject == nodes[proposed_id].name
+            and seed.role == EXECUTION_ROLE
+            and seed.scenario == source["scenario_brief"]
+            and seed.lifecycle == EXECUTION_LIFECYCLE
+            and seed.ownership == "LONG_LIVED_SUBJECT_PROPERTY"
+            and seed.node_kind == entry["node_kind_hint"]
+            and seed.value_type == entry["value_type_hint"]
+            and seed.cardinality == entry["cardinality_hint"]
+            and seed.confirmed_facts == (source["request_text"], source["scenario_brief"])
+            and seed.assumptions == (EXECUTION_ASSUMPTION,)
+            and seed.evidence_gaps == (EXECUTION_GAP,)
+            and seed.clarification_question is None,
+            "FIRE_R2_C2_EXECUTION_SEED_SOURCE_INVALID",
+        )
+    return {
+        "execution_input_count": 28,
+        "five_view_count": len(FIVE_VIEW_NAMES),
+        "five_view_unit_count": 28 * len(FIVE_VIEW_NAMES),
+    }
 
 
 def validate_private(repo: Path, root: Path, node_ids: set[str]) -> dict[str, int]:
@@ -651,10 +868,18 @@ def validate_private(repo: Path, root: Path, node_ids: set[str]) -> dict[str, in
     require(handoff["function_baseline_commit"] == BASELINE and handoff["data_commit"] is None, "FIRE_R2_C2_HANDOFF_COMMITS_INVALID")
     require(handoff["finalizable"] is False and handoff["blocked_by"] == "DATA_COMMIT_REQUIRED", "FIRE_R2_C2_HANDOFF_GATE_INVALID")
 
+    execution_summary = validate_execution_input(repo, root, locked, frozen)
+
     public_blob = b"\n".join((repo / path).read_bytes() for path in sorted(PUBLIC_FILES) if (repo / path).is_file())
     for request_text in requests.values():
         require(request_text.encode("utf-8") not in public_blob, "FIRE_R2_C2_PRIVATE_REQUEST_LEAK")
-    return {"candidate_count": 36, "frozen_count": 28, "positive_count": 24, "zero_target_count": 4}
+    return {
+        "candidate_count": 36,
+        "frozen_count": 28,
+        "positive_count": 24,
+        "zero_target_count": 4,
+        **execution_summary,
+    }
 
 
 def main() -> int:

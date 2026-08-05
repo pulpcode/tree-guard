@@ -51,6 +51,9 @@ R2 未见密封确认数据。数据只用于后续独立执行；本任务不�
   `function_baseline_commit..data_commit` 只新增本 PRD 白名单文件。
 * 白名单外所有文件（包括 R2、Prompt、Provider、角色合同、runner 和通用测试）相对
   功能基线必须零差异。
+* v3 扩展的提交前 HEAD 固定为已有数据提交
+  `16534dd870c8a23feeab4f4e549fe67f0dd6fa26`；只允许修改本 PRD、数据
+  preflight 和数据专属测试。后续新 `data_commit` 仍必须以功能基线为祖先。
 * 本轮不 stage、commit、push 或 merge，因此不得运行 `finalize`，
   不得生成最终 ledger、digest 或 freeze receipt。
 
@@ -83,7 +86,7 @@ R2 未见密封确认数据。数据只用于后续独立执行；本任务不�
   同一执行配置的原始字节。
 * `finalize` 在私有根目录下使用随机 `0700` 临时子目录，以 no-follow、
   `0600` 不可覆盖方式写入 ledger/receipt，全部回读验证后使用同根
-  no-replace 原子 rename 发布为 `07-final-freeze.v1/`。
+  no-replace 原子 rename 发布为 `08-final-freeze.v1/`。
 * ledger 绑定两个 commit、数据集/合同版本、全部已提交白名单文件与私有
   01–06 的 byte length/SHA-256、冻结分母/配额与执行合同；执行配置还必须
   以固定逻辑名 `execution-binding.v1.json`、byte length 和 SHA-256 绑定原始字节，
@@ -94,6 +97,26 @@ R2 未见密封确认数据。数据只用于后续独立执行；本任务不�
 * `verify-frozen` 必须重做 commit/公开/私有校验，严格重算全部长度与摘要，
   拒绝字段、顺序、权限、owner、symlink、commit、摘要或密封状态篡改。
   stdout 只输出聚合状态。
+
+### v3 执行输入 sidecar
+
+* 保留 v1/v2 私有根与冻结工件，不覆盖、不删除；v3 使用全新 `0700`
+  私有根。
+* v3 字节复制已校验的私有 01–06，不修改其任何内容，并新增
+  `07-execution-input.v1.json` `0600` 不可覆盖 sidecar。
+* sidecar 按冻结集精确顺序保存 28 条；每条只依据锁定请求、scenario
+  brief 和公开树编制 `proposed_parent_node_id`、不同顶层分支的
+  `wrong_branch_parent_node_id`、三类结构提示与完整 `IntentContent`
+  `retrieval_seed`。
+* sidecar 不使用 Silver、Oracle、审核内容、模型或任何召回/实验结果；
+  preflight 只做严格字段、枚举、引用、分支和来源绑定，并报告
+  `28 * 5 = 140` 个可执行输入单元，不运行五视图。
+* 五视图名称和变换精确固定为 `V_CANONICAL`、`V_FREE_TEXT_DROPPED`、
+  `V_PARENT_ABSENT`、`V_PARENT_WRONG_BRANCH`、`V_REQUIREMENT_ONLY`；
+  preflight 必须实际构造五类 `IntentRequest` / `IntentContent` 输入并验证
+  parent、自由文本和 expansion 开关差异，不能用五个字段分组代替五个实验视图。
+* 最终 ledger 的私有文件域必须按顺序绑定 01–06 与
+  `07-execution-input.v1.json` 的精确原始字节、长度和 SHA-256。
 
 ## 公开文件路径与所有权（冻结）
 
@@ -149,6 +172,12 @@ PYTHONPATH=src python3 -B -m unittest \
   bool-as-int。
 * [x] ledger 同时绑定执行配置语义与原始字节；仅重新格式化配置或改变
   任一已冻结公开文件后，`verify-frozen` 必须拒绝。
+* [x] v3 私有根保留 01–06 精确字节，新增 28 条严格顺序的 execution-input
+  sidecar，且 proposed/wrong parent 均存在并位于不同顶层分支。
+* [x] 五视图可执行性 preflight 报告 28 条、5 视图和 140 单元，不调用
+  模型、R1、R2、Semantic 或任何功能实验。
+* [x] 最终 ledger 预备绑定 execution-input sidecar 的原始字节、长度和 SHA-256；
+  新 `data_commit` 前不生成 `08-final-freeze.v1/`。
 
 ## Out of Scope
 

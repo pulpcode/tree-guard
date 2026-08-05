@@ -64,7 +64,7 @@ class FireR2SealedConfirmationDataTest(unittest.TestCase):
             os.chmod(path, 0o644)
         root = base / "private"
         root.mkdir(mode=0o700)
-        for index, filename in enumerate(PREFLIGHT.PRIVATE_FILES, start=1):
+        for index, filename in enumerate(PREFLIGHT.LEDGER_PRIVATE_FILES, start=1):
             path = root / filename
             path.write_bytes((json.dumps({"private_canary": index}) + "\n").encode("utf-8"))
             os.chmod(path, 0o600)
@@ -77,6 +77,83 @@ class FireR2SealedConfirmationDataTest(unittest.TestCase):
             self._execution_binding_raw(),
         )
         return repo, root, public_paths, ledger
+
+    def _execution_input_fixture(
+        self,
+        temporary: str,
+    ) -> tuple[Path, dict[str, object], dict[str, object], dict[str, object]]:
+        imported = adapt_tree_document(
+            GENERATOR.build_tree(),
+            source_hint="fire-r2-cleanroom-two-execution-input-test",
+        )
+        self.assertIsNotNone(imported.tree)
+        tree = imported.tree
+        assert tree is not None
+        root_node = next(node for node in tree.nodes if node.parent_node_id is None)
+        top_branches = tuple(
+            node for node in tree.nodes if node.parent_node_id == root_node.node_id
+        )
+        self.assertGreaterEqual(len(top_branches), 2)
+        proposed = top_branches[0]
+        wrong = top_branches[1]
+        contract = next(
+            node.value_contract
+            for node in tree.nodes
+            if node.value_contract is not None
+        )
+        candidates = []
+        entries = []
+        for candidate_id in PREFLIGHT.FROZEN_IDS:
+            request = f"synthetic locked request {candidate_id}"
+            brief = f"synthetic scenario brief {candidate_id}"
+            candidates.append(
+                {
+                    "candidate_id": candidate_id,
+                    "request_text": request,
+                    "scenario_brief": brief,
+                }
+            )
+            entries.append(
+                {
+                    "candidate_id": candidate_id,
+                    "cardinality_hint": contract.cardinality,
+                    "node_kind_hint": "PROPERTY",
+                    "proposed_parent_node_id": proposed.node_id,
+                    "retrieval_seed": {
+                        "assumptions": [PREFLIGHT.EXECUTION_ASSUMPTION],
+                        "cardinality": contract.cardinality,
+                        "clarification_question": None,
+                        "confirmed_facts": [request, brief],
+                        "evidence_gaps": [PREFLIGHT.EXECUTION_GAP],
+                        "lifecycle": PREFLIGHT.EXECUTION_LIFECYCLE,
+                        "node_kind": "PROPERTY",
+                        "ownership": "LONG_LIVED_SUBJECT_PROPERTY",
+                        "role": PREFLIGHT.EXECUTION_ROLE,
+                        "scenario": brief,
+                        "subject": proposed.name,
+                        "value_type": contract.value_type,
+                    },
+                    "value_type_hint": contract.value_type,
+                    "wrong_branch_parent_node_id": wrong.node_id,
+                }
+            )
+        document = {
+            "dataset_id": PREFLIGHT.DATASET,
+            "entries": entries,
+            "entry_count": 28,
+            "schema_version": PREFLIGHT.EXECUTION_INPUT_SCHEMA,
+            "source_stage": "FROZEN_SELECTION",
+            "stage": "EXECUTION_INPUT_LOCKED",
+            "view_names": list(PREFLIGHT.FIVE_VIEW_NAMES),
+        }
+        root = Path(temporary) / "execution-private"
+        root.mkdir(mode=0o700)
+        path = root / PREFLIGHT.EXECUTION_INPUT_FILE
+        path.write_bytes(PREFLIGHT._private_json_bytes(document))
+        os.chmod(path, 0o600)
+        locked = {"candidates": candidates}
+        frozen = {"selected_candidate_ids": list(PREFLIGHT.FROZEN_IDS)}
+        return root, locked, frozen, document
 
     def test_tree_is_deterministic_521_node_resource_without_value(self) -> None:
         first = GENERATOR.build_tree()
@@ -119,6 +196,88 @@ class FireR2SealedConfirmationDataTest(unittest.TestCase):
         identifiers = PREFLIGHT.validate_public(REPOSITORY)
         self.assertEqual(len(identifiers), 521)
 
+    def test_execution_input_preflight_marks_five_views_executable_without_running(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root, locked, frozen, document = self._execution_input_fixture(temporary)
+            summary = PREFLIGHT.validate_execution_input(
+                REPOSITORY,
+                root,
+                locked,
+                frozen,
+            )
+            self.assertEqual(
+                summary,
+                {
+                    "execution_input_count": 28,
+                    "five_view_count": 5,
+                    "five_view_unit_count": 140,
+                },
+            )
+            imported = adapt_tree_document(
+                GENERATOR.build_tree(),
+                source_hint="fire-r2-cleanroom-two-view-contract-test",
+            )
+            self.assertIsNotNone(imported.tree)
+            assert imported.tree is not None
+            views = PREFLIGHT.build_execution_views(
+                document["entries"][0],
+                locked["candidates"][0],
+                imported.tree,
+            )
+            self.assertEqual(tuple(item[0] for item in views), PREFLIGHT.FIVE_VIEW_NAMES)
+            by_name = {item[0]: item for item in views}
+            self.assertEqual(
+                by_name["V_CANONICAL"][1].proposed_parent_node_id,
+                document["entries"][0]["proposed_parent_node_id"],
+            )
+            self.assertIsNone(by_name["V_PARENT_ABSENT"][1].proposed_parent_node_id)
+            self.assertEqual(
+                by_name["V_PARENT_WRONG_BRANCH"][1].proposed_parent_node_id,
+                document["entries"][0]["wrong_branch_parent_node_id"],
+            )
+            self.assertIsNone(by_name["V_FREE_TEXT_DROPPED"][2].subject)
+            self.assertTrue(by_name["V_FREE_TEXT_DROPPED"][3])
+            self.assertIsNone(by_name["V_REQUIREMENT_ONLY"][2].subject)
+            self.assertFalse(by_name["V_REQUIREMENT_ONLY"][3])
+
+    def test_execution_input_rejects_fields_enums_bool_and_same_branch_parent(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root, locked, frozen, original = self._execution_input_fixture(temporary)
+            path = root / PREFLIGHT.EXECUTION_INPUT_FILE
+            mutations = {
+                "extra_field": lambda value: value.update({"unexpected": True}),
+                "bool_count": lambda value: value.update({"entry_count": True}),
+                "view_contract": lambda value: value.update(
+                    {"view_names": list(reversed(PREFLIGHT.FIVE_VIEW_NAMES))}
+                ),
+                "node_kind": lambda value: value["entries"][0].update(
+                    {"node_kind_hint": "UNKNOWN"}
+                ),
+                "cardinality": lambda value: value["entries"][0].update(
+                    {"cardinality_hint": "UNKNOWN"}
+                ),
+                "same_branch": lambda value: value["entries"][0].update(
+                    {
+                        "wrong_branch_parent_node_id": value["entries"][0][
+                            "proposed_parent_node_id"
+                        ]
+                    }
+                ),
+            }
+            for name, mutate in mutations.items():
+                with self.subTest(name=name):
+                    changed = json.loads(json.dumps(original, ensure_ascii=False))
+                    mutate(changed)
+                    path.write_bytes(PREFLIGHT._private_json_bytes(changed))
+                    os.chmod(path, 0o600)
+                    with self.assertRaises(PREFLIGHT.GateError):
+                        PREFLIGHT.validate_execution_input(
+                            REPOSITORY,
+                            root,
+                            locked,
+                            frozen,
+                        )
+
     def test_data_commit_changes_are_addition_only_and_allowlisted(self) -> None:
         PREFLIGHT.validate_commit_rows(
             [
@@ -150,11 +309,11 @@ class FireR2SealedConfirmationDataTest(unittest.TestCase):
                 PREFLIGHT.validate_private_root(private_root)
 
     def test_prepare_git_gate_is_hermetic_and_fail_closed(self) -> None:
-        allowed_untracked = "?? tests/test_fire_r2_sealed_confirmation_data.py\n"
+        allowed_change = " M tests/test_fire_r2_sealed_confirmation_data.py\n"
         valid_results = (
-            mock.Mock(stdout=f"{PREFLIGHT.BASELINE}\n"),
+            mock.Mock(stdout=f"{PREFLIGHT.PREVIOUS_DATA_COMMIT}\n"),
             mock.Mock(stdout=""),
-            mock.Mock(stdout=allowed_untracked),
+            mock.Mock(stdout=allowed_change),
         )
         with mock.patch.object(PREFLIGHT, "git", side_effect=valid_results):
             PREFLIGHT.validate_prepare_git(Path("/isolated-repository"))
@@ -166,22 +325,22 @@ class FireR2SealedConfirmationDataTest(unittest.TestCase):
             ),
             (
                 (
-                    mock.Mock(stdout=f"{PREFLIGHT.BASELINE}\n"),
+                    mock.Mock(stdout=f"{PREFLIGHT.PREVIOUS_DATA_COMMIT}\n"),
                     mock.Mock(stdout="staged-file\n"),
                 ),
                 "FIRE_R2_C2_INDEX_NOT_CLEAN",
             ),
             (
                 (
-                    mock.Mock(stdout=f"{PREFLIGHT.BASELINE}\n"),
+                    mock.Mock(stdout=f"{PREFLIGHT.PREVIOUS_DATA_COMMIT}\n"),
                     mock.Mock(stdout=""),
-                    mock.Mock(stdout=" M scripts/preflight_fire_r2_sealed_confirmation_cleanroom_2.py\n"),
+                    mock.Mock(stdout="M  scripts/preflight_fire_r2_sealed_confirmation_cleanroom_2.py\n"),
                 ),
                 "FIRE_R2_C2_TRACKED_CHANGE_FORBIDDEN",
             ),
             (
                 (
-                    mock.Mock(stdout=f"{PREFLIGHT.BASELINE}\n"),
+                    mock.Mock(stdout=f"{PREFLIGHT.PREVIOUS_DATA_COMMIT}\n"),
                     mock.Mock(stdout=""),
                     mock.Mock(stdout="?? src/treeguard/retrieval.py\n"),
                 ),
@@ -206,6 +365,14 @@ class FireR2SealedConfirmationDataTest(unittest.TestCase):
                     "sha256": PREFLIGHT._sha256(self._execution_binding_raw()),
                 },
             )
+            self.assertEqual(
+                tuple(item["path"] for item in ledger["private_files"]),
+                PREFLIGHT.LEDGER_PRIVATE_FILES,
+            )
+            execution_record = ledger["private_files"][-1]
+            self.assertEqual(execution_record["path"], PREFLIGHT.EXECUTION_INPUT_FILE)
+            self.assertGreater(execution_record["byte_length"], 0)
+            self.assertEqual(len(execution_record["sha256"]), 64)
             PREFLIGHT.publish_final_freeze(root, ledger)
             PREFLIGHT.verify_final_freeze(root, ledger)
             final = root / PREFLIGHT.FINAL_FREEZE_DIRECTORY
@@ -411,6 +578,32 @@ class FireR2SealedConfirmationDataTest(unittest.TestCase):
             public_path = repo / public_paths[0]
             public_path.write_bytes(public_path.read_bytes() + b"changed\n")
             os.chmod(public_path, 0o644)
+            changed = PREFLIGHT.build_binding_ledger(
+                repo,
+                root,
+                "a" * 40,
+                public_paths,
+                self._execution_binding(),
+                self._execution_binding_raw(),
+            )
+            with self.assertRaisesRegex(PREFLIGHT.GateError, "FIRE_R2_C2_LEDGER_BINDING_INVALID"):
+                PREFLIGHT.verify_final_freeze(root, changed)
+
+    def test_verify_frozen_rejects_execution_input_sidecar_reformat(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            repo, root, public_paths, ledger = self._freeze_fixture(temporary)
+            PREFLIGHT.publish_final_freeze(root, ledger)
+            sidecar_path = root / PREFLIGHT.EXECUTION_INPUT_FILE
+            sidecar = json.loads(sidecar_path.read_text(encoding="utf-8"))
+            reformatted = json.dumps(
+                sidecar,
+                ensure_ascii=False,
+                indent=2,
+                sort_keys=True,
+            ).encode("utf-8")
+            self.assertNotEqual(reformatted, sidecar_path.read_bytes())
+            sidecar_path.write_bytes(reformatted)
+            os.chmod(sidecar_path, 0o600)
             changed = PREFLIGHT.build_binding_ledger(
                 repo,
                 root,

@@ -149,8 +149,50 @@ class FireR2SealedConfirmationDataTest(unittest.TestCase):
             ):
                 PREFLIGHT.validate_private_root(private_root)
 
-    def test_current_prepare_git_state_has_no_function_change_or_index_entry(self) -> None:
-        PREFLIGHT.validate_prepare_git(REPOSITORY)
+    def test_prepare_git_gate_is_hermetic_and_fail_closed(self) -> None:
+        allowed_untracked = "?? tests/test_fire_r2_sealed_confirmation_data.py\n"
+        valid_results = (
+            mock.Mock(stdout=f"{PREFLIGHT.BASELINE}\n"),
+            mock.Mock(stdout=""),
+            mock.Mock(stdout=allowed_untracked),
+        )
+        with mock.patch.object(PREFLIGHT, "git", side_effect=valid_results):
+            PREFLIGHT.validate_prepare_git(Path("/isolated-repository"))
+
+        invalid_states = (
+            (
+                (mock.Mock(stdout=f"{'f' * 40}\n"),),
+                "FIRE_R2_C2_HEAD_INVALID",
+            ),
+            (
+                (
+                    mock.Mock(stdout=f"{PREFLIGHT.BASELINE}\n"),
+                    mock.Mock(stdout="staged-file\n"),
+                ),
+                "FIRE_R2_C2_INDEX_NOT_CLEAN",
+            ),
+            (
+                (
+                    mock.Mock(stdout=f"{PREFLIGHT.BASELINE}\n"),
+                    mock.Mock(stdout=""),
+                    mock.Mock(stdout=" M scripts/preflight_fire_r2_sealed_confirmation_cleanroom_2.py\n"),
+                ),
+                "FIRE_R2_C2_TRACKED_CHANGE_FORBIDDEN",
+            ),
+            (
+                (
+                    mock.Mock(stdout=f"{PREFLIGHT.BASELINE}\n"),
+                    mock.Mock(stdout=""),
+                    mock.Mock(stdout="?? src/treeguard/retrieval.py\n"),
+                ),
+                "FIRE_R2_C2_FUNCTION_DIFF_FORBIDDEN",
+            ),
+        )
+        for results, error_code in invalid_states:
+            with self.subTest(error_code=error_code):
+                with mock.patch.object(PREFLIGHT, "git", side_effect=results):
+                    with self.assertRaisesRegex(PREFLIGHT.GateError, error_code):
+                        PREFLIGHT.validate_prepare_git(Path("/isolated-repository"))
 
     def test_finalization_primitive_publishes_and_verifies_exact_freeze(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

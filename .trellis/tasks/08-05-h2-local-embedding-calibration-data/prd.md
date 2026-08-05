@@ -66,10 +66,10 @@
 * [x] Silver 拒绝造成任一冻结配额不足时以固定错误码停线，且不产生补造或借位工件。
 * [x] Oracle sidecar 与执行集逐项绑定，三类 Oracle 不变量明确且互斥。
 * [x] Silver 审核完成，所有条目通过固定 rubric，拒绝项只记录固定原因码。
-* [ ] canary 证明 Oracle、目标 ID、排除 ID、评分答案不进入模型输入或聚合报告。
+* [x] canary 证明 Oracle、目标 ID、排除 ID、评分答案不进入模型输入或聚合报告。
 * [x] 冻结摘要能检测树、场景、Oracle、审核或配置的域内篡改。
-* [ ] A 只调用冻结 lexical 路径，证明 embedding 依赖未导入且 Provider 未调用。
-* [ ] A 准确聚合 Recall@20/8、MRR、hard-negative Top-8 与空目标状态，并执行严格
+* [x] A 只调用冻结 lexical 路径，证明 embedding 依赖未导入且 Provider 未调用。
+* [x] A 准确聚合 Recall@20/8、MRR、hard-negative Top-8 与空目标状态，并执行严格
   大于阈值的停线规则。
 * [x] 只运行数据专属测试白名单与 `git diff --check`，不运行完整或递归测试。
 
@@ -94,6 +94,17 @@
    视图只接收执行视图，并以泄漏 canary 验证。
 5. **A 基线**：只复用冻结 R2 lexical 公共确定性入口，固定 Top-40，生成 Top-20
    后本地评分，最终只持久化聚合报告。
+
+## A Baseline Evidence
+
+* 数据提交绑定：`3af7671ce4bd5e32179b94605e0f3b16f3275880`。
+* manifest 绑定：`61533ab2dcd7c5d982da9c994076484e689c1de56b726ddf2ff508f94dd3712f`。
+* 冻结路径：Top-40 lexical、既定锚点门、EXCLUSION 过滤、Top-20；
+  `embedding_used=false`、`provider_called=false`、`index_used=false`。
+* 聚合结果：Recall@20 `16/20`，Recall@8 `16/20`，MRR@20 `0.775`，非字面
+  Recall@20 `6/10`，hard-negative Top-8 `4/4`，显式空目标 `4/4`。
+* 判定：`H2_DATASET_DISCRIMINATIVE`；总 Recall 与非字面 Recall 均未超过严格停线阈值。
+* 结果仅为本地 Silver 数据校准，不表示 Gold、生产或 Patch 资格。
 
 ## Decision (ADR-lite)
 

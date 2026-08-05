@@ -1,0 +1,43 @@
+{
+  "data_commit": "3af7671ce4bd5e32179b94605e0f3b16f3275880",
+  "embedding_used": false,
+  "explicit_empty": {
+    "hits": 4,
+    "total": 4,
+    "value": 1.0
+  },
+  "gold_eligible": false,
+  "hard_negative_top_8": {
+    "hits": 4,
+    "total": 4,
+    "value": 1.0
+  },
+  "hard_negative_top_k": 8,
+  "index_used": false,
+  "lexical_algorithm_version": "treeguard.boundary-tolerant-role-lexical-retrieval.v1",
+  "lexical_top_k": 40,
+  "mrr_at_20": 0.775,
+  "non_literal_recall_at_20": {
+    "hits": 6,
+    "total": 10,
+    "value": 0.6
+  },
+  "patch_eligible": false,
+  "production_qualification": false,
+  "provider_called": false,
+  "recall_at_20": {
+    "hits": 16,
+    "total": 20,
+    "value": 0.8
+  },
+  "recall_at_8": {
+    "hits": 16,
+    "total": 20,
+    "value": 0.8
+  },
+  "result_top_k": 20,
+  "schema_version": "treeguard.h2-local-lexical-a-aggregate.v1",
+  "source_manifest_hash": "61533ab2dcd7c5d982da9c994076484e689c1de56b726ddf2ff508f94dd3712f",
+  "status": "H2_DATASET_DISCRIMINATIVE",
+  "targeted_count": 20
+}

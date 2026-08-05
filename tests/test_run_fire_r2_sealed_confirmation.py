@@ -201,6 +201,44 @@ class FireR2SealedConfirmationRunnerTest(unittest.TestCase):
         report["views"]["R2"]["V_PARENT_WRONG_BRANCH"]["recall_at_20"] = 21
         self.assertIn("R2_SEALED_WRONG_PARENT_BELOW_MINIMUM", RUNNER._round_failure_codes(report))
 
+    def test_hard_negative_gate_separates_denominator_and_safety(self) -> None:
+        metric = {
+            "target_count": 24,
+            "recall_at_8": 24,
+            "recall_at_20": 24,
+            "mrr_scaled_1e6": 1_000_000,
+            "empty_count": 4,
+            "empty_status_match_count": 4,
+            "hard_negative_count": 4,
+            "hard_negative_top8_safe_count": 4,
+            "non_literal_count": 4,
+            "non_literal_recall_at_8": 4,
+            "non_literal_recall_at_20": 4,
+            "replay_count": 28,
+            "replay_match_count": 28,
+            "status_counts": {"CANDIDATES_READY": 24, "NO_CANDIDATES": 4},
+        }
+        report = {
+            "contract_success_count": 28,
+            "transport_failure_count": 0,
+            "actual_call_count": 28,
+            "views": {"R2": {view: dict(metric) for view in RUNNER.VIEW_ORDER}},
+        }
+        self.assertEqual(RUNNER._round_failure_codes(report), [])
+
+        report["views"]["R2"]["V_CANONICAL"]["hard_negative_count"] = 6
+        report["views"]["R2"]["V_CANONICAL"]["hard_negative_top8_safe_count"] = 6
+        self.assertIn(
+            "R2_SEALED_HARD_NEGATIVE_DENOMINATOR_INVALID",
+            RUNNER._round_failure_codes(report),
+        )
+
+        report["views"]["R2"]["V_CANONICAL"]["hard_negative_count"] = 4
+        report["views"]["R2"]["V_CANONICAL"]["hard_negative_top8_safe_count"] = 3
+        codes = RUNNER._round_failure_codes(report)
+        self.assertNotIn("R2_SEALED_HARD_NEGATIVE_DENOMINATOR_INVALID", codes)
+        self.assertIn("R2_SEALED_HARD_NEGATIVE_FAILURE", codes)
+
     def test_empty_partial_round_fails_without_division_error(self) -> None:
         report, private_report = RUNNER.run_round(
             1,
@@ -226,6 +264,7 @@ class FireR2SealedConfirmationRunnerTest(unittest.TestCase):
             and node.value_contract is not None
         )
         proposed = nodes[target.parent_node_id]
+        excluded = next(node for node in tree.nodes if node.node_id != target.node_id)
 
         def top_branch(node):
             current = node
@@ -247,7 +286,7 @@ class FireR2SealedConfirmationRunnerTest(unittest.TestCase):
             },
             "oracle": {
                 "acceptable_node_ids": [target.node_id],
-                "excluded_node_ids": [],
+                "excluded_node_ids": [excluded.node_id],
                 "primary_category": "LEXICAL_BASELINE",
             },
             "execution": {
@@ -296,6 +335,13 @@ class FireR2SealedConfirmationRunnerTest(unittest.TestCase):
         self.assertEqual(set(report["views"]), {"R1", "R2"})
         self.assertTrue(
             all(set(report["views"][algorithm]) == set(RUNNER.VIEW_ORDER) for algorithm in RUNNER.ALGORITHMS)
+        )
+        self.assertTrue(
+            all(
+                report["views"][algorithm][view]["hard_negative_count"] == 0
+                for algorithm in RUNNER.ALGORITHMS
+                for view in RUNNER.VIEW_ORDER
+            )
         )
         self.assertEqual(private_report["units"][0]["status"], "COMPLETED")
 

@@ -59,6 +59,7 @@ ROUND_COUNT = 2
 SCENARIO_COUNT = 28
 POSITIVE_COUNT = 24
 EMPTY_COUNT = 4
+HARD_NEGATIVE_COUNT = 4
 MAXIMUM_ACTUAL_CALL_COUNT = 112
 MODEL_ID = "qwen3.6-35b-a3b"
 VIEW_ORDER = data_preflight.FIVE_VIEW_NAMES
@@ -309,7 +310,12 @@ def _round_failure_codes(report: dict[str, Any]) -> list[str]:
         codes.append("R2_SEALED_WRONG_PARENT_BELOW_MINIMUM")
     if any(item["empty_status_match_count"] != EMPTY_COUNT for item in r2.values()):
         codes.append("R2_SEALED_EMPTY_STATUS_FAILURE")
-    if any(item["hard_negative_top8_safe_count"] != 4 for item in r2.values()):
+    if any(item["hard_negative_count"] != HARD_NEGATIVE_COUNT for item in r2.values()):
+        codes.append("R2_SEALED_HARD_NEGATIVE_DENOMINATOR_INVALID")
+    if any(
+        item["hard_negative_top8_safe_count"] != item["hard_negative_count"]
+        for item in r2.values()
+    ):
         codes.append("R2_SEALED_HARD_NEGATIVE_FAILURE")
     if any(item["replay_match_count"] != SCENARIO_COUNT for item in r2.values()):
         codes.append("R2_SEALED_REPLAY_FAILURE")
@@ -412,13 +418,18 @@ def run_round(
                 acceptable = set(oracle["acceptable_node_ids"])
                 excluded = set(oracle["excluded_node_ids"])
                 top8 = {item.node_id for item in first.candidates[:8]}
+                is_hard_negative = (
+                    oracle["primary_category"] == "EXCLUSION_HARD_NEGATIVE"
+                )
                 observation = {
                     "primary_category": oracle["primary_category"],
                     "positive": bool(acceptable),
                     "rank": _rank(first, acceptable),
                     "empty_match": not acceptable and first.status == "NO_CANDIDATES",
-                    "hard_negative": bool(excluded),
-                    "hard_negative_safe": bool(excluded) and not bool(top8 & excluded),
+                    "hard_negative": is_hard_negative,
+                    "hard_negative_safe": (
+                        is_hard_negative and bool(excluded) and not bool(top8 & excluded)
+                    ),
                     "replay_match": first.to_dict() == second.to_dict(),
                     "status": first.status,
                 }

@@ -44,6 +44,19 @@ workflow 版本，同样是缺陷。
   `contracts/recommendation-record.v1.schema.json`
 - `AssistedShadowAdmissionReport` ↔
   `contracts/scenario-assisted-shadow-report.v1.schema.json`
+- `RetrievalRoleEvidence` ↔
+  `contracts/retrieval-role-evidence.v1.schema.json`
+- `StructuralIntentV2` ↔ `contracts/structural-intent.v2.schema.json`
+- `ChangeUnderstandingV2` 的模型输入/持久化工件 ↔
+  `contracts/change-understanding-model-output.v2.schema.json` /
+  `contracts/change-understanding.v2.schema.json`
+- `SemanticRelationProjectionV2` ↔
+  `contracts/semantic-relation-model-input.v2.schema.json`
+- `SemanticRelationDraftV2` 的模型输出/持久化工件 ↔
+  `contracts/semantic-relation-model-output.v2.schema.json` /
+  `contracts/semantic-relation-draft.v2.schema.json`
+- `RecommendationPolicyDecisionV2` ↔
+  `contracts/recommendation-policy-decision.v2.schema.json`
 
 当前没有运行时 `jsonschema` 依赖。JSON Schema 是跨边界合同，Python 自己做
 精确字段与语义校验；现有测试只验证 Schema 可解析和必填字段与序列化对象
@@ -161,6 +174,12 @@ parser。
 一次性 EvidencePack，但引用作用域仅限各自工件，禁止跨 pack/投影复用。模型必须
 按投影顺序返回每个候选一次；本地代码校验正向动作与关系匹配。人工修订复用同一
 语义政策，不能通过人工 action 绕过模型输出门禁。
+
+隔离的治理 v2 候选把关系判断和动作选择分离：模型输出只能覆盖投影中的每个
+`C001`—`C008` 关系一次，不含动作或稳定节点 ID；本地
+`apply_deterministic_recommendation_policy_v2()` 从关系、结构兼容性和证据状态
+唯一推导动作。v2 投影必须同时绑定原始需求理解、v1 人工确认、候选集和树快照；
+仅哈希自洽而来源不一致必须拒绝。该候选尚未接入默认 CLI/Workbench。
 
 ## 合同变更最低测试
 

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/semantic-relation-draft.v2.schema.json",
+  "title": "Semantic Relation Draft v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "model_provider",
+    "model_capability",
+    "model_name",
+    "prompt_version",
+    "model_provenance_status",
+    "semantic_approval",
+    "patch_eligible",
+    "source_projection_hash",
+    "source_snapshot_hash",
+    "candidate_assessments",
+    "draft_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "semantic-relation-draft.v2"},
+    "model_provider": {"$ref": "#/$defs/text"},
+    "model_capability": {"$ref": "#/$defs/text"},
+    "model_name": {"$ref": "#/$defs/text"},
+    "prompt_version": {"$ref": "#/$defs/text"},
+    "model_provenance_status": {"const": "UNVERIFIED_FILE_ASSERTION"},
+    "semantic_approval": {"const": false},
+    "patch_eligible": {"const": false},
+    "source_projection_hash": {"$ref": "#/$defs/digest"},
+    "source_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "candidate_assessments": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "$ref": "semantic-relation-model-output.v2.schema.json#/$defs/candidateAssessment"
+      }
+    },
+    "draft_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 1000}
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/retrieval-role-evidence.v1.schema.json",
+  "title": "Retrieval Role Evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "provenance",
+    "calibration_only",
+    "gold_eligible",
+    "gate_eligible",
+    "production_qualification",
+    "source_request_hash",
+    "spans",
+    "evidence_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "retrieval-role-evidence.v1"},
+    "provenance": {
+      "enum": ["CODEX_SILVER_CALIBRATION", "UNVERIFIED_MODEL_CALIBRATION"]
+    },
+    "calibration_only": {"const": true},
+    "gold_eligible": {"const": false},
+    "gate_eligible": {"const": false},
+    "production_qualification": {"const": false},
+    "source_request_hash": {"$ref": "#/$defs/digest"},
+    "spans": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {"$ref": "#/$defs/span"}
+    },
+    "evidence_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "text", "start", "end"],
+      "properties": {
+        "role": {"enum": ["TARGET", "SCOPE", "EXCLUSION"]},
+        "text": {"type": "string", "minLength": 1},
+        "start": {"type": "integer", "minimum": 0},
+        "end": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

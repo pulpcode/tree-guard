@@ -55,6 +55,11 @@ worker、queue、vector index、Spring/MongoDB 直连或生产 Patch publisher�
 - `retrieval.py`：确认意图上的确定性全树候选评分、截断和回放。
 - `semantic_recommendation.py`：有界候选投影、关系—动作政策、人工建议复核和可信
   记录回放。
+- `retrieval_roles.py`：原始需求上的 source-bound 角色证据、稳定 span 与回放；
+- `change_understanding_v2.py`：隔离的四字段结构理解与角色证据组合合同，不负责
+  Provider、召回或动作；
+- `semantic_policy_v2.py`：隔离的 relation-only 候选投影、模型草稿与确定性动作
+  策略；当前只迁移可信 v1 候选投影，不是默认产品入口。
 - `tree_understanding.py`：全树结构画像、M2 有界投影，以及 M3 稀疏场景计划、
   逐单元投影、待审候选与部分失败批次的可信来源合同；
 - `scenario_assisted_shadow_validation.py`：M5 只读人工在环 Shadow 的聚合准入合同，
@@ -119,6 +124,9 @@ validation → adapter → diff → history → business_review → evidence
 models / hashing ─────────────→ change_intent ──→ retrieval
 models / lexical ───────────────────────────────→ retrieval
 change_intent / retrieval / models ──────→ semantic_recommendation
+change_intent / retrieval_roles / models ─→ change_understanding_v2
+change_understanding_v2 / change_intent / semantic_recommendation / models
+                                           └────→ semantic_policy_v2
 evidence / change_intent / semantic_recommendation / models
                                            └────→ ai_review
 adapter / ai_review / change_intent / retrieval /

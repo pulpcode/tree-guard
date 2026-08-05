@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/semantic-relation-model-input.v2.schema.json",
+  "title": "Semantic Relation Model Input v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "projection_version",
+    "structural_intent",
+    "candidate_status",
+    "candidates"
+  ],
+  "properties": {
+    "schema_version": {"const": "semantic-relation-model-input.v2"},
+    "projection_version": {"const": "treeguard.semantic-relation-projection.v2"},
+    "structural_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_kind", "value_type", "cardinality"],
+      "properties": {
+        "node_kind": {"enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]},
+        "value_type": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "cardinality": {"enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]}
+      }
+    },
+    "candidate_status": {
+      "enum": ["CANDIDATES_READY", "NO_CANDIDATES", "INSUFFICIENT_SIGNAL"]
+    },
+    "candidates": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "$ref": "semantic-recommendation-model-input.v1.schema.json#/$defs/candidate"
+      }
+    }
+  }
+}

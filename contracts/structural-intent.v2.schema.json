@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/structural-intent.v2.schema.json",
+  "title": "Structural Intent v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_request_hash",
+    "node_kind",
+    "value_type",
+    "cardinality",
+    "clarification_question",
+    "intent_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "structural-intent.v2"},
+    "source_request_hash": {"$ref": "#/$defs/digest"},
+    "node_kind": {"enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]},
+    "value_type": {"$ref": "#/$defs/nullableText"},
+    "cardinality": {"enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]},
+    "clarification_question": {"$ref": "#/$defs/nullableText"},
+    "intent_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nullableText": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 1000
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/change-understanding-model-output.v2.schema.json",
+  "title": "Change Understanding Model Output v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "node_kind",
+    "value_type",
+    "cardinality",
+    "clarification_question",
+    "spans"
+  ],
+  "properties": {
+    "schema_version": {"const": "change-understanding-model-output.v2"},
+    "node_kind": {"enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]},
+    "value_type": {"$ref": "#/$defs/nullableText"},
+    "cardinality": {"enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]},
+    "clarification_question": {"$ref": "#/$defs/nullableText"},
+    "spans": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {"$ref": "#/$defs/span"}
+    }
+  },
+  "$defs": {
+    "nullableText": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "text"],
+      "properties": {
+        "role": {"enum": ["TARGET", "SCOPE", "EXCLUSION"]},
+        "text": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

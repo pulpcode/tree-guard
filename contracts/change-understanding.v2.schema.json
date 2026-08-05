@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/change-understanding.v2.schema.json",
+  "title": "Change Understanding v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "model_provider",
+    "model_capability",
+    "model_name",
+    "prompt_version",
+    "model_provenance_status",
+    "semantic_approval",
+    "patch_eligible",
+    "source_request_hash",
+    "source_snapshot_hash",
+    "structural_intent",
+    "role_evidence",
+    "understanding_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "change-understanding.v2"},
+    "model_provider": {"$ref": "#/$defs/text"},
+    "model_capability": {"$ref": "#/$defs/text"},
+    "model_name": {"$ref": "#/$defs/text"},
+    "prompt_version": {"$ref": "#/$defs/text"},
+    "model_provenance_status": {"const": "UNVERIFIED_FILE_ASSERTION"},
+    "semantic_approval": {"const": false},
+    "patch_eligible": {"const": false},
+    "source_request_hash": {"$ref": "#/$defs/digest"},
+    "source_snapshot_hash": {"$ref": "#/$defs/digest"},
+    "structural_intent": {
+      "$ref": "structural-intent.v2.schema.json"
+    },
+    "role_evidence": {
+      "$ref": "retrieval-role-evidence.v1.schema.json"
+    },
+    "understanding_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 1000}
+  }
+}

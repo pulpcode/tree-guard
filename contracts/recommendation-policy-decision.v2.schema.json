@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/recommendation-policy-decision.v2.schema.json",
+  "title": "Recommendation Policy Decision v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_version",
+    "semantic_approval",
+    "patch_eligible",
+    "source_understanding_hash",
+    "source_projection_hash",
+    "source_relation_draft_hash",
+    "recommended_action",
+    "selected_candidate_ref",
+    "decision_reason_code",
+    "decision_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "recommendation-policy-decision.v2"},
+    "policy_version": {"const": "treeguard.deterministic-recommendation-policy.v2"},
+    "semantic_approval": {"const": false},
+    "patch_eligible": {"const": false},
+    "source_understanding_hash": {"$ref": "#/$defs/digest"},
+    "source_projection_hash": {"$ref": "#/$defs/digest"},
+    "source_relation_draft_hash": {"$ref": "#/$defs/digest"},
+    "recommended_action": {
+      "enum": [
+        "USE_EXISTING_NODE",
+        "NEED_CLARIFICATION",
+        "NEED_EVIDENCE",
+        "ABSTAIN"
+      ]
+    },
+    "selected_candidate_ref": {
+      "type": ["string", "null"],
+      "pattern": "^C00[1-8]$"
+    },
+    "decision_reason_code": {
+      "enum": [
+        "UNIQUE_COMPATIBLE_EQUIVALENT",
+        "MULTIPLE_COMPATIBLE_EQUIVALENTS",
+        "CANDIDATE_EVIDENCE_REQUIRED",
+        "NO_COMPATIBLE_EQUIVALENT"
+      ]
+    },
+    "decision_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

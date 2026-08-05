@@ -156,6 +156,12 @@ M4.9 与 M5 已经把端到端失败拆分到 Intent、Retrieval 和 Semantic �
   本地开源 embedding 候选、开发机约束与 BGE small 选型。
 - [`research/retrieval-h2-local-pre-registration.md`](research/retrieval-h2-local-pre-registration.md)：
   H2 唯一变量、新数据配额、门槛、运行时边界与停止规则。
+- [`research/semantic-p1-relation-only-pre-registration.md`](research/semantic-p1-relation-only-pre-registration.md)：
+  固定 M4.9 合法关系输出，比较模型动作与确定性动作策略的零调用职责收缩实验。
+- [`research/semantic-p1-relation-only-result.md`](research/semantic-p1-relation-only-result.md)：
+  首次有效 P1 结果、动作过度澄清诊断、边界与 D3 候选建议。
+- [`research/intent-p2-minimal-contract-proposal.md`](research/intent-p2-minimal-contract-proposal.md)：
+  基于 Oracle 消费证据的四字段 StructuralIntent、角色证据拆分与 v2 兼容边界。
 
 ## 当前已收敛事实
 
@@ -308,3 +314,51 @@ R2 已在不修改模型、Prompt、角色合同和分母的前提下，把相�
 - [ ] 独立准备并冻结 H2 新树、36条候选和28条执行集；
 - [ ] A 基线可判别后，实现隔离本地 Provider/H2 索引合同并首次运行 A/B；
 - [ ] 候选冻结后再准备新的未见确认，不在开发集上宣称生产资格。
+
+## Semantic P1：关系判定与动作选择解耦
+
+- [x] 冻结 M4.9 的 51 个合法、召回命中观测与 A 对照指标；
+- [x] 在查看 B 结果前预注册 relation-only 确定性策略、门槛和停止规则；
+- [x] 实现只读离线重评分器并完成首次冻结运行；
+- [x] 首次结果：首选19→41，安全退让32→10，不安全0，重放51/51；
+- [x] 形成 Decision D3 候选，不提前修改生产 Semantic 合同。
+
+## Decision D3（候选）：Semantic 只判关系，本地 Policy 选动作
+
+**Context**：当前模型同时输出逐候选 relation、selected candidate 和 action，本地又
+校验 action/relation 联合约束。P1 在同一51个合法关系输出上忽略模型动作后，确定性
+策略把首选匹配从19提高到41，安全退让从32降到10，不安全动作保持0。
+
+**Candidate decision**：下一版本模型只负责 Top-K 内逐候选关系与证据充分性；本地
+Policy 负责目标选择、动作、空目标与安全降级。唯一且结构兼容的
+`SEMANTICALLY_EQUIVALENT` 映射为 `USE_EXISTING_NODE`；多个等价候选进入结构化澄清；
+缺少等价证据时按证据状态退让。`REUSES_CONTRACT` 与 `CONTEXTUALLY_RELATED` 暂只进入
+人工审查，不自动授权新增。
+
+**Consequences**：减少模型 JSON 字段与跨字段失败，动作可重放、可解释并能独立测试；
+模型仍承担最需要语义判断的候选关系，不把不确定性伪装成规则能力。现有 v1 合同与入口
+保持不变，待候选合同、迁移测试和用户确认后再实施下一版本纵切。
+
+## Decision D4（候选）：四字段 StructuralIntent + source-bound RoleEvidence
+
+**Context**：M4.9 的30个 Silver Oracle 只验收 `node_kind`、`value_type`、
+`cardinality` 和澄清问题；其余8个 Intent 字段全部 `NOT_COMPARED`。D1 已把原始需求
+冻结为权威查询，D2 已验证 source-bound `TARGET/SCOPE/EXCLUSION` 是更可靠的检索证据。
+
+**Candidate decision**：v2 将模型理解拆为四字段 `StructuralIntent` 与独立
+`RetrievalRoleEvidence`。两者可由一次模型调用产生，但必须分别本地验证。移除字段不再
+进入结构合同、召回或动作授权；解释文本与机器决策合同分离。
+
+**Consequences**：合同从12个语义字段缩到4个结构/控制字段，降低格式和语义漂移面；
+召回仍保留原始文本和可回放角色证据，不因“缩短 Intent”丢失业务词。v1 保持兼容，
+先实现不切默认入口的 v2 纵切，待独立确认后再晋升。
+
+## D3/D4 隔离 v2 纵切实施状态
+
+- [x] 实现 `StructuralIntentV2` 和一次模型输出的 `ChangeUnderstandingV2`；
+- [x] 复用 source-bound `RetrievalRoleEvidence`，由本地确定 span 位置；
+- [x] 实现不含 v1 自由文本与动作字段的 relation-only Semantic 投影/输出；
+- [x] 实现只读、不可授予新增权限的确定性动作策略及可信回放；
+- [x] 增加版本化 Schema、来源错配、篡改、结构冲突和 v1 聚焦回归测试；
+- [x] 保持 v1 CLI、Workbench、Provider 和默认产品链路不变；
+- [ ] 在独立确认数据冻结前，不晋升 v2，不宣称生产资格。

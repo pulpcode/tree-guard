@@ -339,5 +339,94 @@ if draft.review_status == "NEEDS_CLARIFICATION":
         raise IntentValidationError(
             "INTENT_CLARIFICATION_LIMIT_REACHED",
             "single clarification round did not resolve the intent",
-        )
+    )
+```
+
+## Scenario：隔离的 v2 理解—关系—确定性动作纵切
+
+### 1. Scope / Trigger
+
+- 当验证 D3/D4 候选架构时使用：一次模型输出最小结构理解和原文角色证据，第二次
+  模型调用只判断 Top-K 候选关系，本地策略选择动作。
+- 这是并行候选实现；不得替换 v1 治理 CLI、Workbench 或默认 Provider 路径。
+- 当前 v2 复用可信 v1 候选投影，只验证理解与 Semantic/Policy 边界，不改变召回。
+
+### 2. Signatures
+
+```python
+ChangeUnderstandingV2.from_model_dict(payload, request, tree, *, model_provider,
+    model_capability, model_name, prompt_version)
+RetrievalRoleEvidence.from_dict(payload, request)
+build_semantic_relation_projection_v2(understanding, legacy_projection,
+    confirmation)
+SemanticRelationDraftV2.from_model_dict(payload, projection, tree, *,
+    model_provider, model_capability, model_name, prompt_version)
+apply_deterministic_recommendation_policy_v2(draft, projection, understanding)
+```
+
+### 3. Contracts
+
+- `StructuralIntentV2` 只有 `node_kind`、`value_type`、`cardinality`、
+  `clarification_question` 四个模型语义字段，并绑定 `source_request_hash`。
+- 同一次理解模型输出还包含 `{role, text}` spans；本地代码在原需求中唯一定位
+  `start/end`，形成独立的 `RetrievalRoleEvidence`。
+- v2 Semantic 输入只含结构字段、候选状态和最多8个临时候选视图；不得包含 v1
+  自由文本 Intent、稳定节点 ID、动作或审批字段。
+- v2 Semantic 输出必须按投影顺序逐候选返回 `relation` 和有界 `reason`，不能返回
+  `recommended_action` 或 `selected_candidate_ref`。
+- Policy 只允许 `USE_EXISTING_NODE`、`NEED_CLARIFICATION`、`NEED_EVIDENCE`、
+  `ABSTAIN`；始终 `semantic_approval=false`、`patch_eligible=false`。
+- 投影同时绑定 understanding、人工 confirmation、candidate set 和 snapshot；所有
+  持久化工件必须从这些可信来源完整重放。
+
+### 4. Validation & Error Matrix
+
+- 结构字段与显式 request hint 冲突 → `UNDERSTANDING_V2_HINT_CONFLICT`；
+- 角色文本无法在原需求中唯一定位 → `UNDERSTANDING_V2_ROLE_*` 对应安全码；
+- 澄清问题含内部 ID → `UNDERSTANDING_V2_INTERNAL_ID_FORBIDDEN`；
+- understanding、confirmation、candidate projection 或 snapshot 不同源 →
+  `SEMANTIC_V2_SOURCE_MISMATCH`；
+- 尚需澄清却进入候选关系比较 → `SEMANTIC_V2_CLARIFICATION_REQUIRED`；
+- 候选引用缺失、重复、越界或乱序 → `SEMANTIC_V2_CANDIDATE_COVERAGE_INVALID`；
+- 非法关系 → `SEMANTIC_V2_RELATION_INVALID`；
+- relation draft、projection、understanding 不同源 →
+  `SEMANTIC_V2_POLICY_SOURCE_MISMATCH`；
+- 存储 decision 即使重算 hash 但不能由可信输入重放 →
+  `SEMANTIC_V2_DECISION_SOURCE_MISMATCH`。
+
+### 5. Good / Base / Bad Cases
+
+- Good：唯一、结构兼容的 `SEMANTICALLY_EQUIVALENT` 由本地映射为
+  `USE_EXISTING_NODE`。
+- Base：多个兼容等价候选进入 `NEED_CLARIFICATION`；没有等价关系则安全退让。
+- Bad：模型关系声称等价但类型、值类型或基数冲突；本地不得选择该候选。
+- Bad：`REUSES_CONTRACT` 或 `CONTEXTUALLY_RELATED` 被解释为自动新增许可。
+
+### 6. Tests Required
+
+- 模型字段精确集、枚举、hint 冲突、角色 span 唯一定位和内部 ID；
+- 调用方输入与 `to_dict()` 输出的可变性攻击；
+- v2 投影不含 v1 自由文本、稳定节点 ID和动作字段；
+- 错误 request/confirmation/snapshot、重算 hash 篡改和完整可信回放；
+- 唯一等价、多个等价、证据不足、无等价四条确定性动作分支；
+- 结构冲突、未知/乱序引用、动作—reason 组合和重复运行一致性；
+- Schema `required` 与运行时序列化字段精确一致；
+- v1 intent/retrieval/semantic 回归保持通过，证明默认入口未切换。
+
+### 7. Wrong vs Correct
+
+#### Wrong
+
+```python
+action = model_output["recommended_action"]
+```
+
+#### Correct
+
+```python
+draft = SemanticRelationDraftV2.from_model_dict(output, projection, tree, ...)
+decision = apply_deterministic_recommendation_policy_v2(
+    draft, projection, understanding
+)
+assert decision.patch_eligible is False
 ```

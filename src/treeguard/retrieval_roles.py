@@ -34,6 +34,18 @@ _DIGEST = re.compile(r"^[0-9a-f]{64}$")
 _WHITESPACE = re.compile(r"\s+")
 _MODEL_OUTPUT_KEYS = {"schema_version", "spans"}
 _MODEL_SPAN_KEYS = {"role", "text"}
+_EVIDENCE_KEYS = {
+    "schema_version",
+    "provenance",
+    "calibration_only",
+    "gold_eligible",
+    "gate_eligible",
+    "production_qualification",
+    "source_request_hash",
+    "spans",
+    "evidence_hash",
+}
+_EVIDENCE_SPAN_KEYS = {"role", "text", "start", "end"}
 
 
 @dataclass(frozen=True, slots=True)
@@ -121,6 +133,58 @@ class RetrievalRoleEvidence:
                 for span in self.spans
             ],
         }
+
+    @classmethod
+    def from_dict(
+        cls,
+        payload: Any,
+        request: IntentRequest,
+    ) -> "RetrievalRoleEvidence":
+        if not isinstance(payload, dict) or set(payload) != _EVIDENCE_KEYS:
+            raise CandidateRetrievalError(
+                "ROLE_EVIDENCE_FIELDS_INVALID",
+                "stored role evidence must use the exact contract fields",
+            )
+        if (
+            payload["schema_version"] != EVIDENCE_SCHEMA_VERSION
+            or payload["provenance"] not in {PROVENANCE, MODEL_PROVENANCE}
+            or payload["calibration_only"] is not True
+            or payload["gold_eligible"] is not False
+            or payload["gate_eligible"] is not False
+            or payload["production_qualification"] is not False
+            or not isinstance(payload["spans"], list)
+        ):
+            raise CandidateRetrievalError(
+                "ROLE_EVIDENCE_POLICY_INVALID",
+                "stored role evidence violates its fixed policy",
+            )
+        try:
+            spans = tuple(
+                RetrievalRoleSpan(
+                    role=item["role"],
+                    text=item["text"],
+                    start=item["start"],
+                    end=item["end"],
+                )
+                for item in payload["spans"]
+                if isinstance(item, dict)
+                and set(item) == _EVIDENCE_SPAN_KEYS
+            )
+            if len(spans) != len(payload["spans"]):
+                raise ValueError
+            evidence = cls(
+                provenance=payload["provenance"],
+                source_request_hash=payload["source_request_hash"],
+                spans=spans,
+                evidence_hash=payload["evidence_hash"],
+            )
+            verify_retrieval_role_evidence(evidence, request)
+            return evidence
+        except (KeyError, TypeError, ValueError):
+            raise CandidateRetrievalError(
+                "ROLE_EVIDENCE_INVALID",
+                "stored role evidence failed local validation",
+            ) from None
 
 
 @dataclass(frozen=True, slots=True)

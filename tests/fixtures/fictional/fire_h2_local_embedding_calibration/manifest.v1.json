@@ -1,0 +1,49 @@
+{
+  "a_baseline_status": "NOT_RUN",
+  "artifact_hashes": {
+    "candidate_oracle": "8b7eb9ffe3f073163a37c5efbb5b18c7aec568f70ff9bcbf698d1e0c8cf3c207",
+    "oracle": "042ea1818541c17d8c2bd424da39e776d9a30b60dc0c117a62484b9c6881482c",
+    "scenario_candidates": "e2ac6db5156e8db49375aaf852e77667938d8ea09fab8a0c2f0bf701d4c69abf",
+    "scenarios": "5ae86982f8dcdcde80a7047fdbfda8ab7972f0a4e1f28631d3b0f92979fa34d0",
+    "silver_review": "6c70cde62f3358520efb57202231c42f7614c63b175b40d849c31b39bbf2b4d8",
+    "tree": "b1958a9d8e5b89c7b0a0def36bf70a3e8c40ee021542b2fc29f4e927509c0998"
+  },
+  "candidate_category_counts": {
+    "BOUNDARY_VARIATION": 4,
+    "CROSS_BRANCH_INTERFERENCE": 5,
+    "EXPLICIT_EMPTY": 5,
+    "HARD_NEGATIVE": 5,
+    "LEXICAL_BASELINE": 5,
+    "NON_LITERAL": 12
+  },
+  "candidate_count": 36,
+  "dataset_status": "FROZEN_CODEX_SILVER",
+  "derived_from_real": false,
+  "embedding_used": false,
+  "execution_category_counts": {
+    "BOUNDARY_VARIATION": 3,
+    "CROSS_BRANCH_INTERFERENCE": 3,
+    "EXPLICIT_EMPTY": 4,
+    "HARD_NEGATIVE": 4,
+    "LEXICAL_BASELINE": 4,
+    "NON_LITERAL": 10
+  },
+  "execution_count": 28,
+  "fictional": true,
+  "generator_seed": "zhuqiong-h2-local-20260805-v1",
+  "generator_version": "treeguard.h2-local-cleanroom-generator.v1",
+  "gold_eligible": false,
+  "manifest_hash": "61533ab2dcd7c5d982da9c994076484e689c1de56b726ddf2ff508f94dd3712f",
+  "non_literal_subtype_counts": {
+    "ABBREVIATION": 2,
+    "COLLOQUIAL_PURPOSE": 2,
+    "CROSS_LEVEL": 2,
+    "MINOR_TYPO": 2,
+    "SYNONYM": 2
+  },
+  "patch_eligible": false,
+  "production_qualification": false,
+  "schema_version": "treeguard.h2-local-manifest.v1",
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "tree_node_count": 733
+}

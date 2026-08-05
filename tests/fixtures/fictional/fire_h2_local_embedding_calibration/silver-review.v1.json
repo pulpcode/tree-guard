@@ -1,0 +1,483 @@
+{
+  "decision_counts": {
+    "PASS": 36
+  },
+  "entries": [
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-001"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-002"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-003"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-004"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-005"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-006"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-007"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-008"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-009"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-010"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-011"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-012"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-013"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-014"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-015"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-016"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-017"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-018"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-019"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-020"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-021"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-022"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-023"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-024"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-025"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-026"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-027"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-028"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-029"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-030"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-031"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-032"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-033"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-034"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-035"
+    },
+    {
+      "decision": "PASS",
+      "reason_codes": [
+        "PROVENANCE_VALID",
+        "CATEGORY_EXCLUSIVE",
+        "ORACLE_DETERMINATE",
+        "TEXT_UNAMBIGUOUS",
+        "DISTRACTOR_JUSTIFIED",
+        "NO_ANSWER_LEAK",
+        "CONTRACT_VALID"
+      ],
+      "scenario_id": "H2C-036"
+    }
+  ],
+  "gold_eligible": false,
+  "patch_eligible": false,
+  "production_qualification": false,
+  "review_hash": "6c70cde62f3358520efb57202231c42f7614c63b175b40d849c31b39bbf2b4d8",
+  "review_status": "CODEX_SILVER_REVIEWED",
+  "reviewer_role": "CODEX_SILVER_REVIEWER",
+  "schema_version": "treeguard.h2-local-silver-review.v1",
+  "source_candidate_set_hash": "e2ac6db5156e8db49375aaf852e77667938d8ea09fab8a0c2f0bf701d4c69abf"
+}

@@ -1,0 +1,202 @@
+{
+  "entries": [
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-001",
+      "target_node_id": "ZH-H2-D01-P01-F01"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-002",
+      "target_node_id": "ZH-H2-D02-P01-F01"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-003",
+      "target_node_id": "ZH-H2-D04-P01-F01"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-004",
+      "target_node_id": "ZH-H2-D06-P01-F01"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-005",
+      "target_node_id": "ZH-H2-D07-P01-F01"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-006",
+      "target_node_id": "ZH-H2-D08-P01-F01"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-007",
+      "target_node_id": "ZH-H2-D03-P01-F01"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-008",
+      "target_node_id": "ZH-H2-D11-P01-F01"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-009",
+      "target_node_id": "ZH-H2-D02-P01-F02"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-010",
+      "target_node_id": "ZH-H2-D10-P01-F01"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-011",
+      "target_node_id": "ZH-H2-D04-P01-F02"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-012",
+      "target_node_id": "ZH-H2-D09-P01-F01"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-013",
+      "target_node_id": "ZH-H2-D01-P01-F02"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-014",
+      "target_node_id": "ZH-H2-D02-P01-F03"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-015",
+      "target_node_id": "ZH-H2-D03-P01-F02"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-016",
+      "target_node_id": "ZH-H2-D05-P01-F01"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-017",
+      "target_node_id": "ZH-H2-D06-P01-F02"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-018",
+      "target_node_id": "ZH-H2-D02-P01-F04"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-019",
+      "target_node_id": "ZH-H2-D04-P01-F03"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-020",
+      "target_node_id": "ZH-H2-D05-P01-F02"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-021",
+      "target_node_id": "ZH-H2-D08-P01-F02"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-022",
+      "target_node_id": "ZH-H2-D11-P01-F02"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-023",
+      "target_node_id": "ZH-H2-D12-P01-F01"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-024",
+      "target_node_id": "ZH-H2-D07-P01-F02"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-025",
+      "target_node_id": "ZH-H2-D04-P01-F04"
+    },
+    {
+      "oracle_type": "TARGET",
+      "scenario_id": "H2C-026",
+      "target_node_id": "ZH-H2-D02-P01-F05"
+    },
+    {
+      "excluded_node_ids": [
+        "ZH-H2-D05-P01-F03"
+      ],
+      "oracle_type": "HARD_NEGATIVE",
+      "scenario_id": "H2C-027"
+    },
+    {
+      "excluded_node_ids": [
+        "ZH-H2-D06-P01-F03"
+      ],
+      "oracle_type": "HARD_NEGATIVE",
+      "scenario_id": "H2C-028"
+    },
+    {
+      "excluded_node_ids": [
+        "ZH-H2-D07-P01-F03"
+      ],
+      "oracle_type": "HARD_NEGATIVE",
+      "scenario_id": "H2C-029"
+    },
+    {
+      "excluded_node_ids": [
+        "ZH-H2-D10-P01-F03"
+      ],
+      "oracle_type": "HARD_NEGATIVE",
+      "scenario_id": "H2C-030"
+    },
+    {
+      "excluded_node_ids": [
+        "ZH-H2-D11-P01-F03"
+      ],
+      "oracle_type": "HARD_NEGATIVE",
+      "scenario_id": "H2C-031"
+    },
+    {
+      "expected_empty_status": "NO_CANDIDATES",
+      "oracle_type": "EXPLICIT_EMPTY",
+      "scenario_id": "H2C-032"
+    },
+    {
+      "expected_empty_status": "NO_CANDIDATES",
+      "oracle_type": "EXPLICIT_EMPTY",
+      "scenario_id": "H2C-033"
+    },
+    {
+      "expected_empty_status": "NO_CANDIDATES",
+      "oracle_type": "EXPLICIT_EMPTY",
+      "scenario_id": "H2C-034"
+    },
+    {
+      "expected_empty_status": "NO_CANDIDATES",
+      "oracle_type": "EXPLICIT_EMPTY",
+      "scenario_id": "H2C-035"
+    },
+    {
+      "expected_empty_status": "NO_CANDIDATES",
+      "oracle_type": "EXPLICIT_EMPTY",
+      "scenario_id": "H2C-036"
+    }
+  ],
+  "entry_count": 36,
+  "gold_eligible": false,
+  "local_scoring_only": true,
+  "model_input_eligible": false,
+  "oracle_hash": "8b7eb9ffe3f073163a37c5efbb5b18c7aec568f70ff9bcbf698d1e0c8cf3c207",
+  "patch_eligible": false,
+  "schema_version": "treeguard.h2-local-candidate-oracle.v1",
+  "source_candidate_set_hash": "e2ac6db5156e8db49375aaf852e77667938d8ea09fab8a0c2f0bf701d4c69abf"
+}

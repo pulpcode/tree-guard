@@ -1,0 +1,1006 @@
+{
+  "candidate_count": 36,
+  "candidate_set_hash": "e2ac6db5156e8db49375aaf852e77667938d8ea09fab8a0c2f0bf701d4c69abf",
+  "candidates": [
+    {
+      "category": "NON_LITERAL",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "请登记复查残火的等待时长。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "integer"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "复查残火"
+        },
+        {
+          "role": "SCOPE",
+          "text": "等待时长"
+        }
+      ],
+      "scenario_id": "H2C-001",
+      "selection_order": 1,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": "SYNONYM"
+    },
+    {
+      "category": "NON_LITERAL",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "水泵歇停后再开机的记号需要留存。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "再开机的记号"
+        },
+        {
+          "role": "SCOPE",
+          "text": "水泵歇停"
+        }
+      ],
+      "scenario_id": "H2C-002",
+      "selection_order": 2,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": "SYNONYM"
+    },
+    {
+      "category": "NON_LITERAL",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "核验挡烟软幕回到原处的结果。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "boolean"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "回到原处"
+        },
+        {
+          "role": "SCOPE",
+          "text": "挡烟软幕"
+        }
+      ],
+      "scenario_id": "H2C-003",
+      "selection_order": 3,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": "SYNONYM"
+    },
+    {
+      "category": "NON_LITERAL",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "补充WZ灯检周期。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "integer"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "WZ灯检周期"
+        }
+      ],
+      "scenario_id": "H2C-004",
+      "selection_order": 4,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": "ABBREVIATION"
+    },
+    {
+      "category": "NON_LITERAL",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "记录ML手台联测是否通过。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "ML手台联测"
+        }
+      ],
+      "scenario_id": "H2C-005",
+      "selection_order": 5,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": "ABBREVIATION"
+    },
+    {
+      "category": "NON_LITERAL",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "登记JZ气瓶轮换号。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "JZ气瓶轮换号"
+        }
+      ],
+      "scenario_id": "H2C-006",
+      "selection_order": 6,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": "ABBREVIATION"
+    },
+    {
+      "category": "NON_LITERAL",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "人都撤出来以后往哪儿站得下，需要留个容量数。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "integer"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "往哪儿站得下"
+        },
+        {
+          "role": "SCOPE",
+          "text": "人都撤出来以后"
+        }
+      ],
+      "scenario_id": "H2C-007",
+      "selection_order": 7,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": "COLLOQUIAL_PURPOSE"
+    },
+    {
+      "category": "NON_LITERAL",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "大车拐弯别被挡住要看哪项，把测量结果记下来。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "float"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "拐弯别被挡住"
+        },
+        {
+          "role": "SCOPE",
+          "text": "大车"
+        }
+      ],
+      "scenario_id": "H2C-008",
+      "selection_order": 8,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": "COLLOQUIAL_PURPOSE"
+    },
+    {
+      "category": "NON_LITERAL",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "登记取水囗启闭状态。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "boolean"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "取水囗启闭状态"
+        }
+      ],
+      "scenario_id": "H2C-009",
+      "selection_order": 9,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": "MINOR_TYPO"
+    },
+    {
+      "category": "NON_LITERAL",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "补充监户人到场确认。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "boolean"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "监户人到场确认"
+        }
+      ],
+      "scenario_id": "H2C-010",
+      "selection_order": 10,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": "MINOR_TYPO"
+    },
+    {
+      "category": "NON_LITERAL",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "分隔单元下游的门扇闭合回执需要归集。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "boolean"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "门扇闭合回执"
+        },
+        {
+          "role": "SCOPE",
+          "text": "分隔单元下游"
+        }
+      ],
+      "scenario_id": "H2C-011",
+      "selection_order": 11,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": "CROSS_LEVEL"
+    },
+    {
+      "category": "NON_LITERAL",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "演训收尾层里的意见存放处需要登记。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "意见存放处"
+        },
+        {
+          "role": "SCOPE",
+          "text": "演训收尾层"
+        }
+      ],
+      "scenario_id": "H2C-012",
+      "selection_order": 12,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": "CROSS_LEVEL"
+    },
+    {
+      "category": "LEXICAL_BASELINE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "登记晨堤交接班确认时刻。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "time_code"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "晨堤交接班确认时刻"
+        }
+      ],
+      "scenario_id": "H2C-013",
+      "selection_order": 1,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "LEXICAL_BASELINE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "更新澜芯稳压泵巡查状态。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "boolean"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "澜芯稳压泵巡查状态"
+        }
+      ],
+      "scenario_id": "H2C-014",
+      "selection_order": 2,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "LEXICAL_BASELINE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "维护羽门疏导员编组编号。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "羽门疏导员编组编号"
+        }
+      ],
+      "scenario_id": "H2C-015",
+      "selection_order": 3,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "LEXICAL_BASELINE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "记录云匣排烟窗启闭反馈。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "boolean"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "云匣排烟窗启闭反馈"
+        }
+      ],
+      "scenario_id": "H2C-016",
+      "selection_order": 4,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "LEXICAL_BASELINE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "填写微昼备用照明续航时长。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "integer"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "微昼备用照明续航时长"
+        }
+      ],
+      "scenario_id": "H2C-017",
+      "selection_order": 5,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "BOUNDARY_VARIATION",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "补充泵房-阀组的试转结果。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "泵房-阀组"
+        },
+        {
+          "role": "SCOPE",
+          "text": "试转结果"
+        }
+      ],
+      "scenario_id": "H2C-018",
+      "selection_order": 1,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "BOUNDARY_VARIATION",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "登记分隔带／门扇闭合率。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "float"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "分隔带／门扇"
+        },
+        {
+          "role": "SCOPE",
+          "text": "闭合率"
+        }
+      ],
+      "scenario_id": "H2C-019",
+      "selection_order": 2,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "BOUNDARY_VARIATION",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "保存排烟口_联动响应码。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "排烟口_联动"
+        },
+        {
+          "role": "SCOPE",
+          "text": "响应码"
+        }
+      ],
+      "scenario_id": "H2C-020",
+      "selection_order": 3,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "BOUNDARY_VARIATION",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "维护器材架位·复核批次。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "器材架位·复核"
+        },
+        {
+          "role": "SCOPE",
+          "text": "批次"
+        }
+      ],
+      "scenario_id": "H2C-021",
+      "selection_order": 4,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "CROSS_BRANCH_INTERFERENCE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "在阔径车辆转向范围登记通路状态。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "通路状态"
+        },
+        {
+          "role": "SCOPE",
+          "text": "阔径车辆转向"
+        }
+      ],
+      "scenario_id": "H2C-022",
+      "selection_order": 1,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "CROSS_BRANCH_INTERFERENCE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "在墨栈卷宗范围维护复核时间。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "time_code"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "复核时间"
+        },
+        {
+          "role": "SCOPE",
+          "text": "墨栈卷宗"
+        }
+      ],
+      "scenario_id": "H2C-023",
+      "selection_order": 2,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "CROSS_BRANCH_INTERFERENCE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "在鸣链调度范围确认联络状态。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "联络状态"
+        },
+        {
+          "role": "SCOPE",
+          "text": "鸣链调度"
+        }
+      ],
+      "scenario_id": "H2C-024",
+      "selection_order": 3,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "CROSS_BRANCH_INTERFERENCE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "在砾幕分区范围记录封闭状态。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "boolean"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "封闭状态"
+        },
+        {
+          "role": "SCOPE",
+          "text": "砾幕分区"
+        }
+      ],
+      "scenario_id": "H2C-025",
+      "selection_order": 4,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "CROSS_BRANCH_INTERFERENCE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "MULTIPLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "在澜芯水源范围归集补给记录。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "补给记录"
+        },
+        {
+          "role": "SCOPE",
+          "text": "澜芯水源"
+        }
+      ],
+      "scenario_id": "H2C-026",
+      "selection_order": 5,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "HARD_NEGATIVE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "查找临时观测项，但排除云匣排烟复位确认。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "boolean"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "临时观测项"
+        },
+        {
+          "role": "EXCLUSION",
+          "text": "云匣排烟复位确认"
+        }
+      ],
+      "scenario_id": "H2C-027",
+      "selection_order": 1,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "HARD_NEGATIVE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "查找临时照度项，但排除微昼灯带旁路标记。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "boolean"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "临时照度项"
+        },
+        {
+          "role": "EXCLUSION",
+          "text": "微昼灯带旁路标记"
+        }
+      ],
+      "scenario_id": "H2C-028",
+      "selection_order": 2,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "HARD_NEGATIVE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "查找临时联络项，但排除鸣链备用频道编号。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "临时联络项"
+        },
+        {
+          "role": "EXCLUSION",
+          "text": "鸣链备用频道编号"
+        }
+      ],
+      "scenario_id": "H2C-029",
+      "selection_order": 3,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "HARD_NEGATIVE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "查找临时边界项，但排除火票临时隔离时限。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "integer"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "临时边界项"
+        },
+        {
+          "role": "EXCLUSION",
+          "text": "火票临时隔离时限"
+        }
+      ],
+      "scenario_id": "H2C-030",
+      "selection_order": 4,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "HARD_NEGATIVE",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "查找临时通行项，但排除阔径临停区占用状态。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "boolean"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "临时通行项"
+        },
+        {
+          "role": "EXCLUSION",
+          "text": "阔径临停区占用状态"
+        }
+      ],
+      "scenario_id": "H2C-031",
+      "selection_order": 5,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "EXPLICIT_EMPTY",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "登记弦月浮桥温差回声。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "弦月浮桥温差回声"
+        }
+      ],
+      "scenario_id": "H2C-032",
+      "selection_order": 1,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "EXPLICIT_EMPTY",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "补充砂钟云梯折光序列。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "砂钟云梯折光序列"
+        }
+      ],
+      "scenario_id": "H2C-033",
+      "selection_order": 2,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "EXPLICIT_EMPTY",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "维护蓝礁风铃静默频次。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "蓝礁风铃静默频次"
+        }
+      ],
+      "scenario_id": "H2C-034",
+      "selection_order": 3,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "EXPLICIT_EMPTY",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "记录纸鹤水闸漂移刻度。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "纸鹤水闸漂移刻度"
+        }
+      ],
+      "scenario_id": "H2C-035",
+      "selection_order": 4,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    },
+    {
+      "category": "EXPLICIT_EMPTY",
+      "derived_from_real": false,
+      "fictional": true,
+      "gold_eligible": false,
+      "patch_eligible": false,
+      "request": {
+        "cardinality_hint": "SINGLE",
+        "node_kind_hint": "PROPERTY",
+        "proposed_parent_node_id": null,
+        "requirement_text": "登记琥珀雨棚回旋等级。",
+        "schema_version": "intent-request.v1",
+        "value_type_hint": "string"
+      },
+      "role_annotations": [
+        {
+          "role": "TARGET",
+          "text": "琥珀雨棚回旋等级"
+        }
+      ],
+      "scenario_id": "H2C-036",
+      "selection_order": 5,
+      "source_class": "CLEANROOM_SYNTHETIC",
+      "subtype": null
+    }
+  ],
+  "category_counts": {
+    "BOUNDARY_VARIATION": 4,
+    "CROSS_BRANCH_INTERFERENCE": 5,
+    "EXPLICIT_EMPTY": 5,
+    "HARD_NEGATIVE": 5,
+    "LEXICAL_BASELINE": 5,
+    "NON_LITERAL": 12
+  },
+  "derived_from_real": false,
+  "fictional": true,
+  "generator_seed": "zhuqiong-h2-local-20260805-v1",
+  "generator_version": "treeguard.h2-local-cleanroom-generator.v1",
+  "gold_eligible": false,
+  "patch_eligible": false,
+  "schema_version": "treeguard.h2-local-candidates.v1",
+  "source_class": "CLEANROOM_SYNTHETIC"
+}

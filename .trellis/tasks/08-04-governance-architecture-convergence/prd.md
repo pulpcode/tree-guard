@@ -146,6 +146,16 @@ M4.9 与 M5 已经把端到端失败拆分到 Intent、Retrieval 和 Semantic �
   Silver 与小模型 R2 首次冻结 PASS、可归因结论和未见确认边界。
 - [`research/retrieval-r2-sealed-confirmation-contract.md`](research/retrieval-r2-sealed-confirmation-contract.md)：
   R2 未见数据隔离、28条固定分母、两轮门槛和架构分流规则。
+- [`research/retrieval-r2-sealed-confirmation-result.md`](research/retrieval-r2-sealed-confirmation-result.md)：
+  首次有效密封结果、聚合召回指标、评测器分母缺陷与混合召回升级结论。
+- [`research/retrieval-h1-hybrid-pre-registration.md`](research/retrieval-h1-hybrid-pre-registration.md)：
+  H1 的 embedding 模型、表示、固定 RRF、开发集分母、门槛与失败降级。
+- [`research/retrieval-h1-hybrid-result.md`](research/retrieval-h1-hybrid-result.md)：
+  H1 首次有效 A/B、召回增益不足、安全边界结果与停止调参决定。
+- [`research/retrieval-h2-local-embedding-options.md`](research/retrieval-h2-local-embedding-options.md)：
+  本地开源 embedding 候选、开发机约束与 BGE small 选型。
+- [`research/retrieval-h2-local-pre-registration.md`](research/retrieval-h2-local-pre-registration.md)：
+  H2 唯一变量、新数据配额、门槛、运行时边界与停止规则。
 
 ## 当前已收敛事实
 
@@ -268,3 +278,33 @@ R2 已在不修改模型、Prompt、角色合同和分母的前提下，把相�
 - 两轮均通过且非字面 Recall@20 均至少 3/4，决策为 `R2_SHADOW_CANDIDATE`；
   总门槛通过但非字面不足为 `R2_LEXICAL_LEG_ONLY`；角色合同失败为
   `ROLE_EXTRACTION_NOT_STABLE`；其他召回失败为 `VECTOR_OR_HYBRID_REQUIRED`。
+
+## R2 未见密封结果与下一切片
+
+- [x] 首次 live 因 Python CA 校验失败，仅形成传输诊断，不作能力结论；
+- [x] 仅增加系统 CA 后完成两轮有效执行：角色合同 28/28、传输失败 0；
+- [x] R2 两轮 Recall@8 均为 22/24、Recall@20 均为 22/24；
+- [x] 非字面 Recall@20 两轮均为 2/4，空目标均为 4/4；
+- [x] 决策冻结为 `VECTOR_OR_HYBRID_REQUIRED`，不具备生产资格；
+- [x] 发现并修复 hard-negative 主类别与分母记账不一致；不回算首次资格；
+- [x] 在独立开发校准数据上预注册单一混合候选，不使用本次28条调参；
+- [x] 冻结 embedding 模型、节点/查询表示、融合算法、索引版本和失败降级；
+- [x] 基于已暴露 M5 虚构树物化24条透明开发校准数据：16正目标、4 hard negative、
+  4显式空目标；Oracle 为 Codex Silver、非 Gold、禁止进入模型输入；
+- [x] embedding 前冻结 A 基线：R2 Recall@20=14/16、非字面=6/8、hard negative
+  安全=4/4、显式空目标=4/4；
+- [x] 实现 H1 节点/查询文档、向量合同、余弦 Top-40、排除过滤、锚点门与固定
+  RRF 的纯确定性 core，并用可控向量验证补召回、空目标和 hard-negative 边界；
+- [x] 实现可替换的 H1 Embedding Provider 协议、固定 `text-embedding-v4/512`
+  百炼实现，以及绑定树/文档/模型的 `0600` 不可覆盖私有索引工件；本地开源模型
+  可复用 Provider 形状，但不得混入 H1，须使用新合同与新分母独立验证；
+- [x] 实现 R2 lexical leg 与 H1 候选的固定 A/B runner，并完成零模型离线预检；
+- [x] 使用冻结百炼 embedding 配置首次运行固定 A/B：Recall@20 从14/16升至15/16、
+  非字面从6/8升至7/8，但均未达到相对 A 增加2条的门槛，决策为 `H1_REJECTED`；
+- [x] H1 未通过，不运行冻结小模型角色重放，不在24条已揭盲开发集继续调参；
+- [x] H2 冻结唯一主要变量：本地 `BAAI/bge-small-zh-v1.5` 512维 profile；H1 文档
+  字段、R2、Top-40、锚点/排除和 RRF 1:1 保持不变；
+- [x] H2 冻结新的28条开发分母、可判别性门、相对/绝对召回门槛和停止规则；
+- [ ] 独立准备并冻结 H2 新树、36条候选和28条执行集；
+- [ ] A 基线可判别后，实现隔离本地 Provider/H2 索引合同并首次运行 A/B；
+- [ ] 候选冻结后再准备新的未见确认，不在开发集上宣称生产资格。

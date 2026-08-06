@@ -3,7 +3,7 @@
   "name": "navigation-copilot-sealed-evaluation",
   "title": "实现导航 Copilot 密封端到端测评",
   "description": "实现独立密封 Oracle、R0/C1 runner、逐阶段评分、重复性与聚合判定；不修改当前产品链路。",
-  "status": "planning",
+  "status": "in_progress",
   "dev_type": null,
   "scope": null,
   "package": null,

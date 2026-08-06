@@ -44,22 +44,22 @@ Semantic、Policy、终态和重复性，并输出是否具备进入受保护环
 
 ## Acceptance Criteria
 
-- [ ] evaluation manifest、Oracle、逐项 observation、aggregate 与 qualification 状态均有
+- [x] evaluation manifest、Oracle、逐项 observation、aggregate 与 qualification 状态均有
   版本化精确 Schema、严格字段集、可信重建、hash/replay 和篡改负例；
-- [ ] Oracle/目标/Prompt/请求/模型响应 canary 不能进入被测模型输入或公开聚合；
-- [ ] 完整 API runner 在 mock Provider 下覆盖清晰、澄清、弱证据、多目标、空目标、错误
+- [x] Oracle/目标/Prompt/请求/模型响应 canary 不能进入被测模型输入或公开聚合；
+- [x] 完整 API runner 在 mock Provider 下覆盖清晰、澄清、弱证据、多目标、空目标、错误
   上下文、候选外纠正和模型降级，并证明单 case 最多两个逻辑阶段；
-- [ ] R0/C1 对照分别产生 Hit@40、Hit@8、MRR@8、帮助/伤害 case 数，且 R0 不调用模型；
-- [ ] scorer 按联合元组评分路线、目标、Policy 和终态，未运行/合同/Provider 失败仍留在
+- [x] R0/C1 对照分别产生 Hit@40、Hit@8、MRR@8、帮助/伤害 case 数，且 R0 不调用模型；
+- [x] scorer 按联合元组评分路线、目标、Policy 和终态，未运行/合同/Provider 失败仍留在
   48 条分母；
-- [ ] 重复性按 16 个 family 聚合三轮结果，不把重复轮扩大为独立分母；
-- [ ] 固定判定支持 `READY_FOR_PROTECTED_SHADOW`、`HOLD_RETRIEVAL`、
+- [x] 重复性按 16 个 family 聚合三轮结果，不把重复轮扩大为独立分母；
+- [x] 固定判定支持 `READY_FOR_PROTECTED_SHADOW`、`HOLD_RETRIEVAL`、
   `HOLD_SEMANTIC_POLICY`、`HOLD_MODEL_CONTRACT`、`DATA_OR_RUN_INVALID` 和
   `INCONCLUSIVE`；
-- [ ] 推荐门槛逐项实现为整数比较，并与父计划精确一致；
-- [ ] 聚焦测试覆盖字段/类型/枚举、bool-as-int、顺序、重复、额外/缺失 case、错误来源、
+- [x] 推荐门槛逐项实现为整数比较，并与父计划精确一致；
+- [x] 聚焦测试覆盖字段/类型/枚举、bool-as-int、顺序、重复、额外/缺失 case、错误来源、
   Oracle 泄漏、公开权限、symlink/FIFO、覆盖、部分发布和聚合允许列表；
-- [ ] 当前 Copilot、Provider、Workbench、生产 Shadow、后端完整测试和前端测试/构建保持
+- [x] 当前 Copilot、Provider、Workbench、生产 Shadow、后端完整测试和前端测试/构建保持
   通过。
 
 ## Definition of Done
@@ -85,6 +85,13 @@ Semantic、Policy、终态和重复性，并输出是否具备进入受保护环
 - 独立 runner 通过真实 Workbench API 编排场景和私有工件；
 - 数据 bundle 与 runner 只通过版本化 Schema、提交 hash 和冻结字节交接；
 - 现有 `NavigationShadowQualification` 只作产品回归旁证，不参与本测评主评分。
+
+已实现合同固定为 `navigation-copilot-sealed-{evaluation-manifest,scenario,oracle,
+trace,observation,aggregate}.v1`。manifest 分别冻结首次理解、澄清重理解和 Semantic 三个
+Prompt 版本，并将 endpoint 类别固定为官方百炼兼容端点；功能提交代码树和数据提交历史均
+在读取 Provider 配置前校验。公开 scenario 文件与隐藏 Oracle 文件均为按 scenario ref 升序
+排列的 JSON 数组，runner 在创建 Workbench app 前完成跨文件来源、树节点与请求 digest
+重放。
 
 ## Research Reference
 

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-sealed-trace.v1.schema.json",
+  "title": "Navigation Copilot Sealed Trace v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "scenario_ref", "round_index", "tree_digest", "request_digest", "provider_mode", "run_status", "failure_code", "failure_stage", "logical_model_stage_count", "wire_attempt_count", "sidecar_complete", "interpretation_status", "observed_route", "observed_profile", "r0_candidate_node_ids", "c1_candidate_node_ids", "policy_status", "highlighted_node_id", "outcome", "trace_hash"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-sealed-trace.v1"},
+    "scenario_ref": {"$ref": "#/$defs/ref"},
+    "round_index": {"enum": [1, 2, 3]},
+    "tree_digest": {"$ref": "#/$defs/digest"},
+    "request_digest": {"$ref": "#/$defs/digest"},
+    "provider_mode": {"const": "BAILIAN_LIVE"},
+    "run_status": {"enum": ["COMPLETE", "UNRUN", "PROVIDER_FAILED", "CONTRACT_FAILED"]},
+    "failure_code": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/code"}]},
+    "failure_stage": {"enum": ["UNDERSTANDING", "RETRIEVAL", "SEMANTIC", "POLICY", "END_TO_END", null]},
+    "logical_model_stage_count": {"type": "integer", "minimum": 0, "maximum": 2},
+    "wire_attempt_count": {"type": "integer", "minimum": 0, "maximum": 4},
+    "sidecar_complete": {"type": "boolean"},
+    "interpretation_status": {"enum": ["MODEL_VALID", "MODEL_DEGRADED", null]},
+    "observed_route": {"enum": ["PROCEED", "CLARIFY", "LIMIT", null]},
+    "observed_profile": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/profile"}]},
+    "r0_candidate_node_ids": {"type": "array", "maxItems": 40, "uniqueItems": true, "items": {"$ref": "#/$defs/node"}},
+    "c1_candidate_node_ids": {"type": "array", "maxItems": 40, "uniqueItems": true, "items": {"$ref": "#/$defs/node"}},
+    "policy_status": {"enum": ["CANDIDATES_AVAILABLE", "AMBIGUOUS", "NONE", "NEED_EVIDENCE", null]},
+    "highlighted_node_id": {"type": ["string", "null"], "maxLength": 512},
+    "outcome": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/terminal"}]},
+    "trace_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "ref": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,127}$"},
+    "node": {"type": "string", "minLength": 1, "maxLength": 512},
+    "profile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["node_kind", "value_type", "cardinality"],
+      "properties": {
+        "node_kind": {"enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]},
+        "value_type": {"type": ["string", "null"], "maxLength": 1000},
+        "cardinality": {"enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]}
+      }
+    },
+    "terminal": {
+      "type": "object", "additionalProperties": false,
+      "required": ["action", "target_node_id", "target_disposition"],
+      "properties": {
+        "action": {"enum": ["SELECT_CANDIDATE", "SELECT_OUTSIDE_CANDIDATE", "REJECT_ALL", "EXIT"]},
+        "target_node_id": {"type": ["string", "null"], "maxLength": 512},
+        "target_disposition": {"enum": ["FOUND_TOP8", "FOUND_OUTSIDE", "PRESENT_NOT_FOUND", "ABSENT"]}
+      }
+    }
+  }
+}

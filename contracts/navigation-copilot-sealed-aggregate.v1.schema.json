@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-sealed-aggregate.v1.schema.json",
+  "title": "Navigation Copilot Sealed Aggregate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "threshold_policy_version", "source_manifest_hash", "qualification_status", "main_case_count", "target_present_count", "category_counts", "r0_top40_hit_count", "r0_top8_hit_count", "r0_mrr_at8_bps", "c1_top40_hit_count", "c1_top8_hit_count", "c1_mrr_at8_bps", "c1_helped_top8_count", "c1_harmed_top8_count", "highlighted_count", "correct_highlight_count", "highlight_precision_bps", "absent_confident_error_count", "no_degradation_count", "joint_match_count", "repeat_family_count", "repeat_stable_count", "first_failure_stage_counts", "production_write_enabled", "gold_eligible", "patch_eligible", "aggregate_hash"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-sealed-aggregate.v1"},
+    "threshold_policy_version": {"const": "treeguard.navigation-copilot-sealed-gate.v1"},
+    "source_manifest_hash": {"$ref": "#/$defs/digest"},
+    "qualification_status": {"enum": ["READY_FOR_PROTECTED_SHADOW", "HOLD_RETRIEVAL", "HOLD_SEMANTIC_POLICY", "HOLD_MODEL_CONTRACT", "DATA_OR_RUN_INVALID", "INCONCLUSIVE"]},
+    "main_case_count": {"$ref": "#/$defs/count"},
+    "target_present_count": {"$ref": "#/$defs/count"},
+    "category_counts": {"$ref": "#/$defs/categoryCounts"},
+    "r0_top40_hit_count": {"$ref": "#/$defs/count"},
+    "r0_top8_hit_count": {"$ref": "#/$defs/count"},
+    "r0_mrr_at8_bps": {"$ref": "#/$defs/rate"},
+    "c1_top40_hit_count": {"$ref": "#/$defs/count"},
+    "c1_top8_hit_count": {"$ref": "#/$defs/count"},
+    "c1_mrr_at8_bps": {"$ref": "#/$defs/rate"},
+    "c1_helped_top8_count": {"$ref": "#/$defs/count"},
+    "c1_harmed_top8_count": {"$ref": "#/$defs/count"},
+    "highlighted_count": {"$ref": "#/$defs/count"},
+    "correct_highlight_count": {"$ref": "#/$defs/count"},
+    "highlight_precision_bps": {"$ref": "#/$defs/rate"},
+    "absent_confident_error_count": {"$ref": "#/$defs/count"},
+    "no_degradation_count": {"$ref": "#/$defs/count"},
+    "joint_match_count": {"$ref": "#/$defs/count"},
+    "repeat_family_count": {"$ref": "#/$defs/count"},
+    "repeat_stable_count": {"$ref": "#/$defs/count"},
+    "first_failure_stage_counts": {"$ref": "#/$defs/stageCounts"},
+    "production_write_enabled": {"const": false},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false},
+    "aggregate_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "count": {"type": "integer", "minimum": 0},
+    "rate": {"type": "integer", "minimum": 0, "maximum": 10000},
+    "categoryCounts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["LITERAL_UNIQUE", "NONLITERAL_UNIQUE", "STRUCTURAL_INTERFERENCE", "MULTI_ACCEPTABLE", "CLARIFICATION", "WEAK_EVIDENCE", "TARGET_ABSENT"],
+      "properties": {
+        "LITERAL_UNIQUE": {"$ref": "#/$defs/count"},
+        "NONLITERAL_UNIQUE": {"$ref": "#/$defs/count"},
+        "STRUCTURAL_INTERFERENCE": {"$ref": "#/$defs/count"},
+        "MULTI_ACCEPTABLE": {"$ref": "#/$defs/count"},
+        "CLARIFICATION": {"$ref": "#/$defs/count"},
+        "WEAK_EVIDENCE": {"$ref": "#/$defs/count"},
+        "TARGET_ABSENT": {"$ref": "#/$defs/count"}
+      }
+    },
+    "stageCounts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["NONE", "UNDERSTANDING", "RETRIEVAL", "SEMANTIC", "POLICY", "END_TO_END", "REPEATABILITY"],
+      "properties": {
+        "NONE": {"$ref": "#/$defs/count"},
+        "UNDERSTANDING": {"$ref": "#/$defs/count"},
+        "RETRIEVAL": {"$ref": "#/$defs/count"},
+        "SEMANTIC": {"$ref": "#/$defs/count"},
+        "POLICY": {"$ref": "#/$defs/count"},
+        "END_TO_END": {"$ref": "#/$defs/count"},
+        "REPEATABILITY": {"$ref": "#/$defs/count"}
+      }
+    }
+  }
+}

@@ -307,6 +307,7 @@ treeguard-navigation-shadow prepare-run \
   --participant-ref P01 \
   --participant-ref P02 \
   --participant-ref P03 \
+  --planned-case-count 36 \
   --output /absolute/private/shadow-run/run.json
 ```
 

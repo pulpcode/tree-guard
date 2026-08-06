@@ -434,6 +434,9 @@ sidecar 位置、Provider 模式、D10 计数起点、停线与回滚；获准�
 - [`research/production-shadow-readiness-audit.md`](research/production-shadow-readiness-audit.md)
   — 基于已提交实现的启用前审计；说明现有 D10 分母、参与者绑定、跨进程聚合和运行冻结
   的缺口，以及推荐的单参与者实例加私有离线汇总路径。
+- [`research/protected-shadow-rollout-handoff.md`](research/protected-shadow-rollout-handoff.md)
+  — 受保护环境首轮 run 的推荐 36-case/3-participant 分母、启用审核、自然任务操作、停线、
+  聚合、回滚和最小外传边界。
 - [`../08-04-governance-architecture-convergence/research/architecture-convergence-verdict.md`](../08-04-governance-architecture-convergence/research/architecture-convergence-verdict.md)
   — 已接受的 D1—D6、关闭路线和新任务进入条件。
 

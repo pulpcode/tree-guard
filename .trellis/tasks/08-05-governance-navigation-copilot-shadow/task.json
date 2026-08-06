@@ -18,7 +18,10 @@
   "commit": null,
   "pr_url": null,
   "subtasks": [],
-  "children": [],
+  "children": [
+    "08-06-navigation-copilot-sealed-evaluation",
+    "08-06-navigation-copilot-sealed-evaluation-data"
+  ],
   "parent": null,
   "relatedFiles": [],
   "notes": "",

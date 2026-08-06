@@ -39,7 +39,7 @@
 
 ## Open Questions
 
-- 无。新增范围或改变既定分母必须重新打开 PRD 审核，不在实现或实验过程中临时调整。
+- 无。新增范围或改变已冻结分母必须重新打开 PRD 审核，不在实现或实验过程中临时调整。
 
 ## Decision D1（已接受）：`NONE` 安全停止
 
@@ -196,6 +196,22 @@ Semantic 降级路径必须分开记账，后者不得计入关系判断成功�
 其候选只展示可信结构差异且不提供默认推荐。Shadow 聚合必须把清晰完整路径、澄清降级
 路径和模型失败降级路径分开记账。
 
+## Decision D12（已接受）：密封虚拟树测评作为生产 Shadow 硬门
+
+**Context**：现有回归已经证明链路可以运行并安全降级，早期真实百炼实验也验证过局部模型
+能力；但当前完整 Navigation Copilot 尚未在未参与调参的虚拟树上用隐藏 Oracle 进行端到端
+效果测评。直接进入真实生产 Shadow 会把模型合同、召回、Semantic 和交互问题首次暴露在
+受保护环境，既难归因，也会消耗真实用户时间。
+
+**Decision**：生产 Shadow 前必须完成一轮独立密封虚拟树资格测评。采用全新 700—1,000
+节点 clean-room resource 树、48 条冻结主分母和 16 条预注册挑战子集额外两轮；外网运行
+真实 `BAILIAN_LIVE` 完整 Workbench 链路，以独立隐藏 Oracle 比较 R0 原文保底和 C1 完整
+链路。只有返回 `READY_FOR_PROTECTED_SHADOW` 才允许进入受保护环境 Shadow 审核。
+
+**Consequences**：现有 H1/H2、M4/M5、M4.9、R2 和青岚场景只作开发回归，不进入资格
+分母；密封集首次揭盲后即转为开发数据，失败后的再次晋升必须使用新分母。该门槛不产生
+Gold、生产写入、Patch 或模型自治资格，也不替代生产 D10 的真实用户效果指标。
+
 ## Requirements (evolving)
 
 - 原始需求始终保留为宽候选恢复路径；模型角色提议、页面上下文和选中节点均不得单独把
@@ -225,6 +241,11 @@ Semantic 降级路径必须分开记账，后者不得计入关系判断成功�
 - 完整结果只写私有 sidecar；公开/API 聚合视图使用独立正向允许列表，不暴露凭据、模型
   原始流量、稳定内部 ID、隐藏 Oracle 或受保护字段。
 - 默认 v1 产品入口在新纵切完成聚焦验证和显式晋升决定前保持不变。
+- 生产 Shadow 前以全新 clean-room 树冻结 48 条密封场景，并独立比较 R0 原文召回保底与
+  C1 完整链路；Oracle、目标和评分答案不得进入被测模型输入。
+- 主运行失败、未运行和合同/Provider 失败均保留在 48 条完整分母中；候选外纠正只计产品
+  可恢复，不计 Retrieval 命中。
+- 预注册 16 条挑战子集额外运行两轮；重复轮按原 scenario family 聚合，不扩张独立分母。
 
 ## Acceptance Criteria (evolving)
 
@@ -261,6 +282,14 @@ Semantic 降级路径必须分开记账，后者不得计入关系判断成功�
   完成不低于90%，错误自信不高于5%，完成耗时中位数不超过3分钟；
 - [x] v1 Workbench、CLI、Provider 与既有实验回归保持通过；
 - [x] 未获显式晋升前，新纵切只能通过隔离 feature path 使用。
+- [ ] 密封数据使用全新 700—1,000 节点 clean-room resource 树、0 VALUE、精确 48 条执行
+  场景和独立隐藏 Oracle，且通过来源、配额、泄漏 canary 与冻结 preflight；
+- [ ] 密封 runner 通过真实 Workbench API 执行 `BAILIAN_LIVE`，冻结功能/数据提交、模型、
+  Prompt、调用上限和门槛，且不修改当前 Copilot、Provider、召回、Prompt 或 UI；
+- [ ] 资格结果满足：Top-40 至少 38/42、Top-8 至少 36/42、非字面至少 8/10、结构干扰
+  至少 6/8、空目标错误强推荐 0/6、模型未降级至少 44/48、联合结果至少 41/48；
+- [ ] 16 条挑战子集至少 14/16 达到三轮 2/3 目标可见性与 Policy 状态一致，且结果返回
+  `READY_FOR_PROTECTED_SHADOW`；
 
 ## Definition of Done
 
@@ -437,6 +466,9 @@ sidecar 位置、Provider 模式、D10 计数起点、停线与回滚；获准�
 - [`research/protected-shadow-rollout-handoff.md`](research/protected-shadow-rollout-handoff.md)
   — 受保护环境首轮 run 的推荐 36-case/3-participant 分母、启用审核、自然任务操作、停线、
   聚合、回滚和最小外传边界。
+- [`research/sealed-fictional-e2e-evaluation-plan.md`](research/sealed-fictional-e2e-evaluation-plan.md)
+  — 生产 Shadow 前的两层虚拟数据、48-case 未见分母、隐藏 Oracle、R0/C1 对照、阶段归因、
+  重复性与一次性资格门槛草案。
 - [`../08-04-governance-architecture-convergence/research/architecture-convergence-verdict.md`](../08-04-governance-architecture-convergence/research/architecture-convergence-verdict.md)
   — 已接受的 D1—D6、关闭路线和新任务进入条件。
 

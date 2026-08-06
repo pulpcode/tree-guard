@@ -1,8 +1,8 @@
 {
   "id": "navigation-copilot-sealed-evaluation-data",
   "name": "navigation-copilot-sealed-evaluation-data",
-  "title": "构建导航 Copilot 密封 clean-room 数据 v3-C",
-  "description": "在v3-A/B提交门拒绝后，以显式异构蓝图、语义/骨架双签名、真实澄清和客观弱证据合同独立构造56条候选并冻结48条；不得读取旧批次或运行被测链路。",
+  "title": "构建导航 Copilot 密封 clean-room 数据 v3-C b02",
+  "description": "v3-C b01因平行执行合同在提交前被拒绝；b02保留未执行的已审authoring语义源，用现有SealedScenario/SealedCaseOracle重建48条执行投影、弱证据LIMIT终态和Git可重放权限边界；不运行被测链路。",
   "status": "planning",
   "dev_type": null,
   "scope": null,

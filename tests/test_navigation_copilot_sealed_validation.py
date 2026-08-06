@@ -13,6 +13,7 @@ from treeguard.navigation_copilot_sealed_validation import (
     public_sealed_aggregate,
     replay_public_sealed_aggregate,
     score_sealed_case,
+    validate_sealed_plan,
 )
 
 
@@ -75,35 +76,52 @@ def _manifest():
     )
 
 
-def _oracle(ref):
+def _oracle(ref, *, request_digest=REQUEST_DIGEST, wrong_context=None):
     category = CATEGORIES[ref]
     absent = category == "TARGET_ABSENT"
     clarify = category == "CLARIFICATION"
+    weak_evidence = category == "WEAK_EVIDENCE"
     target = f"node-{ref}"
-    terminal = TerminalExpectation(
-        action="REJECT_ALL" if absent else "SELECT_CANDIDATE",
-        target_node_id=None if absent else target,
-        target_disposition="ABSENT" if absent else "FOUND_TOP8",
+    targets = (
+        ()
+        if absent
+        else ((target, f"{target}-alternate") if category == "MULTI_ACCEPTABLE" else (target,))
+    )
+    terminals = (
+        (TerminalExpectation("REJECT_ALL", None, "ABSENT"),)
+        if absent
+        else (TerminalExpectation("EXIT", None, "PRESENT_NOT_FOUND"),)
+        if weak_evidence
+        else tuple(
+            TerminalExpectation("SELECT_CANDIDATE", node_id, "FOUND_TOP8")
+            for node_id in targets
+        )
     )
     return SealedCaseOracle.create(
         scenario_ref=ref,
         tree_digest=TREE_DIGEST,
-        request_digest=REQUEST_DIGEST,
+        request_digest=request_digest,
         category=category,
-        expected_route="CLARIFY" if clarify else "PROCEED",
+        expected_route="CLARIFY" if clarify else ("LIMIT" if weak_evidence else "PROCEED"),
         acceptable_profiles=(
             StructuralProfile("PROPERTY", "TEXT", "SINGLE"),
         ),
         target_status="TARGET_ABSENT" if absent else "TARGET_PRESENT",
-        acceptable_node_ids=() if absent else (target,),
+        acceptable_node_ids=targets,
         forbidden_node_ids=() if absent else (f"distractor-{ref}",),
         clarification_policy=(
             "CLARIFICATION_REQUIRED" if clarify else "NOT_APPLICABLE"
         ),
         frozen_clarification_answer="选择治理记录" if clarify else None,
-        acceptable_policy_statuses=("NONE",) if absent else ("CANDIDATES_AVAILABLE",),
-        acceptable_terminals=(terminal,),
-        wrong_context_challenge=ref in WRONG_CONTEXT_REFS,
+        acceptable_policy_statuses=(
+            ("NONE",)
+            if absent
+            else (("NEED_EVIDENCE",) if weak_evidence else ("CANDIDATES_AVAILABLE",))
+        ),
+        acceptable_terminals=terminals,
+        wrong_context_challenge=(
+            ref in WRONG_CONTEXT_REFS if wrong_context is None else wrong_context
+        ),
         review_status="CODEX_SILVER_REVIEWED",
         reviewed_bytes_digest=REVIEW_DIGEST,
         execution_eligible=True,
@@ -140,6 +158,7 @@ def _trace(
 ):
     oracle = _oracle(ref)
     absent = oracle.target_status == "TARGET_ABSENT"
+    weak_evidence = oracle.category == "WEAK_EVIDENCE"
     target = f"node-{ref}"
 
     def candidates(rank):
@@ -151,7 +170,7 @@ def _trace(
         return tuple(values)
 
     highlighted = (
-        None if absent else target
+        None if absent or weak_evidence else target
     ) if highlighted_node is None else highlighted_node
     return SealedCaseTrace.create(
         scenario_ref=ref,
@@ -170,7 +189,9 @@ def _trace(
         observed_profile=StructuralProfile("PROPERTY", "TEXT", "SINGLE"),
         r0_candidate_node_ids=candidates(r0_rank),
         c1_candidate_node_ids=candidates(c1_rank),
-        policy_status="NONE" if absent else "CANDIDATES_AVAILABLE",
+        policy_status=(
+            "NONE" if absent else ("NEED_EVIDENCE" if weak_evidence else "CANDIDATES_AVAILABLE")
+        ),
         highlighted_node_id=highlighted,
         outcome=oracle.acceptable_terminals[0],
     )
@@ -216,6 +237,24 @@ class SealedContractTests(unittest.TestCase):
         with self.assertRaises(SealedEvaluationError):
             SealedCaseOracle.from_dict(payload)
 
+    def test_weak_evidence_target_can_exit_without_selection(self):
+        oracle = _oracle("W00")
+        self.assertEqual(oracle.expected_route, "LIMIT")
+        self.assertEqual(
+            oracle.acceptable_terminals,
+            (TerminalExpectation("EXIT", None, "PRESENT_NOT_FOUND"),),
+        )
+        self.assertEqual(SealedCaseOracle.from_dict(oracle.to_dict()), oracle)
+
+    def test_present_target_exit_is_rejected_outside_weak_evidence(self):
+        values = _oracle("N00").to_dict()
+        values["acceptable_terminals"] = [
+            TerminalExpectation("EXIT", None, "PRESENT_NOT_FOUND").to_dict()
+        ]
+        with self.assertRaises(SealedEvaluationError) as caught:
+            SealedCaseOracle.from_dict(values)
+        self.assertEqual(caught.exception.code, "SEALED_ORACLE_INVALID")
+
     def test_trace_rejects_bool_as_count(self):
         values = _trace("N00").to_dict()
         values.pop("schema_version")
@@ -249,7 +288,16 @@ class SealedContractTests(unittest.TestCase):
             "acceptable_policy_statuses", "oracle_hash",
         ):
             self.assertNotIn(forbidden, model_input)
-        _validate_schema("navigation-copilot-sealed-scenario.v1", scenario.to_dict())
+        _validate_schema("navigation-copilot-sealed-scenario.v2", scenario.to_dict())
+
+    def test_wrong_context_challenge_requires_an_executable_parent_ref(self):
+        scenario = _scenario(sorted(WRONG_CONTEXT_REFS)[0])
+        values = scenario.to_dict()
+        values.pop("schema_version")
+        values.pop("scenario_hash")
+        values["proposed_parent_ref"] = None
+        with self.assertRaises(ValueError):
+            SealedScenario.create(**values)
 
     def test_versioned_schemas_accept_trusted_artifacts(self):
         manifest = _manifest()
@@ -257,11 +305,42 @@ class SealedContractTests(unittest.TestCase):
         scenario = _scenario("N00")
         trace = _trace("N00")
         observation = score_sealed_case(oracle, trace)
-        _validate_schema("navigation-copilot-sealed-evaluation-manifest.v1", manifest.to_dict())
-        _validate_schema("navigation-copilot-sealed-scenario.v1", scenario.to_dict())
-        _validate_schema("navigation-copilot-sealed-oracle.v1", oracle.to_dict())
+        _validate_schema("navigation-copilot-sealed-evaluation-manifest.v2", manifest.to_dict())
+        _validate_schema("navigation-copilot-sealed-scenario.v2", scenario.to_dict())
+        _validate_schema("navigation-copilot-sealed-oracle.v2", oracle.to_dict())
         _validate_schema("navigation-copilot-sealed-trace.v1", trace.to_dict())
         _validate_schema("navigation-copilot-sealed-observation.v1", observation.to_dict())
+
+    def test_complete_plan_round_trips_before_execution(self):
+        scenarios = tuple(_scenario(ref) for ref in SCENARIO_REFS)
+        oracles = tuple(
+            _oracle(ref, request_digest=scenario.request_digest)
+            for ref, scenario in zip(SCENARIO_REFS, scenarios)
+        )
+        validate_sealed_plan(_manifest(), scenarios, oracles)
+
+    def test_plan_rejects_wrong_context_quota_drift(self):
+        scenarios = list(_scenario(ref) for ref in SCENARIO_REFS)
+        index = next(
+            index for index, scenario in enumerate(scenarios)
+            if scenario.wrong_context_challenge
+        )
+        values = scenarios[index].to_dict()
+        values.pop("schema_version")
+        values.pop("scenario_hash")
+        values["wrong_context_challenge"] = False
+        scenarios[index] = SealedScenario.create(**values)
+        oracles = tuple(
+            _oracle(
+                ref,
+                request_digest=scenario.request_digest,
+                wrong_context=scenario.wrong_context_challenge,
+            )
+            for ref, scenario in zip(SCENARIO_REFS, scenarios)
+        )
+        with self.assertRaises(SealedEvaluationError) as caught:
+            validate_sealed_plan(_manifest(), tuple(scenarios), oracles)
+        self.assertEqual(caught.exception.code, "SEALED_PLAN_QUOTA_INVALID")
 
 
 class SealedScoringTests(unittest.TestCase):

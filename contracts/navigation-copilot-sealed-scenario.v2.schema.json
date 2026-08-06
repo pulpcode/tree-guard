@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-sealed-scenario.v2.schema.json",
+  "title": "Navigation Copilot Sealed Scenario v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "scenario_ref", "tree_digest", "category", "requirement_text", "proposed_parent_ref", "node_kind_hint", "value_type_hint", "cardinality_hint", "frozen_clarification_answer", "wrong_context_challenge", "repeat_challenge", "request_digest", "scenario_hash"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-sealed-scenario.v2"},
+    "scenario_ref": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "tree_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "category": {"enum": ["LITERAL_UNIQUE", "NONLITERAL_UNIQUE", "STRUCTURAL_INTERFERENCE", "MULTI_ACCEPTABLE", "CLARIFICATION", "WEAK_EVIDENCE", "TARGET_ABSENT"]},
+    "requirement_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+    "proposed_parent_ref": {"type": ["string", "null"], "pattern": "^N[0-9]{6}$"},
+    "node_kind_hint": {"enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]},
+    "value_type_hint": {"type": ["string", "null"], "maxLength": 1000},
+    "cardinality_hint": {"enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]},
+    "frozen_clarification_answer": {"type": ["string", "null"], "maxLength": 4000},
+    "wrong_context_challenge": {"type": "boolean"},
+    "repeat_challenge": {"type": "boolean"},
+    "request_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "scenario_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"wrong_context_challenge": {"const": true}}, "required": ["wrong_context_challenge"]},
+      "then": {"properties": {"proposed_parent_ref": {"type": "string", "pattern": "^N[0-9]{6}$"}}}
+    }
+  ]
+}

@@ -8,15 +8,16 @@ it never calls a model, reads files, or reimplements the product pipeline.
 from __future__ import annotations
 
 import re
+from collections import Counter
 from dataclasses import dataclass
 from typing import Any
 
 from treeguard.hashing import canonical_digest
 
 
-MANIFEST_SCHEMA_VERSION = "navigation-copilot-sealed-evaluation-manifest.v1"
-SCENARIO_SCHEMA_VERSION = "navigation-copilot-sealed-scenario.v1"
-ORACLE_SCHEMA_VERSION = "navigation-copilot-sealed-oracle.v1"
+MANIFEST_SCHEMA_VERSION = "navigation-copilot-sealed-evaluation-manifest.v2"
+SCENARIO_SCHEMA_VERSION = "navigation-copilot-sealed-scenario.v2"
+ORACLE_SCHEMA_VERSION = "navigation-copilot-sealed-oracle.v2"
 TRACE_SCHEMA_VERSION = "navigation-copilot-sealed-trace.v1"
 OBSERVATION_SCHEMA_VERSION = "navigation-copilot-sealed-observation.v1"
 AGGREGATE_SCHEMA_VERSION = "navigation-copilot-sealed-aggregate.v1"
@@ -25,6 +26,7 @@ THRESHOLD_POLICY_VERSION = "treeguard.navigation-copilot-sealed-gate.v1"
 MAIN_CASE_COUNT = 48
 TARGET_PRESENT_COUNT = 42
 REPEAT_FAMILY_COUNT = 16
+WRONG_CONTEXT_COUNT = 8
 LOGICAL_CASE_LIMIT = 80
 LOGICAL_MODEL_STAGE_LIMIT = 160
 PER_CASE_MODEL_STAGE_LIMIT = 2
@@ -280,6 +282,7 @@ class SealedEvaluationManifest:
             "repeat_scenario_refs": list(self.repeat_scenario_refs),
             "main_case_count": MAIN_CASE_COUNT,
             "target_present_count": TARGET_PRESENT_COUNT,
+            "wrong_context_count": WRONG_CONTEXT_COUNT,
             "logical_case_limit": LOGICAL_CASE_LIMIT,
             "logical_model_stage_limit": LOGICAL_MODEL_STAGE_LIMIT,
             "per_case_model_stage_limit": PER_CASE_MODEL_STAGE_LIMIT,
@@ -317,6 +320,7 @@ class SealedEvaluationManifest:
             "provider_mode": PROVIDER_MODE,
             "main_case_count": MAIN_CASE_COUNT,
             "target_present_count": TARGET_PRESENT_COUNT,
+            "wrong_context_count": WRONG_CONTEXT_COUNT,
             "logical_case_limit": LOGICAL_CASE_LIMIT,
             "logical_model_stage_limit": LOGICAL_MODEL_STAGE_LIMIT,
             "per_case_model_stage_limit": PER_CASE_MODEL_STAGE_LIMIT,
@@ -366,7 +370,8 @@ class SealedEvaluationManifest:
             "understanding_prompt_version", "clarification_prompt_version",
             "semantic_prompt_version", "endpoint_class", "scenario_refs",
             "repeat_scenario_refs",
-            "main_case_count", "target_present_count", "logical_case_limit",
+            "main_case_count", "target_present_count", "wrong_context_count",
+            "logical_case_limit",
             "logical_model_stage_limit", "per_case_model_stage_limit",
             "wire_attempt_limit", "thresholds", "production_write_enabled",
             "gold_eligible", "patch_eligible",
@@ -449,6 +454,8 @@ class SealedScenario:
             self.repeat_challenge, bool
         ):
             raise ValueError("scenario challenge flags must be booleans")
+        if self.wrong_context_challenge and self.proposed_parent_ref is None:
+            raise ValueError("wrong-context challenge requires a parent reference")
         _digest(self.request_digest, "request_digest")
         if self.request_digest != canonical_digest(self.model_request_dict()):
             raise ValueError("scenario request digest does not match")
@@ -608,6 +615,23 @@ class SealedCaseOracle:
             raise ValueError("acceptable and forbidden targets overlap")
         if (self.target_status == "TARGET_PRESENT") != bool(self.acceptable_node_ids):
             raise ValueError("target status and acceptable targets disagree")
+        expected_target_status = (
+            "TARGET_ABSENT" if self.category == "TARGET_ABSENT" else "TARGET_PRESENT"
+        )
+        if self.target_status != expected_target_status:
+            raise ValueError("Oracle category and target status disagree")
+        expected_route = (
+            "CLARIFY"
+            if self.category == "CLARIFICATION"
+            else ("LIMIT" if self.category == "WEAK_EVIDENCE" else "PROCEED")
+        )
+        if self.expected_route != expected_route:
+            raise ValueError("Oracle category and route disagree")
+        if self.category == "MULTI_ACCEPTABLE":
+            if len(self.acceptable_node_ids) < 2:
+                raise ValueError("multi-acceptable Oracle requires multiple targets")
+        elif self.target_status == "TARGET_PRESENT" and len(self.acceptable_node_ids) != 1:
+            raise ValueError("non-multi Oracle requires exactly one target")
         if self.target_status == "TARGET_ABSENT" and self.forbidden_node_ids:
             raise ValueError("absent-target Oracle cannot name structural distractors")
         if self.clarification_policy not in CLARIFICATION_POLICIES:
@@ -631,7 +655,19 @@ class SealedCaseOracle:
         if terminal_keys != tuple(sorted(set(terminal_keys))):
             raise ValueError("Oracle terminals must be unique and ordered")
         if self.target_status == "TARGET_PRESENT":
-            if any(
+            if self.category == "WEAK_EVIDENCE":
+                if (
+                    self.expected_route != "LIMIT"
+                    or self.acceptable_policy_statuses != ("NEED_EVIDENCE",)
+                    or any(
+                        item.action != "EXIT"
+                        or item.target_node_id is not None
+                        or item.target_disposition != "PRESENT_NOT_FOUND"
+                        for item in self.acceptable_terminals
+                    )
+                ):
+                    raise ValueError("weak-evidence terminal is inconsistent")
+            elif any(
                 item.action not in {"SELECT_CANDIDATE", "SELECT_OUTSIDE_CANDIDATE"}
                 or item.target_node_id not in self.acceptable_node_ids
                 or item.target_disposition not in {"FOUND_TOP8", "FOUND_OUTSIDE"}
@@ -764,6 +800,82 @@ class SealedCaseOracle:
             raise SealedEvaluationError(
                 "SEALED_ORACLE_INVALID", "Oracle failed strict validation"
             ) from None
+
+
+def validate_sealed_plan(
+    manifest: SealedEvaluationManifest,
+    scenarios: tuple[SealedScenario, ...],
+    oracles: tuple[SealedCaseOracle, ...],
+) -> None:
+    """Validate the frozen cross-file denominator before any product execution."""
+
+    if (
+        not isinstance(manifest, SealedEvaluationManifest)
+        or not isinstance(scenarios, tuple)
+        or not isinstance(oracles, tuple)
+        or any(not isinstance(item, SealedScenario) for item in scenarios)
+        or any(not isinstance(item, SealedCaseOracle) for item in oracles)
+    ):
+        raise SealedEvaluationError(
+            "SEALED_PLAN_FIELDS_INVALID", "sealed plan requires trusted contracts"
+        )
+    scenario_refs = tuple(item.scenario_ref for item in scenarios)
+    oracle_refs = tuple(item.scenario_ref for item in oracles)
+    if (
+        scenario_refs != manifest.scenario_refs
+        or oracle_refs != manifest.scenario_refs
+        or len(set(scenario_refs)) != len(scenario_refs)
+    ):
+        raise SealedEvaluationError(
+            "SEALED_PLAN_REFERENCE_INVALID", "sealed plan references do not align"
+        )
+    oracle_by_ref = {item.scenario_ref: item for item in oracles}
+    for scenario in scenarios:
+        oracle = oracle_by_ref[scenario.scenario_ref]
+        if (
+            oracle.tree_digest != scenario.tree_digest
+            or oracle.request_digest != scenario.request_digest
+            or oracle.category != scenario.category
+            or oracle.wrong_context_challenge != scenario.wrong_context_challenge
+            or oracle.frozen_clarification_answer
+            != scenario.frozen_clarification_answer
+            or (scenario.scenario_ref in manifest.repeat_scenario_refs)
+            != scenario.repeat_challenge
+        ):
+            raise SealedEvaluationError(
+                "SEALED_PLAN_SOURCE_INVALID", "sealed scenario and Oracle do not align"
+            )
+    category_counts = Counter(item.category for item in scenarios)
+    target_present_count = sum(
+        item.target_status == "TARGET_PRESENT" for item in oracles
+    )
+    wrong_context_count = sum(
+        scenario.wrong_context_challenge
+        and oracle_by_ref[scenario.scenario_ref].target_status == "TARGET_PRESENT"
+        for scenario in scenarios
+    )
+    repeat_categories = Counter(
+        scenario.category
+        for scenario in scenarios
+        if scenario.scenario_ref in manifest.repeat_scenario_refs
+    )
+    if (
+        category_counts != Counter(CATEGORY_QUOTAS)
+        or target_present_count != TARGET_PRESENT_COUNT
+        or wrong_context_count != WRONG_CONTEXT_COUNT
+        or repeat_categories
+        != Counter(
+            {
+                "NONLITERAL_UNIQUE": 4,
+                "STRUCTURAL_INTERFERENCE": 4,
+                "CLARIFICATION": 4,
+                "WEAK_EVIDENCE": 4,
+            }
+        )
+    ):
+        raise SealedEvaluationError(
+            "SEALED_PLAN_QUOTA_INVALID", "sealed plan denominator is not frozen"
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -1377,6 +1489,7 @@ __all__ = [
     "SealedScenario",
     "StructuralProfile",
     "TerminalExpectation",
+    "validate_sealed_plan",
     "public_sealed_aggregate",
     "replay_public_sealed_aggregate",
     "score_sealed_case",

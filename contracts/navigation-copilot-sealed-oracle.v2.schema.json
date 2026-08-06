@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-sealed-oracle.v2.schema.json",
+  "title": "Navigation Copilot Sealed Oracle v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "quality_tier", "assessment_authority", "gold_eligible", "patch_eligible", "scenario_ref", "tree_digest", "request_digest", "category", "expected_route", "acceptable_profiles", "target_status", "acceptable_node_ids", "forbidden_node_ids", "clarification_policy", "frozen_clarification_answer", "acceptable_policy_statuses", "acceptable_terminals", "wrong_context_challenge", "review_status", "reviewed_bytes_digest", "execution_eligible", "oracle_hash"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-sealed-oracle.v2"},
+    "quality_tier": {"const": "SILVER"},
+    "assessment_authority": {"const": "CODEX_ASSISTED"},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false},
+    "scenario_ref": {"$ref": "#/$defs/ref"},
+    "tree_digest": {"$ref": "#/$defs/digest"},
+    "request_digest": {"$ref": "#/$defs/digest"},
+    "category": {"enum": ["LITERAL_UNIQUE", "NONLITERAL_UNIQUE", "STRUCTURAL_INTERFERENCE", "MULTI_ACCEPTABLE", "CLARIFICATION", "WEAK_EVIDENCE", "TARGET_ABSENT"]},
+    "expected_route": {"enum": ["PROCEED", "CLARIFY", "LIMIT"]},
+    "acceptable_profiles": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/profile"}},
+    "target_status": {"enum": ["TARGET_PRESENT", "TARGET_ABSENT"]},
+    "acceptable_node_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/node"}},
+    "forbidden_node_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/node"}},
+    "clarification_policy": {"enum": ["CLARIFICATION_REQUIRED", "NOT_APPLICABLE"]},
+    "frozen_clarification_answer": {"type": ["string", "null"], "maxLength": 4000},
+    "acceptable_policy_statuses": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["CANDIDATES_AVAILABLE", "AMBIGUOUS", "NONE", "NEED_EVIDENCE"]}},
+    "acceptable_terminals": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/terminal"}},
+    "wrong_context_challenge": {"type": "boolean"},
+    "review_status": {"const": "CODEX_SILVER_REVIEWED"},
+    "reviewed_bytes_digest": {"$ref": "#/$defs/digest"},
+    "execution_eligible": {"const": true},
+    "oracle_hash": {"$ref": "#/$defs/digest"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"category": {"const": "WEAK_EVIDENCE"}}, "required": ["category"]},
+      "then": {
+        "properties": {
+          "target_status": {"const": "TARGET_PRESENT"},
+          "expected_route": {"const": "LIMIT"},
+          "acceptable_policy_statuses": {"const": ["NEED_EVIDENCE"]},
+          "acceptable_terminals": {
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["action", "target_node_id", "target_disposition"],
+              "properties": {
+                "action": {"const": "EXIT"},
+                "target_node_id": {"type": "null"},
+                "target_disposition": {"const": "PRESENT_NOT_FOUND"}
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"category": {"const": "TARGET_ABSENT"}}, "required": ["category"]},
+      "then": {
+        "properties": {
+          "target_status": {"const": "TARGET_ABSENT"},
+          "expected_route": {"const": "PROCEED"},
+          "acceptable_node_ids": {"maxItems": 0}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"category": {"const": "CLARIFICATION"}}, "required": ["category"]},
+      "then": {"properties": {"target_status": {"const": "TARGET_PRESENT"}, "expected_route": {"const": "CLARIFY"}, "acceptable_node_ids": {"minItems": 1, "maxItems": 1}}}
+    },
+    {
+      "if": {"properties": {"category": {"const": "MULTI_ACCEPTABLE"}}, "required": ["category"]},
+      "then": {"properties": {"target_status": {"const": "TARGET_PRESENT"}, "expected_route": {"const": "PROCEED"}, "acceptable_node_ids": {"minItems": 2}}}
+    },
+    {
+      "if": {
+        "properties": {"category": {"enum": ["LITERAL_UNIQUE", "NONLITERAL_UNIQUE", "STRUCTURAL_INTERFERENCE"]}},
+        "required": ["category"]
+      },
+      "then": {"properties": {"target_status": {"const": "TARGET_PRESENT"}, "expected_route": {"const": "PROCEED"}, "acceptable_node_ids": {"minItems": 1, "maxItems": 1}}}
+    }
+  ],
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "ref": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "node": {"type": "string", "minLength": 1, "maxLength": 512},
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_kind", "value_type", "cardinality"],
+      "properties": {
+        "node_kind": {"enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]},
+        "value_type": {"type": ["string", "null"], "maxLength": 1000},
+        "cardinality": {"enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]}
+      }
+    },
+    "terminal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action", "target_node_id", "target_disposition"],
+      "properties": {
+        "action": {"enum": ["SELECT_CANDIDATE", "SELECT_OUTSIDE_CANDIDATE", "REJECT_ALL", "EXIT"]},
+        "target_node_id": {"type": ["string", "null"], "maxLength": 512},
+        "target_disposition": {"enum": ["FOUND_TOP8", "FOUND_OUTSIDE", "PRESENT_NOT_FOUND", "ABSENT"]}
+      }
+    }
+  }
+}

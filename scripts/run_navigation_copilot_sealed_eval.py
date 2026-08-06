@@ -49,6 +49,7 @@ from treeguard.navigation_copilot_sealed_validation import (  # noqa: E402
     TerminalExpectation,
     public_sealed_aggregate,
     score_sealed_case,
+    validate_sealed_plan,
 )
 from treeguard.json_utils import strict_json_loads  # noqa: E402
 from treeguard.models import ImportResult  # noqa: E402
@@ -71,9 +72,9 @@ MAX_PRIVATE_INPUT_BYTES = 20_000_000
 FUNCTION_PATHS = (
     "src/treeguard/navigation_copilot_sealed_validation.py",
     "scripts/run_navigation_copilot_sealed_eval.py",
-    "contracts/navigation-copilot-sealed-evaluation-manifest.v1.schema.json",
-    "contracts/navigation-copilot-sealed-scenario.v1.schema.json",
-    "contracts/navigation-copilot-sealed-oracle.v1.schema.json",
+    "contracts/navigation-copilot-sealed-evaluation-manifest.v2.schema.json",
+    "contracts/navigation-copilot-sealed-scenario.v2.schema.json",
+    "contracts/navigation-copilot-sealed-oracle.v2.schema.json",
     "contracts/navigation-copilot-sealed-trace.v1.schema.json",
     "contracts/navigation-copilot-sealed-observation.v1.schema.json",
     "contracts/navigation-copilot-sealed-aggregate.v1.schema.json",
@@ -226,32 +227,18 @@ def validate_input_collections(
 ) -> None:
     """Validate the cross-file handoff before an app or Provider is created."""
 
-    if not isinstance(scenarios, tuple) or not isinstance(oracles, tuple):
-        raise ValueError("sealed input collections must be immutable tuples")
-    scenario_refs = tuple(item.scenario_ref for item in scenarios)
-    oracle_refs = tuple(item.scenario_ref for item in oracles)
-    if scenario_refs != manifest.scenario_refs or oracle_refs != manifest.scenario_refs:
-        raise ValueError("sealed input references do not match the manifest")
-    if len(set(scenario_refs)) != len(scenario_refs):
-        raise ValueError("sealed input references must be unique")
+    validate_sealed_plan(manifest, scenarios, oracles)
     if tree.snapshot_hash != scenarios[0].tree_digest:
         raise ValueError("sealed tree digest does not match scenarios")
-    oracle_by_ref = {item.scenario_ref: item for item in oracles}
-    for scenario in scenarios:
-        oracle = oracle_by_ref[scenario.scenario_ref]
-        if (
-            scenario.tree_digest != tree.snapshot_hash
-            or oracle.tree_digest != tree.snapshot_hash
-            or oracle.request_digest != scenario.request_digest
-            or oracle.category != scenario.category
-            or oracle.wrong_context_challenge
-            != scenario.wrong_context_challenge
-            or (scenario.scenario_ref in manifest.repeat_scenario_refs)
-            != scenario.repeat_challenge
-            or oracle.frozen_clarification_answer
-            != scenario.frozen_clarification_answer
-        ):
-            raise ValueError("sealed scenario and Oracle sources do not align")
+    if any(item.tree_digest != tree.snapshot_hash for item in scenarios + oracles):
+        raise ValueError("sealed scenario and Oracle tree sources do not align")
+    references = build_tree_reference_index(tree)
+    if any(
+        scenario.proposed_parent_ref is not None
+        and scenario.proposed_parent_ref not in references.node_id_by_ref
+        for scenario in scenarios
+    ):
+        raise ValueError("sealed scenario parent reference is outside the frozen tree")
     node_ids = {node.node_id for node in tree.nodes}
     for oracle in oracles:
         if not set(oracle.acceptable_node_ids).issubset(node_ids) or not set(
@@ -324,6 +311,21 @@ def _controlled_outcome(
     case_view: dict[str, Any],
     references: Any,
 ) -> tuple[dict[str, Any], TerminalExpectation]:
+    if oracle.category == "WEAK_EVIDENCE":
+        terminal = TerminalExpectation(
+            action="EXIT",
+            target_node_id=None,
+            target_disposition="PRESENT_NOT_FOUND",
+        )
+        return (
+            {
+                "action": terminal.action,
+                "selected_candidate_ref": None,
+                "selected_node_ref": None,
+                "rejection_disposition": None,
+            },
+            terminal,
+        )
     candidates = tuple(case_view.get("candidates", ()))
     acceptable = set(oracle.acceptable_node_ids)
     for candidate in candidates:

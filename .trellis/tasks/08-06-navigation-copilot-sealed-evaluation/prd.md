@@ -86,8 +86,10 @@ Semantic、Policy、终态和重复性，并输出是否具备进入受保护环
 - 数据 bundle 与 runner 只通过版本化 Schema、提交 hash 和冻结字节交接；
 - 现有 `NavigationShadowQualification` 只作产品回归旁证，不参与本测评主评分。
 
-已实现合同固定为 `navigation-copilot-sealed-{evaluation-manifest,scenario,oracle,
-trace,observation,aggregate}.v1`。manifest 分别冻结首次理解、澄清重理解和 Semantic 三个
+已实现合同固定为 `navigation-copilot-sealed-{trace,observation,aggregate}.v1` 与
+`navigation-copilot-sealed-{evaluation-manifest,scenario,oracle}.v2`。v2 要求错误上下文
+挑战实际携带父节点引用，并允许弱证据、目标存在时以 `EXIT/PRESENT_NOT_FOUND` 安全退出。
+manifest 分别冻结首次理解、澄清重理解和 Semantic 三个
 Prompt 版本，并将 endpoint 类别固定为官方百炼兼容端点；功能提交代码树和数据提交历史均
 在读取 Provider 配置前校验。公开 scenario 文件与隐藏 Oracle 文件均为按 scenario ref 升序
 排列的 JSON 数组，runner 在创建 Workbench app 前完成跨文件来源、树节点与请求 digest

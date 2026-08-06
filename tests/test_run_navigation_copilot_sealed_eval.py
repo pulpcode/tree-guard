@@ -138,7 +138,14 @@ class ProviderFactory:
         return self.semantic
 
 
-def _scenario(tree, *, clarify=False, category=None, parent_ref="N000002"):
+def _scenario(
+    tree,
+    *,
+    clarify=False,
+    category=None,
+    parent_ref="N000002",
+    wrong_context=False,
+):
     resolved_category = category or ("CLARIFICATION" if clarify else "LITERAL_UNIQUE")
     return SealedScenario.create(
         scenario_ref="SEALED001",
@@ -150,16 +157,19 @@ def _scenario(tree, *, clarify=False, category=None, parent_ref="N000002"):
         value_type_hint="string",
         cardinality_hint="MULTIPLE",
         frozen_clarification_answer="是，定位标签字段。" if clarify else None,
-        wrong_context_challenge=False,
+        wrong_context_challenge=wrong_context,
         repeat_challenge=clarify,
     )
 
 
 def _oracle(tree, scenario, *, clarify=False, targets=("node-004",)):
     absent = not targets
+    weak_evidence = scenario.category == "WEAK_EVIDENCE"
     terminals = (
         (TerminalExpectation("REJECT_ALL", None, "ABSENT"),)
         if absent
+        else (TerminalExpectation("EXIT", None, "PRESENT_NOT_FOUND"),)
+        if weak_evidence
         else tuple(
             terminal
             for target in targets
@@ -197,7 +207,7 @@ def _oracle(tree, scenario, *, clarify=False, targets=("node-004",)):
             )
         ),
         acceptable_terminals=terminals,
-        wrong_context_challenge=False,
+        wrong_context_challenge=scenario.wrong_context_challenge,
         review_status="CODEX_SILVER_REVIEWED",
         reviewed_bytes_digest="7" * 64,
         execution_eligible=True,
@@ -215,6 +225,7 @@ class SealedRunnerTests(unittest.IsolatedAsyncioTestCase):
         fail=False,
         semantic_fail_hard=False,
         no_equivalent=False,
+        wrong_context=False,
     ):
         result = load_tree_export(FIXTURE)
         self.assertTrue(result.is_valid)
@@ -225,6 +236,7 @@ class SealedRunnerTests(unittest.IsolatedAsyncioTestCase):
             clarify=clarify,
             category=category,
             parent_ref=parent_ref,
+            wrong_context=wrong_context,
         )
         oracle = _oracle(tree, scenario, clarify=clarify, targets=targets)
         factory = ProviderFactory(
@@ -304,7 +316,12 @@ class SealedRunnerTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(observation.first_failure_stage, "SEMANTIC")
 
     async def test_wrong_context_remains_soft_and_does_not_break_api_contract(self):
-        _, _, _, _, trace = await self._run(parent_ref="N000005")
+        _, scenario, oracle, _, trace = await self._run(
+            parent_ref="N000005",
+            wrong_context=True,
+        )
+        self.assertTrue(scenario.wrong_context_challenge)
+        self.assertTrue(oracle.wrong_context_challenge)
         self.assertEqual(trace.run_status, "COMPLETE")
         self.assertLessEqual(trace.logical_model_stage_count, 2)
 
@@ -324,6 +341,8 @@ class SealedRunnerTests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertIn("node-004", trace.c1_candidate_node_ids[:8])
         self.assertEqual(trace.policy_status, "NEED_EVIDENCE")
+        self.assertEqual(trace.outcome.action, "EXIT")
+        self.assertEqual(trace.outcome.target_disposition, "PRESENT_NOT_FOUND")
         self.assertTrue(score_sealed_case(oracle, trace).joint_match)
 
     async def test_model_failure_is_product_degradation_not_runner_fallback(self):

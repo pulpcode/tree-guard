@@ -1,0 +1,675 @@
+{
+  "schema_version": "treeguard.navigation-copilot-v3c-blueprint-file.v1",
+  "branch_ref": "branch-07",
+  "nodes": [
+    {
+      "blueprint_ref": "b07",
+      "parent_ref": "root",
+      "parent_role": "风铃故事领域",
+      "label": "风铃故事市集",
+      "name": "风铃故事交换市集",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s01",
+        "b07-s02",
+        "b07-s03",
+        "b07-s04",
+        "b07-s05",
+        "b07-s06",
+        "b07-s07"
+      ],
+      "semantic_note": "管理虚构故事卡、朗读席、风铃路标与公开交换活动。"
+    },
+    {
+      "blueprint_ref": "b07-s01",
+      "parent_ref": "b07",
+      "parent_role": "故事卡登记职责",
+      "label": "故事卡",
+      "name": "故事卡登记",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s01-n01",
+        "b07-s01-n02",
+        "b07-s01-n03",
+        "b07-s01-n04"
+      ],
+      "semantic_note": "登记不对应真实人物的虚构故事卡。"
+    },
+    {
+      "blueprint_ref": "b07-s01-n01",
+      "parent_ref": "b07-s01",
+      "parent_role": "卡片身份",
+      "label": "故事卡身份",
+      "name": "故事卡身份",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s01-n05"
+      ],
+      "semantic_note": "绑定故事卡编号。"
+    },
+    {
+      "blueprint_ref": "b07-s01-n05",
+      "parent_ref": "b07-s01-n01",
+      "parent_role": "卡片编号",
+      "label": "故事卡码",
+      "name": "故事卡编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存虚构故事卡编号。"
+    },
+    {
+      "blueprint_ref": "b07-s01-n02",
+      "parent_ref": "b07-s01",
+      "parent_role": "主题标签",
+      "label": "故事主题",
+      "name": "故事主题标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出故事主题标签。"
+    },
+    {
+      "blueprint_ref": "b07-s01-n03",
+      "parent_ref": "b07-s01",
+      "parent_role": "朗读时长",
+      "label": "故事时长",
+      "name": "故事朗读时长",
+      "kind": "property",
+      "value_type": "float",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录预计朗读分钟。"
+    },
+    {
+      "blueprint_ref": "b07-s01-n04",
+      "parent_ref": "b07-s01",
+      "parent_role": "公开许可",
+      "label": "故事公开",
+      "name": "故事公开许可",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s01-n06"
+      ],
+      "semantic_note": "记录卡片公开状态。"
+    },
+    {
+      "blueprint_ref": "b07-s01-n06",
+      "parent_ref": "b07-s01-n04",
+      "parent_role": "许可状态",
+      "label": "故事公开态",
+      "name": "故事卡公开状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明故事卡可公开阅读。"
+    },
+    {
+      "blueprint_ref": "b07-s02",
+      "parent_ref": "b07",
+      "parent_role": "朗读席职责",
+      "label": "朗读席",
+      "name": "公共故事朗读席",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s02-n01",
+        "b07-s02-n02",
+      "b07-s02-n03",
+      "b07-s02-n06"
+      ],
+      "semantic_note": "管理朗读席位置、时窗与辅助设备。"
+    },
+    {
+      "blueprint_ref": "b07-s02-n01",
+      "parent_ref": "b07-s02",
+      "parent_role": "席位空间",
+      "label": "朗读席位",
+      "name": "朗读席空间",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s02-n04",
+        "b07-s02-n05"
+      ],
+      "semantic_note": "绑定朗读席与等候区。"
+    },
+    {
+      "blueprint_ref": "b07-s02-n04",
+      "parent_ref": "b07-s02-n01",
+      "parent_role": "席位编号",
+      "label": "朗读席码",
+      "name": "朗读席编号",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存朗读席空间编号。"
+    },
+    {
+      "blueprint_ref": "b07-s02-n05",
+      "parent_ref": "b07-s02-n01",
+      "parent_role": "等候区域",
+      "label": "朗读候区",
+      "name": "朗读席等候区域",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出朗读席等候位置。"
+    },
+    {
+      "blueprint_ref": "b07-s02-n02",
+      "parent_ref": "b07-s02",
+      "parent_role": "开放时窗",
+      "label": "朗读窗",
+      "name": "朗读席开放时窗",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "记录朗读席开放时段。"
+    },
+    {
+      "blueprint_ref": "b07-s02-n03",
+      "parent_ref": "b07-s02",
+      "parent_role": "辅助设备",
+      "label": "朗读辅助器",
+      "name": "朗读辅助设备",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出文字或触感辅助设备。"
+    },
+    {
+      "blueprint_ref": "b07-s02-n06",
+      "parent_ref": "b07-s02",
+      "parent_role": "使用状态",
+      "label": "朗读席态",
+      "name": "朗读席使用状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明朗读席当前可用。"
+    },
+    {
+      "blueprint_ref": "b07-s03",
+      "parent_ref": "b07",
+      "parent_role": "风铃路标职责",
+      "label": "风铃路标",
+      "name": "故事市集风铃路标",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s03-n01",
+        "b07-s03-n02",
+        "b07-s03-n03"
+      ],
+      "semantic_note": "用不同风铃标签提示故事摊位方向。"
+    },
+    {
+      "blueprint_ref": "b07-s03-n01",
+      "parent_ref": "b07-s03",
+      "parent_role": "路标身份",
+      "label": "风铃标档",
+      "name": "风铃路标身份",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s03-n04"
+      ],
+      "semantic_note": "绑定风铃路标编号。"
+    },
+    {
+      "blueprint_ref": "b07-s03-n04",
+      "parent_ref": "b07-s03-n01",
+      "parent_role": "编号位置",
+      "label": "风铃标位",
+      "name": "路标编号与位置",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s03-n05",
+        "b07-s03-n06"
+      ],
+      "semantic_note": "记录路标编号和安装点。"
+    },
+    {
+      "blueprint_ref": "b07-s03-n05",
+      "parent_ref": "b07-s03-n04",
+      "parent_role": "路标编号",
+      "label": "风铃标码",
+      "name": "风铃路标编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存风铃路标编号。"
+    },
+    {
+      "blueprint_ref": "b07-s03-n06",
+      "parent_ref": "b07-s03-n04",
+      "parent_role": "安装位置",
+      "label": "风铃标点",
+      "name": "风铃路标位置",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出路标安装位置。"
+    },
+    {
+      "blueprint_ref": "b07-s03-n02",
+      "parent_ref": "b07-s03",
+      "parent_role": "方向标签",
+      "label": "风铃方向",
+      "name": "风铃方向标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出风铃代表的方向。"
+    },
+    {
+      "blueprint_ref": "b07-s03-n03",
+      "parent_ref": "b07-s03",
+      "parent_role": "启用状态",
+      "label": "风铃路标态",
+      "name": "风铃路标状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明路标当前启用。"
+    },
+    {
+      "blueprint_ref": "b07-s04",
+      "parent_ref": "b07",
+      "parent_role": "故事交换职责",
+      "label": "故事交换",
+      "name": "故事卡交换台",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s04-n01",
+        "b07-s04-n02"
+      ],
+      "semantic_note": "登记故事卡的自愿交换和归还。"
+    },
+    {
+      "blueprint_ref": "b07-s04-n01",
+      "parent_ref": "b07-s04",
+      "parent_role": "交换卡片",
+      "label": "交换卡片",
+      "name": "交换故事卡集合",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s04-n03",
+        "b07-s04-n04",
+        "b07-s04-n05"
+      ],
+      "semantic_note": "列出送出、取回和保留卡片。"
+    },
+    {
+      "blueprint_ref": "b07-s04-n03",
+      "parent_ref": "b07-s04-n01",
+      "parent_role": "送出卡片",
+      "label": "送出故事卡",
+      "name": "送出故事卡编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出送出的故事卡。"
+    },
+    {
+      "blueprint_ref": "b07-s04-n04",
+      "parent_ref": "b07-s04-n01",
+      "parent_role": "取回卡片",
+      "label": "取回故事卡",
+      "name": "取回故事卡编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出取回的故事卡。"
+    },
+    {
+      "blueprint_ref": "b07-s04-n05",
+      "parent_ref": "b07-s04-n01",
+      "parent_role": "保留卡片",
+      "label": "保留故事卡",
+      "name": "保留故事卡编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出仍在台上的故事卡。"
+    },
+    {
+      "blueprint_ref": "b07-s04-n02",
+      "parent_ref": "b07-s04",
+      "parent_role": "交换确认",
+      "label": "故事交换确认",
+      "name": "故事交换确认",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s04-n06"
+      ],
+      "semantic_note": "记录交换完成状态。"
+    },
+    {
+      "blueprint_ref": "b07-s04-n06",
+      "parent_ref": "b07-s04-n02",
+      "parent_role": "确认状态",
+      "label": "故事交换态",
+      "name": "故事交换完成状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明交换已完成。"
+    },
+    {
+      "blueprint_ref": "b07-s05",
+      "parent_ref": "b07",
+      "parent_role": "夜读活动职责",
+      "label": "夜读会",
+      "name": "风灯夜读活动",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s05-n01",
+      "b07-s05-n02",
+      "b07-s05-n06"
+      ],
+      "semantic_note": "组织低照明、无需报名身份的夜读活动。"
+    },
+    {
+      "blueprint_ref": "b07-s05-n01",
+      "parent_ref": "b07-s05",
+      "parent_role": "活动安排",
+      "label": "夜读安排",
+      "name": "夜读活动安排",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s05-n03",
+        "b07-s05-n04"
+      ],
+      "semantic_note": "绑定活动位置与时窗。"
+    },
+    {
+      "blueprint_ref": "b07-s05-n03",
+      "parent_ref": "b07-s05-n01",
+      "parent_role": "活动位置",
+      "label": "夜读位置",
+      "name": "夜读活动位置",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出夜读活动位置。"
+    },
+    {
+      "blueprint_ref": "b07-s05-n04",
+      "parent_ref": "b07-s05-n01",
+      "parent_role": "活动时窗",
+      "label": "夜读时窗",
+      "name": "夜读活动时窗",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "记录夜读活动时段。"
+    },
+    {
+      "blueprint_ref": "b07-s05-n02",
+      "parent_ref": "b07-s05",
+      "parent_role": "活动内容",
+      "label": "夜读内容",
+      "name": "夜读活动内容",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s05-n05"
+      ],
+      "semantic_note": "列出故事卡和照明级别。"
+    },
+    {
+      "blueprint_ref": "b07-s05-n05",
+      "parent_ref": "b07-s05-n02",
+      "parent_role": "故事卡片",
+      "label": "夜读故事卡",
+      "name": "夜读故事卡编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出夜读使用的故事卡。"
+    },
+    {
+      "blueprint_ref": "b07-s05-n06",
+      "parent_ref": "b07-s05",
+      "parent_role": "开放确认",
+      "label": "夜读开放",
+      "name": "夜读开放确认",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [],
+      "semantic_note": "表示活动开放确认的职责边界。"
+    },
+    {
+      "blueprint_ref": "b07-s06",
+      "parent_ref": "b07",
+      "parent_role": "无声阅读职责",
+      "label": "静读角",
+      "name": "无声阅读角",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s06-n01",
+        "b07-s06-n02",
+        "b07-s06-n03"
+      ],
+      "semantic_note": "提供不播放声音的独立阅读区域。"
+    },
+    {
+      "blueprint_ref": "b07-s06-n01",
+      "parent_ref": "b07-s06",
+      "parent_role": "阅读空间",
+      "label": "静读空间",
+      "name": "静读角空间",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s06-n04"
+      ],
+      "semantic_note": "绑定静读角位置。"
+    },
+    {
+      "blueprint_ref": "b07-s06-n04",
+      "parent_ref": "b07-s06-n01",
+      "parent_role": "空间编号",
+      "label": "静读角码",
+      "name": "静读角位置",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存静读角空间编号。"
+    },
+    {
+      "blueprint_ref": "b07-s06-n02",
+      "parent_ref": "b07-s06",
+      "parent_role": "卡片目录",
+      "label": "静读卡片",
+      "name": "静读故事卡目录",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s06-n05"
+      ],
+      "semantic_note": "列出适合无声阅读的卡片。"
+    },
+    {
+      "blueprint_ref": "b07-s06-n05",
+      "parent_ref": "b07-s06-n02",
+      "parent_role": "卡片编号",
+      "label": "静读卡码",
+      "name": "静读故事卡编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出静读故事卡。"
+    },
+    {
+      "blueprint_ref": "b07-s06-n03",
+      "parent_ref": "b07-s06",
+      "parent_role": "使用规则",
+      "label": "静读规则",
+      "name": "静读角使用规则",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s06-n06"
+      ],
+      "semantic_note": "记录静读角开放状态。"
+    },
+    {
+      "blueprint_ref": "b07-s06-n06",
+      "parent_ref": "b07-s06-n03",
+      "parent_role": "开放状态",
+      "label": "静读角态",
+      "name": "静读角开放状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明静读角开放。"
+    },
+    {
+      "blueprint_ref": "b07-s07",
+      "parent_ref": "b07",
+      "parent_role": "市集交接职责",
+      "label": "故事市集交接",
+      "name": "故事市集班次交接",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b07-s07-n01",
+        "b07-s07-n02",
+        "b07-s07-n03",
+        "b07-s07-n04",
+        "b07-s07-n05",
+        "b07-s07-n06"
+      ],
+      "semantic_note": "交接故事卡、席位、路标与服务状态。"
+    },
+    {
+      "blueprint_ref": "b07-s07-n01",
+      "parent_ref": "b07-s07",
+      "parent_role": "卡片集合",
+      "label": "交接故事卡",
+      "name": "交接故事卡编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出交接故事卡。"
+    },
+    {
+      "blueprint_ref": "b07-s07-n02",
+      "parent_ref": "b07-s07",
+      "parent_role": "朗读席位",
+      "label": "交接朗读席",
+      "name": "交接朗读席位",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出交接朗读席。"
+    },
+    {
+      "blueprint_ref": "b07-s07-n03",
+      "parent_ref": "b07-s07",
+      "parent_role": "风铃路标",
+      "label": "交接风铃标",
+      "name": "交接风铃路标",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出交接风铃路标。"
+    },
+    {
+      "blueprint_ref": "b07-s07-n04",
+      "parent_ref": "b07-s07",
+      "parent_role": "封闭区域",
+      "label": "故事封闭区",
+      "name": "市集封闭区域",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出暂时封闭区域。"
+    },
+    {
+      "blueprint_ref": "b07-s07-n05",
+      "parent_ref": "b07-s07",
+      "parent_role": "交接时刻",
+      "label": "故事交接刻",
+      "name": "故事市集交接时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录交接时刻。"
+    },
+    {
+      "blueprint_ref": "b07-s07-n06",
+      "parent_ref": "b07-s07",
+      "parent_role": "完成状态",
+      "label": "故事交接态",
+      "name": "故事市集交接状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明班次交接完成。"
+    }
+  ]
+}

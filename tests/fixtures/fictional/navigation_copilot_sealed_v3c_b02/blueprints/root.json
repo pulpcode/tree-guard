@@ -1,0 +1,18 @@
+{
+  "schema_version": "treeguard.navigation-copilot-v3c-blueprint-file.v1",
+  "branch_ref": "root",
+  "nodes": [
+    {
+      "blueprint_ref": "root",
+      "parent_ref": null,
+      "parent_role": null,
+      "label": "星澜协作城",
+      "name": "星澜协作城公共知识树",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": ["b01", "b02", "b03", "b04", "b05", "b06", "b07", "b08"],
+      "semantic_note": "汇集八个完全虚构公共协作领域的根目录，仅负责领域分区，不表达生产组织或真实设施。"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": "treeguard.navigation-copilot-v3c-b02-weak-oracle-review.v1",
+  "batch_ref": "navigation-copilot-sealed-v3c-20260806-b02",
+  "reviews": [
+    {"scenario_ref":"v3c-b02-wek-01","hidden_target_blueprint_ref":"b02-s10-n03","competitor_blueprint_refs":["b01-s09-n04","b04-s09-n03"],"acceptable_profiles":[{"node_kind":"PROPERTY","value_type":"boolean","cardinality":"SINGLE"}],"reason_code":"INSUFFICIENT_DISCRIMINATOR","review_status":"CODEX_SILVER_REVIEWED","assessment":"请求缺少对象与领域；回放席、香径导览和小厨观察均有独立开放状态。"},
+    {"scenario_ref":"v3c-b02-wek-02","hidden_target_blueprint_ref":"b05-s03-n08","competitor_blueprint_refs":["b04-s02-n04","b06-s07-n05"],"acceptable_profiles":[{"node_kind":"PROPERTY","value_type":"integer","cardinality":"SINGLE"}],"reason_code":"INSUFFICIENT_DISCRIMINATOR","review_status":"CODEX_SILVER_REVIEWED","assessment":"请求未给出地点或活动对象；修缮工位、共厨灶台和夜潮导览均有单值人数上限。"},
+    {"scenario_ref":"v3c-b02-wek-03","hidden_target_blueprint_ref":"b02-s01-n03","competitor_blueprint_refs":["b02-s12-n05","b02-x07"],"acceptable_profiles":[{"node_kind":"PROPERTY","value_type":"entity_code","cardinality":"MULTIPLE"}],"reason_code":"INSUFFICIENT_DISCRIMINATOR","review_status":"CODEX_SILVER_REVIEWED","assessment":"采集设备、移交设备和无障碍导览设备均是多值实体编号；请求没有用途、阶段或馆内范围。"},
+    {"scenario_ref":"v3c-b02-wek-04","hidden_target_blueprint_ref":"b02-x13","competitor_blueprint_refs":["b03-x16","b04-x17"],"acceptable_profiles":[{"node_kind":"PROPERTY","value_type":"time_code","cardinality":"SINGLE"}],"reason_code":"INSUFFICIENT_DISCRIMINATOR","review_status":"CODEX_SILVER_REVIEWED","assessment":"声景地图修订、航线修订和共厨清点都是跨路径的最近单值时间记录，请求未给出记录对象。"},
+    {"scenario_ref":"v3c-b02-wek-05","hidden_target_blueprint_ref":"b07-s01-n02","competitor_blueprint_refs":["b01-s01-n05","b03-x15"],"acceptable_profiles":[{"node_kind":"PROPERTY","value_type":"string","cardinality":"MULTIPLE"}],"reason_code":"INSUFFICIENT_DISCRIMINATOR","review_status":"CODEX_SILVER_REVIEWED","assessment":"故事主题、星籽休眠条件和渡运服务通告都是多值标签；请求没有标签主题或领域。"}
+  ]
+}

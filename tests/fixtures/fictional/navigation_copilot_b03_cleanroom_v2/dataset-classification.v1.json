@@ -1,0 +1,35 @@
+{
+  "artifact_sha256": {
+    "blueprint_sha256": "e66e55afc9a1b4ff39398cd5ba2c4e7bd3801900c1554fe3b688067c5d844645",
+    "candidate_scenarios_sha256": "abb0bfd89dd5719f6f43f3f26629528d4c01e9b6a2ae9b70f928a8aa84f7598d",
+    "final_scenarios_sha256": "7129881c8c24611586a5c428d1682ebb7a746a838c0723ea80db479ed4c1cdaf",
+    "tree_sha256": "4e1c45f3ba170d445d68b59d09e62c9ae793a15e4a35be4caecc3e47934203e2"
+  },
+  "batch_ref": "NAVCOP_SEALED_V3C_B03_20260817_B",
+  "candidate_count": 56,
+  "dataset_ref": "navigation-copilot-sealed-v3c-b03-civic-atrium-b",
+  "derived_from_real": false,
+  "fictional": true,
+  "final_count": 48,
+  "gold_eligible": false,
+  "namespace": "urn:treeguard:fictional:navigation-copilot:b03:civic-atrium:v1",
+  "node_count": 927,
+  "patch_eligible": false,
+  "public_contract_versions": {
+    "deterministic_contract_commit": "7d8bd6d06ae1a16c87dcb91cd45f7820173ed6fc",
+    "evaluation_manifest": "navigation-copilot-sealed-evaluation-manifest.v2",
+    "function_contract_commit": "40098afe985dfc81183c928a473a2e8a3c2176dc",
+    "oracle": "navigation-copilot-sealed-oracle.v2",
+    "scenario": "navigation-copilot-sealed-scenario.v2"
+  },
+  "role_counts": {
+    "blueprint_background": 603,
+    "curated_core": 176,
+    "stress_only_filler": 148
+  },
+  "schema_version": "navigation-copilot-b03-b-dataset-classification.v1",
+  "seed": 2026081719,
+  "selection_algorithm_version": "treeguard.navigation-copilot-b03-b-slot-selection.v1",
+  "selection_seed": 2026081761,
+  "source_class": "CLEANROOM_SYNTHETIC"
+}

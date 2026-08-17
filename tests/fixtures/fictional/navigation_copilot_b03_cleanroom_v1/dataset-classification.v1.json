@@ -1,0 +1,34 @@
+{
+  "artifact_sha256": {
+    "blueprint_sha256": "a64cb81e19bd6f3f3c19b36d6e8945c14914a1a9ee33ae61ae121098df73c2dd",
+    "candidate_scenarios_sha256": "ba8ea773d7923a0f228e9932f42a698b418c7ffe0d2092b2c2fd54e757ca8af5",
+    "final_scenarios_sha256": "752162cbebebd0cd7457b4b9d00c9439bcd4678b538dd9743c8b1b4d34f6f214",
+    "tree_sha256": "7d8a477e7d12a9716d33d3cc2e8eb5e22a0ff72d3a8e490d0a5a022b6ba75dd2"
+  },
+  "candidate_count": 56,
+  "dataset_ref": "navigation-copilot-sealed-v3c-b03-prismatic-canopy",
+  "derived_from_real": false,
+  "fictional": true,
+  "final_count": 48,
+  "function_contract_commit": "40098afe985dfc81183c928a473a2e8a3c2176dc",
+  "gold_eligible": false,
+  "namespace": "urn:treeguard:fictional:navigation-copilot:b03:prismatic-canopy:v1",
+  "node_count": 864,
+  "patch_eligible": false,
+  "phase2a_complete": true,
+  "phase2b_approved": false,
+  "planning_baseline_commit": "7d8bd6d06ae1a16c87dcb91cd45f7820173ed6fc",
+  "public_contract_versions": {
+    "deterministic_validation": "treeguard.navigation-copilot-sealed-gate.v1",
+    "evaluation_manifest": "navigation-copilot-sealed-evaluation-manifest.v2",
+    "oracle": "navigation-copilot-sealed-oracle.v2",
+    "scenario": "navigation-copilot-sealed-scenario.v2",
+    "tree": "tree-snapshot.v1"
+  },
+  "schema_version": "navigation-copilot-b03-dataset-classification.v1",
+  "seed": 2026081703,
+  "selection_algorithm_version": "treeguard.navigation-copilot-b03-slot-selection.v1",
+  "selection_seed": 2026081748,
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "tree_snapshot_hash": "9d383828974d30ee2beff24d0c8fd120b1d3b9673f2a001488691752fd4e5522"
+}

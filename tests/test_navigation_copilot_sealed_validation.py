@@ -11,7 +11,9 @@ from treeguard.navigation_copilot_sealed_validation import (
     StructuralProfile,
     TerminalExpectation,
     public_sealed_aggregate,
+    public_sealed_diagnostic_aggregate,
     replay_public_sealed_aggregate,
+    replay_public_sealed_diagnostic_aggregate,
     score_sealed_case,
     validate_sealed_plan,
 )
@@ -310,6 +312,10 @@ class SealedContractTests(unittest.TestCase):
         _validate_schema("navigation-copilot-sealed-oracle.v2", oracle.to_dict())
         _validate_schema("navigation-copilot-sealed-trace.v1", trace.to_dict())
         _validate_schema("navigation-copilot-sealed-observation.v1", observation.to_dict())
+        _validate_schema(
+            "navigation-copilot-sealed-diagnostic-aggregate.v1",
+            public_sealed_diagnostic_aggregate(manifest, _observations()),
+        )
 
     def test_complete_plan_round_trips_before_execution(self):
         scenarios = tuple(_scenario(ref) for ref in SCENARIO_REFS)
@@ -460,6 +466,104 @@ class SealedAggregateTests(unittest.TestCase):
             replay_public_sealed_aggregate(
                 aggregate, manifest, observations, run_integrity_valid=True
             )
+
+
+class SealedDiagnosticAggregateTests(unittest.TestCase):
+    def test_passing_run_has_zero_independent_mismatches(self):
+        diagnostic = public_sealed_diagnostic_aggregate(
+            _manifest(), _observations()
+        )
+        self.assertEqual(diagnostic["main_case_count"], 48)
+        for name in (
+            "understanding_model_degraded_count",
+            "understanding_profile_mismatch_count",
+            "product_route_mismatch_count",
+            "retrieval_top8_miss_count",
+            "semantic_mismatch_count",
+            "policy_mismatch_count",
+            "terminal_mismatch_count",
+        ):
+            self.assertEqual(diagnostic[name], 0)
+        self.assertEqual(diagnostic["joint_match_count"], 48)
+        self.assertEqual(diagnostic["no_degradation_path_count"], 48)
+        self.assertTrue(diagnostic["counts_are_independent"])
+        self.assertTrue(diagnostic["diagnostic_only"])
+        self.assertFalse(diagnostic["qualification_effect"])
+        encoded = json.dumps(diagnostic, sort_keys=True)
+        for forbidden in (
+            "scenario_ref", "node-", "requirement_text", "oracle_hash",
+            "prompt", "response",
+        ):
+            self.assertNotIn(forbidden, encoded)
+
+    def test_route_and_downstream_mismatches_are_counted_independently(self):
+        values = _trace(
+            "L00", c1_rank=9, degraded=True, highlighted_node="wrong-node"
+        ).to_dict()
+        values.pop("schema_version")
+        values.pop("trace_hash")
+        values["observed_route"] = "LIMIT"
+        values["observed_profile"] = StructuralProfile(
+            "CONCEPT", None, "MULTIPLE"
+        )
+        values["policy_status"] = "NEED_EVIDENCE"
+        values["r0_candidate_node_ids"] = tuple(values["r0_candidate_node_ids"])
+        values["c1_candidate_node_ids"] = tuple(values["c1_candidate_node_ids"])
+        values["outcome"] = TerminalExpectation.from_dict(values["outcome"])
+        changed_trace = SealedCaseTrace.create(**values)
+        observations = list(_observations())
+        index = next(
+            index
+            for index, item in enumerate(observations)
+            if item.scenario_ref == "L00" and item.round_index == 1
+        )
+        observations[index] = score_sealed_case(_oracle("L00"), changed_trace)
+
+        diagnostic = public_sealed_diagnostic_aggregate(
+            _manifest(), tuple(observations)
+        )
+
+        self.assertEqual(diagnostic["understanding_model_degraded_count"], 1)
+        self.assertEqual(diagnostic["understanding_profile_mismatch_count"], 1)
+        self.assertEqual(diagnostic["product_route_mismatch_count"], 1)
+        self.assertEqual(diagnostic["retrieval_top8_miss_count"], 1)
+        self.assertEqual(diagnostic["semantic_mismatch_count"], 1)
+        self.assertEqual(diagnostic["policy_mismatch_count"], 1)
+
+    def test_diagnostic_requires_complete_unique_main_denominator(self):
+        observations = _observations()
+        with self.assertRaises(SealedEvaluationError) as missing:
+            public_sealed_diagnostic_aggregate(_manifest(), observations[1:])
+        self.assertEqual(
+            missing.exception.code, "SEALED_DIAGNOSTIC_DENOMINATOR_INVALID"
+        )
+        with self.assertRaises(SealedEvaluationError) as duplicate:
+            public_sealed_diagnostic_aggregate(
+                _manifest(), observations + (observations[0],)
+            )
+        self.assertEqual(
+            duplicate.exception.code, "SEALED_DIAGNOSTIC_DENOMINATOR_INVALID"
+        )
+
+    def test_diagnostic_requires_exact_replay(self):
+        manifest = _manifest()
+        observations = _observations()
+        diagnostic = public_sealed_diagnostic_aggregate(manifest, observations)
+        self.assertEqual(
+            replay_public_sealed_diagnostic_aggregate(
+                diagnostic, manifest, observations
+            ),
+            diagnostic,
+        )
+        diagnostic["product_route_mismatch_count"] = 1
+        with self.assertRaises(SealedEvaluationError) as caught:
+            replay_public_sealed_diagnostic_aggregate(
+                diagnostic, manifest, observations
+            )
+        self.assertEqual(
+            caught.exception.code,
+            "SEALED_DIAGNOSTIC_AGGREGATE_REPLAY_MISMATCH",
+        )
 
 
 if __name__ == "__main__":

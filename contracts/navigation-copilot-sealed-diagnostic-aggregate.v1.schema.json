@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-sealed-diagnostic-aggregate.v1.schema.json",
+  "title": "Navigation Copilot Sealed Diagnostic Aggregate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source_manifest_hash", "source_observation_schema_version", "main_case_count", "understanding_model_degraded_count", "understanding_profile_mismatch_count", "product_route_mismatch_count", "retrieval_top8_miss_count", "semantic_mismatch_count", "policy_mismatch_count", "terminal_mismatch_count", "joint_match_count", "no_degradation_path_count", "counts_are_independent", "diagnostic_only", "qualification_effect", "production_write_enabled", "gold_eligible", "patch_eligible", "diagnostic_aggregate_hash"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-sealed-diagnostic-aggregate.v1"},
+    "source_manifest_hash": {"$ref": "#/$defs/digest"},
+    "source_observation_schema_version": {"const": "navigation-copilot-sealed-observation.v1"},
+    "main_case_count": {"$ref": "#/$defs/count"},
+    "understanding_model_degraded_count": {"$ref": "#/$defs/count"},
+    "understanding_profile_mismatch_count": {"$ref": "#/$defs/count"},
+    "product_route_mismatch_count": {"$ref": "#/$defs/count"},
+    "retrieval_top8_miss_count": {"$ref": "#/$defs/count"},
+    "semantic_mismatch_count": {"$ref": "#/$defs/count"},
+    "policy_mismatch_count": {"$ref": "#/$defs/count"},
+    "terminal_mismatch_count": {"$ref": "#/$defs/count"},
+    "joint_match_count": {"$ref": "#/$defs/count"},
+    "no_degradation_path_count": {"$ref": "#/$defs/count"},
+    "counts_are_independent": {"const": true},
+    "diagnostic_only": {"const": true},
+    "qualification_effect": {"const": false},
+    "production_write_enabled": {"const": false},
+    "gold_eligible": {"const": false},
+    "patch_eligible": {"const": false},
+    "diagnostic_aggregate_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "count": {"type": "integer", "minimum": 0}
+  }
+}

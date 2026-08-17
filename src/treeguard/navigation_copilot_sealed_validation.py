@@ -21,6 +21,9 @@ ORACLE_SCHEMA_VERSION = "navigation-copilot-sealed-oracle.v2"
 TRACE_SCHEMA_VERSION = "navigation-copilot-sealed-trace.v1"
 OBSERVATION_SCHEMA_VERSION = "navigation-copilot-sealed-observation.v1"
 AGGREGATE_SCHEMA_VERSION = "navigation-copilot-sealed-aggregate.v1"
+DIAGNOSTIC_AGGREGATE_SCHEMA_VERSION = (
+    "navigation-copilot-sealed-diagnostic-aggregate.v1"
+)
 THRESHOLD_POLICY_VERSION = "treeguard.navigation-copilot-sealed-gate.v1"
 
 MAIN_CASE_COUNT = 48
@@ -1475,8 +1478,105 @@ def replay_public_sealed_aggregate(
     return expected
 
 
+def public_sealed_diagnostic_aggregate(
+    manifest: SealedEvaluationManifest,
+    observations: tuple[SealedCaseObservation, ...],
+) -> dict[str, Any]:
+    """Build independent diagnostic counts without changing qualification v1."""
+
+    if not isinstance(manifest, SealedEvaluationManifest):
+        raise TypeError("sealed diagnostic aggregate requires a trusted manifest")
+    if not isinstance(observations, tuple) or any(
+        not isinstance(item, SealedCaseObservation) for item in observations
+    ):
+        raise SealedEvaluationError(
+            "SEALED_DIAGNOSTIC_OBSERVATIONS_INVALID",
+            "diagnostic observations must be an immutable tuple",
+        )
+    keys = tuple((item.scenario_ref, item.round_index) for item in observations)
+    if len(set(keys)) != len(keys):
+        raise SealedEvaluationError(
+            "SEALED_DIAGNOSTIC_DENOMINATOR_INVALID",
+            "diagnostic scenario rounds must be unique",
+        )
+    scenario_refs = set(manifest.scenario_refs)
+    repeat_refs = set(manifest.repeat_scenario_refs)
+    if any(
+        item.scenario_ref not in scenario_refs
+        or (item.round_index != 1 and item.scenario_ref not in repeat_refs)
+        for item in observations
+    ):
+        raise SealedEvaluationError(
+            "SEALED_DIAGNOSTIC_DENOMINATOR_INVALID",
+            "diagnostic observations are outside the frozen manifest",
+        )
+    primary = {item.scenario_ref: item for item in observations if item.round_index == 1}
+    if set(primary) != scenario_refs:
+        raise SealedEvaluationError(
+            "SEALED_DIAGNOSTIC_DENOMINATOR_INVALID",
+            "diagnostic aggregate requires the complete main denominator",
+        )
+    ordered = tuple(primary[ref] for ref in manifest.scenario_refs)
+    payload = {
+        "schema_version": DIAGNOSTIC_AGGREGATE_SCHEMA_VERSION,
+        "source_manifest_hash": manifest.manifest_hash,
+        "source_observation_schema_version": OBSERVATION_SCHEMA_VERSION,
+        "main_case_count": len(ordered),
+        "understanding_model_degraded_count": sum(
+            item.model_degraded for item in ordered
+        ),
+        "understanding_profile_mismatch_count": sum(
+            not item.profile_match for item in ordered
+        ),
+        "product_route_mismatch_count": sum(
+            not item.clarification_match for item in ordered
+        ),
+        "retrieval_top8_miss_count": sum(
+            item.target_present and (item.c1_rank is None or item.c1_rank > 8)
+            for item in ordered
+        ),
+        "semantic_mismatch_count": sum(
+            item.absent_confident_error
+            or (item.highlighted and not item.highlighted_correct)
+            for item in ordered
+        ),
+        "policy_mismatch_count": sum(not item.policy_match for item in ordered),
+        "terminal_mismatch_count": sum(
+            not item.terminal_match for item in ordered
+        ),
+        "joint_match_count": sum(item.joint_match for item in ordered),
+        "no_degradation_path_count": sum(
+            item.no_degradation_path for item in ordered
+        ),
+        "counts_are_independent": True,
+        "diagnostic_only": True,
+        "qualification_effect": False,
+        "production_write_enabled": False,
+        "gold_eligible": False,
+        "patch_eligible": False,
+    }
+    return {**payload, "diagnostic_aggregate_hash": canonical_digest(payload)}
+
+
+def replay_public_sealed_diagnostic_aggregate(
+    payload: Any,
+    manifest: SealedEvaluationManifest,
+    observations: tuple[SealedCaseObservation, ...],
+) -> dict[str, Any]:
+    """Strictly replay a diagnostic aggregate from trusted observations."""
+
+    expected = public_sealed_diagnostic_aggregate(manifest, observations)
+    if not isinstance(payload, dict) or payload != expected:
+        raise SealedEvaluationError(
+            "SEALED_DIAGNOSTIC_AGGREGATE_REPLAY_MISMATCH",
+            "diagnostic aggregate does not replay trusted observations",
+        )
+    return expected
+
+
 __all__ = [
     "AGGREGATE_SCHEMA_VERSION",
+    "DIAGNOSTIC_AGGREGATE_SCHEMA_VERSION",
     "MANIFEST_SCHEMA_VERSION",
     "OBSERVATION_SCHEMA_VERSION",
     "ORACLE_SCHEMA_VERSION",
@@ -1491,6 +1591,8 @@ __all__ = [
     "TerminalExpectation",
     "validate_sealed_plan",
     "public_sealed_aggregate",
+    "public_sealed_diagnostic_aggregate",
     "replay_public_sealed_aggregate",
+    "replay_public_sealed_diagnostic_aggregate",
     "score_sealed_case",
 ]

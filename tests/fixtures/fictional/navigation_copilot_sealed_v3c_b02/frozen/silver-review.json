@@ -1,0 +1,962 @@
+{
+  "batch_ref": "navigation-copilot-sealed-v3c-20260806-b02",
+  "gold_eligible": false,
+  "quality_tier": "SILVER",
+  "reviews": [
+    {
+      "assessment": "多个单值开始时间同样合理；冻结回答用晨光幕布对象区分叶影观察。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "PASS",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-cla-01",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "低刺激入口与桥下声廊入口都符合原请求；冻结回答可区分二者，渡运父上下文无关。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "PASS",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-cla-02",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "每日首班与末班都是班次时间，冻结回答明确选择第一班。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "PASS",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-cla-03",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "日常共厨与节庆供餐都有服务状态；冻结回答新增日常范围完成区分。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "PASS",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-cla-04",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "织物缝补和轮车修缮都有完成时刻；回答锁定织物，岸线父上下文明确无关。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "PASS",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-cla-05",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "潮声观察席与潮光窗口都有开放时间，冻结回答明确观察席对象。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "PASS",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-cla-06",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "夜读活动位置与常设朗读席都可承载故事活动，回答能区分，保留为储备。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "PASS",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-cla-07",
+      "selection_disposition": "RESERVE_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "请求逐字指向星籽入库时刻，树内只有该职责承担入库时间。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-lit-01",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "回声路线预计时长与对应单值浮点属性逐字一致，没有同名替代节点。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-lit-02",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "轻舟班号是渡运班次下的唯一实体编号属性，请求自然且边界明确。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-lit-03",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "月籽剩余份数精确对应共厨库存计数，不与入库或香气字段混淆。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-lit-04",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "工具归还时段直接命中借用工具的多时段属性，目标职责唯一。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-lit-05",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "浮标潮位读数是岸线观察分支中唯一同名的单值浮点读数。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-lit-06",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "故事主题标签逐字对应故事卡目录的多值标签属性。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-lit-07",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "苔钟观察等级是公坊节律观察下的唯一整数等级字段。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-lit-08",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "夜花活动报名编号明确指向活动报名的多值实体编号集合。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-lit-09",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "回放席开放状态是声景回放席配置下的唯一布尔开关。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-lit-10",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "可用泊位数量自然指向渡运泊位余量，作为字面唯一储备项成立。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-lit-11",
+      "selection_disposition": "RESERVE_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "目标位置本身可回答，但请求重复“位置的位置”，不满足自然性门槛。",
+      "finding_codes": [
+        "REQUEST_REDUNDANT_WORDING"
+      ],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "FAIL",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-lit-12",
+      "selection_disposition": "REJECTED",
+      "status": "SILVER_REJECTED"
+    },
+    {
+      "assessment": "夜花静留区与香径静留区都满足温室夜间安静停留，两个目标并列合理。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-mul-01",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "馆级无障碍设备与触感导览设备均可支持无障碍导览，集合无需强制唯一。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-mul-02",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "泊位等候区、普通等候区和辅助等候点均能等候登舟，基数差异不取消语义可接受性。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-mul-03",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "公共修缮工位集合与工位能力中的具体空间都能开展修缮，两个目标均有效。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-mul-04",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "朗读席、静读角和夜读活动位置均满足阅读或听故事，作为储备多目标项成立。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-mul-05",
+      "selection_disposition": "RESERVE_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "“从几点开始”自然改写夜花观察开始时刻，并由夜花对象消除其他开始时间。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-non-01",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "“可看的时段”是潮光观测时刻的自然同义表达，复数时段与基数一致。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-non-02",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "“声图”缩写仍由最近修订语义唯一落到声景地图修订时刻；修缮社父上下文明确错误。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-non-03",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "“共厨”缩写和入口方位共同唯一指向公共共厨入口集合。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-non-04",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "辅助登舟的口语目的唯一对应辅助等候点，而普通等候区是已审干扰项。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-non-05",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "“一次能拿几件”口语化表达观察工具借用上限，目标对象和计数职责充分。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-non-06",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "“开方”是开放的轻微错别字，香径导览仍唯一；故事市集父上下文不改变目标。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-non-07",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "“受礼”轻微错写不妨碍修缮工单受理时刻的唯一识别。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-non-08",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "从交接层询问禁入观察点是合法跨层表达，目标为交接禁入点集合。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-non-09",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "从星籽批次上溯来源舱是跨层问法，来源舱字段比供雾位置更符合职责。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-non-10",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "朗读席接待时间同义指向开放时窗，作为未冻结储备仍可回答。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-non-11",
+      "selection_disposition": "RESERVE_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "“云织”缩写结合营业状态唯一落到渡运服务状态，保留为可用储备。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-non-12",
+      "selection_disposition": "RESERVE_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "温室蓝图没有土壤盐度字段，供雾周期等邻近属性不能替代缺失目标。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-none-01",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "声景馆不存在停车费用，路线时长只是结构邻近干扰，空目标判断明确。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-none-02",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "云织渡运没有机车或燃油编号，班号不能冒充不存在的车辆燃油字段。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-none-03",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "共厨交接没有冷冻配送车辆或车牌，转运工具记录不足以构成目标。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-none-04",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "修缮社记录木片表面等冷修语义，不存在金属熔炼温度，邻近材质字段不可接受。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-none-05",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "苔钟公坊没有付费会员体系，观察等级不等价于会员等级，目标严格缺失。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-none-06",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "请求明确限定回放席子树，局部音量上限优先于馆级同名干扰。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-str-01",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "“馆整体”要求馆级上限，回放席局部属性构成对称结构干扰。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-str-02",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "工位能力中的人数上限明确选择工位局部值；灶台父上下文合法但语义错误。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-str-03",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "修缮社层级的预约上限与工位人数上限结构相近但责任不同。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-str-04",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "夜潮导览路线限定岸线照明等级，夜花观察照明是跨分支干扰。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-str-05",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "交接语境要求交接观察工具集合；声景移交父节点是合法但无关的上下文压力。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-str-06",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "班次交接里的朗读席集合不同于常设朗读席编号，层级限定充分。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-str-07",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "风窗航线的替代落点集合与全局备降站字段结构相近但作用域不同。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-str-08",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "季末交接样本集合与授粉环节样本相邻但责任分离，适合作为储备干扰项。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "NOT_APPLICABLE"
+      },
+      "scenario_ref": "v3c-b02-str-09",
+      "selection_disposition": "RESERVE_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "三条跨路径布尔开放状态均合理，缺口来自对象判别而非犹豫措辞；苔钟父上下文错误。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "PASS"
+      },
+      "scenario_ref": "v3c-b02-wek-01",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "至少三个不同分支的人数上限满足请求，客观缺少决定性范围，隐藏目标仅一个。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "PASS"
+      },
+      "scenario_ref": "v3c-b02-wek-02",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "设备编号存在三个同结构合理候选，缺失用途判别；共厨父上下文不能唯一化声景设备。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "PASS"
+      },
+      "scenario_ref": "v3c-b02-wek-03",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "“最近的一次”不含对象或职责线索，三个时间字段同样成立，必须限制而非选点。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "PASS"
+      },
+      "scenario_ref": "v3c-b02-wek-04",
+      "selection_disposition": "FROZEN_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "assessment": "标签列表在三条跨分支路径均合理，客观缺少对象判别，储备项仍完成全量审核。",
+      "finding_codes": [],
+      "round": 1,
+      "rubric_results": {
+        "category_semantics": "PASS",
+        "clarification_contrast": "NOT_APPLICABLE",
+        "naturalness": "PASS",
+        "oracle_consistency": "PASS",
+        "primary_phenomenon": "PASS",
+        "tree_answerability": "PASS",
+        "weak_evidence_objectivity": "PASS"
+      },
+      "scenario_ref": "v3c-b02-wek-05",
+      "selection_disposition": "RESERVE_ACCEPTED",
+      "status": "SILVER_ACCEPTED"
+    }
+  ],
+  "schema_version": "treeguard.navigation-copilot-v3c-b02-candidate-review.v1"
+}

@@ -1,0 +1,28 @@
+{
+  "batch_ref": "navigation-copilot-sealed-v3c-20260806-b02",
+  "blueprint_file_schema_version": "treeguard.navigation-copilot-v3c-blueprint-file.v1",
+  "blueprint_files": [
+    "blueprints/root.json",
+    "blueprints/branch-01.json",
+    "blueprints/branch-02.json",
+    "blueprints/branch-03.json",
+    "blueprints/branch-04.json",
+    "blueprints/branch-05.json",
+    "blueprints/branch-06.json",
+    "blueprints/branch-07.json",
+    "blueprints/branch-08.json"
+  ],
+  "derived_from_real": false,
+  "fictional": true,
+  "gold_eligible": false,
+  "namespace": "b6e2f54c-713a-4d18-a6f9-02b7c5e83d21",
+  "node_count": 700,
+  "patch_eligible": false,
+  "production_qualification": false,
+  "root_blueprint_file": "blueprints/root.json",
+  "schema_version": "treeguard.navigation-copilot-v3c-blueprint-catalog.v2",
+  "seed": "NCV3C-CLEANROOM-20260806-SEED-02",
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "stable_id_algorithm_version": "treeguard.navigation-copilot-v3c-stable-id.v2",
+  "value_envelope_count": 0
+}

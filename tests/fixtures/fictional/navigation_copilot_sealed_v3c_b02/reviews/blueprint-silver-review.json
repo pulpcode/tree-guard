@@ -1,0 +1,916 @@
+{
+  "batch_ref": "navigation-copilot-sealed-v3c-20260806-b02",
+  "reviews": [
+    {
+      "blueprint_ref": "b01",
+      "boundary_assessment": "温室公共工作在此汇合；声景、渡运与共厨职责留在其他顶层分支。",
+      "child_role_assessment": "种子、光幕、雾水、藤架、授粉、交换、观测、维护、导览、活动、香气与季末交接各自承担独立职责。",
+      "finding_codes": [],
+      "parent_responsibility": "统摄漂灯温室的种植、设施、观察与访客协作。",
+      "round": 1,
+      "source_semantic_payload_digest": "b1b894475e81880a21cbaa3d29bb45fcbc678f8d361f03adbd95133e8d8b91bf",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b01-s01",
+      "boundary_assessment": "只记录入库批次，不承接供雾、授粉或季末交接。",
+      "child_role_assessment": "称呼、入库时刻、来源舱位、萌发等级、休眠标签、公开状态、观察标记和预计周期共同描述批次。",
+      "finding_codes": [],
+      "parent_responsibility": "登记单个星籽批次的身份、来源和萌发准备信息。",
+      "round": 1,
+      "source_semantic_payload_digest": "e2049aa4dd59dad229b20873d381ff3fd8b3ca2fea7251e3cdd67bb1cbfa1eb5",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b01-s02",
+      "boundary_assessment": "负责光幕投射，不混入叶影观测结果或夜花活动安排。",
+      "child_role_assessment": "色带方案与亮度上限配合启收幕时刻、投射舱位、渐变步数、禁投区域和启用状态。",
+      "finding_codes": [],
+      "parent_responsibility": "编排晨光幕布的色带、时间、空间和启停边界。",
+      "round": 1,
+      "source_semantic_payload_digest": "d9a92094ecc6fe3a7bf7c8df21163417d85939b2453f11354cb7bc801590e0db",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b01-s03",
+      "boundary_assessment": "水资源配给与光幕、藤架维护及批次登记边界清楚。",
+      "child_role_assessment": "启动与稳定雾量嵌在供雾分段内，另有接收舱位、水源、回收比例、周期标签和停雾状态。",
+      "finding_codes": [],
+      "parent_responsibility": "定义雾水供给阶段及接收、来源和回收控制。",
+      "round": 1,
+      "source_semantic_payload_digest": "ff3c2a840f6d43aad6f875ef7d2f47f22a0ea0465ab572ed3d57a28ad606425a",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b01-s04",
+      "boundary_assessment": "不记录植物批次或浮台锚索，设施对象限定为藤架。",
+      "child_role_assessment": "主架轮廓、侧架承重、所在舱位、通道宽度、维护入口和开放标记覆盖结构与使用。",
+      "finding_codes": [],
+      "parent_responsibility": "表达藤架的轮廓、承重、通行与维护空间。",
+      "round": 1,
+      "source_semantic_payload_digest": "54ac5a4951cc69ec9e3c9878646e56d601c9824373a18bfbff5e85138e6bc2f7",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b01-s05",
+      "boundary_assessment": "班次调度不承担花粉样本交换或花区观测档案。",
+      "child_role_assessment": "蜂群配置细分工作、领航、休整群，外加目标花区、起飞时刻、巡回次数和风况许可。",
+      "finding_codes": [],
+      "parent_responsibility": "安排风蜂授粉班次的蜂群、花区、时刻和许可。",
+      "round": 1,
+      "source_semantic_payload_digest": "a7797ec3cb47c35a582ee24d33a325a182b99025d6c8d54bc01cbc599f6b86a8",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b01-s06",
+      "boundary_assessment": "仅管样本交换，不替代授粉班次或季末材料移交。",
+      "child_role_assessment": "样本包下保存登记编号与保存标签，送出方、接收方、交接时刻和回执状态构成交接链。",
+      "finding_codes": [],
+      "parent_responsibility": "记录花粉样本在温室间的送接与回执。",
+      "round": 1,
+      "source_semantic_payload_digest": "5abbc79ed7f9ca945730704fb6c1af176d7c1ee9753dad028386d29d40f4f9cc",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b01-s07",
+      "boundary_assessment": "观察结果与晨光编排配置分离，关联光幕只作观测参照。",
+      "child_role_assessment": "窗口含起止时刻、观察舱位和关联光幕，另列叶片样本、影长变化及复核状态。",
+      "finding_codes": [],
+      "parent_responsibility": "保存叶影观测窗口、样本、变化量和复核。",
+      "round": 1,
+      "source_semantic_payload_digest": "b6075dd898da8582f03bc9dceac81aeed1ddf547c4411e32297ad2506a95fcfc",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b01-s08",
+      "boundary_assessment": "维护对象限定浮台，不吸收藤架或访客路径管理。",
+      "child_role_assessment": "甲板检查含区域与等级，锚索检查含编号与张力，并记录班组和访客封闭状态。",
+      "finding_codes": [],
+      "parent_responsibility": "组织温室浮台的甲板、锚索和封闭维护。",
+      "round": 1,
+      "source_semantic_payload_digest": "f4b92326909564c665ddfc34dd4c0039f4568bc6004f455963423146e592a404",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b01-s09",
+      "boundary_assessment": "负责路径可达性，不承载夜花观察或香气档案。",
+      "child_role_assessment": "主路径保留停靠点，静音支路给出区域，无障碍支路给出坡度上限，整体另有导览开放。",
+      "finding_codes": [],
+      "parent_responsibility": "组织香径的主路、静音支路、无障碍支路和开放状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "13a1ae1da60ebfd8b5e948ccd58b630d35d6636144726f005ff1aaa62df6650a",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b01-s10",
+      "boundary_assessment": "活动安排与常设香径导览及香气记录保持分离。",
+      "child_role_assessment": "观花环节含区域、开始和人数；静听含区域与照明；报名入口保存报名编号。",
+      "finding_codes": [],
+      "parent_responsibility": "安排夜花活动的观察、静听和报名。",
+      "round": 1,
+      "source_semantic_payload_digest": "9ed07ad1c86019d56bbc2346ab967d4ac75a88fec109bb3c91cf1a26def48bfd",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b01-s11",
+      "boundary_assessment": "只做气味档案，不管理夜花报名或叶影量测。",
+      "child_role_assessment": "序列递进到末段标签，观察条件含区域和光照标签，并以公开状态控制档案。",
+      "finding_codes": [],
+      "parent_responsibility": "描述香气层次序列、观察条件与公开许可。",
+      "round": 1,
+      "source_semantic_payload_digest": "4a38abf26fdcd61283cdc4163ecae4c54a1187f61be8ec79d038192e69438f96",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b01-s12",
+      "boundary_assessment": "只处理季末移交，不替代日常花粉交换或浮台维护。",
+      "child_role_assessment": "种植交接包含种子、花粉和保存舱位；设施交接包含待修设施、封闭区域和确认状态。",
+      "finding_codes": [],
+      "parent_responsibility": "汇总季末种植材料与设施状态交接。",
+      "round": 1,
+      "source_semantic_payload_digest": "990b37d08b72789dace2a93563063ac45d57ba706c2a9c4eaecf2c68ecf02f96",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b02",
+      "boundary_assessment": "馆级政策和专项记录分层清楚，不延伸到渡运或故事市集。",
+      "child_role_assessment": "十二项声景职责与开放、入口、语言、设备、音量、修订和服务等馆级字段共同形成馆藏导航。",
+      "finding_codes": [],
+      "parent_responsibility": "统摄回声地图馆的声景采集、路线、展陈、无障碍与馆务。",
+      "round": 1,
+      "source_semantic_payload_digest": "26622f430a33c10fad70d3912d061af20d6b72b64c0a7d096ca178d4d514732e",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b02-s01",
+      "boundary_assessment": "采集原始声纹，不负责地图版本发布或馆内回放。",
+      "child_role_assessment": "采集地点与时窗界定范围，设备编号标识工具，公开许可和完整等级描述可用性。",
+      "finding_codes": [],
+      "parent_responsibility": "记录街区声纹的地点、时窗、设备、许可和完整度。",
+      "round": 1,
+      "source_semantic_payload_digest": "678ef99dc58f20f6711174a8c3da0d986d00200f8432a2d60a3443be2c6b7cce",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b02-s02",
+      "boundary_assessment": "步行导航不包含静默区规则或桥下声廊结构。",
+      "child_role_assessment": "路线节点、预计时长、静音替代路线与开放状态覆盖路径、耗时和可用性。",
+      "finding_codes": [],
+      "parent_responsibility": "定义回声步行路线及安静替代方案。",
+      "round": 1,
+      "source_semantic_payload_digest": "c9eef0af4569a71357b9f668c8f3c70db44fe970b6ee2bba25e07664cf95e4a3",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b02-s03",
+      "boundary_assessment": "规则区域独立于回声路线和馆级夜间静默政策。",
+      "child_role_assessment": "区域边界细分空间点位与标签，配合生效时窗和启用状态。",
+      "finding_codes": [],
+      "parent_responsibility": "维护公共静默区域的边界、时窗和规则开关。",
+      "round": 1,
+      "source_semantic_payload_digest": "e89c4b3d7b1e449b61d44a695aae0098ba63e408d6b9dca49faff5b2184212de",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b02-s04",
+      "boundary_assessment": "钟声索引不吸收渡口呼号或雨棚节奏。",
+      "child_role_assessment": "钟塔记录绑定实体编号，报时模式绑定触发时刻，临时停鸣给出状态。",
+      "finding_codes": [],
+      "parent_responsibility": "索引公共钟塔及其报时与停鸣状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "1fb3b697eab6e790b6aced5fe988de3aa46b4dd43dee39c7df48432bd6fad42f",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b02-s05",
+      "boundary_assessment": "只覆盖声廊空间，不管理馆级潮位提醒或步行路线。",
+      "child_role_assessment": "声廊结构含入口、聚声和离开位置，整体通行许可控制访问。",
+      "finding_codes": [],
+      "parent_responsibility": "描述桥下回声走廊的分段空间与通行许可。",
+      "round": 1,
+      "source_semantic_payload_digest": "24e8e1600d56a69878c0223c677c4d2cd20d516292786934fc74c377c2eab29e",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b02-s06",
+      "boundary_assessment": "声音节奏档案不承担天气路线或钟声报时。",
+      "child_role_assessment": "节奏结构递进到节拍频率与停顿标签，雨棚位置标明空间。",
+      "finding_codes": [],
+      "parent_responsibility": "记录雨棚滴声的节奏层次和发生位置。",
+      "round": 1,
+      "source_semantic_payload_digest": "4bcf66f773e7728f9450972e9e5b6b6add555fcf174cc279aeeb4daedbfa5660",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b02-s08",
+      "boundary_assessment": "仅描述方位风铃，不与故事市集路标共享职责。",
+      "child_role_assessment": "方位组合把街角位置、风铃编号、方向标签与启用状态放在同一对象下。",
+      "finding_codes": [],
+      "parent_responsibility": "组织街角风铃的位置、编号、方向和启用状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "3973e7d3741b0d45de0019299aed55a20df4a49d6f5b4560ac45452e8ff0126b",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b02-s09",
+      "boundary_assessment": "版本发布不包含采集设备、公开下载开关或最近修订时刻。",
+      "child_role_assessment": "版本身份保存版本编号，发布范围递进到覆盖街区编号集合。",
+      "finding_codes": [],
+      "parent_responsibility": "管理声景地图版本身份和发布街区范围。",
+      "round": 1,
+      "source_semantic_payload_digest": "a9139b6fa183abf5ff5c88fd602ca61658b99a831c66be7ade367d0329a15156",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b02-s10",
+      "boundary_assessment": "席位局部上限与馆根层音量政策刻意分层。",
+      "child_role_assessment": "席位配置含空间编号与开放状态，音量边界含单一上限值。",
+      "finding_codes": [],
+      "parent_responsibility": "描述馆内回放席的席位配置和局部音量边界。",
+      "round": 1,
+      "source_semantic_payload_digest": "e693122aca4f5363a427385ec568493a177c56f1661a553cb663901fbc3e1028",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b02-s11",
+      "boundary_assessment": "无障碍触感表达不替代普通回放席或总览图。",
+      "child_role_assessment": "触感图层绑定声景位置与符号标签，设备集合和可用状态支撑导览。",
+      "finding_codes": [],
+      "parent_responsibility": "提供听障触感图层、辅助设备和可用状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "5066d9269ae864f30dc79b3b1eb7bf4982c89096e8ce33f94d70436b3a9543e6",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b02-s12",
+      "boundary_assessment": "只负责移交，不更改版本发布范围或采集许可。",
+      "child_role_assessment": "移交清单、设备清点和许可核对分别落到版本、设备及完成状态。",
+      "finding_codes": [],
+      "parent_responsibility": "完成声景档案、回放设备和许可的馆藏移交。",
+      "round": 1,
+      "source_semantic_payload_digest": "1899d62905d577225b6c782969ab3561a497f2cbec8539139f743b64ec1fd514",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03",
+      "boundary_assessment": "总体字段与专项记录分层，且不跨入声景馆或温室。",
+      "child_role_assessment": "十二项运营职责与首末班、船只、站点、容量、低云、夜航、语言和总体服务字段共同覆盖公共渡运。",
+      "finding_codes": [],
+      "parent_responsibility": "统摄云织渡运的班次、站点、航线、队列、设备和航季协作。",
+      "round": 1,
+      "source_semantic_payload_digest": "91d7cab62b661358bca0bccbf6d7a31bea8bb772af9844aef5dc99ed491fd834",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03-s01",
+      "boundary_assessment": "单班记录不代替每日首末班或整体渡运状态。",
+      "child_role_assessment": "班次身份区分班号与船号，另有离站时刻和班次服务状态。",
+      "finding_codes": [],
+      "parent_responsibility": "记录一班轻舟的身份、离站时间和服务状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "453f29f4897822edb2afce70b57b6051692946f91f1cb5e641c23c9a9b6be6a2",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03-s02",
+      "boundary_assessment": "站内设施与登舟队列、开放站点总览各自独立。",
+      "child_role_assessment": "泊位布局含靠泊位置、候船区域与可用数量，另列换乘状态和站点编号。",
+      "finding_codes": [],
+      "parent_responsibility": "描述云索中转站的泊位布局、换乘许可和站点身份。",
+      "round": 1,
+      "source_semantic_payload_digest": "889e1ccef534668884403c3c1aec9148f95bd52aec58158cb46aef2193229bf2",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03-s03",
+      "boundary_assessment": "行李登记不管理失物转交或乘客队列。",
+      "child_role_assessment": "浮签编号、交付站点及其编号、领取时窗、交付确认和尺寸等级构成完整行李链。",
+      "finding_codes": [],
+      "parent_responsibility": "登记行李浮签、交付站、领取窗口和确认。",
+      "round": 1,
+      "source_semantic_payload_digest": "6d43caf79d2013213cec9f3d6000d70aff9724d3ea60d9a130a96e2f557614af",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03-s04",
+      "boundary_assessment": "气象航线方案与低云绕行及根层关闭站点区分。",
+      "child_role_assessment": "风窗范围给出时段，替代落点含站点与转移时长，航线状态控制启用。",
+      "finding_codes": [],
+      "parent_responsibility": "定义航行风窗、备降替代和航线启用。",
+      "round": 1,
+      "source_semantic_payload_digest": "fb914dce6f14ef73adc5781118648a1e93d78a3ef9e2e805b8668d3b7c1b5132",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03-s05",
+      "boundary_assessment": "队列职责不承接泊位布局或无障碍站点总览。",
+      "child_role_assessment": "普通队列含等候区和人数，辅助队列含辅助等候区和通道状态。",
+      "finding_codes": [],
+      "parent_responsibility": "组织普通与辅助两类登舟队列。",
+      "round": 1,
+      "source_semantic_payload_digest": "f88bde65a75400b343b92648b010d145b0a7b9565c7149b9f09a5d6a4f1a7159",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03-s06",
+      "boundary_assessment": "充能设备记录不表示燃油、班次身份或船只运营状态。",
+      "child_role_assessment": "会话递进到船坞实体编号，能量变化含开始与结束等级。",
+      "finding_codes": [],
+      "parent_responsibility": "记录轻舟在船坞的一次充能会话和能量变化。",
+      "round": 1,
+      "source_semantic_payload_digest": "e9bea2ab415d7ca6124cea61317edb7ed00ff6ca7b8e98d71fdd1516fb6cb478",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03-s07",
+      "boundary_assessment": "失物链路与行李浮签交付职责分开。",
+      "child_role_assessment": "记录编号、发现位置、转交链路的保管位置和领取确认共同闭合流程。",
+      "finding_codes": [],
+      "parent_responsibility": "跟踪渡运失物从发现到保管与领取。",
+      "round": 1,
+      "source_semantic_payload_digest": "0a07b22c579bf417d99fbc5508ceb73e53b95f36ce7b44cbbbd0149e5c693b53",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03-s08",
+      "boundary_assessment": "专项绕行不替代风窗航线或根层低云运行状态。",
+      "child_role_assessment": "触发条件含能见等级与风向标签，路径集合和方案状态描述应对动作。",
+      "finding_codes": [],
+      "parent_responsibility": "定义低云能见条件、绕行路径和启用状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "06ce57377c6a3c3bc6b34442d2303ef77336c91b56498d1bd97d50c9a7f44cae",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03-s09",
+      "boundary_assessment": "只管理夜航视觉引导，不承担整体夜航运行状态。",
+      "child_role_assessment": "路径节点、色彩标签、灯具编号及嵌入路径的亮度控制共同描述引导灯带。",
+      "finding_codes": [],
+      "parent_responsibility": "组织夜航灯带的空间路径、色彩、灯具与亮度。",
+      "round": 1,
+      "source_semantic_payload_digest": "ad53bfa4e64dc01400f57c353c4ae2eeebfe7f4cce0e71d8e64c95639cc43524",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03-s09-n01",
+      "boundary_assessment": "路径内部配置不扩展到航线启停或船员轮值。",
+      "child_role_assessment": "空间节点、色彩标签、灯具编号和亮度控制形成路径级组合。",
+      "finding_codes": [],
+      "parent_responsibility": "承载夜航灯带路径的节点与呈现属性。",
+      "round": 1,
+      "source_semantic_payload_digest": "6814f574b42c119b741d14cf7ec5c052bae5ac3606dfb630d00c17a3bc9ad86c",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03-s10",
+      "boundary_assessment": "人员排班不记录班次船号或航季设施交接。",
+      "child_role_assessment": "值守船员组和轮值安排共同覆盖人员与时间，休整位置嵌在安排链中。",
+      "finding_codes": [],
+      "parent_responsibility": "安排轻舟船员的值守人员与轮值休整。",
+      "round": 1,
+      "source_semantic_payload_digest": "5a75f444b5371199b6c6064b70a98ec27a217ecc550053f4864fc7fca34f9bc4",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03-s11",
+      "boundary_assessment": "票证互助不管理普通班次或行李浮签。",
+      "child_role_assessment": "票证编号、适用航线、有效时窗、转赠状态、次数与标签完整描述互助票。",
+      "finding_codes": [],
+      "parent_responsibility": "记录互助票证身份、航线、时窗、转赠和使用约束。",
+      "round": 1,
+      "source_semantic_payload_digest": "3183c044e546a02e802655792b0890747d7cb421108fe5a133a59d40f1422130",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b03-s12",
+      "boundary_assessment": "航季移交不替代日常航线状态或船坞充能。",
+      "child_role_assessment": "航线交接区分保留和暂停，设施交接列出设备，并有整体确认状态。",
+      "finding_codes": [],
+      "parent_responsibility": "完成季风航季的航线与设施交接。",
+      "round": 1,
+      "source_semantic_payload_digest": "7bd59221fbfc9b021818fd9bd2b85b051d17e90476372fdc22304aa481a5a483",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04",
+      "boundary_assessment": "日常与节庆、专项与总体均分层，不延伸到温室种植。",
+      "child_role_assessment": "十二项厨房职责与入口、开放、容量、服务、清洁和说明等根层字段共同构成公共厨房。",
+      "finding_codes": [],
+      "parent_responsibility": "统摄月籽共厨的食材、灶台、器具、活动、餐余和交接。",
+      "round": 1,
+      "source_semantic_payload_digest": "37ac87d4e52086dcaeee89d7be51b900bfb58a8e98d33a8f7d744650e7163e01",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04-s01",
+      "boundary_assessment": "入库记录不承担香草借篮或厨房库存交接。",
+      "child_role_assessment": "食材编号、来源花园、入库时刻、保存格位、香气标签、可借状态和剩余份数覆盖一批食材。",
+      "finding_codes": [],
+      "parent_responsibility": "登记月籽食材的身份、来源、保存和可借库存。",
+      "round": 1,
+      "source_semantic_payload_digest": "b0e90e94f06596c9f92146f35336820a9ab068538283c7e6581b528adf172f79",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04-s02",
+      "boundary_assessment": "单灶台预约与共厨总容量及活动总预约上限分开。",
+      "child_role_assessment": "灶台编号、预约时窗、操作台位、参与上限、清洁确认和活动标签描述一次预约资源。",
+      "finding_codes": [],
+      "parent_responsibility": "管理星火灶台的身份、预约窗口和配套条件。",
+      "round": 1,
+      "source_semantic_payload_digest": "7de105ea296d6a9e4504fb5375117311583d6cd159aeb714016a8ab5c4ddb9b6",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04-s03",
+      "boundary_assessment": "不承担月籽食材库存或器具柜清点。",
+      "child_role_assessment": "借篮明细、借出时刻、归还位置、保鲜标签与归还确认闭合借用过程。",
+      "finding_codes": [],
+      "parent_responsibility": "记录香草借篮的内容、借出、归还和保鲜。",
+      "round": 1,
+      "source_semantic_payload_digest": "031219368e37fc373a2687cf70eef692a06b78ca88727496b47f13a2b0fba2fc",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04-s04",
+      "boundary_assessment": "发酵观察不混入节庆菜单或儿童观察活动。",
+      "child_role_assessment": "容器记录、发酵观察窗口、存放位置、阶段标签与展示许可覆盖展示过程。",
+      "finding_codes": [],
+      "parent_responsibility": "描述微光发酵罐的容器、观察窗口、位置和阶段。",
+      "round": 1,
+      "source_semantic_payload_digest": "84c50b2ee6a4cfb95ee34194b1e87eaf15c1f679f80db1ace0ae985529425886",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04-s05",
+      "boundary_assessment": "长桌活动区别灶台预约和节庆供餐。",
+      "child_role_assessment": "席位安排、活动时刻、主题标签与报名状态共同支持长桌活动。",
+      "finding_codes": [],
+      "parent_responsibility": "组织共享长桌的席位、时窗、主题和报名。",
+      "round": 1,
+      "source_semantic_payload_digest": "327a625be2bcdfffb9cd098c31aa1be4de502b7279e071234669b0b8cf5ad496",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04-s06",
+      "boundary_assessment": "食谱档案不等同节庆菜单或实际食材库存。",
+      "child_role_assessment": "食谱身份与食材标签定义内容，预计份数和公开状态定义使用边界。",
+      "finding_codes": [],
+      "parent_responsibility": "保存月光食谱卡身份、食材标签、份数和公开状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "9b5b2af18021062c3e47d20e8dca498cb6c234c1c5ac8e20b8763af6eca7a36a",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04-s07",
+      "boundary_assessment": "器具柜与香草篮及共厨设施交接边界清楚。",
+      "child_role_assessment": "柜体身份、柜内器具目录、归还时窗和清点数量构成保管职责。",
+      "finding_codes": [],
+      "parent_responsibility": "管理共享器具柜身份、目录、归还窗口与清点数量。",
+      "round": 1,
+      "source_semantic_payload_digest": "6998e25de61829987e0258f4392dcef45e6bee801e25468c8b6376f79d410c15",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04-s08",
+      "boundary_assessment": "不记录食材入库或香草借用归还。",
+      "child_role_assessment": "送出香料份额、交换时刻和回执状态形成简洁交换记录。",
+      "finding_codes": [],
+      "parent_responsibility": "记录香料交换的送出份额、时刻和回执。",
+      "round": 1,
+      "source_semantic_payload_digest": "654289001906e8327e1039201f7ad392e9cee221700e01cc771d1acdbd9f8cdf",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04-s09",
+      "boundary_assessment": "活动范围不延伸到灶台操作或长桌报名。",
+      "child_role_assessment": "观察材料、活动位置与开放状态覆盖儿童观察的内容与准入。",
+      "finding_codes": [],
+      "parent_responsibility": "安排小厨观察材料、地点和开放状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "78df3e10a18205cf1eccf02310883ec9aa45b4945e9c7728439cbadf82d2237e",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04-s10",
+      "boundary_assessment": "只处理餐余，不纳入食材库存或节庆出餐。",
+      "child_role_assessment": "收集环节、转运环节和分类确认形成餐余处理链。",
+      "finding_codes": [],
+      "parent_responsibility": "跟踪餐余从收集到转运及分类确认。",
+      "round": 1,
+      "source_semantic_payload_digest": "d181a4198e9f19d3537ab5e48b9f0eaa168b6ecde249dd43d40ea13178c24d6f",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04-s11",
+      "boundary_assessment": "节庆菜单与日常食谱卡及日常服务状态分离。",
+      "child_role_assessment": "菜单结构收纳菜品卡、份数、台位、主题与公开状态，另列供餐时窗。",
+      "finding_codes": [],
+      "parent_responsibility": "组织虚构节庆菜单内容和供餐时窗。",
+      "round": 1,
+      "source_semantic_payload_digest": "d326d6c79056e85b5c90b46c9a913f5fc51b1bcb1fe4065308fc74e25aacec7b",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04-s11-n01",
+      "boundary_assessment": "结构不管理供餐时窗之外的厨房运营。",
+      "child_role_assessment": "菜品卡集合、预计份数、出餐台位、菜单主题与公开状态组成菜单结构。",
+      "finding_codes": [],
+      "parent_responsibility": "定义节庆菜单的菜品、产量、台位、主题和公开性。",
+      "round": 1,
+      "source_semantic_payload_digest": "d44fac420fafaac9a7611766a1bbb13fdf5007258efa80de944a47db1af6932d",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b04-s12",
+      "boundary_assessment": "交接快照不替代日常入库、预约或器具柜保管。",
+      "child_role_assessment": "食材交接含批次与格位，设施交接含灶台、器具和完成状态。",
+      "finding_codes": [],
+      "parent_responsibility": "完成食材库存与共厨设施交接。",
+      "round": 1,
+      "source_semantic_payload_digest": "f7bffa8a7c4e15b16a5c083f874c2a10f37199fbd64d814c4b2c6e87fb0364a5",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b05",
+      "boundary_assessment": "根层服务字段与专项工单分开，不跨入共厨或观测台。",
+      "child_role_assessment": "十二项修缮职责与入口、时窗、工位、值守、预约和整体服务字段共同支撑公共修缮。",
+      "finding_codes": [],
+      "parent_responsibility": "统摄椋鸟修缮社的工单、借用、工位、专项修复、巡检与交接。",
+      "round": 1,
+      "source_semantic_payload_digest": "79d6fa8f95f68855c60468954a6be676941fe28b5be1a2742bbf6ac39c8d31a5",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b05-s01",
+      "boundary_assessment": "工单受理不展开具体木片、织物或轮车工艺。",
+      "child_role_assessment": "身份含工单编号与队伍，物件范围含类别与接收位置，另有受理时刻和完成状态。",
+      "finding_codes": [],
+      "parent_responsibility": "登记修缮工单身份、物件范围、受理时间和完成状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "94e219c9d8c9d4d383c42c48b1a8af346e611b6e105eccb587bf9acb47e85da7",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b05-s02",
+      "boundary_assessment": "工具借用与工位预约及班次工具交接分离。",
+      "child_role_assessment": "工具目录含编号、数量与用途，使用边界给出区域，归还状态和时段闭合借用。",
+      "finding_codes": [],
+      "parent_responsibility": "管理共享工具目录、使用区域、归还状态和时窗。",
+      "round": 1,
+      "source_semantic_payload_digest": "f1848403b6389c9279fe8f9a0b786abe09768f2cf2bcdf5cdfd08b16b1188cd4",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b05-s03",
+      "boundary_assessment": "单工位能力不等于社级可用工位或活动预约上限。",
+      "child_role_assessment": "编号、预约时窗、能力材料与固定工具、人数、清洁、照明和入口共同定义工位。",
+      "finding_codes": [],
+      "parent_responsibility": "描述修缮工位预约、能力、状态和辅助入口。",
+      "round": 1,
+      "source_semantic_payload_digest": "4d09e3db39be49967182a97839f5e80c27d18262e846b7f7edd03b4b569b6aaf",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b05-s04",
+      "boundary_assessment": "木片工艺不混入陶片拼合或织物缝补。",
+      "child_role_assessment": "木片组合含编号与顺序，养护含格位和时长，另有验收状态与表面标签。",
+      "finding_codes": [],
+      "parent_responsibility": "记录木片组合、拼接顺序、养护和验收。",
+      "round": 1,
+      "source_semantic_payload_digest": "5fed9f539685c620d2b1fad7f33ee44b1c3dc871b3fa51a7d9e187ede5606840",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b05-s05",
+      "boundary_assessment": "织物修复与其他专项工艺分开。",
+      "child_role_assessment": "对象含编号、材质、颜色和破损等级，过程含工位与完成时刻，并记录返还。",
+      "finding_codes": [],
+      "parent_responsibility": "记录织物对象、缝补过程和返还状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "517ea67df5323a06a3f62929a3677037e9c4101a4bc4a5cc4038e5cb216d6947",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b05-s06",
+      "boundary_assessment": "时间校准不扩展到普通修缮完成时间或巡检。",
+      "child_role_assessment": "摆钟编号、校准前后偏移、校准时间、展示状态与标签形成校准记录。",
+      "finding_codes": [],
+      "parent_responsibility": "校准公共摆钟并保留前后读数、时刻和展示状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "774e03f87230b179da751360dd3eee1e1caa4aa4590e2e9d20ee491596ff742f",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b05-s07",
+      "boundary_assessment": "轮车修缮与木片、陶片和灯罩职责分开。",
+      "child_role_assessment": "轮组编号、转动等级、磨损标签配合工位、完成时刻、出库检查及载荷等级。",
+      "finding_codes": [],
+      "parent_responsibility": "记录轮车轮组检查、工位、完成时间和出库状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "3326158d2bce2ddbc21fe34218b4db2c969632cfe471cfcd16f954fad8c9ca5d",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b05-s08",
+      "boundary_assessment": "陶片路径不替代巡检路线或木片拼接。",
+      "child_role_assessment": "陶片编号、拼合顺序、修复工位、展示状态及修复标签覆盖修复链。",
+      "finding_codes": [],
+      "parent_responsibility": "描述陶片集合、拼合路径、工位与展示复核。",
+      "round": 1,
+      "source_semantic_payload_digest": "eb675da9562bdf0e380c0ccf32b2b25c1cb7421910f5e54db6dc16af1215f95b",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b05-s09",
+      "boundary_assessment": "灯罩对象与摆钟展示及普通照明等级区分。",
+      "child_role_assessment": "灯罩身份递进到编号和位置，确认组合包含完成时刻、状态与透光等级，另列纸纤标签。",
+      "finding_codes": [],
+      "parent_responsibility": "记录纸纤灯罩身份、安装位置、透光与修缮确认。",
+      "round": 1,
+      "source_semantic_payload_digest": "ebc057ddad7132563eb5034b3454c41c2075e845d5806db0118317e8205aa482",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b05-s10",
+      "boundary_assessment": "巡检导航不承担具体物件修复工艺。",
+      "child_role_assessment": "路线结构含起点、停靠序列和终点，执行记录含执行组与开始时刻。",
+      "finding_codes": [],
+      "parent_responsibility": "定义修缮巡检路线及其执行记录。",
+      "round": 1,
+      "source_semantic_payload_digest": "7b556f6f1d8053e88d8b5de2403d2c623d61b0647aa401314d73755c271ca1f2",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b05-s11",
+      "boundary_assessment": "教育活动与工位预约和社级活动上限分层。",
+      "child_role_assessment": "主题标签、学习场地、活动安排的时窗人数及报名状态共同描述活动。",
+      "finding_codes": [],
+      "parent_responsibility": "组织修缮学徒活动的主题、场地、时窗、人数和报名。",
+      "round": 1,
+      "source_semantic_payload_digest": "7e15e441ad5ba0756d39dfa5f065465bdc8c7ffb9c33fbc62030fdd884348c7a",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b05-s12",
+      "boundary_assessment": "交接不修改日常工单、借用或工位预约记录。",
+      "child_role_assessment": "工单交接区分继续与复核，工具集合、封闭工位、完成状态和交接时刻构成快照。",
+      "finding_codes": [],
+      "parent_responsibility": "完成工单、工具和工位的班次交接。",
+      "round": 1,
+      "source_semantic_payload_digest": "fe2d487a1edad6f1389d815af27cd3e8f484e2760142e24277f322245b7f0795",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b06",
+      "boundary_assessment": "观测对象都在本台边界内，不吸收声景馆或渡运职责。",
+      "child_role_assessment": "八项观测职责分别覆盖窗口、读数、描摹、刻度、维护、席位、夜潮导览及班次交接。",
+      "finding_codes": [],
+      "parent_responsibility": "统摄棱潮观测台的潮光、浮标、云带、岸线、棱镜、席位、导览和交接。",
+      "round": 1,
+      "source_semantic_payload_digest": "f402ec584fa20187c02064d6a483c397891f27c0eca17685e970e816b0fc0e8b",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b06-s01",
+      "boundary_assessment": "潮光窗口区别潮声席开放时窗和夜潮导览。",
+      "child_role_assessment": "窗口时段、观测位置、色带标签、亮度等级及公开状态覆盖一次潮光记录。",
+      "finding_codes": [],
+      "parent_responsibility": "定义潮光观测的时段、位置、色带、亮度和公开状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "ff161c04387269063dc28a5c52ff5065a131e456d77c797e2d8bed7787a9efe9",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b06-s02",
+      "boundary_assessment": "浮标观测不混入岸线刻度或设备交接。",
+      "child_role_assessment": "浮标编号与位置组成身份，潮位读数、巡读时刻及确认状态组成一次巡读。",
+      "finding_codes": [],
+      "parent_responsibility": "记录浮标身份、潮位读数、巡读时刻和确认。",
+      "round": 1,
+      "source_semantic_payload_digest": "586fc2dc34c01535996f04fda0eb6e2ebe8a87b0242817716bedf8a4badbd0a6",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b06-s03",
+      "boundary_assessment": "云带描述与潮位量测及夜潮导览分离。",
+      "child_role_assessment": "空间范围、形态标签、描摹时刻与复核状态覆盖描摹成果。",
+      "finding_codes": [],
+      "parent_responsibility": "记录岸外云带的范围、形态、时刻和复核。",
+      "round": 1,
+      "source_semantic_payload_digest": "e2426466fd73a93f742df0780bfdb3d0ca38e911c89e6b9590a43eba1116b83f",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b06-s04",
+      "boundary_assessment": "岸线刻度不替代浮标潮位或观测台封闭点位。",
+      "child_role_assessment": "刻度位置含点位、编号和读数，另有观察时刻和开放状态。",
+      "finding_codes": [],
+      "parent_responsibility": "管理岸线刻度位置、读数、观察时刻与开放许可。",
+      "round": 1,
+      "source_semantic_payload_digest": "6440c494ae3c60923268c94d26ebd9d95b5f82b5591bfee7f3eb354c636e2308",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b06-s05",
+      "boundary_assessment": "设备维护与潮光观测内容及交接清单分开。",
+      "child_role_assessment": "棱镜档案含编号与安装位置，维护记录含时刻，并列展示状态。",
+      "finding_codes": [],
+      "parent_responsibility": "维护观测棱镜身份、位置、维护时刻和展示状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "d45eef89483e36b1fd1bf81209b8ebc74da2a980c46a7423cfe7a5c286e0b386",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b06-s06",
+      "boundary_assessment": "访客席位不承担潮光窗口或夜潮路线。",
+      "child_role_assessment": "席位空间递进到单一编号，另有多个开放时窗和使用状态。",
+      "finding_codes": [],
+      "parent_responsibility": "描述潮声观察席空间、开放时窗和使用状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "1ed30380d43d11203bf4ff8eb20068343bf0f1995bd8ccda2b33a304f9fbe9ed",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b06-s07",
+      "boundary_assessment": "导览活动与固定观察席及岸线开放许可分离。",
+      "child_role_assessment": "导览路线含点位、时窗、人数及照明，报名状态控制参与。",
+      "finding_codes": [],
+      "parent_responsibility": "安排夜潮导览路线、时窗、容量、照明和报名。",
+      "round": 1,
+      "source_semantic_payload_digest": "93ae44946be7ac12508bbe949d82a8df260f182dbcaea85f03bf5a34d672e09e",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b06-s08",
+      "boundary_assessment": "交接快照不替代各设备的巡读和维护记录。",
+      "child_role_assessment": "设备交接区分浮标与棱镜，区域交接列封闭点位，完成确认收束流程。",
+      "finding_codes": [],
+      "parent_responsibility": "完成观测设备、区域和确认的班次交接。",
+      "round": 1,
+      "source_semantic_payload_digest": "9266a9a6bb56e90e2a0f9a55c394588b96d5c1178ba65201710e5abb9469dfa7",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b07",
+      "boundary_assessment": "故事市集边界明确，不把回声馆风铃或温室活动纳入。",
+      "child_role_assessment": "七项职责从内容登记延伸到阅读空间、交换流程、活动和班次移交。",
+      "finding_codes": [],
+      "parent_responsibility": "统摄风铃故事市集的卡片、朗读、路标、交换、夜读、静读和交接。",
+      "round": 1,
+      "source_semantic_payload_digest": "87333748f54aa789e3b7d19889fed323782c940b09d064b0ccd15e545e789ce9",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b07-s01",
+      "boundary_assessment": "登记档案不等同交换卡集合或静读目录。",
+      "child_role_assessment": "卡片编号、主题标签、朗读时长与公开状态共同描述单张故事卡。",
+      "finding_codes": [],
+      "parent_responsibility": "登记故事卡身份、主题、朗读时长和公开许可。",
+      "round": 1,
+      "source_semantic_payload_digest": "19e8a9645009717bb5dd9b84f78c5b6de6901d97c735daabd869165a0aa1fabe",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b07-s02",
+      "boundary_assessment": "朗读席与无声阅读角及交接席位集合分层。",
+      "child_role_assessment": "席位编号与等候区、开放时窗、辅助设备及使用状态覆盖朗读服务。",
+      "finding_codes": [],
+      "parent_responsibility": "管理公共朗读席的空间、时窗、设备和使用状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "2de9ab3add420b117d6ba73529bbeaae6a45996a3b678d1698ce8205bee06422",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b07-s03",
+      "boundary_assessment": "市集路标不与回声地图馆的街角风铃合并。",
+      "child_role_assessment": "路标身份含编号和安装位置，方向标签与启用状态支撑导航。",
+      "finding_codes": [],
+      "parent_responsibility": "描述故事市集风铃路标的身份、位置、方向和启用。",
+      "round": 1,
+      "source_semantic_payload_digest": "c4a17a080a97c7814cb806bce91f736c4562059fd980f8d430c00723f9995301",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b07-s04",
+      "boundary_assessment": "交换台不修改故事卡登记内容或夜读活动。",
+      "child_role_assessment": "交换卡片集合区分三种去向，交换确认保存完成状态。",
+      "finding_codes": [],
+      "parent_responsibility": "记录故事卡送出、取回、保留及交换确认。",
+      "round": 1,
+      "source_semantic_payload_digest": "b4cfdafee12fe6e33750ce08a51af54136420a1e526a2e8aedade06da7534b7c",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b07-s05",
+      "boundary_assessment": "夜读活动与常设朗读席和静读角区分。",
+      "child_role_assessment": "活动安排含位置与时窗，活动内容列故事卡，开放确认作为活动准入节点。",
+      "finding_codes": [],
+      "parent_responsibility": "安排风灯夜读的位置、时窗、故事卡和开放确认。",
+      "round": 1,
+      "source_semantic_payload_digest": "f45b11425608f7ba117c3e393805a57ed4e54ade189eaaa48ea614bf2194914b",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b07-s06",
+      "boundary_assessment": "静读职责不包含朗读设备或夜读活动安排。",
+      "child_role_assessment": "阅读空间、静读卡片集合与开放规则覆盖静读服务。",
+      "finding_codes": [],
+      "parent_responsibility": "组织无声阅读角的空间、卡片目录和使用规则。",
+      "round": 1,
+      "source_semantic_payload_digest": "9daa11dc32630881a6693a30dbfcd10bbd3485669264d7a33caf10662b623fc9",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b07-s07",
+      "boundary_assessment": "交接集合不替代各对象的日常登记与服务记录。",
+      "child_role_assessment": "卡片集合、朗读席位、风铃路标、封闭区域、交接时刻和完成状态形成交接快照。",
+      "finding_codes": [],
+      "parent_responsibility": "完成故事卡、席位、路标、区域和状态的班次交接。",
+      "round": 1,
+      "source_semantic_payload_digest": "53c52f08249ea49fa089983fabb77d968f254fffc03b33440dae1cab10f10e4e",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b08",
+      "boundary_assessment": "实验坊只处理完全虚构公共观察活动，不跨入棱潮观测台。",
+      "child_role_assessment": "六项职责覆盖观察展品、日历、观察容器、风向纸带、公共工具及班次移交。",
+      "finding_codes": [],
+      "parent_responsibility": "统摄苔钟公坊的展品、影刻、露水、纸带、工具借阅和交接。",
+      "round": 1,
+      "source_semantic_payload_digest": "1216db4e7010cb64d2145b2d2ebd973c00cfb310b38d6f6c0360681022bb34e0",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b08-s01",
+      "boundary_assessment": "展品档案不等同交接苔钟集合或影刻日历。",
+      "child_role_assessment": "展品编号与位置组成身份，节律标签、观察等级及展示状态定义观察属性。",
+      "finding_codes": [],
+      "parent_responsibility": "描述苔钟展品身份、位置、节律、等级和展示状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "4e34408dcccfcb2a276cedb29086195bc7c2b0ec647e7af12a8f4d57c1b267f5",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b08-s02",
+      "boundary_assessment": "日历职责不承载露水观察或微风方向。",
+      "child_role_assessment": "影刻位置递进到空间编号，活动日期集合和日历公开状态共同描述日历。",
+      "finding_codes": [],
+      "parent_responsibility": "维护露台影刻日历的位置、活动时刻和公开状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "3ce49aec2f3aa5716503f1c64743cf0399dfe9ce8b3444c8c450facfaa7efe86",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b08-s03",
+      "boundary_assessment": "露水容器与苔钟展品及工具借阅分开。",
+      "child_role_assessment": "瓶体档案含编号、位置和观察标签，另有观察时刻与展示状态。",
+      "finding_codes": [],
+      "parent_responsibility": "记录露水瓶身份、放置点、标签、时刻和展示状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "6bb8d76499fe4609c3a0272c11f9c54aaf20172d936961eefc4e2e0e2df40854",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b08-s04",
+      "boundary_assessment": "纸带用于风向呈现，不承担露水或影刻观察。",
+      "child_role_assessment": "纸带组合包含编号、位置、方向与颜色标签，整体状态记录是否观察。",
+      "finding_codes": [],
+      "parent_responsibility": "组织微风纸带的编号、悬挂、方向、颜色和观察状态。",
+      "round": 1,
+      "source_semantic_payload_digest": "e6fb89681cc4c5b60d96efe0042b33babec5927608cdbee15cb859c6aab95a9a",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b08-s05",
+      "boundary_assessment": "日常借阅与公坊交接中的工具清点分离。",
+      "child_role_assessment": "工具清单含编号与数量，借阅时窗递进到可借时段集合。",
+      "finding_codes": [],
+      "parent_responsibility": "管理观察工具清单、数量和可借时段。",
+      "round": 1,
+      "source_semantic_payload_digest": "e320c4119c6f7ff54b6e3f1e5df8a642f447596d3e062e1c6a82294fdd69be27",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "b08-s06",
+      "boundary_assessment": "交接快照不替代展品档案或日常工具借阅。",
+      "child_role_assessment": "苔钟、观察点、工具、未归还借阅、封闭点、交接时刻、完成状态和说明更新覆盖移交。",
+      "finding_codes": [],
+      "parent_responsibility": "完成展品、点位、工具、借阅和说明的公坊交接。",
+      "round": 1,
+      "source_semantic_payload_digest": "0e2dd3809a1ee841eca3119d589db92d339ec0922a5fda069442d14990326c8e",
+      "status": "SILVER_ACCEPTED"
+    },
+    {
+      "blueprint_ref": "root",
+      "boundary_assessment": "根只负责领域分区；所有业务语义下沉到显式分支，且只有根允许空父引用。",
+      "child_role_assessment": "漂灯温室、回声地图、云织渡运、月籽共厨、椋鸟修缮、棱潮观测、风铃故事和苔钟公坊并列为唯一顶层分支。",
+      "finding_codes": [],
+      "parent_responsibility": "统摄星澜协作城全部八个虚构公共知识领域。",
+      "round": 1,
+      "source_semantic_payload_digest": "ef9d1f0de7932ed882b18a265607842f0d39f8512e5d3ad97084201345654813",
+      "status": "SILVER_ACCEPTED"
+    }
+  ],
+  "schema_version": "treeguard.navigation-copilot-v3c-b02-blueprint-review.v1"
+}

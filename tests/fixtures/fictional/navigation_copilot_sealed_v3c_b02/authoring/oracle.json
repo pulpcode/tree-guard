@@ -1,0 +1,1177 @@
+{
+  "batch_ref": "navigation-copilot-sealed-v3c-20260806-b02",
+  "oracles": [
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "time_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b01-s02-n02"
+      ],
+      "clarification_comparison_blueprint_refs": [
+        "b01-s07-n05"
+      ],
+      "clarification_strategy": "询问是哪项活动开始，并用晨光幕布与叶影观测作对照。",
+      "distractor_blueprint_refs": [
+        "b01-s07-n05"
+      ],
+      "scenario_ref": "v3c-b02-cla-01",
+      "source_semantic_payload_digest": "bd45d059aa296a76eb81e1b5031f3c48d9f94da041ca436e247a7abb091b00f1",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b02-x04"
+      ],
+      "clarification_comparison_blueprint_refs": [
+        "b02-s05-n03"
+      ],
+      "clarification_strategy": "询问低刺激入口还是桥下声廊入口。",
+      "distractor_blueprint_refs": [
+        "b02-s05-n03"
+      ],
+      "scenario_ref": "v3c-b02-cla-02",
+      "source_semantic_payload_digest": "c0e197de222587491f5fdaa704020dc004d1eafa36cd64e6be7b9e074da2533f",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "time_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b03-x01"
+      ],
+      "clarification_comparison_blueprint_refs": [
+        "b03-x02"
+      ],
+      "clarification_strategy": "询问每日第一班还是每日最后一班。",
+      "distractor_blueprint_refs": [
+        "b03-x02"
+      ],
+      "scenario_ref": "v3c-b02-cla-03",
+      "source_semantic_payload_digest": "460e62361864903054c1b2bf238b07b105f1f87a85365479f41df4063c35cf76",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "boolean"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b04-x09"
+      ],
+      "clarification_comparison_blueprint_refs": [
+        "b04-x08"
+      ],
+      "clarification_strategy": "询问日常共厨还是节庆供餐服务。",
+      "distractor_blueprint_refs": [
+        "b04-x08"
+      ],
+      "scenario_ref": "v3c-b02-cla-04",
+      "source_semantic_payload_digest": "e12ec21f863bef5ce86574c325deb3a6fe7c67af084b106ee6f02f439940fd92",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "time_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b05-s05-n08"
+      ],
+      "clarification_comparison_blueprint_refs": [
+        "b05-s07-n03"
+      ],
+      "clarification_strategy": "询问织物缝补还是轮车修缮的完成时间。",
+      "distractor_blueprint_refs": [
+        "b05-s07-n03"
+      ],
+      "scenario_ref": "v3c-b02-cla-05",
+      "source_semantic_payload_digest": "b71ca739fc9992fa89c15c7c9c67f6e0df68959a14fce8ebe793d3d73413e75b",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "time_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b06-s06-n02"
+      ],
+      "clarification_comparison_blueprint_refs": [
+        "b06-s01-n06"
+      ],
+      "clarification_strategy": "询问潮声席开放时窗还是潮光观测时段。",
+      "distractor_blueprint_refs": [
+        "b06-s01-n06"
+      ],
+      "scenario_ref": "v3c-b02-cla-06",
+      "source_semantic_payload_digest": "acb50e6a6725d4de75cdafb7811d6255d99e6de05da05164e10c97efa1dc25a5",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b07-s05-n03"
+      ],
+      "clarification_comparison_blueprint_refs": [
+        "b07-s02-n04"
+      ],
+      "clarification_strategy": "询问风灯夜读活动还是公共朗读席的位置。",
+      "distractor_blueprint_refs": [
+        "b07-s02-n04"
+      ],
+      "scenario_ref": "v3c-b02-cla-07",
+      "source_semantic_payload_digest": "a4b4c7ef0546b45edce033b3da84529560127e9b51ca07e7b5c5634d5e643eef",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "time_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b01-s01-n02"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-lit-01",
+      "source_semantic_payload_digest": "98b2e6777cb3fdd874295566ad7e0ca1b229f22d8775c24a04543046c421379c",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "float"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b02-s02-n02"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-lit-02",
+      "source_semantic_payload_digest": "3d3322fa3d96f6e9458f9db5486a9de66d8674cd1db65c34aa675d47aa619b84",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "entity_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b03-s01-n04"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-lit-03",
+      "source_semantic_payload_digest": "0c5e9be5a55c7412e68ddad677cad5c00135e962a42c4e1be37df191445e146d",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "integer"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b04-s01-n07"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-lit-04",
+      "source_semantic_payload_digest": "ea4296a20962b791aff52f8e61f7f53bef94f63b2c8c5ad79ce641b59a444f03",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "time_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b05-s02-n09"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-lit-05",
+      "source_semantic_payload_digest": "be7c898ddfdde0649b3dcc2d46eda40ede270def7661a753e6268819a53ae281",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "float"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b06-s02-n02"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-lit-06",
+      "source_semantic_payload_digest": "92c8ef5cf435353a1b9d8745c92ff912a2f565f977dd4cab2e57f20107477170",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "string"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b07-s01-n02"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-lit-07",
+      "source_semantic_payload_digest": "d329ec2f94b7305f92a5c02ab5f118f6846b70c93f6d88fe1b4e9f150ef3d412",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "integer"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b08-s01-n03"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-lit-08",
+      "source_semantic_payload_digest": "0327dfee1b9909479f47e565e1ae2a69a3a7e11208ee39259046b64a44cf35a0",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "entity_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b01-s10-n03"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-lit-09",
+      "source_semantic_payload_digest": "94fe04775aa99d771bb43e9a644cb2e1955d423b8dd12fe94033a24ced3d987b",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "boolean"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b02-s10-n03"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-lit-10",
+      "source_semantic_payload_digest": "ed0693f4226821709fa5fad4805ea09c2233821e30db75e75345c9bdfa31abaf",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "integer"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b03-s02-n05"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-lit-11",
+      "source_semantic_payload_digest": "35d83b630267d595cc59146fbc50f2fccaab831886c412fe7c5c49073cd2c350",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b03-x17"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-lit-12",
+      "source_semantic_payload_digest": "a1bce5cb342dad2fdecc86f032295512e255fae5144856ef87173fe16c03923d",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b01-s10-n07",
+        "b01-s09-n07"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-mul-01",
+      "source_semantic_payload_digest": "83d9f6eb6a21f590f75eb4ba596547d496bb62f8adf156438652a3817d6bc6db",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "entity_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b02-x07",
+        "b02-s11-n02"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-mul-02",
+      "source_semantic_payload_digest": "bf5559c3d908e7002b54ee30194a5433cd09016bf0ff6f1829e02ea60eb60845",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        },
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b03-s02-n04",
+        "b03-s05-n03",
+        "b03-s05-n05"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-mul-03",
+      "source_semantic_payload_digest": "d34ba4c86c117c51a2eeb7918eedfadb1c6e64e67232e54c57002f6be59dd101",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        },
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b05-x04",
+        "b05-s03-n01"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-mul-04",
+      "source_semantic_payload_digest": "f2aaf96d4856de51f1db9a5abe439893c77067ae5b17ac7723b20b647fa9497e",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b07-s02-n04",
+        "b07-s06-n04",
+        "b07-s05-n03"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [],
+      "scenario_ref": "v3c-b02-mul-05",
+      "source_semantic_payload_digest": "8092a508b7a32c596c7d13a4f2070c8c0f22b1d8b224ed8d8eb6b7fc70152780",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "time_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b01-s10-n05"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b01-s07-n05"
+      ],
+      "scenario_ref": "v3c-b02-non-01",
+      "source_semantic_payload_digest": "8805984c8a5fc666e10a86ca936fa674d746d033cdfa2916c2222779bdd20a84",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "time_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b06-s01-n06"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b06-s06-n02"
+      ],
+      "scenario_ref": "v3c-b02-non-02",
+      "source_semantic_payload_digest": "8ef0a59a18c90345bfe5968e833b5b23eef29e510c20d26de206213cec46b587",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "time_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b02-x13"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b02-s01-n02"
+      ],
+      "scenario_ref": "v3c-b02-non-03",
+      "source_semantic_payload_digest": "acf29f1aa2084b0c97752f9fb9fb8fe756fdb9916b1259ffa6f5df83d833b7fe",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b04-x01"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b04-x13"
+      ],
+      "scenario_ref": "v3c-b02-non-04",
+      "source_semantic_payload_digest": "a4ff04a53bc12b015fefe0bdb0ace5a5056f454124851498a10833e26d82ffed",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b03-s05-n05"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b03-s05-n03"
+      ],
+      "scenario_ref": "v3c-b02-non-05",
+      "source_semantic_payload_digest": "fab381a9a4084b902e2b38bd3081cafb08d4a9a7b56b9687d9e27a29f324e325",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "integer"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b08-s05-n04"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b05-s02-n05"
+      ],
+      "scenario_ref": "v3c-b02-non-06",
+      "source_semantic_payload_digest": "4eb804d1cb3689142e07dc597abcb92b98802a647d6ef04d026d49c9541ae305",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "boolean"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b01-s09-n04"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b01-s10-n03"
+      ],
+      "scenario_ref": "v3c-b02-non-07",
+      "source_semantic_payload_digest": "b73e2cde869cf7ac53c2cd444d150215ffa6e2fd35dce7c60060437a8641cee4",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "time_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b05-s01-n03"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b05-s12-n09"
+      ],
+      "scenario_ref": "v3c-b02-non-08",
+      "source_semantic_payload_digest": "3a07d5fb5c9df500734ec8f79695c167b0b18e9ff4b4d87f2f901ee81e1a7ae1",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b08-s06-n07"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b08-s06-n02"
+      ],
+      "scenario_ref": "v3c-b02-non-09",
+      "source_semantic_payload_digest": "635bc43736ce84ca06326c80bc77c0bc4bc04c683002624472a6fe065b689de9",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b01-s01-n03"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b01-s03-n02"
+      ],
+      "scenario_ref": "v3c-b02-non-10",
+      "source_semantic_payload_digest": "6c1ab8972bac06f549d8690b3f69315879395cf7dc41e6cd00f2d44aaef8888d",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "time_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b07-s02-n02"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b07-s05-n04"
+      ],
+      "scenario_ref": "v3c-b02-non-11",
+      "source_semantic_payload_digest": "50a17b501dac029212c188e04ca709b0ecd86df211d1ab67be85199984ce2e88",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "boolean"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b03-x18"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b03-s01-n03"
+      ],
+      "scenario_ref": "v3c-b02-non-12",
+      "source_semantic_payload_digest": "a7eb59d5e171a7719e101dff0f3a53522f5e1f2b25277d34e03ad5fc898213e8",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "float"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b01-s03-n04"
+      ],
+      "scenario_ref": "v3c-b02-none-01",
+      "source_semantic_payload_digest": "5b2edaacb4f79e96c174ed6d1eb4b9f28126a0f9e57c635539ef0b4a3995cc30",
+      "target_exists": false,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "float"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b02-s02-n02"
+      ],
+      "scenario_ref": "v3c-b02-none-02",
+      "source_semantic_payload_digest": "997832b193d95ee3cb5d312caacaed55c4fc3ef1ed87499b2e19c54cda677b7a",
+      "target_exists": false,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "entity_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b03-s01-n05"
+      ],
+      "scenario_ref": "v3c-b02-none-03",
+      "source_semantic_payload_digest": "5033b60a0b9b0029b6ed556a8456641f5f1486b525401d3e88474a2abaa1ebe3",
+      "target_exists": false,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "entity_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b04-s12-n05"
+      ],
+      "scenario_ref": "v3c-b02-none-04",
+      "source_semantic_payload_digest": "f6d5808914e85ca0f29d71f6cf034a7bc4e374edc7b12b646473679d95c3f74b",
+      "target_exists": false,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "float"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b05-s04-n08"
+      ],
+      "scenario_ref": "v3c-b02-none-05",
+      "source_semantic_payload_digest": "05b50dba2f1fbb341e7f2042fe43b74396995b73fa2fe04cce3ce606985fdb6c",
+      "target_exists": false,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "integer"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b08-s01-n03"
+      ],
+      "scenario_ref": "v3c-b02-none-06",
+      "source_semantic_payload_digest": "fc5916921caf23a76fd8b2759b92d6cd8eb32856803f1591f12684ddd0a84152",
+      "target_exists": false,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "integer"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b02-s10-n05"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b02-x09"
+      ],
+      "scenario_ref": "v3c-b02-str-01",
+      "source_semantic_payload_digest": "b2a689434d6f41495d63fbc2878491e366d8d4aff23392468ac419b2c8d597c2",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "integer"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b02-x09"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b02-s10-n05"
+      ],
+      "scenario_ref": "v3c-b02-str-02",
+      "source_semantic_payload_digest": "6f57bb366284373ca232175f42f144b3f86c965eb6f7cb218e028f07f5b62890",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "integer"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b05-s03-n08"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b05-x07"
+      ],
+      "scenario_ref": "v3c-b02-str-03",
+      "source_semantic_payload_digest": "efe4cf366da10fb010f852cf6e7b587b52a134790ead5c9081a540d88a1946b2",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "integer"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b05-x07"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b05-s03-n08"
+      ],
+      "scenario_ref": "v3c-b02-str-04",
+      "source_semantic_payload_digest": "5355150cfdcaa89fa737f64f591cde74e952581ff6f5d1d835422ee742af920a",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "integer"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b06-s07-n06"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b01-s10-n08"
+      ],
+      "scenario_ref": "v3c-b02-str-05",
+      "source_semantic_payload_digest": "bbb4919a3e8e863b5bd7c9a41ceda6c65ef891392ba6d12a814d050a02ea5dfa",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "entity_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b08-s06-n03"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b08-s05-n03"
+      ],
+      "scenario_ref": "v3c-b02-str-06",
+      "source_semantic_payload_digest": "4ef7381116b92aa8aff17234ed9c5b45edf05bee65ec5885fae490bbaf9b48b3",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b07-s07-n02"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b07-s02-n04"
+      ],
+      "scenario_ref": "v3c-b02-str-07",
+      "source_semantic_payload_digest": "1e38485a5276d67c2d59ce06c4b3f8ff45ac3aecaabe53f2534c7bec2db7a62a",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "space_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b03-s04-n05"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b03-x06"
+      ],
+      "scenario_ref": "v3c-b02-str-08",
+      "source_semantic_payload_digest": "84edff9c29872df8561a2f67ccbec96c1d068fb15f137cf164fdf16abd2a38ab",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "entity_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b01-s12-n04"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b01-s06-n07"
+      ],
+      "scenario_ref": "v3c-b02-str-09",
+      "source_semantic_payload_digest": "226092fbf52a905b3e70db771524c65ffe9847c68125e011563ca02d0b124573",
+      "target_exists": true,
+      "weak_evidence_reason": null
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "boolean"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b02-s10-n03"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b01-s09-n04",
+        "b04-s09-n03"
+      ],
+      "scenario_ref": "v3c-b02-wek-01",
+      "source_semantic_payload_digest": null,
+      "target_exists": true,
+      "weak_evidence_reason": "INSUFFICIENT_DISCRIMINATOR",
+      "weak_evidence_review_assessment": "请求缺少对象与领域；回放席、香径导览和小厨观察均有独立开放状态。"
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "integer"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b05-s03-n08"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b04-s02-n04",
+        "b06-s07-n05"
+      ],
+      "scenario_ref": "v3c-b02-wek-02",
+      "source_semantic_payload_digest": null,
+      "target_exists": true,
+      "weak_evidence_reason": "INSUFFICIENT_DISCRIMINATOR",
+      "weak_evidence_review_assessment": "请求未给出地点或活动对象；修缮工位、共厨灶台和夜潮导览均有单值人数上限。"
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "entity_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b02-s01-n03"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b02-s12-n05",
+        "b02-x07"
+      ],
+      "scenario_ref": "v3c-b02-wek-03",
+      "source_semantic_payload_digest": null,
+      "target_exists": true,
+      "weak_evidence_reason": "INSUFFICIENT_DISCRIMINATOR",
+      "weak_evidence_review_assessment": "采集设备、移交设备和无障碍导览设备均是多值实体编号；请求没有用途、阶段或馆内范围。"
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "SINGLE",
+          "node_kind": "PROPERTY",
+          "value_type": "time_code"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b02-x13"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b03-x16",
+        "b04-x17"
+      ],
+      "scenario_ref": "v3c-b02-wek-04",
+      "source_semantic_payload_digest": null,
+      "target_exists": true,
+      "weak_evidence_reason": "INSUFFICIENT_DISCRIMINATOR",
+      "weak_evidence_review_assessment": "声景地图修订、航线修订和共厨清点都是跨路径的最近单值时间记录，请求未给出记录对象。"
+    },
+    {
+      "acceptable_profiles": [
+        {
+          "cardinality": "MULTIPLE",
+          "node_kind": "PROPERTY",
+          "value_type": "string"
+        }
+      ],
+      "acceptable_target_blueprint_refs": [
+        "b07-s01-n02"
+      ],
+      "clarification_comparison_blueprint_refs": [],
+      "clarification_strategy": null,
+      "distractor_blueprint_refs": [
+        "b01-s01-n05",
+        "b03-x15"
+      ],
+      "scenario_ref": "v3c-b02-wek-05",
+      "source_semantic_payload_digest": null,
+      "target_exists": true,
+      "weak_evidence_reason": "INSUFFICIENT_DISCRIMINATOR",
+      "weak_evidence_review_assessment": "故事主题、星籽休眠条件和渡运服务通告都是多值标签；请求没有标签主题或领域。"
+    }
+  ],
+  "schema_version": "treeguard.navigation-copilot-v3c-b02-oracle-authoring.v1"
+}

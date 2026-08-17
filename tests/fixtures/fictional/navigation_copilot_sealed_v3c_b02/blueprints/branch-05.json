@@ -1,0 +1,1742 @@
+{
+  "schema_version": "treeguard.navigation-copilot-v3c-blueprint-file.v1",
+  "branch_ref": "branch-05",
+  "nodes": [
+    {
+      "blueprint_ref": "b05",
+      "parent_ref": "root",
+      "parent_role": "椋鸟修缮领域",
+      "label": "椋鸟修缮社",
+      "name": "椋鸟公共修缮社",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s01",
+        "b05-s02",
+        "b05-s03",
+        "b05-s04",
+        "b05-s05",
+        "b05-s06",
+        "b05-s07",
+        "b05-s08",
+        "b05-s09",
+        "b05-s10",
+        "b05-s11",
+        "b05-s12",
+        "b05-x01",
+        "b05-x02",
+        "b05-x03",
+        "b05-x04",
+        "b05-x05",
+        "b05-x06",
+        "b05-x07",
+        "b05-x08",
+        "b05-x09",
+        "b05-x10"
+      ],
+      "semantic_note": "管理完全虚构的工具借用、修缮工位、零件归还与学习活动。"
+    },
+    {
+      "blueprint_ref": "b05-s01",
+      "parent_ref": "b05",
+      "parent_role": "修缮工单职责",
+      "label": "修缮工单",
+      "name": "公共修缮工单",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s01-n01",
+        "b05-s01-n02",
+        "b05-s01-n03",
+        "b05-s01-n04"
+      ],
+      "semantic_note": "记录一项虚构公共物件修缮请求。"
+    },
+    {
+      "blueprint_ref": "b05-s01-n01",
+      "parent_ref": "b05-s01",
+      "parent_role": "工单身份",
+      "label": "工单身份",
+      "name": "修缮工单身份",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s01-n05",
+        "b05-s01-n06"
+      ],
+      "semantic_note": "绑定工单编号与受理队。"
+    },
+    {
+      "blueprint_ref": "b05-s01-n05",
+      "parent_ref": "b05-s01-n01",
+      "parent_role": "工单编号",
+      "label": "修缮单码",
+      "name": "修缮工单编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存虚构工单编号。"
+    },
+    {
+      "blueprint_ref": "b05-s01-n06",
+      "parent_ref": "b05-s01-n01",
+      "parent_role": "受理队伍",
+      "label": "修缮队码",
+      "name": "工单受理队伍",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "关联受理工单的虚构队伍。"
+    },
+    {
+      "blueprint_ref": "b05-s01-n02",
+      "parent_ref": "b05-s01",
+      "parent_role": "物件范围",
+      "label": "修缮物件",
+      "name": "修缮物件范围",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s01-n07",
+        "b05-s01-n08"
+      ],
+      "semantic_note": "描述物件类别与接收位置。"
+    },
+    {
+      "blueprint_ref": "b05-s01-n07",
+      "parent_ref": "b05-s01-n02",
+      "parent_role": "类别标签",
+      "label": "物件类别",
+      "name": "修缮物件类别",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出物件的公开类别标签。"
+    },
+    {
+      "blueprint_ref": "b05-s01-n08",
+      "parent_ref": "b05-s01-n02",
+      "parent_role": "接收位置",
+      "label": "物件接收点",
+      "name": "物件接收位置",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出物件接收位置。"
+    },
+    {
+      "blueprint_ref": "b05-s01-n03",
+      "parent_ref": "b05-s01",
+      "parent_role": "受理时刻",
+      "label": "工单受理刻",
+      "name": "工单受理时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录工单受理时刻。"
+    },
+    {
+      "blueprint_ref": "b05-s01-n04",
+      "parent_ref": "b05-s01",
+      "parent_role": "完成状态",
+      "label": "工单完成态",
+      "name": "工单完成状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明工单已经完成。"
+    },
+    {
+      "blueprint_ref": "b05-s02",
+      "parent_ref": "b05",
+      "parent_role": "工具借用职责",
+      "label": "工具借用",
+      "name": "共享工具借用",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s02-n01",
+        "b05-s02-n02",
+      "b05-s02-n03",
+      "b05-s02-n08"
+      ],
+      "semantic_note": "登记工具借出、使用区域与归还。"
+    },
+    {
+      "blueprint_ref": "b05-s02-n01",
+      "parent_ref": "b05-s02",
+      "parent_role": "工具目录",
+      "label": "借用工具组",
+      "name": "借用工具目录",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s02-n04",
+        "b05-s02-n05",
+        "b05-s02-n06"
+      ],
+      "semantic_note": "列出借用工具和数量。"
+    },
+    {
+      "blueprint_ref": "b05-s02-n04",
+      "parent_ref": "b05-s02-n01",
+      "parent_role": "工具编号",
+      "label": "借用工具码",
+      "name": "借用工具编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出本次借用的工具。"
+    },
+    {
+      "blueprint_ref": "b05-s02-n05",
+      "parent_ref": "b05-s02-n01",
+      "parent_role": "工具数量",
+      "label": "借用工具数",
+      "name": "借用工具数量",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录借用工具总数。"
+    },
+    {
+      "blueprint_ref": "b05-s02-n06",
+      "parent_ref": "b05-s02-n01",
+      "parent_role": "用途标签",
+      "label": "工具用途",
+      "name": "工具借用用途",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出借用用途标签。"
+    },
+    {
+      "blueprint_ref": "b05-s02-n02",
+      "parent_ref": "b05-s02",
+      "parent_role": "使用边界",
+      "label": "工具使用区",
+      "name": "工具使用边界",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s02-n07"
+      ],
+      "semantic_note": "限定工具可使用的区域。"
+    },
+    {
+      "blueprint_ref": "b05-s02-n07",
+      "parent_ref": "b05-s02-n02",
+      "parent_role": "区域编号",
+      "label": "使用区码",
+      "name": "工具使用区域",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出允许使用工具的区域。"
+    },
+    {
+      "blueprint_ref": "b05-s02-n03",
+      "parent_ref": "b05-s02",
+      "parent_role": "归还状态",
+      "label": "工具归还态",
+      "name": "工具归还状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明工具已按数归还。"
+    },
+    {
+      "blueprint_ref": "b05-s02-n08",
+      "parent_ref": "b05-s02",
+      "parent_role": "归还时窗",
+      "label": "工具归还窗",
+      "name": "工具归还时窗",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s02-n09"
+      ],
+      "semantic_note": "记录工具归还时间。"
+    },
+    {
+      "blueprint_ref": "b05-s02-n09",
+      "parent_ref": "b05-s02-n08",
+      "parent_role": "时窗集合",
+      "label": "归还时段",
+      "name": "工具归还时段",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出允许归还时段。"
+    },
+    {
+      "blueprint_ref": "b05-s03",
+      "parent_ref": "b05",
+      "parent_role": "工位预约职责",
+      "label": "修缮工位",
+      "name": "修缮工位预约",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s03-n01",
+        "b05-s03-n02",
+        "b05-s03-n03",
+        "b05-s03-n04",
+      "b05-s03-n05",
+      "b05-s03-n09"
+      ],
+      "semantic_note": "安排不同材料修缮使用的工作台。"
+    },
+    {
+      "blueprint_ref": "b05-s03-n01",
+      "parent_ref": "b05-s03",
+      "parent_role": "工位编号",
+      "label": "修缮台码",
+      "name": "修缮工位编号",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存修缮工位编号。"
+    },
+    {
+      "blueprint_ref": "b05-s03-n02",
+      "parent_ref": "b05-s03",
+      "parent_role": "预约时窗",
+      "label": "修缮台窗",
+      "name": "工位预约时窗",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "记录工位使用时段。"
+    },
+    {
+      "blueprint_ref": "b05-s03-n03",
+      "parent_ref": "b05-s03",
+      "parent_role": "工位能力",
+      "label": "工位能力",
+      "name": "修缮工位能力",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s03-n06",
+        "b05-s03-n07",
+        "b05-s03-n08"
+      ],
+      "semantic_note": "列出工位支持材料与工具。"
+    },
+    {
+      "blueprint_ref": "b05-s03-n06",
+      "parent_ref": "b05-s03-n03",
+      "parent_role": "材料标签",
+      "label": "工位材料",
+      "name": "工位支持材料",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出工位支持的材料标签。"
+    },
+    {
+      "blueprint_ref": "b05-s03-n07",
+      "parent_ref": "b05-s03-n03",
+      "parent_role": "固定工具",
+      "label": "工位工具",
+      "name": "工位固定工具",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出工位固定工具编号。"
+    },
+    {
+      "blueprint_ref": "b05-s03-n08",
+      "parent_ref": "b05-s03-n03",
+      "parent_role": "人数上限",
+      "label": "工位人数",
+      "name": "工位人数上限",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "限制同时使用人数。"
+    },
+    {
+      "blueprint_ref": "b05-s03-n04",
+      "parent_ref": "b05-s03",
+      "parent_role": "清洁状态",
+      "label": "工位清洁态",
+      "name": "工位清洁状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明工位已完成清洁。"
+    },
+    {
+      "blueprint_ref": "b05-s03-n05",
+      "parent_ref": "b05-s03",
+      "parent_role": "照明等级",
+      "label": "工位光级",
+      "name": "工位照明等级",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录工位照明等级。"
+    },
+    {
+      "blueprint_ref": "b05-s03-n09",
+      "parent_ref": "b05-s03",
+      "parent_role": "辅助入口",
+      "label": "工位缓入口",
+      "name": "工位辅助入口",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出便于进入工位的入口。"
+    },
+    {
+      "blueprint_ref": "b05-s04",
+      "parent_ref": "b05",
+      "parent_role": "木片修补职责",
+      "label": "木片修补",
+      "name": "木片拼接修补",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s04-n01",
+        "b05-s04-n02",
+      "b05-s04-n03",
+      "b05-s04-n09"
+      ],
+      "semantic_note": "记录虚构木片修补的拼接与养护。"
+    },
+    {
+      "blueprint_ref": "b05-s04-n01",
+      "parent_ref": "b05-s04",
+      "parent_role": "木片组合",
+      "label": "木片组合",
+      "name": "修补木片组合",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s04-n04",
+        "b05-s04-n05"
+      ],
+      "semantic_note": "绑定木片编号与拼接顺序。"
+    },
+    {
+      "blueprint_ref": "b05-s04-n04",
+      "parent_ref": "b05-s04-n01",
+      "parent_role": "木片编号",
+      "label": "修补木片",
+      "name": "修补木片编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出参与修补的木片。"
+    },
+    {
+      "blueprint_ref": "b05-s04-n05",
+      "parent_ref": "b05-s04-n01",
+      "parent_role": "拼接顺序",
+      "label": "木片序",
+      "name": "木片拼接顺序",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "记录木片拼接顺序。"
+    },
+    {
+      "blueprint_ref": "b05-s04-n02",
+      "parent_ref": "b05-s04",
+      "parent_role": "养护安排",
+      "label": "木片养护",
+      "name": "木片养护安排",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s04-n06"
+      ],
+      "semantic_note": "安排修补后的静置位置。"
+    },
+    {
+      "blueprint_ref": "b05-s04-n06",
+      "parent_ref": "b05-s04-n02",
+      "parent_role": "静置位置",
+      "label": "木片静置",
+      "name": "木片静置位置",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s04-n07",
+        "b05-s04-n08"
+      ],
+      "semantic_note": "记录静置格位与时长。"
+    },
+    {
+      "blueprint_ref": "b05-s04-n07",
+      "parent_ref": "b05-s04-n06",
+      "parent_role": "格位编号",
+      "label": "木片格位",
+      "name": "木片静置格位",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出木片静置格位。"
+    },
+    {
+      "blueprint_ref": "b05-s04-n08",
+      "parent_ref": "b05-s04-n06",
+      "parent_role": "静置时长",
+      "label": "木片静置时",
+      "name": "木片静置时长",
+      "kind": "property",
+      "value_type": "float",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录虚构静置小时数。"
+    },
+    {
+      "blueprint_ref": "b05-s04-n03",
+      "parent_ref": "b05-s04",
+      "parent_role": "验收状态",
+      "label": "木片验收态",
+      "name": "木片修补验收",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明修补已通过公开验收。"
+    },
+    {
+      "blueprint_ref": "b05-s04-n09",
+      "parent_ref": "b05-s04",
+      "parent_role": "表面标签",
+      "label": "木片表面",
+      "name": "木片表面标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出修补后表面标签。"
+    },
+    {
+      "blueprint_ref": "b05-s05",
+      "parent_ref": "b05",
+      "parent_role": "织物缝补职责",
+      "label": "织物缝补",
+      "name": "织物缝补记录",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s05-n01",
+      "b05-s05-n02",
+      "b05-s05-n09"
+      ],
+      "semantic_note": "登记公共布旗与坐垫的缝补。"
+    },
+    {
+      "blueprint_ref": "b05-s05-n01",
+      "parent_ref": "b05-s05",
+      "parent_role": "缝补对象",
+      "label": "缝补对象",
+      "name": "织物缝补对象",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s05-n03",
+        "b05-s05-n04",
+        "b05-s05-n05",
+        "b05-s05-n06"
+      ],
+      "semantic_note": "描述织物编号、材质和颜色。"
+    },
+    {
+      "blueprint_ref": "b05-s05-n03",
+      "parent_ref": "b05-s05-n01",
+      "parent_role": "织物编号",
+      "label": "织物码",
+      "name": "缝补织物编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存虚构织物编号。"
+    },
+    {
+      "blueprint_ref": "b05-s05-n04",
+      "parent_ref": "b05-s05-n01",
+      "parent_role": "材质标签",
+      "label": "织物材质",
+      "name": "织物材质标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出织物材质标签。"
+    },
+    {
+      "blueprint_ref": "b05-s05-n05",
+      "parent_ref": "b05-s05-n01",
+      "parent_role": "颜色标签",
+      "label": "织物颜色",
+      "name": "织物颜色标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出织物颜色标签。"
+    },
+    {
+      "blueprint_ref": "b05-s05-n06",
+      "parent_ref": "b05-s05-n01",
+      "parent_role": "破损等级",
+      "label": "织物损级",
+      "name": "织物破损等级",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录织物破损等级。"
+    },
+    {
+      "blueprint_ref": "b05-s05-n02",
+      "parent_ref": "b05-s05",
+      "parent_role": "缝补过程",
+      "label": "缝补过程",
+      "name": "织物缝补过程",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s05-n07",
+        "b05-s05-n08"
+      ],
+      "semantic_note": "记录工位和完成时刻。"
+    },
+    {
+      "blueprint_ref": "b05-s05-n07",
+      "parent_ref": "b05-s05-n02",
+      "parent_role": "使用工位",
+      "label": "缝补工位",
+      "name": "织物缝补工位",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出缝补使用的工位。"
+    },
+    {
+      "blueprint_ref": "b05-s05-n08",
+      "parent_ref": "b05-s05-n02",
+      "parent_role": "完成时刻",
+      "label": "缝补完成刻",
+      "name": "织物缝补完成时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录缝补完成时刻。"
+    },
+    {
+      "blueprint_ref": "b05-s05-n09",
+      "parent_ref": "b05-s05",
+      "parent_role": "返还状态",
+      "label": "织物返还态",
+      "name": "织物返还状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明织物已返还。"
+    },
+    {
+      "blueprint_ref": "b05-s06",
+      "parent_ref": "b05",
+      "parent_role": "摆钟校准职责",
+      "label": "摆钟校准",
+      "name": "公共摆钟校准",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s06-n01",
+        "b05-s06-n02",
+        "b05-s06-n03",
+      "b05-s06-n04",
+      "b05-s06-n09"
+      ],
+      "semantic_note": "记录虚构公共摆钟的非计量校准。"
+    },
+    {
+      "blueprint_ref": "b05-s06-n01",
+      "parent_ref": "b05-s06",
+      "parent_role": "摆钟编号",
+      "label": "摆钟码",
+      "name": "公共摆钟编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存摆钟编号。"
+    },
+    {
+      "blueprint_ref": "b05-s06-n02",
+      "parent_ref": "b05-s06",
+      "parent_role": "校准读数",
+      "label": "摆钟读数",
+      "name": "摆钟校准读数",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s06-n05"
+      ],
+      "semantic_note": "记录校准前读数。"
+    },
+    {
+      "blueprint_ref": "b05-s06-n05",
+      "parent_ref": "b05-s06-n02",
+      "parent_role": "前后比较",
+      "label": "摆钟比较",
+      "name": "摆钟前后比较",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s06-n06",
+        "b05-s06-n07"
+      ],
+      "semantic_note": "比较校准前后偏移。"
+    },
+    {
+      "blueprint_ref": "b05-s06-n06",
+      "parent_ref": "b05-s06-n05",
+      "parent_role": "校准前偏移",
+      "label": "摆钟前差",
+      "name": "摆钟校准前偏移",
+      "kind": "property",
+      "value_type": "float",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录校准前虚构偏移。"
+    },
+    {
+      "blueprint_ref": "b05-s06-n07",
+      "parent_ref": "b05-s06-n05",
+      "parent_role": "校准后偏移",
+      "label": "摆钟后差",
+      "name": "摆钟校准后偏移",
+      "kind": "property",
+      "value_type": "float",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录校准后虚构偏移。"
+    },
+    {
+      "blueprint_ref": "b05-s06-n03",
+      "parent_ref": "b05-s06",
+      "parent_role": "校准时刻",
+      "label": "摆钟校准窗",
+      "name": "摆钟校准时刻",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s06-n08"
+      ],
+      "semantic_note": "绑定校准执行时间。"
+    },
+    {
+      "blueprint_ref": "b05-s06-n08",
+      "parent_ref": "b05-s06-n03",
+      "parent_role": "时刻值",
+      "label": "校准刻",
+      "name": "摆钟校准时间",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存校准时间。"
+    },
+    {
+      "blueprint_ref": "b05-s06-n04",
+      "parent_ref": "b05-s06",
+      "parent_role": "展示状态",
+      "label": "摆钟展示态",
+      "name": "摆钟展示状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明摆钟可继续展示。"
+    },
+    {
+      "blueprint_ref": "b05-s06-n09",
+      "parent_ref": "b05-s06",
+      "parent_role": "校准标签",
+      "label": "摆钟校准签",
+      "name": "摆钟校准标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出校准方法标签。"
+    },
+    {
+      "blueprint_ref": "b05-s07",
+      "parent_ref": "b05",
+      "parent_role": "轮车修缮职责",
+      "label": "轮车修缮",
+      "name": "公共轮车修缮",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s07-n01",
+        "b05-s07-n02",
+        "b05-s07-n03",
+      "b05-s07-n04",
+      "b05-s07-n09"
+      ],
+      "semantic_note": "修缮虚构园区手推轮车。"
+    },
+    {
+      "blueprint_ref": "b05-s07-n01",
+      "parent_ref": "b05-s07",
+      "parent_role": "轮组检查",
+      "label": "轮组检查",
+      "name": "轮车轮组检查",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s07-n05",
+        "b05-s07-n06",
+        "b05-s07-n07"
+      ],
+      "semantic_note": "记录轮组编号、转动和磨损。"
+    },
+    {
+      "blueprint_ref": "b05-s07-n05",
+      "parent_ref": "b05-s07-n01",
+      "parent_role": "轮组编号",
+      "label": "轮组码",
+      "name": "轮车轮组编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出受检轮组。"
+    },
+    {
+      "blueprint_ref": "b05-s07-n06",
+      "parent_ref": "b05-s07-n01",
+      "parent_role": "转动等级",
+      "label": "轮组转级",
+      "name": "轮组转动等级",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "记录轮组转动等级。"
+    },
+    {
+      "blueprint_ref": "b05-s07-n07",
+      "parent_ref": "b05-s07-n01",
+      "parent_role": "磨损标签",
+      "label": "轮组磨损",
+      "name": "轮组磨损标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出轮组磨损标签。"
+    },
+    {
+      "blueprint_ref": "b05-s07-n02",
+      "parent_ref": "b05-s07",
+      "parent_role": "车架位置",
+      "label": "轮车工位",
+      "name": "轮车修缮工位",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出轮车修缮工位。"
+    },
+    {
+      "blueprint_ref": "b05-s07-n03",
+      "parent_ref": "b05-s07",
+      "parent_role": "完成时刻",
+      "label": "轮车完成刻",
+      "name": "轮车修缮完成时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录修缮完成时刻。"
+    },
+    {
+      "blueprint_ref": "b05-s07-n04",
+      "parent_ref": "b05-s07",
+      "parent_role": "出库检查",
+      "label": "轮车出库",
+      "name": "轮车出库检查",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s07-n08"
+      ],
+      "semantic_note": "确认轮车可离开工位。"
+    },
+    {
+      "blueprint_ref": "b05-s07-n08",
+      "parent_ref": "b05-s07-n04",
+      "parent_role": "检查状态",
+      "label": "轮车出库态",
+      "name": "轮车出库状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明轮车通过出库检查。"
+    },
+    {
+      "blueprint_ref": "b05-s07-n09",
+      "parent_ref": "b05-s07",
+      "parent_role": "载荷等级",
+      "label": "轮车载级",
+      "name": "轮车载荷等级",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录轮车虚构载荷等级。"
+    },
+    {
+      "blueprint_ref": "b05-s08",
+      "parent_ref": "b05",
+      "parent_role": "陶片修复职责",
+      "label": "陶片修复",
+      "name": "装饰陶片修复",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s08-n01",
+        "b05-s08-n02",
+      "b05-s08-n03",
+      "b05-s08-n09"
+      ],
+      "semantic_note": "修复不具文物属性的虚构装饰陶片。"
+    },
+    {
+      "blueprint_ref": "b05-s08-n01",
+      "parent_ref": "b05-s08",
+      "parent_role": "陶片集合",
+      "label": "陶片集合",
+      "name": "修复陶片集合",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s08-n04"
+      ],
+      "semantic_note": "列出参与拼合的陶片。"
+    },
+    {
+      "blueprint_ref": "b05-s08-n04",
+      "parent_ref": "b05-s08-n01",
+      "parent_role": "陶片编号",
+      "label": "陶片码",
+      "name": "修复陶片编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出修复陶片编号。"
+    },
+    {
+      "blueprint_ref": "b05-s08-n02",
+      "parent_ref": "b05-s08",
+      "parent_role": "拼合路径",
+      "label": "陶片拼合",
+      "name": "陶片拼合路径",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s08-n05",
+        "b05-s08-n06"
+      ],
+      "semantic_note": "记录拼合顺序与工位。"
+    },
+    {
+      "blueprint_ref": "b05-s08-n05",
+      "parent_ref": "b05-s08-n02",
+      "parent_role": "拼合顺序",
+      "label": "陶片序",
+      "name": "陶片拼合顺序",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "记录陶片拼合顺序。"
+    },
+    {
+      "blueprint_ref": "b05-s08-n06",
+      "parent_ref": "b05-s08-n02",
+      "parent_role": "修复工位",
+      "label": "陶片工位",
+      "name": "陶片修复工位",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s08-n07"
+      ],
+      "semantic_note": "绑定陶片修复位置。"
+    },
+    {
+      "blueprint_ref": "b05-s08-n07",
+      "parent_ref": "b05-s08-n06",
+      "parent_role": "工位编号",
+      "label": "陶修台码",
+      "name": "陶片工位编号",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存修复工位编号。"
+    },
+    {
+      "blueprint_ref": "b05-s08-n03",
+      "parent_ref": "b05-s08",
+      "parent_role": "展示复核",
+      "label": "陶片复核",
+      "name": "陶片展示复核",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s08-n08"
+      ],
+      "semantic_note": "复核陶片可否展示。"
+    },
+    {
+      "blueprint_ref": "b05-s08-n08",
+      "parent_ref": "b05-s08-n03",
+      "parent_role": "复核状态",
+      "label": "陶片展示态",
+      "name": "陶片展示状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明陶片可公开展示。"
+    },
+    {
+      "blueprint_ref": "b05-s08-n09",
+      "parent_ref": "b05-s08",
+      "parent_role": "修复标签",
+      "label": "陶片修复签",
+      "name": "陶片修复标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出修复方式标签。"
+    },
+    {
+      "blueprint_ref": "b05-s09",
+      "parent_ref": "b05",
+      "parent_role": "灯罩修缮职责",
+      "label": "灯罩修缮",
+      "name": "纸纤灯罩修缮",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s09-n01",
+        "b05-s09-n03",
+        "b05-s09-n09"
+      ],
+      "semantic_note": "修缮虚构公共纸纤灯罩。"
+    },
+    {
+      "blueprint_ref": "b05-s09-n01",
+      "parent_ref": "b05-s09",
+      "parent_role": "灯罩身份",
+      "label": "灯罩身份",
+      "name": "灯罩修缮身份",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s09-n04"
+      ],
+      "semantic_note": "绑定灯罩编号。"
+    },
+    {
+      "blueprint_ref": "b05-s09-n04",
+      "parent_ref": "b05-s09-n01",
+      "parent_role": "编号与位置",
+      "label": "灯罩档案",
+      "name": "灯罩编号与位置",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s09-n05",
+        "b05-s09-n06"
+      ],
+      "semantic_note": "保存灯罩编号和安装位。"
+    },
+    {
+      "blueprint_ref": "b05-s09-n05",
+      "parent_ref": "b05-s09-n04",
+      "parent_role": "灯罩编号",
+      "label": "灯罩码",
+      "name": "灯罩实体编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存灯罩编号。"
+    },
+    {
+      "blueprint_ref": "b05-s09-n06",
+      "parent_ref": "b05-s09-n04",
+      "parent_role": "安装位置",
+      "label": "灯罩位置",
+      "name": "灯罩安装位置",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出灯罩安装位置。"
+    },
+    {
+      "blueprint_ref": "b05-s09-n02",
+      "parent_ref": "b05-s09-n03",
+      "parent_role": "透光等级",
+      "label": "灯罩光级",
+      "name": "灯罩透光等级",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录修缮后透光等级。"
+    },
+    {
+      "blueprint_ref": "b05-s09-n03",
+      "parent_ref": "b05-s09",
+      "parent_role": "修缮确认",
+      "label": "灯罩确认",
+      "name": "灯罩修缮确认",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s09-n07",
+        "b05-s09-n08",
+        "b05-s09-n02"
+      ],
+      "semantic_note": "记录完成时刻与状态。"
+    },
+    {
+      "blueprint_ref": "b05-s09-n07",
+      "parent_ref": "b05-s09-n03",
+      "parent_role": "完成时刻",
+      "label": "灯罩完成刻",
+      "name": "灯罩修缮完成时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录修缮完成时刻。"
+    },
+    {
+      "blueprint_ref": "b05-s09-n08",
+      "parent_ref": "b05-s09-n03",
+      "parent_role": "确认状态",
+      "label": "灯罩修缮态",
+      "name": "灯罩修缮状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明修缮已确认。"
+    },
+    {
+      "blueprint_ref": "b05-s09-n09",
+      "parent_ref": "b05-s09",
+      "parent_role": "纸纤标签",
+      "label": "灯罩纸签",
+      "name": "灯罩纸纤标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出纸纤材料标签。"
+    },
+    {
+      "blueprint_ref": "b05-s10",
+      "parent_ref": "b05",
+      "parent_role": "巡检路线职责",
+      "label": "修缮巡检",
+      "name": "修缮巡检路线",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s10-n01",
+        "b05-s10-n02"
+      ],
+      "semantic_note": "安排公共设施的非安全认证巡检。"
+    },
+    {
+      "blueprint_ref": "b05-s10-n01",
+      "parent_ref": "b05-s10",
+      "parent_role": "路线结构",
+      "label": "巡检路线",
+      "name": "巡检路线结构",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s10-n03",
+        "b05-s10-n04",
+        "b05-s10-n05"
+      ],
+      "semantic_note": "列出起点、停靠和终点。"
+    },
+    {
+      "blueprint_ref": "b05-s10-n03",
+      "parent_ref": "b05-s10-n01",
+      "parent_role": "路线起点",
+      "label": "巡检起点",
+      "name": "巡检路线起点",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出巡检起点。"
+    },
+    {
+      "blueprint_ref": "b05-s10-n04",
+      "parent_ref": "b05-s10-n01",
+      "parent_role": "停靠序列",
+      "label": "巡检停靠",
+      "name": "巡检停靠序列",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s10-n06"
+      ],
+      "semantic_note": "组织沿途巡检位置。"
+    },
+    {
+      "blueprint_ref": "b05-s10-n06",
+      "parent_ref": "b05-s10-n04",
+      "parent_role": "停靠位置",
+      "label": "巡检点",
+      "name": "巡检停靠位置",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出巡检停靠点。"
+    },
+    {
+      "blueprint_ref": "b05-s10-n05",
+      "parent_ref": "b05-s10-n01",
+      "parent_role": "路线终点",
+      "label": "巡检终点",
+      "name": "巡检路线终点",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出巡检终点。"
+    },
+    {
+      "blueprint_ref": "b05-s10-n02",
+      "parent_ref": "b05-s10",
+      "parent_role": "巡检执行",
+      "label": "巡检执行",
+      "name": "巡检执行记录",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s10-n07"
+      ],
+      "semantic_note": "记录执行组与时刻。"
+    },
+    {
+      "blueprint_ref": "b05-s10-n07",
+      "parent_ref": "b05-s10-n02",
+      "parent_role": "执行明细",
+      "label": "巡检明细",
+      "name": "巡检执行明细",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s10-n08",
+        "b05-s10-n09"
+      ],
+      "semantic_note": "绑定巡检组和开始时刻。"
+    },
+    {
+      "blueprint_ref": "b05-s10-n08",
+      "parent_ref": "b05-s10-n07",
+      "parent_role": "执行组",
+      "label": "巡检组",
+      "name": "巡检执行组",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "关联虚构巡检组。"
+    },
+    {
+      "blueprint_ref": "b05-s10-n09",
+      "parent_ref": "b05-s10-n07",
+      "parent_role": "开始时刻",
+      "label": "巡检刻",
+      "name": "巡检开始时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录巡检开始时刻。"
+    },
+    {
+      "blueprint_ref": "b05-s11",
+      "parent_ref": "b05",
+      "parent_role": "学徒活动职责",
+      "label": "修缮学堂",
+      "name": "修缮学徒活动",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s11-n01",
+        "b05-s11-n02",
+        "b05-s11-n03",
+        "b05-s11-n04"
+      ],
+      "semantic_note": "提供不涉及资格认证的修缮学习活动。"
+    },
+    {
+      "blueprint_ref": "b05-s11-n01",
+      "parent_ref": "b05-s11",
+      "parent_role": "活动主题",
+      "label": "学堂主题",
+      "name": "修缮活动主题",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s11-n05"
+      ],
+      "semantic_note": "记录学习活动主题。"
+    },
+    {
+      "blueprint_ref": "b05-s11-n05",
+      "parent_ref": "b05-s11-n01",
+      "parent_role": "主题标签",
+      "label": "修缮课题",
+      "name": "修缮主题标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出活动主题标签。"
+    },
+    {
+      "blueprint_ref": "b05-s11-n02",
+      "parent_ref": "b05-s11",
+      "parent_role": "活动场地",
+      "label": "学堂场地",
+      "name": "修缮学习场地",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s11-n06"
+      ],
+      "semantic_note": "绑定学习活动场地。"
+    },
+    {
+      "blueprint_ref": "b05-s11-n06",
+      "parent_ref": "b05-s11-n02",
+      "parent_role": "场地编号",
+      "label": "学堂位置",
+      "name": "学习场地编号",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出活动场地。"
+    },
+    {
+      "blueprint_ref": "b05-s11-n03",
+      "parent_ref": "b05-s11",
+      "parent_role": "活动安排",
+      "label": "学堂安排",
+      "name": "修缮活动安排",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s11-n07"
+      ],
+      "semantic_note": "记录时窗与人数。"
+    },
+    {
+      "blueprint_ref": "b05-s11-n07",
+      "parent_ref": "b05-s11-n03",
+      "parent_role": "时窗人数",
+      "label": "学堂时窗",
+      "name": "活动时窗与人数",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s11-n08",
+        "b05-s11-n09"
+      ],
+      "semantic_note": "绑定活动时窗和人数。"
+    },
+    {
+      "blueprint_ref": "b05-s11-n08",
+      "parent_ref": "b05-s11-n07",
+      "parent_role": "活动时窗",
+      "label": "修缮课窗",
+      "name": "修缮活动时窗",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出活动时段。"
+    },
+    {
+      "blueprint_ref": "b05-s11-n09",
+      "parent_ref": "b05-s11-n07",
+      "parent_role": "人数上限",
+      "label": "学堂人数",
+      "name": "学习活动人数上限",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "限制参与人数。"
+    },
+    {
+      "blueprint_ref": "b05-s11-n04",
+      "parent_ref": "b05-s11",
+      "parent_role": "报名状态",
+      "label": "学堂报名态",
+      "name": "学习活动报名状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明当前可报名。"
+    },
+    {
+      "blueprint_ref": "b05-s12",
+      "parent_ref": "b05",
+      "parent_role": "修缮交接职责",
+      "label": "修缮交接",
+      "name": "修缮社班次交接",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s12-n01",
+        "b05-s12-n02",
+      "b05-s12-n03",
+      "b05-s12-n09"
+      ],
+      "semantic_note": "交接工单、工具与工位状态。"
+    },
+    {
+      "blueprint_ref": "b05-s12-n01",
+      "parent_ref": "b05-s12",
+      "parent_role": "工单交接",
+      "label": "工单卷",
+      "name": "工单状态交接",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s12-n04",
+        "b05-s12-n05"
+      ],
+      "semantic_note": "列出继续和待复核工单。"
+    },
+    {
+      "blueprint_ref": "b05-s12-n04",
+      "parent_ref": "b05-s12-n01",
+      "parent_role": "继续工单",
+      "label": "继续工单",
+      "name": "继续处理工单",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出继续处理工单。"
+    },
+    {
+      "blueprint_ref": "b05-s12-n05",
+      "parent_ref": "b05-s12-n01",
+      "parent_role": "复核工单",
+      "label": "复核工单",
+      "name": "待复核工单",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出待复核工单。"
+    },
+    {
+      "blueprint_ref": "b05-s12-n02",
+      "parent_ref": "b05-s12",
+      "parent_role": "工具交接",
+      "label": "工具卷",
+      "name": "工具状态交接",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s12-n06"
+      ],
+      "semantic_note": "列出需清点的工具。"
+    },
+    {
+      "blueprint_ref": "b05-s12-n06",
+      "parent_ref": "b05-s12-n02",
+      "parent_role": "工具集合",
+      "label": "交接工具",
+      "name": "交接工具编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出交接工具。"
+    },
+    {
+      "blueprint_ref": "b05-s12-n03",
+      "parent_ref": "b05-s12",
+      "parent_role": "工位交接",
+      "label": "工位卷",
+      "name": "工位状态交接",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b05-s12-n07",
+        "b05-s12-n08"
+      ],
+      "semantic_note": "确认封闭工位和完成状态。"
+    },
+    {
+      "blueprint_ref": "b05-s12-n07",
+      "parent_ref": "b05-s12-n03",
+      "parent_role": "封闭工位",
+      "label": "封闭工位",
+      "name": "交接封闭工位",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出暂时封闭工位。"
+    },
+    {
+      "blueprint_ref": "b05-s12-n08",
+      "parent_ref": "b05-s12-n03",
+      "parent_role": "完成状态",
+      "label": "修缮交接态",
+      "name": "修缮交接完成状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明班次交接完成。"
+    },
+    {
+      "blueprint_ref": "b05-s12-n09",
+      "parent_ref": "b05-s12",
+      "parent_role": "交接时刻",
+      "label": "修缮交接刻",
+      "name": "修缮交接时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录班次交接时刻。"
+    },
+    {
+      "blueprint_ref": "b05-x01",
+      "parent_ref": "b05",
+      "parent_role": "修缮社入口",
+      "label": "修缮入口",
+      "name": "修缮社入口位置",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出修缮社入口。"
+    },
+    {
+      "blueprint_ref": "b05-x02",
+      "parent_ref": "b05",
+      "parent_role": "开放时窗",
+      "label": "修缮开放窗",
+      "name": "修缮社开放时窗",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "记录修缮社开放时段。"
+    },
+    {
+      "blueprint_ref": "b05-x03",
+      "parent_ref": "b05",
+      "parent_role": "工具目录版本",
+      "label": "工具版号",
+      "name": "工具目录版本",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存工具目录版本。"
+    },
+    {
+      "blueprint_ref": "b05-x04",
+      "parent_ref": "b05",
+      "parent_role": "可用工位",
+      "label": "可用工位",
+      "name": "当前可用工位",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出当前可用工位。"
+    },
+    {
+      "blueprint_ref": "b05-x05",
+      "parent_ref": "b05",
+      "parent_role": "封闭工位",
+      "label": "停用工位",
+      "name": "当前停用工位",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出当前停用工位。"
+    },
+    {
+      "blueprint_ref": "b05-x06",
+      "parent_ref": "b05",
+      "parent_role": "值守队伍",
+      "label": "修缮值守",
+      "name": "修缮社值守队伍",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "关联值守队伍。"
+    },
+    {
+      "blueprint_ref": "b05-x07",
+      "parent_ref": "b05",
+      "parent_role": "预约上限",
+      "label": "修缮预约额",
+      "name": "修缮活动预约上限",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "限制预约人数。"
+    },
+    {
+      "blueprint_ref": "b05-x08",
+      "parent_ref": "b05",
+      "parent_role": "说明语言",
+      "label": "修缮语言",
+      "name": "修缮说明语言",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出说明语言。"
+    },
+    {
+      "blueprint_ref": "b05-x09",
+      "parent_ref": "b05",
+      "parent_role": "借用状态",
+      "label": "工具借用态",
+      "name": "工具借用服务状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明工具借用开放。"
+    },
+    {
+      "blueprint_ref": "b05-x10",
+      "parent_ref": "b05",
+      "parent_role": "整体状态",
+      "label": "修缮服务态",
+      "name": "椋鸟修缮社服务状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明整体服务开放。"
+    }
+  ]
+}

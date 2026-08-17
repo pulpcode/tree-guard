@@ -1,0 +1,605 @@
+{
+  "schema_version": "treeguard.navigation-copilot-v3c-blueprint-file.v1",
+  "branch_ref": "branch-08",
+  "nodes": [
+    {
+      "blueprint_ref": "b08",
+      "parent_ref": "root",
+      "parent_role": "苔钟公坊领域",
+      "label": "苔钟公坊",
+      "name": "苔钟公共实验坊",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s01",
+        "b08-s02",
+        "b08-s03",
+        "b08-s04",
+        "b08-s05",
+        "b08-s06"
+      ],
+      "semantic_note": "管理虚构苔钟展品、影刻日历、露台实验与公开借阅。"
+    },
+    {
+      "blueprint_ref": "b08-s01",
+      "parent_ref": "b08",
+      "parent_role": "苔钟展品职责",
+      "label": "苔钟展品",
+      "name": "苔钟节律展品",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s01-n01",
+        "b08-s01-n02",
+        "b08-s01-n03",
+        "b08-s01-n04"
+      ],
+      "semantic_note": "记录不用于计时认证的苔钟展品。"
+    },
+    {
+      "blueprint_ref": "b08-s01-n01",
+      "parent_ref": "b08-s01",
+      "parent_role": "展品身份",
+      "label": "苔钟身份",
+      "name": "苔钟展品身份",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s01-n05",
+        "b08-s01-n06"
+      ],
+      "semantic_note": "绑定展品编号与位置。"
+    },
+    {
+      "blueprint_ref": "b08-s01-n05",
+      "parent_ref": "b08-s01-n01",
+      "parent_role": "展品编号",
+      "label": "苔钟码",
+      "name": "苔钟展品编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存虚构苔钟编号。"
+    },
+    {
+      "blueprint_ref": "b08-s01-n06",
+      "parent_ref": "b08-s01-n01",
+      "parent_role": "展示位置",
+      "label": "苔钟位",
+      "name": "苔钟展示位置",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出苔钟展示位置。"
+    },
+    {
+      "blueprint_ref": "b08-s01-n02",
+      "parent_ref": "b08-s01",
+      "parent_role": "节律标签",
+      "label": "苔钟节律",
+      "name": "苔钟节律标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出苔钟节律标签。"
+    },
+    {
+      "blueprint_ref": "b08-s01-n03",
+      "parent_ref": "b08-s01",
+      "parent_role": "观察等级",
+      "label": "苔钟观察级",
+      "name": "苔钟观察等级",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录虚构观察等级。"
+    },
+    {
+      "blueprint_ref": "b08-s01-n04",
+      "parent_ref": "b08-s01",
+      "parent_role": "展示状态",
+      "label": "苔钟展示态",
+      "name": "苔钟展示状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明展品可公开观察。"
+    },
+    {
+      "blueprint_ref": "b08-s02",
+      "parent_ref": "b08",
+      "parent_role": "影刻日历职责",
+      "label": "影刻日历",
+      "name": "露台影刻日历",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s02-n01",
+        "b08-s02-n02",
+        "b08-s02-n03"
+      ],
+      "semantic_note": "用影子位置标记虚构活动日期。"
+    },
+    {
+      "blueprint_ref": "b08-s02-n01",
+      "parent_ref": "b08-s02",
+      "parent_role": "影刻位置",
+      "label": "影刻位置",
+      "name": "影刻日历位置",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s02-n04"
+      ],
+      "semantic_note": "绑定影刻观察点。"
+    },
+    {
+      "blueprint_ref": "b08-s02-n04",
+      "parent_ref": "b08-s02-n01",
+      "parent_role": "位置编号",
+      "label": "影刻点档",
+      "name": "影刻点编号",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s02-n05"
+      ],
+      "semantic_note": "承载影刻空间编号。"
+    },
+    {
+      "blueprint_ref": "b08-s02-n05",
+      "parent_ref": "b08-s02-n04",
+      "parent_role": "编号值",
+      "label": "影刻点码",
+      "name": "影刻空间编号",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存影刻点编号。"
+    },
+    {
+      "blueprint_ref": "b08-s02-n02",
+      "parent_ref": "b08-s02",
+      "parent_role": "活动日期",
+      "label": "影刻日期",
+      "name": "影刻活动时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出对应活动时刻。"
+    },
+    {
+      "blueprint_ref": "b08-s02-n03",
+      "parent_ref": "b08-s02",
+      "parent_role": "日历状态",
+      "label": "影刻日历态",
+      "name": "影刻日历状态",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s02-n06"
+      ],
+      "semantic_note": "记录日历公开状态。"
+    },
+    {
+      "blueprint_ref": "b08-s02-n06",
+      "parent_ref": "b08-s02-n03",
+      "parent_role": "公开状态",
+      "label": "影刻公开态",
+      "name": "影刻日历公开状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明日历可公开查看。"
+    },
+    {
+      "blueprint_ref": "b08-s03",
+      "parent_ref": "b08",
+      "parent_role": "露水瓶职责",
+      "label": "露水瓶",
+      "name": "露水观察瓶",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s03-n01",
+        "b08-s03-n02",
+        "b08-s03-n03"
+      ],
+      "semantic_note": "登记不作饮用或实验结论的露水观察瓶。"
+    },
+    {
+      "blueprint_ref": "b08-s03-n01",
+      "parent_ref": "b08-s03",
+      "parent_role": "瓶体档案",
+      "label": "露水瓶档",
+      "name": "露水瓶档案",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s03-n04",
+        "b08-s03-n05",
+        "b08-s03-n06"
+      ],
+      "semantic_note": "绑定瓶体、放置点与标签。"
+    },
+    {
+      "blueprint_ref": "b08-s03-n04",
+      "parent_ref": "b08-s03-n01",
+      "parent_role": "瓶体编号",
+      "label": "露水瓶码",
+      "name": "露水瓶编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存露水瓶编号。"
+    },
+    {
+      "blueprint_ref": "b08-s03-n05",
+      "parent_ref": "b08-s03-n01",
+      "parent_role": "放置位置",
+      "label": "露水瓶位",
+      "name": "露水瓶放置位置",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出露水瓶放置点。"
+    },
+    {
+      "blueprint_ref": "b08-s03-n06",
+      "parent_ref": "b08-s03-n01",
+      "parent_role": "观察标签",
+      "label": "露水观察签",
+      "name": "露水观察标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出公开观察标签。"
+    },
+    {
+      "blueprint_ref": "b08-s03-n02",
+      "parent_ref": "b08-s03",
+      "parent_role": "观察时刻",
+      "label": "露水观察刻",
+      "name": "露水观察时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "记录露水观察时段。"
+    },
+    {
+      "blueprint_ref": "b08-s03-n03",
+      "parent_ref": "b08-s03",
+      "parent_role": "展示状态",
+      "label": "露水瓶态",
+      "name": "露水瓶展示状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明露水瓶可展示。"
+    },
+    {
+      "blueprint_ref": "b08-s04",
+      "parent_ref": "b08",
+      "parent_role": "微风纸带职责",
+      "label": "微风纸带",
+      "name": "微风纸带观察",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s04-n01",
+        "b08-s04-n02"
+      ],
+      "semantic_note": "用纸带方向记录虚构微风变化。"
+    },
+    {
+      "blueprint_ref": "b08-s04-n01",
+      "parent_ref": "b08-s04",
+      "parent_role": "纸带组合",
+      "label": "纸带组合",
+      "name": "微风纸带组合",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s04-n03",
+        "b08-s04-n04",
+        "b08-s04-n05",
+        "b08-s04-n06"
+      ],
+      "semantic_note": "绑定纸带编号、位置、方向和颜色。"
+    },
+    {
+      "blueprint_ref": "b08-s04-n03",
+      "parent_ref": "b08-s04-n01",
+      "parent_role": "纸带编号",
+      "label": "微风带码",
+      "name": "微风纸带编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出观察纸带编号。"
+    },
+    {
+      "blueprint_ref": "b08-s04-n04",
+      "parent_ref": "b08-s04-n01",
+      "parent_role": "悬挂位置",
+      "label": "微风带位",
+      "name": "纸带悬挂位置",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出纸带悬挂点。"
+    },
+    {
+      "blueprint_ref": "b08-s04-n05",
+      "parent_ref": "b08-s04-n01",
+      "parent_role": "方向标签",
+      "label": "微风方向",
+      "name": "纸带方向标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出纸带方向标签。"
+    },
+    {
+      "blueprint_ref": "b08-s04-n06",
+      "parent_ref": "b08-s04-n01",
+      "parent_role": "颜色标签",
+      "label": "微风带色",
+      "name": "纸带颜色标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出纸带颜色标签。"
+    },
+    {
+      "blueprint_ref": "b08-s04-n02",
+      "parent_ref": "b08-s04",
+      "parent_role": "观察状态",
+      "label": "纸带观察态",
+      "name": "纸带观察状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明纸带观察开放。"
+    },
+    {
+      "blueprint_ref": "b08-s05",
+      "parent_ref": "b08",
+      "parent_role": "公坊借阅职责",
+      "label": "公坊借阅",
+      "name": "观察工具借阅",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s05-n01",
+        "b08-s05-n02"
+      ],
+      "semantic_note": "登记无测量认证用途的观察工具借阅。"
+    },
+    {
+      "blueprint_ref": "b08-s05-n01",
+      "parent_ref": "b08-s05",
+      "parent_role": "工具清单",
+      "label": "借阅工具",
+      "name": "借阅观察工具",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s05-n03",
+        "b08-s05-n04"
+      ],
+      "semantic_note": "列出工具编号与数量。"
+    },
+    {
+      "blueprint_ref": "b08-s05-n03",
+      "parent_ref": "b08-s05-n01",
+      "parent_role": "工具编号",
+      "label": "观察工具码",
+      "name": "观察工具编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出借阅工具。"
+    },
+    {
+      "blueprint_ref": "b08-s05-n04",
+      "parent_ref": "b08-s05-n01",
+      "parent_role": "工具数量",
+      "label": "观察工具数",
+      "name": "观察工具数量",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录借阅工具数量。"
+    },
+    {
+      "blueprint_ref": "b08-s05-n02",
+      "parent_ref": "b08-s05",
+      "parent_role": "借阅时窗",
+      "label": "工具借阅窗",
+      "name": "观察工具借阅时窗",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s05-n05",
+        "b08-s05-n06"
+      ],
+      "semantic_note": "记录借出与归还时段。"
+    },
+    {
+      "blueprint_ref": "b08-s05-n05",
+      "parent_ref": "b08-s05-n02",
+      "parent_role": "时窗明细",
+      "label": "借阅时段",
+      "name": "工具借阅时段",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [],
+      "semantic_note": "承载具体借阅时段。"
+    },
+    {
+      "blueprint_ref": "b08-s05-n06",
+      "parent_ref": "b08-s05-n02",
+      "parent_role": "时段集合",
+      "label": "工具时窗",
+      "name": "工具可借时段",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出工具可借时段。"
+    },
+    {
+      "blueprint_ref": "b08-s06",
+      "parent_ref": "b08",
+      "parent_role": "公坊交接职责",
+      "label": "苔钟交接",
+      "name": "苔钟公坊交接",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b08-s06-n01",
+        "b08-s06-n02",
+        "b08-s06-n03",
+        "b08-s06-n04",
+      "b08-s06-n05",
+      "b08-s06-n06",
+      "b08-s06-n07",
+      "b08-s06-n08"
+      ],
+      "semantic_note": "交接展品、观察点、工具和开放状态。"
+    },
+    {
+      "blueprint_ref": "b08-s06-n01",
+      "parent_ref": "b08-s06",
+      "parent_role": "展品集合",
+      "label": "交接苔钟",
+      "name": "交接苔钟编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出交接苔钟。"
+    },
+    {
+      "blueprint_ref": "b08-s06-n02",
+      "parent_ref": "b08-s06",
+      "parent_role": "观察点位",
+      "label": "交接观察点",
+      "name": "交接观察点位",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出交接观察点。"
+    },
+    {
+      "blueprint_ref": "b08-s06-n03",
+      "parent_ref": "b08-s06",
+      "parent_role": "工具集合",
+      "label": "交接观察器",
+      "name": "交接观察工具",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出交接观察工具。"
+    },
+    {
+      "blueprint_ref": "b08-s06-n04",
+      "parent_ref": "b08-s06",
+      "parent_role": "交接时刻",
+      "label": "苔钟交接刻",
+      "name": "苔钟公坊交接时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录公坊交接时刻。"
+    },
+    {
+      "blueprint_ref": "b08-s06-n05",
+      "parent_ref": "b08-s06",
+      "parent_role": "完成状态",
+      "label": "苔钟交接态",
+      "name": "苔钟公坊交接状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明公坊交接完成。"
+    },
+    {
+      "blueprint_ref": "b08-s06-n06",
+      "parent_ref": "b08-s06",
+      "parent_role": "借阅清点",
+      "label": "交接借阅项",
+      "name": "交接未归还借阅编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出交接时仍在借阅中的观察工具编号。"
+    },
+    {
+      "blueprint_ref": "b08-s06-n07",
+      "parent_ref": "b08-s06",
+      "parent_role": "展示封闭点",
+      "label": "交接封闭点",
+      "name": "交接期间封闭观察点",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出班次交接期间暂不开放的观察位置。"
+    },
+    {
+      "blueprint_ref": "b08-s06-n08",
+      "parent_ref": "b08-s06",
+      "parent_role": "说明更新",
+      "label": "交接说明签",
+      "name": "交接后说明更新标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出下一班次需要更新的公开说明主题。"
+    }
+  ]
+}

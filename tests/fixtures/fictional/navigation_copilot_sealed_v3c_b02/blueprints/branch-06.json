@@ -1,0 +1,767 @@
+{
+  "schema_version": "treeguard.navigation-copilot-v3c-blueprint-file.v1",
+  "branch_ref": "branch-06",
+  "nodes": [
+    {
+      "blueprint_ref": "b06",
+      "parent_ref": "root",
+      "parent_role": "棱潮观测领域",
+      "label": "棱潮观测台",
+      "name": "棱潮公共观测台",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s01",
+        "b06-s02",
+        "b06-s03",
+        "b06-s04",
+        "b06-s05",
+        "b06-s06",
+        "b06-s07",
+        "b06-s08"
+      ],
+      "semantic_note": "记录完全虚构的潮光、浮标、云带与岸线观测。"
+    },
+    {
+      "blueprint_ref": "b06-s01",
+      "parent_ref": "b06",
+      "parent_role": "潮光窗口职责",
+      "label": "潮光窗口",
+      "name": "潮光观测窗口",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s01-n01",
+        "b06-s01-n02",
+        "b06-s01-n03",
+        "b06-s01-n04",
+        "b06-s01-n05"
+      ],
+      "semantic_note": "限定一次潮光观察的时间和位置。"
+    },
+    {
+      "blueprint_ref": "b06-s01-n01",
+      "parent_ref": "b06-s01",
+      "parent_role": "窗口时段",
+      "label": "潮光时段",
+      "name": "潮光观测时段",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s01-n06"
+      ],
+      "semantic_note": "绑定窗口的虚构时段。"
+    },
+    {
+      "blueprint_ref": "b06-s01-n06",
+      "parent_ref": "b06-s01-n01",
+      "parent_role": "时段集合",
+      "label": "潮光刻",
+      "name": "潮光观测时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出潮光观察时刻。"
+    },
+    {
+      "blueprint_ref": "b06-s01-n02",
+      "parent_ref": "b06-s01",
+      "parent_role": "观测位置",
+      "label": "潮光点",
+      "name": "潮光观测位置",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出岸边观测点。"
+    },
+    {
+      "blueprint_ref": "b06-s01-n03",
+      "parent_ref": "b06-s01",
+      "parent_role": "色带标签",
+      "label": "潮光色",
+      "name": "潮光色带标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出虚构潮光色带。"
+    },
+    {
+      "blueprint_ref": "b06-s01-n04",
+      "parent_ref": "b06-s01",
+      "parent_role": "亮度等级",
+      "label": "潮光级",
+      "name": "潮光亮度等级",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录潮光亮度等级。"
+    },
+    {
+      "blueprint_ref": "b06-s01-n05",
+      "parent_ref": "b06-s01",
+      "parent_role": "公开状态",
+      "label": "潮光公开态",
+      "name": "潮光记录公开状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明记录可公开展示。"
+    },
+    {
+      "blueprint_ref": "b06-s02",
+      "parent_ref": "b06",
+      "parent_role": "浮标巡读职责",
+      "label": "棱潮浮标",
+      "name": "棱潮浮标巡读",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s02-n01",
+        "b06-s02-n02",
+        "b06-s02-n03",
+        "b06-s02-n04"
+      ],
+      "semantic_note": "记录浮标位置、读数与巡读状态。"
+    },
+    {
+      "blueprint_ref": "b06-s02-n01",
+      "parent_ref": "b06-s02",
+      "parent_role": "浮标身份",
+      "label": "浮标身份",
+      "name": "巡读浮标身份",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s02-n05",
+        "b06-s02-n06"
+      ],
+      "semantic_note": "绑定浮标编号与位置。"
+    },
+    {
+      "blueprint_ref": "b06-s02-n05",
+      "parent_ref": "b06-s02-n01",
+      "parent_role": "浮标编号",
+      "label": "棱潮标码",
+      "name": "棱潮浮标编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存虚构浮标编号。"
+    },
+    {
+      "blueprint_ref": "b06-s02-n06",
+      "parent_ref": "b06-s02-n01",
+      "parent_role": "浮标位置",
+      "label": "棱潮标位",
+      "name": "棱潮浮标位置",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出浮标所在位置。"
+    },
+    {
+      "blueprint_ref": "b06-s02-n02",
+      "parent_ref": "b06-s02",
+      "parent_role": "潮位读数",
+      "label": "浮标潮位",
+      "name": "浮标潮位读数",
+      "kind": "property",
+      "value_type": "float",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录虚构潮位读数。"
+    },
+    {
+      "blueprint_ref": "b06-s02-n03",
+      "parent_ref": "b06-s02",
+      "parent_role": "巡读时刻",
+      "label": "浮标巡读刻",
+      "name": "浮标巡读时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录巡读时刻。"
+    },
+    {
+      "blueprint_ref": "b06-s02-n04",
+      "parent_ref": "b06-s02",
+      "parent_role": "巡读确认",
+      "label": "浮标巡读态",
+      "name": "浮标巡读确认",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明巡读已完成。"
+    },
+    {
+      "blueprint_ref": "b06-s03",
+      "parent_ref": "b06",
+      "parent_role": "云带描摹职责",
+      "label": "云带描摹",
+      "name": "岸外云带描摹",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s03-n01",
+        "b06-s03-n02",
+        "b06-s03-n03",
+        "b06-s03-n04"
+      ],
+      "semantic_note": "用标签记录岸外虚构云带形态。"
+    },
+    {
+      "blueprint_ref": "b06-s03-n01",
+      "parent_ref": "b06-s03",
+      "parent_role": "云带范围",
+      "label": "云带范围",
+      "name": "云带空间范围",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s03-n05"
+      ],
+      "semantic_note": "绑定云带可见区域。"
+    },
+    {
+      "blueprint_ref": "b06-s03-n05",
+      "parent_ref": "b06-s03-n01",
+      "parent_role": "范围点位",
+      "label": "云带点位",
+      "name": "云带可见点位",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出观察云带的点位。"
+    },
+    {
+      "blueprint_ref": "b06-s03-n02",
+      "parent_ref": "b06-s03",
+      "parent_role": "形态描述",
+      "label": "云带形态",
+      "name": "云带形态描述",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s03-n06"
+      ],
+      "semantic_note": "保存非气象预测的形态标签。"
+    },
+    {
+      "blueprint_ref": "b06-s03-n06",
+      "parent_ref": "b06-s03-n02",
+      "parent_role": "形态标签",
+      "label": "云带签",
+      "name": "云带形态标签",
+      "kind": "property",
+      "value_type": "string",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出虚构云带形态。"
+    },
+    {
+      "blueprint_ref": "b06-s03-n03",
+      "parent_ref": "b06-s03",
+      "parent_role": "描摹时刻",
+      "label": "云带刻",
+      "name": "云带描摹时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录描摹时刻。"
+    },
+    {
+      "blueprint_ref": "b06-s03-n04",
+      "parent_ref": "b06-s03",
+      "parent_role": "复核状态",
+      "label": "云带复核态",
+      "name": "云带描摹复核",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明描摹已复核。"
+    },
+    {
+      "blueprint_ref": "b06-s04",
+      "parent_ref": "b06",
+      "parent_role": "岸线刻度职责",
+      "label": "岸线刻度",
+      "name": "岸线观察刻度",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s04-n01",
+        "b06-s04-n02",
+        "b06-s04-n03"
+      ],
+      "semantic_note": "记录非测绘用途的虚构岸线刻度。"
+    },
+    {
+      "blueprint_ref": "b06-s04-n01",
+      "parent_ref": "b06-s04",
+      "parent_role": "刻度位置",
+      "label": "岸线刻位",
+      "name": "岸线刻度位置",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s04-n04",
+        "b06-s04-n05",
+        "b06-s04-n06"
+      ],
+      "semantic_note": "绑定观察点、刻度编号与读数。"
+    },
+    {
+      "blueprint_ref": "b06-s04-n04",
+      "parent_ref": "b06-s04-n01",
+      "parent_role": "观察点位",
+      "label": "岸线点",
+      "name": "岸线观察点位",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出岸线观察位置。"
+    },
+    {
+      "blueprint_ref": "b06-s04-n05",
+      "parent_ref": "b06-s04-n01",
+      "parent_role": "刻度编号",
+      "label": "岸线刻码",
+      "name": "岸线刻度编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存虚构刻度编号。"
+    },
+    {
+      "blueprint_ref": "b06-s04-n06",
+      "parent_ref": "b06-s04-n01",
+      "parent_role": "刻度读数",
+      "label": "岸线读数",
+      "name": "岸线刻度读数",
+      "kind": "property",
+      "value_type": "float",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录虚构岸线读数。"
+    },
+    {
+      "blueprint_ref": "b06-s04-n02",
+      "parent_ref": "b06-s04",
+      "parent_role": "观察时刻",
+      "label": "岸线观察刻",
+      "name": "岸线观察时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录观察时刻。"
+    },
+    {
+      "blueprint_ref": "b06-s04-n03",
+      "parent_ref": "b06-s04",
+      "parent_role": "开放许可",
+      "label": "岸线开放态",
+      "name": "岸线观察开放状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明观察点对访客开放。"
+    },
+    {
+      "blueprint_ref": "b06-s05",
+      "parent_ref": "b06",
+      "parent_role": "棱镜维护职责",
+      "label": "观测棱镜",
+      "name": "观测棱镜维护",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s05-n01",
+        "b06-s05-n02",
+        "b06-s05-n03"
+      ],
+      "semantic_note": "维护仅用于公共展示的虚构棱镜。"
+    },
+    {
+      "blueprint_ref": "b06-s05-n01",
+      "parent_ref": "b06-s05",
+      "parent_role": "棱镜档案",
+      "label": "棱镜档案",
+      "name": "观测棱镜档案",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s05-n04",
+        "b06-s05-n05"
+      ],
+      "semantic_note": "绑定棱镜编号和安装点。"
+    },
+    {
+      "blueprint_ref": "b06-s05-n04",
+      "parent_ref": "b06-s05-n01",
+      "parent_role": "棱镜编号",
+      "label": "棱镜码",
+      "name": "观测棱镜编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存棱镜编号。"
+    },
+    {
+      "blueprint_ref": "b06-s05-n05",
+      "parent_ref": "b06-s05-n01",
+      "parent_role": "安装位置",
+      "label": "棱镜位",
+      "name": "观测棱镜位置",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "指出棱镜安装位置。"
+    },
+    {
+      "blueprint_ref": "b06-s05-n02",
+      "parent_ref": "b06-s05",
+      "parent_role": "维护记录",
+      "label": "棱镜维护卷",
+      "name": "棱镜维护记录",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s05-n06"
+      ],
+      "semantic_note": "记录维护时刻。"
+    },
+    {
+      "blueprint_ref": "b06-s05-n06",
+      "parent_ref": "b06-s05-n02",
+      "parent_role": "维护时刻",
+      "label": "棱镜维护刻",
+      "name": "棱镜维护时刻",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存维护完成时刻。"
+    },
+    {
+      "blueprint_ref": "b06-s05-n03",
+      "parent_ref": "b06-s05",
+      "parent_role": "展示状态",
+      "label": "棱镜展示态",
+      "name": "棱镜展示状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明棱镜可继续展示。"
+    },
+    {
+      "blueprint_ref": "b06-s06",
+      "parent_ref": "b06",
+      "parent_role": "潮声席位职责",
+      "label": "潮声席",
+      "name": "潮声观察席",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s06-n01",
+        "b06-s06-n02",
+        "b06-s06-n03"
+      ],
+      "semantic_note": "管理不播放录音的现场潮声席位。"
+    },
+    {
+      "blueprint_ref": "b06-s06-n01",
+      "parent_ref": "b06-s06",
+      "parent_role": "席位空间",
+      "label": "潮声席位",
+      "name": "潮声席位空间",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s06-n04"
+      ],
+      "semantic_note": "绑定席位位置。"
+    },
+    {
+      "blueprint_ref": "b06-s06-n04",
+      "parent_ref": "b06-s06-n01",
+      "parent_role": "位置明细",
+      "label": "潮声席档",
+      "name": "潮声席位明细",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s06-n05",
+        "b06-s06-n06"
+      ],
+      "semantic_note": "记录席位编号。"
+    },
+    {
+      "blueprint_ref": "b06-s06-n05",
+      "parent_ref": "b06-s06-n04",
+      "parent_role": "席位编号",
+      "label": "潮声席码",
+      "name": "潮声席空间编号",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [],
+      "semantic_note": "承载最终空间编号。"
+    },
+    {
+      "blueprint_ref": "b06-s06-n06",
+      "parent_ref": "b06-s06-n04",
+      "parent_role": "编号值",
+      "label": "潮声空间码",
+      "name": "潮声席位编号",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "保存潮声席位编号。"
+    },
+    {
+      "blueprint_ref": "b06-s06-n02",
+      "parent_ref": "b06-s06",
+      "parent_role": "开放时窗",
+      "label": "潮声席窗",
+      "name": "潮声席开放时窗",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "记录席位开放时段。"
+    },
+    {
+      "blueprint_ref": "b06-s06-n03",
+      "parent_ref": "b06-s06",
+      "parent_role": "使用状态",
+      "label": "潮声席态",
+      "name": "潮声席使用状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明席位当前可用。"
+    },
+    {
+      "blueprint_ref": "b06-s07",
+      "parent_ref": "b06",
+      "parent_role": "夜潮导览职责",
+      "label": "夜潮导览",
+      "name": "夜潮观测导览",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s07-n01",
+        "b06-s07-n02"
+      ],
+      "semantic_note": "组织低照明的夜潮公共导览。"
+    },
+    {
+      "blueprint_ref": "b06-s07-n01",
+      "parent_ref": "b06-s07",
+      "parent_role": "导览路线",
+      "label": "夜潮路线",
+      "name": "夜潮导览路线",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s07-n03",
+        "b06-s07-n04",
+        "b06-s07-n05",
+        "b06-s07-n06"
+      ],
+      "semantic_note": "列出路线、时窗、人数和光级。"
+    },
+    {
+      "blueprint_ref": "b06-s07-n03",
+      "parent_ref": "b06-s07-n01",
+      "parent_role": "路线点位",
+      "label": "夜潮点",
+      "name": "夜潮导览点位",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出夜潮导览点。"
+    },
+    {
+      "blueprint_ref": "b06-s07-n04",
+      "parent_ref": "b06-s07-n01",
+      "parent_role": "导览时窗",
+      "label": "夜潮窗",
+      "name": "夜潮导览时窗",
+      "kind": "property",
+      "value_type": "time_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "记录夜潮导览时段。"
+    },
+    {
+      "blueprint_ref": "b06-s07-n05",
+      "parent_ref": "b06-s07-n01",
+      "parent_role": "人数上限",
+      "label": "夜潮人数",
+      "name": "夜潮导览人数上限",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "限制参与人数。"
+    },
+    {
+      "blueprint_ref": "b06-s07-n06",
+      "parent_ref": "b06-s07-n01",
+      "parent_role": "照明等级",
+      "label": "夜潮光级",
+      "name": "夜潮导览照明等级",
+      "kind": "property",
+      "value_type": "integer",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "记录允许照明等级。"
+    },
+    {
+      "blueprint_ref": "b06-s07-n02",
+      "parent_ref": "b06-s07",
+      "parent_role": "报名状态",
+      "label": "夜潮报名态",
+      "name": "夜潮导览报名状态",
+      "kind": "property",
+      "value_type": "boolean",
+      "cardinality": "SINGLE",
+      "child_refs": [],
+      "semantic_note": "声明当前可报名。"
+    },
+    {
+      "blueprint_ref": "b06-s08",
+      "parent_ref": "b06",
+      "parent_role": "观测交接职责",
+      "label": "棱潮交接",
+      "name": "观测台班次交接",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s08-n01",
+      "b06-s08-n02",
+      "b06-s08-n06"
+      ],
+      "semantic_note": "交接浮标、棱镜与观察区域。"
+    },
+    {
+      "blueprint_ref": "b06-s08-n01",
+      "parent_ref": "b06-s08",
+      "parent_role": "设备交接",
+      "label": "观测设备卷",
+      "name": "观测设备交接",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s08-n03",
+        "b06-s08-n04"
+      ],
+      "semantic_note": "列出浮标与棱镜设备。"
+    },
+    {
+      "blueprint_ref": "b06-s08-n03",
+      "parent_ref": "b06-s08-n01",
+      "parent_role": "浮标集合",
+      "label": "交接浮标",
+      "name": "交接浮标编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出交接浮标。"
+    },
+    {
+      "blueprint_ref": "b06-s08-n04",
+      "parent_ref": "b06-s08-n01",
+      "parent_role": "棱镜集合",
+      "label": "交接棱镜",
+      "name": "交接棱镜编号",
+      "kind": "property",
+      "value_type": "entity_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出交接棱镜。"
+    },
+    {
+      "blueprint_ref": "b06-s08-n02",
+      "parent_ref": "b06-s08",
+      "parent_role": "区域交接",
+      "label": "观测区域卷",
+      "name": "观测区域交接",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [
+        "b06-s08-n05"
+      ],
+      "semantic_note": "记录暂时封闭区域。"
+    },
+    {
+      "blueprint_ref": "b06-s08-n05",
+      "parent_ref": "b06-s08-n02",
+      "parent_role": "封闭点位",
+      "label": "封闭观测点",
+      "name": "封闭观测点位",
+      "kind": "property",
+      "value_type": "space_code",
+      "cardinality": "MULTIPLE",
+      "child_refs": [],
+      "semantic_note": "列出封闭观察点。"
+    },
+    {
+      "blueprint_ref": "b06-s08-n06",
+      "parent_ref": "b06-s08",
+      "parent_role": "完成确认",
+      "label": "棱潮交接确认",
+      "name": "观测交接确认",
+      "kind": "concept",
+      "value_type": null,
+      "cardinality": null,
+      "child_refs": [],
+      "semantic_note": "表示交接确认职责边界。"
+    }
+  ]
+}

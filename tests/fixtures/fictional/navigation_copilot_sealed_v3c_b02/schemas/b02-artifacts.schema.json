@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/fixtures/navigation-copilot-v3c-b02-artifacts.schema.json",
+  "title": "Navigation Copilot v3-C b02 data-only artifacts",
+  "oneOf": [
+    {"$ref": "#/$defs/catalog"},
+    {"$ref": "#/$defs/candidateBindings"},
+    {"$ref": "#/$defs/candidates"},
+    {"$ref": "#/$defs/oracleAuthoring"},
+    {"$ref": "#/$defs/blueprintReview"},
+    {"$ref": "#/$defs/candidateReview"},
+    {"$ref": "#/$defs/migrationLedger"},
+    {"$ref": "#/$defs/preflight"},
+    {"$ref": "#/$defs/dataManifest"},
+    {"$ref": "#/$defs/weakOracleReview"}
+  ],
+  "$defs": {
+    "baseBatch": {
+      "type": "object",
+      "required": ["schema_version", "batch_ref"],
+      "properties": {
+        "schema_version": {"type": "string", "minLength": 1},
+        "batch_ref": {"const": "navigation-copilot-sealed-v3c-20260806-b02"}
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_kind", "value_type", "cardinality"],
+      "properties": {
+        "node_kind": {"enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]},
+        "value_type": {"type": ["string", "null"]},
+        "cardinality": {"enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "finding_codes", "rubric", "assessment"],
+      "properties": {
+        "status": {"enum": ["SILVER_ACCEPTED", "SILVER_REJECTED"]},
+        "finding_codes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "rubric": {"type": "array", "minItems": 7, "maxItems": 7, "items": {"enum": ["PASS", "FAIL", "NOT_APPLICABLE"]}},
+        "assessment": {"type": "string", "minLength": 1}
+      }
+    },
+    "candidateBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_category", "source_ordinal", "scenario_ref", "execution_category", "node_kind_hint", "value_type_hint", "cardinality_hint", "wrong_parent_blueprint_ref", "review"],
+      "allOf": [
+        {
+          "if": {"properties": {"source_category": {"const": "CLARIFICATION"}}, "required": ["source_category"]},
+          "then": {"required": ["frozen_clarification_answer"]},
+          "else": {"not": {"required": ["frozen_clarification_answer"]}}
+        }
+      ],
+      "properties": {
+        "source_category": {"enum": ["LITERAL_UNIQUE", "NON_LITERAL_UNIQUE", "STRUCTURAL_DISTRACTOR", "MULTIPLE_ACCEPTABLE", "CLARIFICATION", "WEAK_EVIDENCE", "NO_TARGET"]},
+        "source_ordinal": {"type": "integer", "minimum": 1},
+        "scenario_ref": {"type": "string", "pattern": "^v3c-b02-"},
+        "execution_category": {"enum": ["LITERAL_UNIQUE", "NONLITERAL_UNIQUE", "STRUCTURAL_INTERFERENCE", "MULTI_ACCEPTABLE", "CLARIFICATION", "WEAK_EVIDENCE", "TARGET_ABSENT"]},
+        "node_kind_hint": {"enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]},
+        "value_type_hint": {"type": ["string", "null"]},
+        "cardinality_hint": {"enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]},
+        "frozen_clarification_answer": {"type": "string", "minLength": 1},
+        "wrong_parent_blueprint_ref": {"type": ["string", "null"]},
+        "review": {"$ref": "#/$defs/review"}
+      }
+    },
+    "catalog": {
+      "allOf": [
+        {"$ref": "#/$defs/baseBatch"},
+        {
+          "type": "object",
+          "required": ["namespace", "seed", "stable_id_algorithm_version", "blueprint_file_schema_version", "source_class", "fictional", "derived_from_real", "root_blueprint_file", "blueprint_files", "node_count", "value_envelope_count", "gold_eligible", "patch_eligible", "production_qualification"],
+          "properties": {"schema_version": {"const": "treeguard.navigation-copilot-v3c-blueprint-catalog.v2"}}
+        }
+      ]
+    },
+    "candidateBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "batch_ref", "rubric_order", "bindings"],
+      "properties": {
+        "schema_version": {"const": "treeguard.navigation-copilot-v3c-b02-candidate-bindings.v1"},
+        "batch_ref": {"const": "navigation-copilot-sealed-v3c-20260806-b02"},
+        "rubric_order": {"type": "array", "minItems": 7, "maxItems": 7, "items": {"type": "string"}, "uniqueItems": true},
+        "bindings": {"type": "array", "minItems": 56, "maxItems": 56, "items": {"$ref": "#/$defs/candidateBinding"}}
+      }
+    },
+    "candidates": {
+      "allOf": [
+        {"$ref": "#/$defs/baseBatch"},
+        {
+          "type": "object",
+          "required": ["candidates"],
+          "properties": {
+            "schema_version": {"const": "treeguard.navigation-copilot-v3c-b02-candidates.v1"},
+            "candidates": {"type": "array", "minItems": 56, "maxItems": 56}
+          }
+        }
+      ]
+    },
+    "oracleAuthoring": {
+      "allOf": [
+        {"$ref": "#/$defs/baseBatch"},
+        {
+          "type": "object",
+          "required": ["oracles"],
+          "properties": {
+            "schema_version": {"const": "treeguard.navigation-copilot-v3c-b02-oracle-authoring.v1"},
+            "oracles": {"type": "array", "minItems": 56, "maxItems": 56}
+          }
+        }
+      ]
+    },
+    "blueprintReview": {
+      "allOf": [
+        {"$ref": "#/$defs/baseBatch"},
+        {
+          "type": "object",
+          "required": ["reviews"],
+          "properties": {
+            "schema_version": {"const": "treeguard.navigation-copilot-v3c-b02-blueprint-review.v1"},
+            "reviews": {"type": "array", "minItems": 91, "maxItems": 91}
+          }
+        }
+      ]
+    },
+    "candidateReview": {
+      "allOf": [
+        {"$ref": "#/$defs/baseBatch"},
+        {
+          "type": "object",
+          "required": ["reviews"],
+          "properties": {
+            "schema_version": {"const": "treeguard.navigation-copilot-v3c-b02-candidate-review.v1"},
+            "reviews": {"type": "array", "minItems": 56, "maxItems": 56}
+          }
+        }
+      ]
+    },
+    "migrationLedger": {
+      "allOf": [
+        {"$ref": "#/$defs/baseBatch"},
+        {
+          "type": "object",
+          "required": ["b01_status", "source_allowlist", "blueprint_files", "blueprint_review_payloads", "candidate_payloads", "oracle_payloads", "weak_oracle_source_semantic_payload_reused"],
+          "properties": {"schema_version": {"const": "treeguard.navigation-copilot-v3c-b02-migration-ledger.v1"}}
+        }
+      ]
+    },
+    "preflight": {
+      "allOf": [
+        {"$ref": "#/$defs/baseBatch"},
+        {"type": "object", "properties": {"schema_version": {"const": "treeguard.navigation-copilot-v3c-b02-preflight.v1"}}}
+      ]
+    },
+    "dataManifest": {
+      "allOf": [
+        {"$ref": "#/$defs/baseBatch"},
+        {
+          "type": "object",
+          "required": ["function_commit", "data_commit", "execution_manifest_present", "artifact_sha256", "gold_eligible", "patch_eligible", "production_qualification"],
+          "properties": {"schema_version": {"const": "treeguard.navigation-copilot-v3c-b02-data-manifest.v1"}}
+        }
+      ]
+    },
+    "weakOracleReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "batch_ref", "reviews"],
+      "properties": {
+        "schema_version": {"const": "treeguard.navigation-copilot-v3c-b02-weak-oracle-review.v1"},
+        "batch_ref": {"const": "navigation-copilot-sealed-v3c-20260806-b02"},
+        "reviews": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["scenario_ref", "hidden_target_blueprint_ref", "competitor_blueprint_refs", "acceptable_profiles", "reason_code", "review_status", "assessment"],
+            "properties": {
+              "scenario_ref": {"type": "string", "pattern": "^v3c-b02-wek-"},
+              "hidden_target_blueprint_ref": {"type": "string", "minLength": 1},
+              "competitor_blueprint_refs": {"type": "array", "minItems": 2, "items": {"type": "string"}, "uniqueItems": true},
+              "acceptable_profiles": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/profile"}},
+              "reason_code": {"enum": ["INSUFFICIENT_DISCRIMINATOR", "UNBOUNDED_SCOPE"]},
+              "review_status": {"const": "CODEX_SILVER_REVIEWED"},
+              "assessment": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "batch_ref": "NAVCOP_B03C_REVIEW_PROOF_20260817_C0",
+  "dataset_ref": "navigation-copilot-b03c-review-contract-proof",
+  "items": [
+    {
+      "review_state": "PENDING",
+      "scenario_id": "c0s-001"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_id": "c0s-002"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_id": "c0s-003"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_id": "c0s-004"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_id": "c0s-005"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_id": "c0s-006"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_id": "c0s-007"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_id": "c0s-008"
+    }
+  ],
+  "producer_module": "author_review_contract_proof",
+  "schema_version": "treeguard.navigation-copilot-b03c-review-proof-packet.v1",
+  "source_scenarios_sha256": "7d3f502f08f115c0cf41fa7460766a46564b925b2eaf6fa9aeb3ec041c4cc75d",
+  "source_tree_sha256": "dc256ad590159e23564f9166fae46f1053757a00fdf2d5751fc1d7ab67fef12d"
+}

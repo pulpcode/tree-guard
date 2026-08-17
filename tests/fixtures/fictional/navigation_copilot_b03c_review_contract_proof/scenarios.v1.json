@@ -1,0 +1,55 @@
+{
+  "batch_ref": "NAVCOP_B03C_REVIEW_PROOF_20260817_C0",
+  "dataset_ref": "navigation-copilot-b03c-review-contract-proof",
+  "items": [
+    {
+      "context_node_id": null,
+      "request_text": "我想取消已经约好的洗衣时段",
+      "scenario_id": "c0s-001",
+      "scenario_type": "UNIQUE"
+    },
+    {
+      "context_node_id": null,
+      "request_text": "想约一台烘机",
+      "scenario_id": "c0s-002",
+      "scenario_type": "NONLITERAL_UNIQUE"
+    },
+    {
+      "context_node_id": "c0n-022",
+      "request_text": "机器一直发出怪响，应该去哪里处理",
+      "scenario_id": "c0s-003",
+      "scenario_type": "WRONG_CONTEXT"
+    },
+    {
+      "context_node_id": null,
+      "request_text": "哪些项目是补充洗涤用品的？",
+      "scenario_id": "c0s-004",
+      "scenario_type": "MULTI_ACCEPTABLE"
+    },
+    {
+      "context_node_id": null,
+      "request_text": "我要预约设备",
+      "scenario_id": "c0s-005",
+      "scenario_type": "CLARIFICATION"
+    },
+    {
+      "context_node_id": null,
+      "request_text": "衣服处理得不对，怎么办",
+      "scenario_id": "c0s-006",
+      "scenario_type": "WEAK_EVIDENCE"
+    },
+    {
+      "context_node_id": null,
+      "request_text": "我想预约熨烫机",
+      "scenario_id": "c0s-007",
+      "scenario_type": "TARGET_ABSENT"
+    },
+    {
+      "context_node_id": null,
+      "request_text": "我想了解洗衣房能提供哪些帮助",
+      "scenario_id": "c0s-008",
+      "scenario_type": "SUPERTYPE_PRESENT"
+    }
+  ],
+  "schema_version": "treeguard.navigation-copilot-b03c-review-proof-scenarios.v1"
+}

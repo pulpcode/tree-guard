@@ -1,0 +1,76 @@
+{
+  "schema_version": "treeguard.navigation-copilot-b03c-review-input.v1",
+  "source_tree_sha256": "dc256ad590159e23564f9166fae46f1053757a00fdf2d5751fc1d7ab67fef12d",
+  "source_scenarios_sha256": "7d3f502f08f115c0cf41fa7460766a46564b925b2eaf6fa9aeb3ec041c4cc75d",
+  "source_review_packet_sha256": "9cd5904eb6f451599cf13344e9f6796e0548c67f84d78892cf482aad40a51f06",
+  "elapsed_minutes": 20,
+  "reviewed_node_ids": [
+    "c0n-001", "c0n-002", "c0n-003", "c0n-004", "c0n-005", "c0n-006",
+    "c0n-007", "c0n-008", "c0n-009", "c0n-010", "c0n-011", "c0n-012",
+    "c0n-013", "c0n-014", "c0n-015", "c0n-016", "c0n-017", "c0n-018",
+    "c0n-019", "c0n-020", "c0n-021", "c0n-022", "c0n-023", "c0n-024",
+    "c0n-025", "c0n-026", "c0n-027", "c0n-028", "c0n-029", "c0n-030",
+    "c0n-031", "c0n-032", "c0n-033", "c0n-034", "c0n-035", "c0n-036",
+    "c0n-037", "c0n-038", "c0n-039", "c0n-040", "c0n-041"
+  ],
+  "random_recheck_scenario_ids": ["c0s-002", "c0s-005", "c0s-007"],
+  "dual_review_count": 0,
+  "decisions": [
+    {
+      "scenario_id": "c0s-001",
+      "decision": "SILVER_ACCEPTED",
+      "reviewed_target_ids": ["c0n-005"],
+      "rationale": "请求明确表达取消既有预约，预约取消是唯一直接承接该动作的字段。"
+    },
+    {
+      "scenario_id": "c0s-002",
+      "decision": "SILVER_ACCEPTED",
+      "reviewed_target_ids": ["c0n-004"],
+      "phenomenon": "abbreviation",
+      "surface_form": "烘机预约",
+      "rationale": "口语简称烘机只绑定烘干机预约别名，不会与洗衣机预约产生第二个展开。"
+    },
+    {
+      "scenario_id": "c0s-003",
+      "decision": "SILVER_ACCEPTED",
+      "reviewed_target_ids": ["c0n-039"],
+      "rationale": "虽然上下文落在用品补给，怪响描述仍唯一指向帮助与安全下的异响报告。"
+    },
+    {
+      "scenario_id": "c0s-004",
+      "decision": "SILVER_ACCEPTED",
+      "reviewed_target_ids": ["c0n-023", "c0n-024", "c0n-025"],
+      "rationale": "用品补给分支中三个以补充结尾的字段都满足请求，用品取用不满足补充谓词。"
+    },
+    {
+      "scenario_id": "c0s-005",
+      "decision": "SILVER_ACCEPTED",
+      "reviewed_target_ids": [],
+      "contrast_node_ids": ["c0n-003", "c0n-004"],
+      "clarification_question": "你要预约洗衣机还是烘干机？",
+      "clarification_answer": "我要预约烘干机。",
+      "resolved_target_ids": ["c0n-004"],
+      "rationale": "设备预约在回答前有洗衣机和烘干机两个合理对照，回答后唯一收敛到烘干机预约。"
+    },
+    {
+      "scenario_id": "c0s-006",
+      "decision": "SILVER_ACCEPTED",
+      "reviewed_target_ids": [],
+      "evidence_gap": "未说明衣物处于洗涤、烘干、遗留还是设备异常阶段。",
+      "rationale": "请求缺少处理阶段和异常现象，当前证据不足以在衣物管理或帮助分支间唯一定位。"
+    },
+    {
+      "scenario_id": "c0s-007",
+      "decision": "SILVER_ACCEPTED",
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "rationale": "全树没有熨烫设备、熨烫预约或可合理承接该专门需求的上位主题，因此可判为空目标。"
+    },
+    {
+      "scenario_id": "c0s-008",
+      "decision": "SILVER_ACCEPTED",
+      "reviewed_target_ids": ["c0n-041"],
+      "rationale": "用户询问洗衣房可提供的帮助，服务咨询及其洗衣房帮助别名能够直接承接，不能判为空目标。"
+    }
+  ]
+}

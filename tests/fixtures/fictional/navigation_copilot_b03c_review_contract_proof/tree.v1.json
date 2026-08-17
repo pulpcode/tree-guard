@@ -1,0 +1,393 @@
+{
+  "batch_ref": "NAVCOP_B03C_REVIEW_PROOF_20260817_C0",
+  "dataset_ref": "navigation-copilot-b03c-review-contract-proof",
+  "derived_from_real": false,
+  "domain_ref": "FICTIONAL_SHARED_LAUNDRY_OPERATIONS",
+  "fictional": true,
+  "gold_eligible": false,
+  "namespace": "urn:treeguard:fictional:navigation-copilot:b03c:review-proof:v1",
+  "nodes": [
+    {
+      "aliases": [
+        "洗衣房服务"
+      ],
+      "cardinality": "MULTI",
+      "label": "共享洗衣房服务",
+      "node_id": "c0n-001",
+      "node_kind": "COLLECTION",
+      "parent_id": null,
+      "value_type": "NONE"
+    },
+    {
+      "aliases": [],
+      "cardinality": "MULTI",
+      "label": "预约安排",
+      "node_id": "c0n-002",
+      "node_kind": "COLLECTION",
+      "parent_id": "c0n-001",
+      "value_type": "NONE"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "洗衣机预约",
+      "node_id": "c0n-003",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-002",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [
+        "烘机预约"
+      ],
+      "cardinality": "SINGLE",
+      "label": "烘干机预约",
+      "node_id": "c0n-004",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-002",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "预约取消",
+      "node_id": "c0n-005",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-002",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "预约时段",
+      "node_id": "c0n-006",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-002",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "MULTI",
+      "label": "设备状态",
+      "node_id": "c0n-007",
+      "node_kind": "COLLECTION",
+      "parent_id": "c0n-001",
+      "value_type": "NONE"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "可用洗衣机",
+      "node_id": "c0n-008",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-007",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "可用烘干机",
+      "node_id": "c0n-009",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-007",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "故障洗衣机",
+      "node_id": "c0n-010",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-007",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "暂停设备",
+      "node_id": "c0n-011",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-007",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "MULTI",
+      "label": "洗涤程序",
+      "node_id": "c0n-012",
+      "node_kind": "COLLECTION",
+      "parent_id": "c0n-001",
+      "value_type": "NONE"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "标准洗",
+      "node_id": "c0n-013",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-012",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "轻柔洗",
+      "node_id": "c0n-014",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-012",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "快速洗",
+      "node_id": "c0n-015",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-012",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "高温洗",
+      "node_id": "c0n-016",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-012",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "MULTI",
+      "label": "烘干处理",
+      "node_id": "c0n-017",
+      "node_kind": "COLLECTION",
+      "parent_id": "c0n-001",
+      "value_type": "NONE"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "低温烘干",
+      "node_id": "c0n-018",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-017",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "标准烘干",
+      "node_id": "c0n-019",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-017",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "延时烘干",
+      "node_id": "c0n-020",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-017",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "自然晾晒",
+      "node_id": "c0n-021",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-017",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "MULTI",
+      "label": "用品补给",
+      "node_id": "c0n-022",
+      "node_kind": "COLLECTION",
+      "parent_id": "c0n-001",
+      "value_type": "NONE"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "洗衣液补充",
+      "node_id": "c0n-023",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-022",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "柔顺剂补充",
+      "node_id": "c0n-024",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-022",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "消毒剂补充",
+      "node_id": "c0n-025",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-022",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "用品取用",
+      "node_id": "c0n-026",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-022",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "MULTI",
+      "label": "衣物管理",
+      "node_id": "c0n-027",
+      "node_kind": "COLLECTION",
+      "parent_id": "c0n-001",
+      "value_type": "NONE"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "遗留衣物",
+      "node_id": "c0n-028",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-027",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "临时存放",
+      "node_id": "c0n-029",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-027",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "认领登记",
+      "node_id": "c0n-030",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-027",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "超时处理",
+      "node_id": "c0n-031",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-027",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "MULTI",
+      "label": "费用与规则",
+      "node_id": "c0n-032",
+      "node_kind": "COLLECTION",
+      "parent_id": "c0n-001",
+      "value_type": "NONE"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "单次费用",
+      "node_id": "c0n-033",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-032",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "退款申请",
+      "node_id": "c0n-034",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-032",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "使用须知",
+      "node_id": "c0n-035",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-032",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "开放时间",
+      "node_id": "c0n-036",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-032",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "MULTI",
+      "label": "帮助与安全",
+      "node_id": "c0n-037",
+      "node_kind": "COLLECTION",
+      "parent_id": "c0n-001",
+      "value_type": "NONE"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "漏水报告",
+      "node_id": "c0n-038",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-037",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [
+        "怪响报告"
+      ],
+      "cardinality": "SINGLE",
+      "label": "异响报告",
+      "node_id": "c0n-039",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-037",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [],
+      "cardinality": "SINGLE",
+      "label": "紧急停机",
+      "node_id": "c0n-040",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-037",
+      "value_type": "TEXT"
+    },
+    {
+      "aliases": [
+        "服务帮助",
+        "洗衣房帮助"
+      ],
+      "cardinality": "SINGLE",
+      "label": "服务咨询",
+      "node_id": "c0n-041",
+      "node_kind": "FIELD",
+      "parent_id": "c0n-037",
+      "value_type": "TEXT"
+    }
+  ],
+  "patch_eligible": false,
+  "schema_version": "treeguard.navigation-copilot-b03c-review-proof-tree.v1",
+  "seed": 2026081737,
+  "source_class": "CLEANROOM_SYNTHETIC"
+}

@@ -1,0 +1,13 @@
+{
+  "accepted": 8,
+  "nodes": 41,
+  "reviewer_class": "CODEX_SILVER_REVIEWED",
+  "scenarios": 8,
+  "schema_version": "treeguard.navigation-copilot-b03c-review-proof-report.v1",
+  "source_review_input_sha256": "c906112c70691e0347b058aaa591b34740d5c38cbe528370cc99272f344d8b93",
+  "source_review_packet_sha256": "9cd5904eb6f451599cf13344e9f6796e0548c67f84d78892cf482aad40a51f06",
+  "source_scenarios_sha256": "7d3f502f08f115c0cf41fa7460766a46564b925b2eaf6fa9aeb3ec041c4cc75d",
+  "source_tree_sha256": "dc256ad590159e23564f9166fae46f1053757a00fdf2d5751fc1d7ab67fef12d",
+  "status": "C0_REVIEW_CONTRACT_PROOF_PASSED",
+  "value_envelope_count": 0
+}

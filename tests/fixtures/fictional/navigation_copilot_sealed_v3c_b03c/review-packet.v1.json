@@ -1,0 +1,234 @@
+{
+  "batch_ref": "NAVCOP_SEALED_V3C_B03_20260817_C",
+  "dataset_ref": "navigation-copilot-sealed-v3c-b03-maker-lab-c",
+  "items": [
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:001"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:002"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:003"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:004"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:005"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:006"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:007"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:008"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:009"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:010"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:011"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:012"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:013"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:014"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:015"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:016"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:017"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:018"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:019"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:020"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:021"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:022"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:023"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:024"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:025"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:026"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:027"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:028"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:029"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:030"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:031"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:032"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:033"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:034"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:035"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:036"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:037"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:038"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:039"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:040"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:041"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:042"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:043"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:044"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:045"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:046"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:047"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:048"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:049"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:050"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:051"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:052"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:053"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:054"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:055"
+    },
+    {
+      "review_state": "PENDING",
+      "scenario_ref": "b03c:056"
+    }
+  ],
+  "producer_module": "author_sealed_data",
+  "schema_version": "treeguard.navigation-copilot-b03c-sealed-review-packet.v1",
+  "source_candidates_sha256": "122fd83fab7856b37928288c7f086a6350812946dd05540d9c8ea9fafb7e8dda",
+  "source_tree_sha256": "0d6edf17accb680464343ae3e27943143049211cdb8d19df6998c9247bc7f3bd"
+}

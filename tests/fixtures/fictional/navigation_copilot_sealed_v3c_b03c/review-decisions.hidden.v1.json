@@ -1,0 +1,1129 @@
+{
+  "decisions": [
+    {
+      "compatible_target_ids": [
+        "N500004"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“新增项目名称字段”逐项核对全树近邻后，项目名称是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500004"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:001"
+    },
+    {
+      "compatible_target_ids": [
+        "N500098"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“记录工位预约取消”逐项核对全树近邻后，预约取消是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500098"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:002"
+    },
+    {
+      "compatible_target_ids": [
+        "N500182"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“登记工具实际归还时间”逐项核对全树近邻后，实际归还是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500182"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:003"
+    },
+    {
+      "compatible_target_ids": [
+        "N500269"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“补充材料当前余量”逐项核对全树近邻后，当前余量是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500269"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:004"
+    },
+    {
+      "compatible_target_ids": [
+        "N500363"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“记录设备维护完成时间”逐项核对全树近邻后，完成时间是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500363"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:005"
+    },
+    {
+      "compatible_target_ids": [
+        "N500456"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“登记样件保留期限”逐项核对全树近邻后，保留期限是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500456"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:006"
+    },
+    {
+      "compatible_target_ids": [
+        "N500534"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“增加消防通道检查项”逐项核对全树近邻后，消防通道检查是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500534"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:007"
+    },
+    {
+      "compatible_target_ids": [
+        "N500637"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“填写成果版本说明”逐项核对全树近邻后，版本说明是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500637"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:008"
+    },
+    {
+      "compatible_target_ids": [
+        "N500174"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“登记万用表借用”逐项核对全树近邻后，万用表借用是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500174"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:009"
+    },
+    {
+      "compatible_target_ids": [
+        "N500018"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“记录项目审核意见”逐项核对全树近邻后，审核意见是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500018"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:010"
+    },
+    {
+      "compatible_target_ids": [
+        "N500279"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“填写余料存放位置”逐项核对全树近邻后，存放位置是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500279"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:011"
+    },
+    {
+      "compatible_target_ids": [
+        "N500086"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "phenomenon": "abbreviation",
+      "rationale": "对“给3D打印台加预约入口”逐项核对全树近邻后，三维打印台预约是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500086"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:012",
+      "surface_form": "3D打印台预约"
+    },
+    {
+      "compatible_target_ids": [
+        "N500350"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "phenomenon": "abbreviation",
+      "rationale": "对“登记激切机的维护安排”逐项核对全树近邻后，激光切割机维护是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500350"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:013",
+      "surface_form": "激切机维护"
+    },
+    {
+      "compatible_target_ids": [
+        "N500098"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "phenomenon": "minor_typo",
+      "rationale": "对“记录工位预悦取消”逐项核对全树近邻后，预约取消是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500098"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:014",
+      "surface_form": "预悦取消"
+    },
+    {
+      "compatible_target_ids": [
+        "N500182"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "phenomenon": "minor_typo",
+      "rationale": "对“工具实际归坏时间要记录”逐项核对全树近邻后，实际归还是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500182"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:015",
+      "surface_form": "实际归坏"
+    },
+    {
+      "compatible_target_ids": [
+        "N500355"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "phenomenon": "synonym",
+      "rationale": "对“登记设备修护周期”逐项核对全树近邻后，维护周期是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500355"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:016",
+      "surface_form": "修护周期"
+    },
+    {
+      "compatible_target_ids": [
+        "N500356"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "phenomenon": "colloquial",
+      "rationale": "对“激光切割机什么时候再保养”逐项核对全树近邻后，下次维护是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500356"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:017",
+      "surface_form": "再保养"
+    },
+    {
+      "compatible_target_ids": [
+        "N500015"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "phenomenon": "cross_layer_expression",
+      "rationale": "对“项目要用哪些材料”逐项核对全树近邻后，材料范围是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500015"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:018",
+      "surface_form": "要用哪些材料"
+    },
+    {
+      "compatible_target_ids": [
+        "N500640"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "phenomenon": "colloquial",
+      "rationale": "对“成品交给谁”逐项核对全树近邻后，接收人员是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500640"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:019",
+      "surface_form": "交给谁"
+    },
+    {
+      "compatible_target_ids": [
+        "N500174"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "phenomenon": "abbreviation",
+      "rationale": "对“增加万表借用入口”逐项核对全树近邻后，万用表借用是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500174"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:020",
+      "surface_form": "万表借用"
+    },
+    {
+      "compatible_target_ids": [
+        "N500540"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "phenomenon": "minor_typo",
+      "rationale": "对“检查护目境是否佩戴”逐项核对全树近邻后，护目镜确认是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500540"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:021",
+      "surface_form": "护目境确认"
+    },
+    {
+      "compatible_target_ids": [
+        "N500279"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "phenomenon": "colloquial",
+      "rationale": "对“剩料放哪儿”逐项核对全树近邻后，存放位置是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500279"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:022",
+      "surface_form": "剩料放哪儿"
+    },
+    {
+      "compatible_target_ids": [
+        "N500091"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "phenomenon": "colloquial",
+      "rationale": "对“什么时候把台子腾出来”逐项核对全树近邻后，结束时段是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500091"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:023",
+      "surface_form": "腾出工位"
+    },
+    {
+      "compatible_target_ids": [
+        "N500019"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“记录项目完成条件”逐项核对全树近邻后，完成条件是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500019"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:024"
+    },
+    {
+      "compatible_target_ids": [
+        "N500368"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“记录设备恢复状态”逐项核对全树近邻后，恢复状态是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500368"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:025"
+    },
+    {
+      "compatible_target_ids": [
+        "N500447"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“登记样件关联项目”逐项核对全树近邻后，关联项目是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500447"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:026"
+    },
+    {
+      "compatible_target_ids": [
+        "N500274"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“填写材料用途说明”逐项核对全树近邻后，用途说明是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500274"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:027"
+    },
+    {
+      "compatible_target_ids": [
+        "N500357"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“记录维护责任人员”逐项核对全树近邻后，责任人员是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500357"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:028"
+    },
+    {
+      "compatible_target_ids": [
+        "N500643"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“登记成果确认状态”逐项核对全树近邻后，确认状态是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500643"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:029"
+    },
+    {
+      "compatible_target_ids": [
+        "N500551"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“报告设备异响”逐项核对全树近邻后，异响报告是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500551"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:030"
+    },
+    {
+      "compatible_target_ids": [
+        "N500183"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“登记工具完好状态”逐项核对全树近邻后，完好状态是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500183"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:031"
+    },
+    {
+      "compatible_target_ids": [
+        "N500007"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“记录项目预计周期”逐项核对全树近邻后，预计周期是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500007"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:032"
+    },
+    {
+      "compatible_target_ids": [
+        "N500653"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "对“填写交接未结事项”逐项核对全树近邻后，未结事项是唯一兼容的虚构字段。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500653"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:033"
+    },
+    {
+      "compatible_target_ids": [
+        "N500085",
+        "N500086",
+        "N500087",
+        "N500088"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "“列出所有工位预约入口”覆盖4个同组字段，已逐项检查纳入集合且没有额外兼容项。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500085",
+        "N500086",
+        "N500087",
+        "N500088"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:034"
+    },
+    {
+      "compatible_target_ids": [
+        "N500350",
+        "N500351",
+        "N500352",
+        "N500353"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "“列出所有设备维护对象”覆盖4个同组字段，已逐项检查纳入集合且没有额外兼容项。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500350",
+        "N500351",
+        "N500352",
+        "N500353"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:035"
+    },
+    {
+      "compatible_target_ids": [
+        "N500534",
+        "N500535",
+        "N500536",
+        "N500537",
+        "N500538"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "“列出全部安全检查范围”覆盖5个同组字段，已逐项检查纳入集合且没有额外兼容项。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500534",
+        "N500535",
+        "N500536",
+        "N500537",
+        "N500538"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:036"
+    },
+    {
+      "compatible_target_ids": [
+        "N500645",
+        "N500646",
+        "N500647",
+        "N500648"
+      ],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "“列出成果交接的附件项目”覆盖4个同组字段，已逐项检查纳入集合且没有额外兼容项。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [
+        "N500645",
+        "N500646",
+        "N500647",
+        "N500648"
+      ],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:037"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [
+        "N500085",
+        "N500086",
+        "N500087",
+        "N500088"
+      ],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "“我要预约工位”回答前有4个合理对照，冻结回答后唯一收敛到三维打印台预约。",
+      "resolved_target_ids": [
+        "N500086"
+      ],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:038"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [
+        "N500172",
+        "N500173",
+        "N500174",
+        "N500175"
+      ],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "“我要借工具”回答前有4个合理对照，冻结回答后唯一收敛到万用表借用。",
+      "resolved_target_ids": [
+        "N500174"
+      ],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:039"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [
+        "N500264",
+        "N500265",
+        "N500266",
+        "N500267"
+      ],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "“我要登记材料”回答前有4个合理对照，冻结回答后唯一收敛到涂料登记。",
+      "resolved_target_ids": [
+        "N500266"
+      ],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:040"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [
+        "N500550",
+        "N500551",
+        "N500552"
+      ],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "“我要报告安全问题”回答前有3个合理对照，冻结回答后唯一收敛到冒烟报告。",
+      "resolved_target_ids": [
+        "N500552"
+      ],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:041"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [
+        "N500459",
+        "N500460",
+        "N500461"
+      ],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "“我要处理样件”回答前有3个合理对照，冻结回答后唯一收敛到报废申请。",
+      "resolved_target_ids": [
+        "N500460"
+      ],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:042"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [
+        "N500182",
+        "N500651"
+      ],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "“我要归还东西”回答前有2个合理对照，冻结回答后唯一收敛到实际归还。",
+      "resolved_target_ids": [
+        "N500182"
+      ],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:043"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [
+        "N500363",
+        "N500638"
+      ],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "“我要登记完成情况”回答前有2个合理对照，冻结回答后唯一收敛到完成摘要。",
+      "resolved_target_ids": [
+        "N500638"
+      ],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:044"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": "未说明是哪一种安排、对象和期望状态。",
+      "finding_codes": [],
+      "rationale": "当前请求证据不足：未说明是哪一种安排、对象和期望状态。因此不能预先绑定目标。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:045"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": "未说明设备名称、异常现象和发生阶段。",
+      "finding_codes": [],
+      "rationale": "当前请求证据不足：未说明设备名称、异常现象和发生阶段。因此不能预先绑定目标。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:046"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": "未说明材料类别、处理动作和数量范围。",
+      "finding_codes": [],
+      "rationale": "当前请求证据不足：未说明材料类别、处理动作和数量范围。因此不能预先绑定目标。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:047"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": "未说明样件身份、当前状态和希望执行的动作。",
+      "finding_codes": [],
+      "rationale": "当前请求证据不足：未说明样件身份、当前状态和希望执行的动作。因此不能预先绑定目标。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:048"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": "未说明交接对象、未完成环节和责任主体。",
+      "finding_codes": [],
+      "rationale": "当前请求证据不足：未说明交接对象、未完成环节和责任主体。因此不能预先绑定目标。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:049"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "全树核对 canonical、alias、简称、单编辑近邻和可满足上位主题后，陶艺窑炉预约没有现有目标。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:050"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "全树核对 canonical、alias、简称、单编辑近邻和可满足上位主题后，玻璃吹制炉温度没有现有目标。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:051"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "全树核对 canonical、alias、简称、单编辑近邻和可满足上位主题后，织布机经线密度没有现有目标。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:052"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "全树核对 canonical、alias、简称、单编辑近邻和可满足上位主题后，暗房显影液浓度没有现有目标。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:053"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "全树核对 canonical、alias、简称、单编辑近邻和可满足上位主题后，水刀切割压力没有现有目标。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:054"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "全树核对 canonical、alias、简称、单编辑近邻和可满足上位主题后，喷漆房湿度没有现有目标。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:055"
+    },
+    {
+      "compatible_target_ids": [],
+      "contrast_node_ids": [],
+      "decision": "SILVER_ACCEPTED",
+      "evidence_gap": null,
+      "finding_codes": [],
+      "rationale": "全树核对 canonical、alias、简称、单编辑近邻和可满足上位主题后，金工车床转速没有现有目标。",
+      "resolved_target_ids": [],
+      "reviewed_target_ids": [],
+      "satisfiable_supertype_ids": [],
+      "scenario_ref": "b03c:056"
+    }
+  ],
+  "dual_review_count": 0,
+  "elapsed_minutes": 180,
+  "producer_module": "record_sealed_reviews",
+  "random_recheck_scenario_refs": [
+    "b03c:002",
+    "b03c:009",
+    "b03c:016",
+    "b03c:023",
+    "b03c:030",
+    "b03c:037",
+    "b03c:044",
+    "b03c:051"
+  ],
+  "reviewed_node_ids": [
+    "N500001",
+    "N500002",
+    "N500003",
+    "N500004",
+    "N500005",
+    "N500006",
+    "N500007",
+    "N500008",
+    "N500009",
+    "N500010",
+    "N500011",
+    "N500012",
+    "N500013",
+    "N500014",
+    "N500015",
+    "N500016",
+    "N500017",
+    "N500018",
+    "N500019",
+    "N500020",
+    "N500021",
+    "N500022",
+    "N500070",
+    "N500083",
+    "N500084",
+    "N500085",
+    "N500086",
+    "N500087",
+    "N500088",
+    "N500089",
+    "N500090",
+    "N500091",
+    "N500092",
+    "N500093",
+    "N500094",
+    "N500095",
+    "N500096",
+    "N500097",
+    "N500098",
+    "N500099",
+    "N500100",
+    "N500101",
+    "N500102",
+    "N500103",
+    "N500104",
+    "N500156",
+    "N500170",
+    "N500171",
+    "N500172",
+    "N500173",
+    "N500174",
+    "N500175",
+    "N500176",
+    "N500177",
+    "N500178",
+    "N500179",
+    "N500180",
+    "N500181",
+    "N500182",
+    "N500183",
+    "N500184",
+    "N500185",
+    "N500186",
+    "N500187",
+    "N500188",
+    "N500189",
+    "N500190",
+    "N500191",
+    "N500192",
+    "N500247",
+    "N500262",
+    "N500263",
+    "N500264",
+    "N500265",
+    "N500266",
+    "N500267",
+    "N500268",
+    "N500269",
+    "N500270",
+    "N500271",
+    "N500272",
+    "N500273",
+    "N500274",
+    "N500275",
+    "N500276",
+    "N500277",
+    "N500278",
+    "N500279",
+    "N500280",
+    "N500281",
+    "N500282",
+    "N500283",
+    "N500334",
+    "N500348",
+    "N500349",
+    "N500350",
+    "N500351",
+    "N500352",
+    "N500353",
+    "N500354",
+    "N500355",
+    "N500356",
+    "N500357",
+    "N500358",
+    "N500359",
+    "N500360",
+    "N500361",
+    "N500362",
+    "N500363",
+    "N500364",
+    "N500365",
+    "N500366",
+    "N500367",
+    "N500368",
+    "N500369",
+    "N500370",
+    "N500371",
+    "N500428",
+    "N500444",
+    "N500445",
+    "N500446",
+    "N500447",
+    "N500448",
+    "N500449",
+    "N500450",
+    "N500451",
+    "N500452",
+    "N500453",
+    "N500454",
+    "N500455",
+    "N500456",
+    "N500457",
+    "N500458",
+    "N500459",
+    "N500460",
+    "N500461",
+    "N500462",
+    "N500463",
+    "N500464",
+    "N500465",
+    "N500518",
+    "N500532",
+    "N500533",
+    "N500534",
+    "N500535",
+    "N500536",
+    "N500537",
+    "N500538",
+    "N500539",
+    "N500540",
+    "N500541",
+    "N500542",
+    "N500543",
+    "N500544",
+    "N500545",
+    "N500546",
+    "N500547",
+    "N500548",
+    "N500549",
+    "N500550",
+    "N500551",
+    "N500552",
+    "N500553",
+    "N500554",
+    "N500555",
+    "N500556",
+    "N500616",
+    "N500633",
+    "N500634",
+    "N500635",
+    "N500636",
+    "N500637",
+    "N500638",
+    "N500639",
+    "N500640",
+    "N500641",
+    "N500642",
+    "N500643",
+    "N500644",
+    "N500645",
+    "N500646",
+    "N500647",
+    "N500648",
+    "N500649",
+    "N500650",
+    "N500651",
+    "N500652",
+    "N500653",
+    "N500654",
+    "N500655",
+    "N500656",
+    "N500720"
+  ],
+  "reviewer_class": "CODEX_SILVER_REVIEWED",
+  "schema_version": "treeguard.navigation-copilot-b03c-sealed-review-decisions.v1",
+  "source_candidates_sha256": "122fd83fab7856b37928288c7f086a6350812946dd05540d9c8ea9fafb7e8dda",
+  "source_review_packet_sha256": "acea6d6636036d6e21deaa07a1679e341767acab707f13d02bfc26dcf285239b",
+  "source_tree_sha256": "0d6edf17accb680464343ae3e27943143049211cdb8d19df6998c9247bc7f3bd"
+}

@@ -98,22 +98,53 @@ def _require_target_ids(decision: dict[str, Any], by_id: dict[str, dict[str, Any
     return target_ids
 
 
+def verify_absence_contract(
+    request_text: str,
+    labels_and_aliases: list[str],
+    reviewed_target_ids: list[str],
+    satisfiable_supertype_ids: list[str],
+) -> None:
+    if satisfiable_supertype_ids:
+        _reject("DATASET_ORACLE_OVERCLAIM")
+    normalized_request = request_text.replace("我想", "").replace("一台", "")
+    if any(text in request_text or normalized_request in text for text in labels_and_aliases):
+        _reject("DATASET_ABSENCE_CLOSURE_INCOMPLETE")
+    if reviewed_target_ids:
+        _reject("DATASET_ORACLE_OVERCLAIM")
+
+
+def verify_target_set_exhaustiveness(
+    reviewed_target_ids: list[str], compatible_target_ids: list[str]
+) -> None:
+    if reviewed_target_ids != sorted(compatible_target_ids):
+        _reject("DATASET_TARGET_SET_NOT_EXHAUSTIVE")
+
+
+def verify_clarification_contrast(
+    contrast_node_ids: list[str], resolved_target_ids: list[str]
+) -> None:
+    if (
+        len(contrast_node_ids) < 2
+        or len(contrast_node_ids) != len(set(contrast_node_ids))
+        or len(resolved_target_ids) != 1
+        or resolved_target_ids[0] not in contrast_node_ids
+    ):
+        _reject("DATASET_CLARIFICATION_CONTRAST_INSUFFICIENT")
+
+
 def _verify_absence(
     scenario: dict[str, Any], decision: dict[str, Any], by_id: dict[str, dict[str, Any]]
 ) -> None:
-    if decision.get("satisfiable_supertype_ids"):
-        _reject("DATASET_ORACLE_OVERCLAIM")
-    request = scenario["request_text"]
-    labels_and_aliases = [
-        text
-        for node in by_id.values()
-        for text in [node["label"], *node.get("aliases", [])]
-    ]
-    normalized_request = request.replace("我想", "").replace("一台", "")
-    if any(text in request or normalized_request in text for text in labels_and_aliases):
-        _reject("DATASET_ABSENCE_CLOSURE_INCOMPLETE")
-    if decision.get("reviewed_target_ids"):
-        _reject("DATASET_ORACLE_OVERCLAIM")
+    verify_absence_contract(
+        scenario["request_text"],
+        [
+            text
+            for node in by_id.values()
+            for text in [node["label"], *node.get("aliases", [])]
+        ],
+        decision.get("reviewed_target_ids", []),
+        decision.get("satisfiable_supertype_ids", []),
+    )
 
 
 def _verify_nonliteral(decision: dict[str, Any], by_id: dict[str, dict[str, Any]]) -> None:
@@ -145,23 +176,15 @@ def _verify_multi(
         for node_id in children.get("c0n-022", [])
         if by_id[node_id]["label"].endswith("补充")
     )
-    actual = decision.get("reviewed_target_ids")
-    if actual != expected:
-        _reject("DATASET_TARGET_SET_NOT_EXHAUSTIVE")
+    verify_target_set_exhaustiveness(decision.get("reviewed_target_ids", []), expected)
 
 
 def _verify_clarification(decision: dict[str, Any]) -> None:
     contrast_ids = decision.get("contrast_node_ids")
     resolved_ids = decision.get("resolved_target_ids")
-    if (
-        not isinstance(contrast_ids, list)
-        or len(contrast_ids) < 2
-        or len(contrast_ids) != len(set(contrast_ids))
-        or not isinstance(resolved_ids, list)
-        or len(resolved_ids) != 1
-        or resolved_ids[0] not in contrast_ids
-    ):
+    if not isinstance(contrast_ids, list) or not isinstance(resolved_ids, list):
         _reject("DATASET_CLARIFICATION_CONTRAST_INSUFFICIENT")
+    verify_clarification_contrast(contrast_ids, resolved_ids)
 
 
 def verify_documents(

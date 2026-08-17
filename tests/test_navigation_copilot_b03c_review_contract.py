@@ -11,8 +11,11 @@ from scripts.navigation_copilot_b03c.author_review_contract_proof import materia
 from scripts.navigation_copilot_b03c.record_review_contract_decisions import record_decisions
 from scripts.navigation_copilot_b03c.verify_review_contract_proof import (
     ContractViolation,
+    verify_absence_contract,
+    verify_clarification_contrast,
     verify_documents,
     verify_paths,
+    verify_target_set_exhaustiveness,
 )
 
 
@@ -187,6 +190,11 @@ class ReviewContractProofTest(unittest.TestCase):
         for name, expected, changes in cases:
             with self.subTest(name=name):
                 self.assert_contract_code(expected, **changes)
+
+    def test_public_review_contracts_are_dataset_independent(self) -> None:
+        verify_absence_contract("需要陶轮排队", ["激光台预约"], [], [])
+        verify_target_set_exhaustiveness(["maker-a", "maker-b"], ["maker-b", "maker-a"])
+        verify_clarification_contrast(["maker-a", "maker-b"], ["maker-b"])
 
 
 if __name__ == "__main__":

@@ -538,3 +538,7 @@ sidecar 位置、Provider 模式、D10 计数起点、停线与回滚；获准�
   澄清 Oracle 要求 `AMBIGUOUS`，而两调用产品链路在澄清后固定跳过 Semantic、只能产生
   `NEED_EVIDENCE`；该不可达组合本应在网络前拒绝。b02 已揭盲并退出资格用途，详细安全
   聚合见 `research/navigation-v3c-b02-live-result.md`。
+- Understanding Prompt v2 已在11条非密封、已见 clean-room Silver 直接样本上完成真实
+  两阶段校准：11/11理解有效、0误澄清、11/11重新召回目标可见、11/11 Semantic 有效、
+  10条正确突出、0条错误突出和1条安全退让。该结果只允许启动新密封数据准备，不恢复
+  b02 资格，也不证明澄清、空目标或未见树能力。

@@ -21,6 +21,7 @@ from treeguard import adapt_tree_document  # noqa: E402
 from treeguard.ai_review import (  # noqa: E402
     BailianConfig,
     BailianNavigationSemanticProviderV2,
+    BailianNavigationUnderstandingProvider,
     BailianProviderError,
 )
 from treeguard.change_intent import IntentRequest  # noqa: E402
@@ -46,6 +47,10 @@ from treeguard.navigation_copilot import (  # noqa: E402
 
 DATA_ROOT = ROOT / "tests" / "fixtures" / "fictional" / "fire_validation"
 REPORT_VERSION = "treeguard.navigation-semantic-v2-dev-evaluation.v1"
+UNDERSTANDING_REPORT_VERSION = (
+    "treeguard.navigation-understanding-v2-dev-evaluation.v1"
+)
+END_TO_END_REPORT_VERSION = "treeguard.navigation-copilot-v2-dev-evaluation.v1"
 DATASET_ID = "fictional-fire-governance-validation"
 
 
@@ -57,11 +62,24 @@ class SemanticV2Provider(Protocol):
     ) -> NavigationSemanticDraftV2: ...
 
 
+class UnderstandingV2Provider(Protocol):
+    def understand(
+        self,
+        request: IntentRequest,
+        tree: CanonicalTree,
+        *,
+        clarification_question: str | None = None,
+        clarification_answer: str | None = None,
+    ) -> ChangeUnderstandingV2: ...
+
+
 @dataclass(frozen=True, slots=True)
 class DevelopmentUnit:
+    request: IntentRequest
     interpretation: NavigationInterpretation
     candidate_set: NavigationCandidateSet
     projection: NavigationSemanticProjectionV2
+    target_node_id: str
     expected_candidate_ref: str | None
 
 
@@ -156,15 +174,173 @@ def build_development_units() -> tuple[CanonicalTree, tuple[DevelopmentUnit, ...
             raise ValueError("development Oracle leaked into model input")
         units.append(
             DevelopmentUnit(
+                request=request,
                 interpretation=interpretation,
                 candidate_set=candidate_set,
                 projection=projection,
+                target_node_id=target_node_id,
                 expected_candidate_ref=expected_candidate_ref,
             )
         )
     if not units:
         raise ValueError("development evaluation has no eligible units")
     return tree, tuple(units)
+
+
+def evaluate_understanding_development_units(
+    provider: UnderstandingV2Provider,
+) -> dict[str, Any]:
+    """Measure Prompt behavior without persisting requests or per-item results."""
+
+    tree, units = build_development_units()
+    failure_code_counts: Counter[str] = Counter()
+    model_valid = 0
+    profile_match = 0
+    unexpected_clarification = 0
+    provider_failures = 0
+
+    for unit in units:
+        try:
+            understanding = provider.understand(unit.request, tree)
+            interpretation = NavigationInterpretation.valid(
+                understanding,
+                unit.request,
+                tree,
+            )
+        except (BailianProviderError, NavigationCopilotError) as exc:
+            provider_failures += 1
+            failure_code_counts[getattr(exc, "code", "MODEL_OR_CONTRACT_FAILED")] += 1
+            continue
+        model_valid += 1
+        expected = unit.interpretation.structural_intent
+        observed = interpretation.structural_intent
+        profile_match += (
+            observed.node_kind == expected.node_kind
+            and observed.value_type == expected.value_type
+            and observed.cardinality == expected.cardinality
+        )
+        unexpected_clarification += observed.clarification_question is not None
+
+    return {
+        "report_version": UNDERSTANDING_REPORT_VERSION,
+        "status": "DEVELOPMENT_SMOKE_COMPLETE",
+        "dataset_role": "NON_SEALED_CLEANROOM_SILVER",
+        "qualification_eligible": False,
+        "gold_eligible": False,
+        "patch_eligible": False,
+        "planned_unit_count": len(units),
+        "model_valid_count": model_valid,
+        "provider_failure_count": provider_failures,
+        "failure_code_counts": dict(sorted(failure_code_counts.items())),
+        "profile_match_count": profile_match,
+        "unexpected_clarification_count": unexpected_clarification,
+    }
+
+
+def evaluate_end_to_end_development_units(
+    understanding_provider: UnderstandingV2Provider,
+    semantic_provider: SemanticV2Provider,
+) -> dict[str, Any]:
+    """Run both live model stages while keeping the Silver target local."""
+
+    tree, units = build_development_units()
+    failure_code_counts: Counter[str] = Counter()
+    policy_status_counts: Counter[str] = Counter()
+    understanding_valid = 0
+    unexpected_clarification = 0
+    retrieval_eligible = 0
+    semantic_valid = 0
+    correct_highlight = 0
+    incorrect_highlight = 0
+    safe_nonhighlight = 0
+    provider_failures = 0
+
+    for unit in units:
+        try:
+            understanding = understanding_provider.understand(unit.request, tree)
+            interpretation = NavigationInterpretation.valid(
+                understanding,
+                unit.request,
+                tree,
+            )
+        except (BailianProviderError, NavigationCopilotError) as exc:
+            provider_failures += 1
+            failure_code_counts[getattr(exc, "code", "UNDERSTANDING_FAILED")] += 1
+            continue
+        understanding_valid += 1
+        if interpretation.needs_clarification:
+            unexpected_clarification += 1
+            continue
+        try:
+            candidate_set = build_navigation_candidate_set(
+                unit.request,
+                interpretation,
+                tree,
+            )
+            projection = build_navigation_semantic_projection_v2(
+                unit.request,
+                interpretation,
+                candidate_set,
+                tree,
+            )
+        except NavigationCopilotError as exc:
+            failure_code_counts[exc.code] += 1
+            continue
+        expected_candidate_ref = next(
+            (
+                view.candidate_ref
+                for view, candidate in zip(
+                    projection.candidates,
+                    candidate_set.candidates[: len(projection.candidates)],
+                )
+                if candidate.node_id == unit.target_node_id
+            ),
+            None,
+        )
+        if expected_candidate_ref is None:
+            continue
+        retrieval_eligible += 1
+        try:
+            draft = semantic_provider.compare(projection, tree)
+            decision = apply_navigation_policy_v2(
+                interpretation,
+                candidate_set,
+                projection,
+                draft,
+                semantic_status="SUCCEEDED",
+            )
+        except (BailianProviderError, NavigationCopilotError) as exc:
+            provider_failures += 1
+            failure_code_counts[getattr(exc, "code", "SEMANTIC_FAILED")] += 1
+            continue
+        semantic_valid += 1
+        policy_status_counts[decision.status] += 1
+        if decision.highlighted_candidate_ref == expected_candidate_ref:
+            correct_highlight += 1
+        elif decision.highlighted_candidate_ref is None:
+            safe_nonhighlight += 1
+        else:
+            incorrect_highlight += 1
+
+    return {
+        "report_version": END_TO_END_REPORT_VERSION,
+        "status": "DEVELOPMENT_SMOKE_COMPLETE",
+        "dataset_role": "NON_SEALED_CLEANROOM_SILVER",
+        "qualification_eligible": False,
+        "gold_eligible": False,
+        "patch_eligible": False,
+        "planned_unit_count": len(units),
+        "understanding_valid_count": understanding_valid,
+        "unexpected_clarification_count": unexpected_clarification,
+        "retrieval_eligible_count": retrieval_eligible,
+        "semantic_valid_count": semantic_valid,
+        "provider_failure_count": provider_failures,
+        "failure_code_counts": dict(sorted(failure_code_counts.items())),
+        "correct_highlight_count": correct_highlight,
+        "incorrect_highlight_count": incorrect_highlight,
+        "safe_nonhighlight_count": safe_nonhighlight,
+        "policy_status_counts": dict(sorted(policy_status_counts.items())),
+    }
 
 
 def evaluate_development_units(
@@ -240,12 +416,24 @@ def _read_fixture_json(path: Path) -> dict[str, Any]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--live", action="store_true")
+    parser.add_argument(
+        "--stage",
+        choices=("semantic", "understanding", "end-to-end"),
+        default="semantic",
+    )
     args = parser.parse_args(argv)
+    report_version = (
+        UNDERSTANDING_REPORT_VERSION
+        if args.stage == "understanding"
+        else END_TO_END_REPORT_VERSION
+        if args.stage == "end-to-end"
+        else REPORT_VERSION
+    )
     if not args.live:
         print(
             json.dumps(
                 {
-                    "report_version": REPORT_VERSION,
+                    "report_version": report_version,
                     "status": "LIVE_MODE_REQUIRED",
                 },
                 ensure_ascii=False,
@@ -254,13 +442,25 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 2
     try:
-        provider = BailianNavigationSemanticProviderV2(BailianConfig.from_env())
-        report = evaluate_development_units(provider)
+        config = BailianConfig.from_env()
+        if args.stage == "understanding":
+            report = evaluate_understanding_development_units(
+                BailianNavigationUnderstandingProvider(config)
+            )
+        elif args.stage == "end-to-end":
+            report = evaluate_end_to_end_development_units(
+                BailianNavigationUnderstandingProvider(config),
+                BailianNavigationSemanticProviderV2(config),
+            )
+        else:
+            report = evaluate_development_units(
+                BailianNavigationSemanticProviderV2(config)
+            )
     except (BailianProviderError, OSError, TypeError, ValueError) as exc:
         code = getattr(exc, "code", "DEVELOPMENT_EVALUATION_FAILED")
         print(
             json.dumps(
-                {"report_version": REPORT_VERSION, "status": code},
+                {"report_version": report_version, "status": code},
                 ensure_ascii=False,
                 sort_keys=True,
             )

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-semantic-output.v2.schema.json",
+  "title": "Navigation Copilot Semantic Output v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "candidate_assessments"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-semantic-output.v2"},
+    "candidate_assessments": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["candidate_ref", "relation", "reason"],
+        "properties": {
+          "candidate_ref": {"type": "string", "pattern": "^C00[1-8]$"},
+          "relation": {"enum": ["SEMANTICALLY_EQUIVALENT", "REUSES_CONTRACT", "CONTEXTUALLY_RELATED", "NOT_EQUIVALENT", "NEED_EVIDENCE"]},
+          "reason": {"type": "string", "minLength": 1, "maxLength": 1000}
+        }
+      }
+    }
+  }
+}

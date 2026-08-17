@@ -57,6 +57,14 @@ workflow 版本，同样是缺陷。
   `contracts/semantic-relation-draft.v2.schema.json`
 - `RecommendationPolicyDecisionV2` ↔
   `contracts/recommendation-policy-decision.v2.schema.json`
+- `NavigationSemanticProjectionV2` ↔
+  `contracts/navigation-copilot-semantic-input.v2.schema.json` /
+  `contracts/navigation-copilot-semantic-projection.v2.schema.json`
+- `NavigationSemanticDraftV2` 的模型输出/持久化工件 ↔
+  `contracts/navigation-copilot-semantic-output.v2.schema.json` /
+  `contracts/navigation-copilot-semantic-draft.v2.schema.json`
+- `NavigationPolicyDecisionV2` ↔
+  `contracts/navigation-copilot-policy-decision.v2.schema.json`
 
 当前没有运行时 `jsonschema` 依赖。JSON Schema 是跨边界合同，Python 自己做
 精确字段与语义校验；现有测试只验证 Schema 可解析和必填字段与序列化对象

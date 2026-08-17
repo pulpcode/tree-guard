@@ -119,6 +119,9 @@ Provider transport 必须显式启用并 fail-closed：
 - 禁止 URL credential、自定义 port、query、fragment、redirect 和继承 proxy；
 - response 大小有界，并严格解析 JSON；
 - authorization token 只在 header；
+- 公开百炼 HTTPS 必须显式使用项目锁定的 `certifi` CA bundle，不能依赖开发机 Python
+  的偶然系统证书状态，也不得通过关闭证书校验修复连接；内网 Qwen/loopback 保持各自
+  受保护环境信任配置，不继承公开 CA 策略；
 - 模型合同最多两次逻辑尝试；默认每次只外发一次。Bailian Semantic 可显式增加全局
   一次连接恢复，因此实际 wire 上限为三次，且每次都必须独立记账；
 - 读取/发送真实、外部导入、来源不明或非 clean-room 文件前取得明确数据批准；本项目

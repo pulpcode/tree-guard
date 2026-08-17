@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-semantic-input.v2.schema.json",
+  "title": "Navigation Copilot Semantic Input v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "requirement_text", "structural_intent", "candidate_status", "candidates"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-semantic-input.v2"},
+    "requirement_text": {"type": "string", "minLength": 1, "maxLength": 8000},
+    "structural_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_kind", "value_type", "cardinality"],
+      "properties": {
+        "node_kind": {"enum": ["CONCEPT", "PROPERTY", "UNKNOWN"]},
+        "value_type": {"type": ["string", "null"], "minLength": 1, "maxLength": 1000},
+        "cardinality": {"enum": ["SINGLE", "MULTIPLE", "UNKNOWN"]}
+      }
+    },
+    "candidate_status": {"enum": ["CANDIDATES_READY", "NO_CANDIDATES", "INSUFFICIENT_SIGNAL"]},
+    "candidates": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {"$ref": "semantic-recommendation-model-input.v1.schema.json#/$defs/candidate"}
+    }
+  }
+}

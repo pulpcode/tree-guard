@@ -43,8 +43,16 @@ SEMANTIC_INPUT_SCHEMA_VERSION = "navigation-copilot-semantic-input.v1"
 SEMANTIC_PROJECTION_SCHEMA_VERSION = "navigation-copilot-semantic-projection.v1"
 SEMANTIC_OUTPUT_SCHEMA_VERSION = "navigation-copilot-semantic-output.v1"
 SEMANTIC_DRAFT_SCHEMA_VERSION = "navigation-copilot-semantic-draft.v1"
+SEMANTIC_INPUT_SCHEMA_VERSION_V2 = "navigation-copilot-semantic-input.v2"
+SEMANTIC_PROJECTION_SCHEMA_VERSION_V2 = (
+    "navigation-copilot-semantic-projection.v2"
+)
+SEMANTIC_OUTPUT_SCHEMA_VERSION_V2 = "navigation-copilot-semantic-output.v2"
+SEMANTIC_DRAFT_SCHEMA_VERSION_V2 = "navigation-copilot-semantic-draft.v2"
 POLICY_DECISION_SCHEMA_VERSION = "navigation-copilot-policy-decision.v1"
 POLICY_VERSION = "treeguard.navigation-copilot-policy.v1"
+POLICY_DECISION_SCHEMA_VERSION_V2 = "navigation-copilot-policy-decision.v2"
+POLICY_VERSION_V2 = "treeguard.navigation-copilot-policy.v2"
 OUTCOME_SCHEMA_VERSION = "navigation-copilot-outcome.v1"
 MAX_INTERNAL_CANDIDATES = 40
 
@@ -884,6 +892,538 @@ def build_navigation_semantic_projection(
 
 
 @dataclass(frozen=True, slots=True)
+class NavigationSemanticProjectionV2:
+    """Semantic projection that preserves the authoritative user requirement."""
+
+    source_request_hash: str
+    source_interpretation_hash: str
+    source_candidate_set_hash: str
+    source_snapshot_hash: str
+    requirement_text: str
+    candidate_status: str
+    node_kind: str
+    value_type: str | None
+    cardinality: str
+    candidates: tuple[SemanticCandidateView, ...]
+    projection_hash: str
+
+    def __post_init__(self) -> None:
+        for value in (
+            self.source_request_hash,
+            self.source_interpretation_hash,
+            self.source_candidate_set_hash,
+            self.source_snapshot_hash,
+            self.projection_hash,
+        ):
+            _digest(value)
+        _bounded_text(
+            self.requirement_text,
+            "requirement_text",
+            maximum=_MAX_TEXT_CHARS,
+        )
+        if self.candidate_status not in {
+            "CANDIDATES_READY",
+            "NO_CANDIDATES",
+            "INSUFFICIENT_SIGNAL",
+        }:
+            raise ValueError("navigation semantic v2 candidate status is invalid")
+        if self.node_kind not in {"CONCEPT", "PROPERTY", "UNKNOWN"}:
+            raise ValueError("navigation semantic v2 node kind is invalid")
+        if self.cardinality not in {"SINGLE", "MULTIPLE", "UNKNOWN"}:
+            raise ValueError("navigation semantic v2 cardinality is invalid")
+        if self.value_type is not None:
+            _bounded_text(self.value_type, "value_type", maximum=1_000)
+        if (
+            not isinstance(self.candidates, tuple)
+            or len(self.candidates) > MAX_MODEL_CANDIDATES
+            or tuple(item.candidate_ref for item in self.candidates)
+            != tuple(f"C{index:03d}" for index in range(1, len(self.candidates) + 1))
+        ):
+            raise ValueError("navigation semantic v2 candidates are invalid")
+        if (self.candidate_status == "CANDIDATES_READY") != bool(self.candidates):
+            raise ValueError("navigation semantic v2 status and candidates disagree")
+        if _serialized_char_count(self.to_model_dict()) > MAX_MODEL_INPUT_CHARS:
+            raise ValueError("navigation semantic v2 projection is too large")
+        if self.projection_hash != canonical_digest(self.to_model_dict()):
+            raise ValueError("navigation semantic v2 projection hash does not match")
+
+    @property
+    def candidate_refs(self) -> tuple[str, ...]:
+        return tuple(item.candidate_ref for item in self.candidates)
+
+    def to_model_dict(self) -> dict[str, Any]:
+        return {
+            "schema_version": SEMANTIC_INPUT_SCHEMA_VERSION_V2,
+            "requirement_text": self.requirement_text,
+            "structural_intent": {
+                "node_kind": self.node_kind,
+                "value_type": self.value_type,
+                "cardinality": self.cardinality,
+            },
+            "candidate_status": self.candidate_status,
+            "candidates": [item.to_dict() for item in self.candidates],
+        }
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schema_version": SEMANTIC_PROJECTION_SCHEMA_VERSION_V2,
+            "source_request_hash": self.source_request_hash,
+            "source_interpretation_hash": self.source_interpretation_hash,
+            "source_candidate_set_hash": self.source_candidate_set_hash,
+            "source_snapshot_hash": self.source_snapshot_hash,
+            "model_input": self.to_model_dict(),
+            "projection_hash": self.projection_hash,
+        }
+
+    @classmethod
+    def from_dict(
+        cls,
+        payload: Any,
+        request: IntentRequest,
+        interpretation: NavigationInterpretation,
+        candidate_set: NavigationCandidateSet,
+        tree: CanonicalTree,
+    ) -> "NavigationSemanticProjectionV2":
+        expected = build_navigation_semantic_projection_v2(
+            request, interpretation, candidate_set, tree
+        )
+        if not isinstance(payload, dict) or expected.to_dict() != payload:
+            raise NavigationCopilotError(
+                "COPILOT_SEMANTIC_V2_SOURCE_MISMATCH",
+                "stored semantic v2 projection does not replay trusted sources",
+            )
+        return expected
+
+
+def build_navigation_semantic_projection_v2(
+    request: IntentRequest,
+    interpretation: NavigationInterpretation,
+    candidate_set: NavigationCandidateSet,
+    tree: CanonicalTree,
+) -> NavigationSemanticProjectionV2:
+    """Build v2 from the trusted v1 sources without mutating v1 replay."""
+
+    legacy = build_navigation_semantic_projection(
+        request, interpretation, candidate_set, tree
+    )
+    model_payload = {
+        "schema_version": SEMANTIC_INPUT_SCHEMA_VERSION_V2,
+        "requirement_text": request.requirement_text,
+        "structural_intent": {
+            "node_kind": legacy.node_kind,
+            "value_type": legacy.value_type,
+            "cardinality": legacy.cardinality,
+        },
+        "candidate_status": legacy.candidate_status,
+        "candidates": [item.to_dict() for item in legacy.candidates],
+    }
+    if _serialized_char_count(model_payload) > MAX_MODEL_INPUT_CHARS:
+        raise NavigationCopilotError(
+            "COPILOT_SEMANTIC_V2_PROJECTION_TOO_LARGE",
+            "semantic v2 projection exceeds its context budget",
+        )
+    projection = NavigationSemanticProjectionV2(
+        source_request_hash=request.request_hash,
+        source_interpretation_hash=legacy.source_interpretation_hash,
+        source_candidate_set_hash=legacy.source_candidate_set_hash,
+        source_snapshot_hash=legacy.source_snapshot_hash,
+        requirement_text=request.requirement_text,
+        candidate_status=legacy.candidate_status,
+        node_kind=legacy.node_kind,
+        value_type=legacy.value_type,
+        cardinality=legacy.cardinality,
+        candidates=legacy.candidates,
+        projection_hash=canonical_digest(model_payload),
+    )
+    verify_navigation_semantic_projection_v2_for_model(projection, tree)
+    return projection
+
+
+def verify_navigation_semantic_projection_v2_for_model(
+    projection: NavigationSemanticProjectionV2,
+    tree: CanonicalTree,
+) -> None:
+    """Fail closed before a v2 projection crosses the model boundary."""
+
+    if (
+        not isinstance(projection, NavigationSemanticProjectionV2)
+        or not isinstance(tree, CanonicalTree)
+        or not tree.is_resource_map
+        or projection.source_snapshot_hash != tree.snapshot_hash
+    ):
+        raise NavigationCopilotError(
+            "COPILOT_SEMANTIC_V2_SOURCE_MISMATCH",
+            "semantic v2 projection does not bind the trusted snapshot",
+        )
+    text_values = [projection.requirement_text]
+    if projection.value_type is not None:
+        text_values.append(projection.value_type)
+    for candidate in projection.candidates:
+        text_values.extend(
+            (candidate.label, candidate.name, *candidate.path_labels)
+        )
+        if candidate.value_type is not None:
+            text_values.append(candidate.value_type)
+    if contains_internal_identifier(
+        text_values,
+        (node.node_id for node in tree.nodes),
+    ):
+        raise NavigationCopilotError(
+            "COPILOT_SEMANTIC_V2_INTERNAL_ID_FORBIDDEN",
+            "semantic v2 model input must not contain internal identifiers",
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class NavigationSemanticDraftV2:
+    model_provider: str
+    model_name: str
+    prompt_version: str
+    source_projection_hash: str
+    source_snapshot_hash: str
+    candidate_assessments: tuple[SemanticCandidateAssessment, ...]
+    draft_hash: str
+
+    def __post_init__(self) -> None:
+        for value in (self.model_provider, self.model_name, self.prompt_version):
+            _bounded_text(value, "model metadata", maximum=1_000)
+        _digest(self.source_projection_hash)
+        _digest(self.source_snapshot_hash)
+        _digest(self.draft_hash)
+        if not isinstance(self.candidate_assessments, tuple) or any(
+            not isinstance(item, SemanticCandidateAssessment)
+            for item in self.candidate_assessments
+        ):
+            raise ValueError("navigation semantic v2 assessments are invalid")
+        if self.draft_hash != canonical_digest(self._payload()):
+            raise ValueError("navigation semantic v2 draft hash does not match")
+
+    def _payload(self) -> dict[str, Any]:
+        return {
+            "schema_version": SEMANTIC_DRAFT_SCHEMA_VERSION_V2,
+            "model_provider": self.model_provider,
+            "model_name": self.model_name,
+            "prompt_version": self.prompt_version,
+            "semantic_approval": False,
+            "patch_eligible": False,
+            "source_projection_hash": self.source_projection_hash,
+            "source_snapshot_hash": self.source_snapshot_hash,
+            "candidate_assessments": [
+                item.to_dict() for item in self.candidate_assessments
+            ],
+        }
+
+    def to_dict(self) -> dict[str, Any]:
+        return {**self._payload(), "draft_hash": self.draft_hash}
+
+    @classmethod
+    def from_model_dict(
+        cls,
+        payload: Any,
+        projection: NavigationSemanticProjectionV2,
+        tree: CanonicalTree,
+        *,
+        model_provider: str,
+        model_name: str,
+        prompt_version: str,
+    ) -> "NavigationSemanticDraftV2":
+        if (
+            not isinstance(projection, NavigationSemanticProjectionV2)
+            or projection.source_snapshot_hash != tree.snapshot_hash
+        ):
+            raise NavigationCopilotError(
+                "COPILOT_SEMANTIC_V2_SOURCE_MISMATCH",
+                "semantic v2 draft does not bind the trusted projection",
+            )
+        if not isinstance(payload, dict) or set(payload) != {
+            "schema_version",
+            "candidate_assessments",
+        }:
+            raise NavigationCopilotError(
+                "COPILOT_SEMANTIC_V2_MODEL_FIELDS_INVALID",
+                "semantic v2 model output must use exact fields",
+            )
+        if payload["schema_version"] != SEMANTIC_OUTPUT_SCHEMA_VERSION_V2:
+            raise NavigationCopilotError(
+                "COPILOT_SEMANTIC_V2_MODEL_VERSION_INVALID",
+                "semantic v2 model output version is unsupported",
+            )
+        assessments = _parse_assessments(payload["candidate_assessments"], projection)
+        if contains_internal_identifier(
+            (item.reason for item in assessments),
+            (node.node_id for node in tree.nodes),
+        ):
+            raise NavigationCopilotError(
+                "COPILOT_SEMANTIC_V2_INTERNAL_ID_FORBIDDEN",
+                "semantic reasons must not contain internal identifiers",
+            )
+        draft_payload = {
+            "schema_version": SEMANTIC_DRAFT_SCHEMA_VERSION_V2,
+            "model_provider": _bounded_text(
+                model_provider, "model_provider", maximum=1_000
+            ).strip(),
+            "model_name": _bounded_text(
+                model_name, "model_name", maximum=1_000
+            ).strip(),
+            "prompt_version": _bounded_text(
+                prompt_version, "prompt_version", maximum=1_000
+            ).strip(),
+            "semantic_approval": False,
+            "patch_eligible": False,
+            "source_projection_hash": projection.projection_hash,
+            "source_snapshot_hash": tree.snapshot_hash,
+            "candidate_assessments": [item.to_dict() for item in assessments],
+        }
+        return cls(
+            model_provider=draft_payload["model_provider"],
+            model_name=draft_payload["model_name"],
+            prompt_version=draft_payload["prompt_version"],
+            source_projection_hash=projection.projection_hash,
+            source_snapshot_hash=tree.snapshot_hash,
+            candidate_assessments=assessments,
+            draft_hash=canonical_digest(draft_payload),
+        )
+
+    @classmethod
+    def from_dict(
+        cls,
+        payload: Any,
+        projection: NavigationSemanticProjectionV2,
+        tree: CanonicalTree,
+    ) -> "NavigationSemanticDraftV2":
+        keys = {
+            "schema_version", "model_provider", "model_name", "prompt_version",
+            "semantic_approval", "patch_eligible", "source_projection_hash",
+            "source_snapshot_hash", "candidate_assessments", "draft_hash",
+        }
+        if (
+            not isinstance(payload, dict)
+            or set(payload) != keys
+            or payload.get("schema_version") != SEMANTIC_DRAFT_SCHEMA_VERSION_V2
+            or payload.get("semantic_approval") is not False
+            or payload.get("patch_eligible") is not False
+        ):
+            raise NavigationCopilotError(
+                "COPILOT_SEMANTIC_V2_DRAFT_INVALID",
+                "stored semantic v2 draft violates its contract",
+            )
+        expected = cls.from_model_dict(
+            {
+                "schema_version": SEMANTIC_OUTPUT_SCHEMA_VERSION_V2,
+                "candidate_assessments": payload["candidate_assessments"],
+            },
+            projection,
+            tree,
+            model_provider=payload["model_provider"],
+            model_name=payload["model_name"],
+            prompt_version=payload["prompt_version"],
+        )
+        if expected.to_dict() != payload:
+            raise NavigationCopilotError(
+                "COPILOT_SEMANTIC_V2_SOURCE_MISMATCH",
+                "stored semantic v2 draft does not replay trusted sources",
+            )
+        return expected
+
+
+@dataclass(frozen=True, slots=True)
+class NavigationPolicyDecisionV2:
+    source_interpretation_hash: str
+    source_candidate_set_hash: str
+    source_projection_hash: str | None
+    source_semantic_draft_hash: str | None
+    status: str
+    highlighted_candidate_ref: str | None
+    reason_code: str
+    semantic_status: str
+    decision_hash: str
+
+    def __post_init__(self) -> None:
+        _digest(self.source_interpretation_hash)
+        _digest(self.source_candidate_set_hash)
+        for value in (
+            self.source_projection_hash,
+            self.source_semantic_draft_hash,
+        ):
+            if value is not None:
+                _digest(value)
+        if self.status not in {
+            "CANDIDATES_AVAILABLE",
+            "AMBIGUOUS",
+            "NONE",
+            "NEED_EVIDENCE",
+        }:
+            raise ValueError("navigation policy v2 status is invalid")
+        if self.highlighted_candidate_ref is not None and (
+            _CANDIDATE_REF.fullmatch(self.highlighted_candidate_ref) is None
+            or self.status != "CANDIDATES_AVAILABLE"
+        ):
+            raise ValueError("navigation policy v2 highlighted candidate is invalid")
+        if self.semantic_status not in {
+            "SUCCEEDED",
+            "SKIPPED_CLARIFICATION_PATH",
+            "DEGRADED",
+            "NOT_APPLICABLE",
+        }:
+            raise ValueError("navigation policy v2 semantic status is invalid")
+        if not _valid_code(self.reason_code):
+            raise ValueError("navigation policy v2 reason code is invalid")
+        _digest(self.decision_hash)
+        if self.decision_hash != canonical_digest(self._payload()):
+            raise ValueError("navigation policy v2 decision hash does not match")
+
+    def _payload(self) -> dict[str, Any]:
+        return {
+            "schema_version": POLICY_DECISION_SCHEMA_VERSION_V2,
+            "policy_version": POLICY_VERSION_V2,
+            "semantic_approval": False,
+            "patch_eligible": False,
+            "source_interpretation_hash": self.source_interpretation_hash,
+            "source_candidate_set_hash": self.source_candidate_set_hash,
+            "source_projection_hash": self.source_projection_hash,
+            "source_semantic_draft_hash": self.source_semantic_draft_hash,
+            "status": self.status,
+            "highlighted_candidate_ref": self.highlighted_candidate_ref,
+            "reason_code": self.reason_code,
+            "semantic_status": self.semantic_status,
+        }
+
+    def to_dict(self) -> dict[str, Any]:
+        return {**self._payload(), "decision_hash": self.decision_hash}
+
+    @classmethod
+    def from_dict(
+        cls,
+        payload: Any,
+        interpretation: NavigationInterpretation,
+        candidate_set: NavigationCandidateSet,
+        projection: NavigationSemanticProjectionV2 | None,
+        semantic_draft: NavigationSemanticDraftV2 | None,
+    ) -> "NavigationPolicyDecisionV2":
+        if not isinstance(payload, dict):
+            raise NavigationCopilotError(
+                "COPILOT_POLICY_V2_DECISION_INVALID",
+                "stored policy v2 decision must be an object",
+            )
+        try:
+            expected = apply_navigation_policy_v2(
+                interpretation,
+                candidate_set,
+                projection,
+                semantic_draft,
+                semantic_status=payload.get("semantic_status"),
+            )
+        except (TypeError, ValueError):
+            raise NavigationCopilotError(
+                "COPILOT_POLICY_V2_DECISION_INVALID",
+                "stored policy v2 decision failed deterministic replay",
+            ) from None
+        if expected.to_dict() != payload:
+            raise NavigationCopilotError(
+                "COPILOT_POLICY_V2_SOURCE_MISMATCH",
+                "stored policy v2 decision does not replay trusted sources",
+            )
+        return expected
+
+
+def apply_navigation_policy_v2(
+    interpretation: NavigationInterpretation,
+    candidate_set: NavigationCandidateSet,
+    projection: NavigationSemanticProjectionV2 | None,
+    semantic_draft: NavigationSemanticDraftV2 | None,
+    *,
+    semantic_status: str,
+) -> NavigationPolicyDecisionV2:
+    """Apply the unchanged strict policy to the v2 Semantic contract."""
+
+    if (
+        not isinstance(interpretation, NavigationInterpretation)
+        or not isinstance(candidate_set, NavigationCandidateSet)
+        or candidate_set.source_interpretation_hash
+        != interpretation.interpretation_hash
+    ):
+        raise NavigationCopilotError(
+            "COPILOT_POLICY_V2_SOURCE_MISMATCH",
+            "navigation policy v2 sources do not align",
+        )
+    if candidate_set.status != "CANDIDATES_READY":
+        return _decision_v2(
+            interpretation,
+            candidate_set,
+            projection,
+            semantic_draft,
+            status="NONE",
+            highlighted=None,
+            reason="COPILOT_NO_CANDIDATES",
+            semantic_status="NOT_APPLICABLE",
+        )
+    if semantic_draft is None:
+        if semantic_status not in {
+            "SKIPPED_CLARIFICATION_PATH",
+            "DEGRADED",
+        }:
+            raise NavigationCopilotError(
+                "COPILOT_POLICY_V2_SEMANTIC_STATUS_INVALID",
+                "missing semantic v2 draft requires an explicit degraded status",
+            )
+        return _decision_v2(
+            interpretation,
+            candidate_set,
+            projection,
+            semantic_draft,
+            status="NEED_EVIDENCE",
+            highlighted=None,
+            reason=(
+                "COPILOT_SEMANTIC_SKIPPED_AFTER_CLARIFICATION"
+                if semantic_status == "SKIPPED_CLARIFICATION_PATH"
+                else "COPILOT_SEMANTIC_DEGRADED"
+            ),
+            semantic_status=semantic_status,
+        )
+    if (
+        not isinstance(projection, NavigationSemanticProjectionV2)
+        or not isinstance(semantic_draft, NavigationSemanticDraftV2)
+        or semantic_draft.source_projection_hash != projection.projection_hash
+        or projection.source_candidate_set_hash != candidate_set.candidate_set_hash
+    ):
+        raise NavigationCopilotError(
+            "COPILOT_POLICY_V2_SOURCE_MISMATCH",
+            "semantic v2 sources do not align with the candidate set",
+        )
+    candidate_by_ref = {
+        item.candidate_ref: item for item in projection.candidates
+    }
+    equivalents = tuple(
+        item.candidate_ref
+        for item in semantic_draft.candidate_assessments
+        if item.relation == "SEMANTICALLY_EQUIVALENT"
+        and _compatible(projection, candidate_by_ref[item.candidate_ref])
+    )
+    if len(equivalents) == 1:
+        status = "CANDIDATES_AVAILABLE"
+        highlighted = equivalents[0]
+        reason = "COPILOT_UNIQUE_COMPATIBLE_EQUIVALENT"
+    elif len(equivalents) > 1:
+        status = "AMBIGUOUS"
+        highlighted = None
+        reason = "COPILOT_MULTIPLE_COMPATIBLE_EQUIVALENTS"
+    else:
+        status = "NEED_EVIDENCE"
+        highlighted = None
+        reason = "COPILOT_NO_COMPATIBLE_EQUIVALENT"
+    return _decision_v2(
+        interpretation,
+        candidate_set,
+        projection,
+        semantic_draft,
+        status=status,
+        highlighted=highlighted,
+        reason=reason,
+        semantic_status="SUCCEEDED",
+    )
+
+
+@dataclass(frozen=True, slots=True)
 class NavigationSemanticDraft:
     model_provider: str
     model_name: str
@@ -1546,7 +2086,7 @@ def _navigation_candidate_set(
 
 def _parse_assessments(
     value: Any,
-    projection: NavigationSemanticProjection,
+    projection: NavigationSemanticProjection | NavigationSemanticProjectionV2,
 ) -> tuple[SemanticCandidateAssessment, ...]:
     if not isinstance(value, list) or len(value) != len(projection.candidates):
         raise NavigationCopilotError(
@@ -1592,7 +2132,7 @@ def _parse_assessments(
 
 
 def _compatible(
-    projection: NavigationSemanticProjection,
+    projection: NavigationSemanticProjection | NavigationSemanticProjectionV2,
     candidate: SemanticCandidateView,
 ) -> bool:
     return not (
@@ -1638,6 +2178,48 @@ def _decision(
         "semantic_status": semantic_status,
     }
     return NavigationPolicyDecision(
+        source_interpretation_hash=interpretation.interpretation_hash,
+        source_candidate_set_hash=candidate_set.candidate_set_hash,
+        source_projection_hash=payload["source_projection_hash"],
+        source_semantic_draft_hash=payload["source_semantic_draft_hash"],
+        status=status,
+        highlighted_candidate_ref=highlighted,
+        reason_code=reason,
+        semantic_status=semantic_status,
+        decision_hash=canonical_digest(payload),
+    )
+
+
+def _decision_v2(
+    interpretation: NavigationInterpretation,
+    candidate_set: NavigationCandidateSet,
+    projection: NavigationSemanticProjectionV2 | None,
+    semantic_draft: NavigationSemanticDraftV2 | None,
+    *,
+    status: str,
+    highlighted: str | None,
+    reason: str,
+    semantic_status: str,
+) -> NavigationPolicyDecisionV2:
+    payload = {
+        "schema_version": POLICY_DECISION_SCHEMA_VERSION_V2,
+        "policy_version": POLICY_VERSION_V2,
+        "semantic_approval": False,
+        "patch_eligible": False,
+        "source_interpretation_hash": interpretation.interpretation_hash,
+        "source_candidate_set_hash": candidate_set.candidate_set_hash,
+        "source_projection_hash": (
+            projection.projection_hash if projection is not None else None
+        ),
+        "source_semantic_draft_hash": (
+            semantic_draft.draft_hash if semantic_draft is not None else None
+        ),
+        "status": status,
+        "highlighted_candidate_ref": highlighted,
+        "reason_code": reason,
+        "semantic_status": semantic_status,
+    }
+    return NavigationPolicyDecisionV2(
         source_interpretation_hash=interpretation.interpretation_hash,
         source_candidate_set_hash=candidate_set.candidate_set_hash,
         source_projection_hash=payload["source_projection_hash"],
@@ -1707,9 +2289,13 @@ __all__ = [
     "MAX_INTERNAL_CANDIDATES",
     "OUTCOME_SCHEMA_VERSION",
     "POLICY_DECISION_SCHEMA_VERSION",
+    "POLICY_DECISION_SCHEMA_VERSION_V2",
     "SEMANTIC_DRAFT_SCHEMA_VERSION",
+    "SEMANTIC_DRAFT_SCHEMA_VERSION_V2",
     "SEMANTIC_INPUT_SCHEMA_VERSION",
+    "SEMANTIC_INPUT_SCHEMA_VERSION_V2",
     "SEMANTIC_OUTPUT_SCHEMA_VERSION",
+    "SEMANTIC_OUTPUT_SCHEMA_VERSION_V2",
     "NavigationCandidate",
     "NavigationCandidateScore",
     "NavigationCandidateSet",
@@ -1719,12 +2305,18 @@ __all__ = [
     "NavigationInterpretation",
     "NavigationOutcome",
     "NavigationPolicyDecision",
+    "NavigationPolicyDecisionV2",
     "NavigationSemanticDraft",
+    "NavigationSemanticDraftV2",
     "NavigationSemanticProjection",
+    "NavigationSemanticProjectionV2",
     "NavigationShadowObservation",
     "apply_navigation_policy",
+    "apply_navigation_policy_v2",
     "build_navigation_candidate_set",
     "build_navigation_outcome",
     "build_navigation_semantic_projection",
+    "build_navigation_semantic_projection_v2",
     "navigation_shadow_aggregate",
+    "verify_navigation_semantic_projection_v2_for_model",
 ]

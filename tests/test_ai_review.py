@@ -21,6 +21,7 @@ from treeguard.ai_review import (
 from treeguard.business_review import mine_business_version_pair
 from treeguard.evidence import build_business_review_evidence_pack
 from treeguard.hashing import canonical_digest
+from treeguard.http_utils import build_isolated_opener
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -120,6 +121,35 @@ def valid_draft_payload(pack) -> dict:
 
 
 class AIReviewTests(unittest.TestCase):
+    def test_isolated_opener_builds_explicit_tls_context_without_proxy(self) -> None:
+        with (
+            patch("treeguard.http_utils.ssl.create_default_context") as context,
+            patch("treeguard.http_utils.urllib.request.build_opener") as opener,
+        ):
+            build_isolated_opener(cafile="/fictional/ca.pem")
+
+        context.assert_called_once_with(cafile="/fictional/ca.pem")
+        handlers = opener.call_args.args
+        self.assertTrue(
+            any(
+                isinstance(handler, urllib.request.ProxyHandler)
+                and handler.proxies == {}
+                for handler in handlers
+            )
+        )
+        self.assertTrue(
+            any(
+                isinstance(handler, urllib.request.HTTPRedirectHandler)
+                for handler in handlers
+            )
+        )
+        self.assertTrue(
+            any(
+                isinstance(handler, urllib.request.HTTPSHandler)
+                for handler in handlers
+            )
+        )
+
     def test_valid_draft_matches_contract_fields(self) -> None:
         pack = evidence_pack()
         payload = valid_draft_payload(pack)
@@ -466,6 +496,18 @@ class AIReviewTests(unittest.TestCase):
             blocked_error.exception.code,
             "AI_REVIEW_POLICY_INVALID",
         )
+
+    def test_public_bailian_provider_uses_explicit_certifi_ca_bundle(self) -> None:
+        with (
+            patch(
+                "treeguard.ai_review.certifi.where",
+                return_value="/fictional/ca.pem",
+            ),
+            patch("treeguard.ai_review.build_isolated_opener") as opener,
+        ):
+            BailianAIReviewProvider(BailianConfig(api_key="fictional-key"))
+
+        opener.assert_called_once_with(cafile="/fictional/ca.pem")
 
     def test_config_reads_environment_without_exposing_key(self) -> None:
         with patch.dict(

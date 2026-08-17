@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import ipaddress
 import re
+import ssl
 import urllib.request
 from typing import Any
 
@@ -30,13 +31,20 @@ class NoRedirectHandler(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def build_isolated_opener() -> urllib.request.OpenerDirector:
-    """Build an opener that ignores ambient proxies and rejects redirects."""
+def build_isolated_opener(
+    *,
+    cafile: str | None = None,
+) -> urllib.request.OpenerDirector:
+    """Build a no-proxy, no-redirect opener with optional explicit CA roots."""
 
-    return urllib.request.build_opener(
+    handlers: list[Any] = [
         urllib.request.ProxyHandler({}),
         NoRedirectHandler(),
-    )
+    ]
+    if cafile is not None:
+        context = ssl.create_default_context(cafile=cafile)
+        handlers.append(urllib.request.HTTPSHandler(context=context))
+    return urllib.request.build_opener(*handlers)
 
 
 def is_protected_environment_host(hostname: str) -> bool:

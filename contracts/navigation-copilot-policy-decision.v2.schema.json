@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-policy-decision.v2.schema.json",
+  "title": "Navigation Copilot Policy Decision v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "policy_version", "semantic_approval", "patch_eligible", "source_interpretation_hash", "source_candidate_set_hash", "source_projection_hash", "source_semantic_draft_hash", "status", "highlighted_candidate_ref", "reason_code", "semantic_status", "decision_hash"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-policy-decision.v2"},
+    "policy_version": {"const": "treeguard.navigation-copilot-policy.v2"},
+    "semantic_approval": {"const": false},
+    "patch_eligible": {"const": false},
+    "source_interpretation_hash": {"$ref": "#/$defs/digest"},
+    "source_candidate_set_hash": {"$ref": "#/$defs/digest"},
+    "source_projection_hash": {"$ref": "#/$defs/nullableDigest"},
+    "source_semantic_draft_hash": {"$ref": "#/$defs/nullableDigest"},
+    "status": {"enum": ["CANDIDATES_AVAILABLE", "AMBIGUOUS", "NONE", "NEED_EVIDENCE"]},
+    "highlighted_candidate_ref": {"type": ["string", "null"], "pattern": "^C[0-9]{3}$"},
+    "reason_code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,127}$"},
+    "semantic_status": {"enum": ["SUCCEEDED", "SKIPPED_CLARIFICATION_PATH", "DEGRADED", "NOT_APPLICABLE"]},
+    "decision_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nullableDigest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -365,6 +365,93 @@ if draft.review_status == "NEEDS_CLARIFICATION":
     )
 ```
 
+## Scenario：Navigation Semantic v2 权威需求比较
+
+### 1. Scope / Trigger
+
+- 当 Navigation Copilot 需要判断候选与用户原始需求的语义关系时使用；
+- 该合同修复 v1 只携带结构意图、模型不知道用户实际需求的缺口；
+- v2 先作为隔离 feature path，不原位修改 v1，不自动切换 Workbench。
+
+### 2. Signatures
+
+```python
+build_navigation_semantic_projection_v2(
+    request, interpretation, candidate_set, tree
+)
+verify_navigation_semantic_projection_v2_for_model(projection, tree)
+NavigationSemanticDraftV2.from_model_dict(
+    payload, projection, tree,
+    model_provider=..., model_name=..., prompt_version=...,
+)
+BailianNavigationSemanticProviderV2.compare(projection, tree)
+```
+
+### 3. Contracts
+
+- 模型输入精确包含 `schema_version`、权威 `requirement_text`、三字段
+  `structural_intent`、`candidate_status` 和最多8个临时候选；
+- 原始需求必须逐字来自可信 `IntentRequest`，不得使用模型摘要替代；投影持久化额外绑定
+  request、interpretation、candidate set 和 snapshot hash，但这些 hash 不进入模型输入；
+- v2 builder 与 Provider 发送前都必须重验可信 snapshot 绑定，并扫描原始需求、结构
+  value type 及所有候选文本，拒绝已知或常见伪造内部 ID/hash；
+- Prompt 必须定义：同一信息项、仅复用合同、仅上下文相关、明确不等价和证据不足五类
+  关系边界，不能只列举枚举；
+- 模型仍按投影顺序逐项返回 `relation` 和 `reason`，不得返回动作、选中项、稳定 ID、审批
+  或 Patch；
+- 确定性 Policy 不因 v2 放宽：只有唯一结构兼容的 `SEMANTICALLY_EQUIVALENT` 可突出，
+  其他关系只是审查证据；
+- v1 输入、草稿、Provider、回放与默认入口保持不变。
+
+### 4. Validation & Error Matrix
+
+| 条件 | 处理 |
+|---|---|
+| request/interpretation/candidate/snapshot 不同源 | `COPILOT_SEMANTIC_V2_SOURCE_MISMATCH` |
+| 原始需求、结构 value type 或候选文本含已知/常见伪造内部 ID/hash | `COPILOT_SEMANTIC_V2_INTERNAL_ID_FORBIDDEN` |
+| 模型投影超过 48,000 字符 | `COPILOT_SEMANTIC_V2_PROJECTION_TOO_LARGE` |
+| 模型输出字段或版本非法 | `COPILOT_SEMANTIC_V2_MODEL_FIELDS_INVALID` / `COPILOT_SEMANTIC_V2_MODEL_VERSION_INVALID` |
+| 候选缺失、重复或乱序 | `COPILOT_SEMANTIC_CANDIDATE_COVERAGE_INVALID` |
+| 草稿不能从可信 v2 投影回放 | `COPILOT_SEMANTIC_V2_SOURCE_MISMATCH` |
+
+### 5. Good / Base / Bad Cases
+
+- Good：原始需求明确指向一个信息项，模型结合需求与候选差异只把同一信息项标为等价；
+- Base：候选结构兼容但是否同一信息项证据不足，返回 `NEED_EVIDENCE`；
+- Bad：仅因候选排名第一、词面相似或字段合同相同就标为等价；
+- Bad：把隐藏 Oracle、目标答案、稳定节点 ID 或 Policy 动作放入模型输入。
+
+### 6. Tests Required
+
+- v1 输入不出现 `requirement_text`，v2 输入精确出现可信请求原文；
+- v2 Schema required 与运行时序列化字段一致；
+- 错误 request、重算 hash 篡改、内部 ID 和超限投影 fail closed；
+- Provider Prompt 同时包含五类关系的判定边界，重试只携带固定错误码；
+- 输出必须逐项覆盖候选并能从可信来源回放；
+- canary 证明稳定 ID、hash、Oracle、动作和审批不进入模型投影；
+- v1 聚焦与完整回归保持通过。
+
+### 7. Wrong vs Correct
+
+#### Wrong
+
+```python
+semantic_input = {
+    "structural_intent": structural_intent,
+    "candidates": candidates,
+}
+```
+
+#### Correct
+
+```python
+projection = build_navigation_semantic_projection_v2(
+    request, interpretation, candidate_set, tree
+)
+assert projection.to_model_dict()["requirement_text"] == request.requirement_text
+assert "source_request_hash" not in projection.to_model_dict()
+```
+
 ## Scenario：隔离的 v2 理解—关系—确定性动作纵切
 
 ### 1. Scope / Trigger

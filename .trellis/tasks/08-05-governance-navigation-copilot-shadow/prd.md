@@ -212,6 +212,24 @@ Semantic 降级路径必须分开记账，后者不得计入关系判断成功�
 分母；密封集首次揭盲后即转为开发数据，失败后的再次晋升必须使用新分母。该门槛不产生
 Gold、生产写入、Patch 或模型自治资格，也不替代生产 D10 的真实用户效果指标。
 
+## Decision D13（已接受）：补齐 Semantic v2 的权威需求输入，不放宽 Policy
+
+**Context**：首次密封资格运行保持负结果。代码审计发现 Navigation Semantic v1 只接收
+结构意图与候选视图，没有接收权威的原始 `requirement_text`；同时 v1 Prompt 只列出五类
+关系枚举，没有定义其判定边界。模型因此无法可靠判断候选是否表达用户实际需求。既有
+Policy 仅在唯一结构兼容的 `SEMANTICALLY_EQUIVALENT` 时突出候选，该规则仍符合 D3、D6
+和既有安全实验结论。
+
+**Decision**：新增并行、版本化的 Navigation Semantic v2 输入、投影、输出与草稿合同。
+v2 从可信 `IntentRequest` 恢复有界原始需求，继续携带结构意图与最多8个临时候选，并在
+Prompt 中明确定义五类关系的互斥判定边界。v1 的字节、回放、Provider 和默认产品入口
+保持不变；确定性 Policy 继续只在恰有一个结构兼容的等价候选时突出结果，不把其他关系、
+排序或分数升级为业务推荐。
+
+**Consequences**：该改动修复模型任务输入缺失，但不预先宣称模型效果提升。先以非密封、
+完全虚构的开发数据验证 v2 合同和关系行为；不得重跑或调参已揭盲的48条资格分母。未来
+申请生产 Shadow 必须使用新的独立密封分母。
+
 ## Requirements (evolving)
 
 - 原始需求始终保留为宽候选恢复路径；模型角色提议、页面上下文和选中节点均不得单独把
@@ -220,6 +238,8 @@ Gold、生产写入、Patch 或模型自治资格，也不替代生产 D10 的�
   需求和本地可信提示召回；不得把降级计为模型成功。
 - Retrieval 输出有界候选和可回放证据，不批准复用、新增或 Patch。
 - Semantic 对候选逐项给出关系和证据充分性；不得输出最终动作或稳定节点 ID。
+- Semantic v2 必须同时接收来自可信 `IntentRequest` 的有界原始需求、结构意图与候选视图；
+  Prompt 必须明确定义五类关系边界，隐藏 Oracle、目标答案、动作和审批不得进入输入。
 - Semantic 超时、不可用或合同失败时丢弃模型关系输出，保留 Retrieval 候选并进入
   `NEED_EVIDENCE`；只展示可信结构差异，不提供默认推荐或一键接受。
 - 单个 case 总计最多两次逻辑模型调用；澄清路径的第二次调用只重新理解回答，完成召回后
@@ -282,6 +302,12 @@ Gold、生产写入、Patch 或模型自治资格，也不替代生产 D10 的�
   完成不低于90%，错误自信不高于5%，完成耗时中位数不超过3分钟；
 - [x] v1 Workbench、CLI、Provider 与既有实验回归保持通过；
 - [x] 未获显式晋升前，新纵切只能通过隔离 feature path 使用。
+- [x] Navigation Semantic v2 使用独立 Schema 和运行时类型，能从可信请求、理解、候选集和
+  快照完整回放；v1 序列化和历史回放保持不变；
+- [x] Semantic v2 模型输入包含权威原始需求且不含稳定 ID、hash、Oracle、动作或审批，
+  Prompt 明确定义五类关系边界；
+- [x] 非密封 clean-room 开发测试覆盖唯一等价、多个等价、非等价、关系复用、上下文相关、
+  证据不足、合同失败和泄漏 canary；确定性 Policy 规则不放宽；
 - [ ] 密封数据使用全新 700—1,000 节点 clean-room resource 树、0 VALUE、精确 48 条执行
   场景和独立隐藏 Oracle，且通过来源、配额、泄漏 canary 与冻结 preflight；
 - [ ] 密封 runner 通过真实 Workbench API 执行 `BAILIAN_LIVE`，冻结功能/数据提交、模型、
@@ -469,6 +495,12 @@ sidecar 位置、Provider 模式、D10 计数起点、停线与回滚；获准�
 - [`research/sealed-fictional-e2e-evaluation-plan.md`](research/sealed-fictional-e2e-evaluation-plan.md)
   — 生产 Shadow 前的两层虚拟数据、48-case 未见分母、隐藏 Oracle、R0/C1 对照、阶段归因、
   重复性与一次性资格门槛草案。
+- [`research/semantic-input-contract-gap.md`](research/semantic-input-contract-gap.md)
+  — 首次密封负结果后的代码审计，定位 Semantic v1 缺少权威原始需求与关系判定边界，
+  并冻结并行 v2、保持严格 Policy 和禁止同分母调参的修复方向。
+- [`research/semantic-v2-dev-smoke-result.md`](research/semantic-v2-dev-smoke-result.md)
+  — 既有非密封 clean-room Silver 开发集上的11条真实百炼聚合 smoke，以及 TLS 信任链
+  修复、效果边界和不得外推为生产资格的限制。
 - [`../08-04-governance-architecture-convergence/research/architecture-convergence-verdict.md`](../08-04-governance-architecture-convergence/research/architecture-convergence-verdict.md)
   — 已接受的 D1—D6、关闭路线和新任务进入条件。
 
@@ -487,3 +519,8 @@ sidecar 位置、Provider 模式、D10 计数起点、停线与回滚；获准�
   私有离线汇总；该结论不否定单 case 安全演练能力，也不属于模型效果失败。
 - 上述仓库侧缺口已由 Phase 7 实现并通过完整回归；`NO_GO` 的剩余含义仅是尚未在受保护
   环境冻结最终 run、审核 rollout/rollback 和完成 30 个有效 case，不再是分母合同缺失。
+- Navigation Semantic v2 已建立隔离合同、严格 Policy v2 和非密封 clean-room 开发
+  runner；现有消防 medium 开发集可形成11条目标存在且 Top-8 可见的 Silver 单元。首次
+  live 尝试仅得到 `BAILIAN_CONNECTION_FAILED` 聚合，模型有效输出为0，因此尚未产生模型
+  效果结论；明确授权后定位并修复公开 CA 信任链，重试获得11/11有效输出、10条正确突出、
+  0条错误突出和1条结构冲突安全退让。该结果仅为开发 smoke，不恢复已失败的密封资格。

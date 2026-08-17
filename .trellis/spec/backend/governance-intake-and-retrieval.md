@@ -406,6 +406,10 @@ BailianNavigationSemanticProviderV2.compare(projection, tree)
 - v2 与生产 `shadow_run_manifest` 不得共存；违反时在读取树或调用模型前以
   `COPILOT_SEMANTIC_V2_SHADOW_FORBIDDEN` 失败关闭。密封 runner 仍复用实际 Workbench HTTP
   流程、候选生成和 sidecar 发布，不得另写一条简化产品链路。
+- 理解 Prompt 的澄清边界或 hint 优先级发生实质变化时，初次理解与澄清 Prompt 版本必须
+  同步递增；当前收紧版本为 `treeguard.navigation-copilot-understanding.zh.v2` 和
+  `treeguard.navigation-copilot-understanding-clarification.zh.v2`，旧 execution manifest
+  不得用于新运行。
 
 ### 4. Validation & Error Matrix
 
@@ -456,6 +460,65 @@ projection = build_navigation_semantic_projection_v2(
 )
 assert projection.to_model_dict()["requirement_text"] == request.requirement_text
 assert "source_request_hash" not in projection.to_model_dict()
+```
+
+## Scenario：密封短对话 Oracle 可达性
+
+### 1. Scope / Trigger
+
+- 当密封 Navigation Copilot runner 使用“一次理解 + 可选一次澄清”的两调用上限时适用；
+- 目的是在模型调用前证明 Oracle 要求的 Policy 状态能够由实际产品链路产生。
+
+### 2. Signatures
+
+```python
+validate_input_collections(manifest, scenarios, oracles, tree)
+```
+
+### 3. Contracts
+
+- 初次理解要求澄清时，第二次理解消费冻结答案，随后固定
+  `semantic_status=SKIPPED_CLARIFICATION_PATH`；
+- `apply_navigation_policy_v2()` 在该状态下必然返回 `NEED_EVIDENCE`；
+- 因此 `category=CLARIFICATION` 的密封 Oracle 必须精确接受
+  `acceptable_policy_statuses=["NEED_EVIDENCE"]`，不得要求 `AMBIGUOUS` 或
+  `CANDIDATES_AVAILABLE`；
+- 可达性只校验阶段状态，不把隐藏目标或 Oracle 交给 Provider。
+
+### 4. Validation & Error Matrix
+
+| 条件 | 处理 |
+|---|---|
+| 澄清 Oracle 精确接受 `NEED_EVIDENCE` | 继续完整数据与提交绑定 preflight |
+| 澄清 Oracle 要求其他 Policy 状态 | 网络前 `SEALED_CLARIFICATION_POLICY_UNREACHABLE` |
+| 非澄清 Oracle | 继续使用其类别既有合同 |
+
+### 5. Good / Base / Bad Cases
+
+- Good：澄清后跳过 Semantic，Oracle 接受 `NEED_EVIDENCE`，人工仍可从候选中处置；
+- Base：非澄清路径正常调用 Semantic，由关系结果决定 Policy；
+- Bad：runner 跳过 Semantic，但 Oracle 期待只有 Semantic 才可能产生的 `AMBIGUOUS`。
+
+### 6. Tests Required
+
+- 使用完整48条 fixture 回读，确保不可达澄清 Oracle 在 Provider 创建前拒绝；
+- 测试固定错误码，不调用模型、不创建 sidecar；
+- 合法澄清单 case 仍验证第二次理解、Semantic 跳过和 `NEED_EVIDENCE`。
+
+### 7. Wrong vs Correct
+
+#### Wrong
+
+```python
+assert oracle.acceptable_policy_statuses == ("AMBIGUOUS",)
+assert semantic_status == "SKIPPED_CLARIFICATION_PATH"
+```
+
+#### Correct
+
+```python
+assert oracle.acceptable_policy_statuses == ("NEED_EVIDENCE",)
+assert semantic_status == "SKIPPED_CLARIFICATION_PATH"
 ```
 
 ## Scenario：隔离的 v2 理解—关系—确定性动作纵切

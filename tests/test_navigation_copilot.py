@@ -794,8 +794,16 @@ class NavigationCopilotProviderTests(unittest.TestCase):
         result = provider.understand(request, tree)
 
         self.assertEqual(result.structural_intent.node_kind, "PROPERTY")
+        self.assertEqual(
+            result.prompt_version,
+            "treeguard.navigation-copilot-understanding.zh.v2",
+        )
         self.assertEqual(len(provider.bodies), 2)
         self.assertFalse(provider.bodies[0]["enable_thinking"])
+        system_prompt = provider.bodies[0]["messages"][0]["content"]
+        self.assertIn("非空的 node_kind_hint", system_prompt)
+        self.assertIn("至少两个互斥解释", system_prompt)
+        self.assertIn("不得因为候选不确定", system_prompt)
         retry_payload = json.loads(provider.bodies[1]["messages"][1]["content"])
         self.assertEqual(
             retry_payload["previous_validation_error"],

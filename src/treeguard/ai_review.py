@@ -114,10 +114,10 @@ RETRIEVAL_ROLE_PROMPT_VERSION_V1 = "treeguard.retrieval-role-extraction.zh.v1"
 RETRIEVAL_ROLE_PROMPT_VERSION_V2 = "treeguard.retrieval-role-extraction.zh.v2"
 RETRIEVAL_ROLE_PROMPT_VERSION = RETRIEVAL_ROLE_PROMPT_VERSION_V2
 NAVIGATION_UNDERSTANDING_PROMPT_VERSION = (
-    "treeguard.navigation-copilot-understanding.zh.v1"
+    "treeguard.navigation-copilot-understanding.zh.v2"
 )
 NAVIGATION_UNDERSTANDING_CLARIFICATION_PROMPT_VERSION = (
-    "treeguard.navigation-copilot-understanding-clarification.zh.v1"
+    "treeguard.navigation-copilot-understanding-clarification.zh.v2"
 )
 NAVIGATION_SEMANTIC_PROMPT_VERSION = (
     "treeguard.navigation-copilot-semantic.zh.v1"
@@ -2630,6 +2630,12 @@ class BailianNavigationUnderstandingProvider(BailianAIReviewProvider):
             "节点 ID、审批或 Patch。spans 的 text 必须逐字来自 requirement_text，并且每段"
             "在原文中只能定位一次；至少提供一个 TARGET。所有字段必须出现，只返回顶层"
             "JSON 对象，不使用 Markdown。"
+            "intent_request 中非空的 node_kind_hint、value_type_hint、cardinality_hint 是可信"
+            "结构约束，必须原样采用，不得改写或与树候选猜测混合；空 hint 才允许推断或"
+            "返回 UNKNOWN/null。只有 requirement_text 本身存在至少两个互斥解释，且该歧义"
+            "会阻止确定 TARGET 时，才返回 clarification_question。不得因为候选不确定、"
+            "proposed parent、树上下文、缺少可选信息或模型信心不足而澄清；这些情况保留"
+            "UNKNOWN/null。"
             f'schema_version 必须为 "{UNDERSTANDING_V2_MODEL_OUTPUT_VERSION}"。'
         )
         if clarification_question is not None:

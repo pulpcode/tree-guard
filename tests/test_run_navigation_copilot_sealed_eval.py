@@ -15,6 +15,7 @@ from scripts.run_navigation_copilot_sealed_eval import (
     _read_public_json,
     build_r0_candidate_node_ids,
     execute_case_via_workbench_api,
+    validate_input_collections,
 )
 from treeguard import load_tree_export
 from treeguard.ai_review import BailianProviderError
@@ -22,6 +23,8 @@ from treeguard.change_understanding_v2 import ChangeUnderstandingV2
 from treeguard.navigation_copilot import NavigationSemanticDraftV2
 from treeguard.navigation_copilot_sealed_validation import (
     SealedCaseOracle,
+    SealedEvaluationError,
+    SealedEvaluationManifest,
     SealedScenario,
     StructuralProfile,
     TerminalExpectation,
@@ -232,6 +235,48 @@ def _oracle(tree, scenario, *, clarify=False, targets=("node-004",)):
 
 
 class SealedRunnerTests(unittest.IsolatedAsyncioTestCase):
+    def test_full_run_rejects_unreachable_clarification_policy_before_provider(self):
+        result = load_tree_export(B02_FIXTURE / "tree.json")
+        self.assertTrue(result.is_valid)
+        tree = result.tree
+        assert tree is not None
+        scenarios = tuple(
+            SealedScenario.from_dict(item)
+            for item in json.loads(
+                (B02_FIXTURE / "scenarios.json").read_text(encoding="utf-8")
+            )
+        )
+        oracles = tuple(
+            SealedCaseOracle.from_dict(item)
+            for item in json.loads(
+                (B02_FIXTURE / "hidden-oracle.json").read_text(encoding="utf-8")
+            )
+        )
+        manifest = SealedEvaluationManifest.create(
+            function_commit="a" * 40,
+            data_commit="b" * 40,
+            tree_sha256="c" * 64,
+            scenarios_sha256="d" * 64,
+            oracle_sha256="e" * 64,
+            model_name="fixture-model",
+            understanding_prompt_version="fixture-understanding.v1",
+            clarification_prompt_version="fixture-clarification.v1",
+            semantic_prompt_version="fixture-semantic.v2",
+            endpoint_class="OFFICIAL_BAILIAN_COMPATIBLE",
+            scenario_refs=tuple(item.scenario_ref for item in scenarios),
+            repeat_scenario_refs=tuple(
+                item.scenario_ref for item in scenarios if item.repeat_challenge
+            ),
+            wire_attempt_limit=320,
+        )
+
+        with self.assertRaises(SealedEvaluationError) as caught:
+            validate_input_collections(manifest, scenarios, oracles, tree)
+        self.assertEqual(
+            caught.exception.code,
+            "SEALED_CLARIFICATION_POLICY_UNREACHABLE",
+        )
+
     async def test_b02_literal_case_runs_through_v2_without_oracle_in_model_input(self):
         result = load_tree_export(B02_FIXTURE / "tree.json")
         self.assertTrue(result.is_valid)

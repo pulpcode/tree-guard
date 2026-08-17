@@ -43,6 +43,7 @@ from treeguard.navigation_copilot import (  # noqa: E402
 from treeguard.navigation_copilot_sealed_validation import (  # noqa: E402
     SealedCaseOracle,
     SealedCaseTrace,
+    SealedEvaluationError,
     SealedEvaluationManifest,
     SealedScenario,
     StructuralProfile,
@@ -237,6 +238,15 @@ def validate_input_collections(
 ) -> None:
     """Validate the cross-file handoff before an app or Provider is created."""
 
+    for oracle in oracles:
+        if (
+            oracle.category == "CLARIFICATION"
+            and oracle.acceptable_policy_statuses != ("NEED_EVIDENCE",)
+        ):
+            raise SealedEvaluationError(
+                "SEALED_CLARIFICATION_POLICY_UNREACHABLE",
+                "clarification Oracle conflicts with the two-call product path",
+            )
     validate_sealed_plan(manifest, scenarios, oracles)
     if tree.snapshot_hash != scenarios[0].tree_digest:
         raise ValueError("sealed tree digest does not match scenarios")
@@ -772,7 +782,10 @@ def main() -> int:
     result = load_tree_export(args.tree)
     if not result.is_valid or result.tree is None:
         raise SystemExit("sealed tree did not pass the adapter")
-    validate_input_collections(manifest, scenarios, oracles, result.tree)
+    try:
+        validate_input_collections(manifest, scenarios, oracles, result.tree)
+    except SealedEvaluationError as exc:
+        raise SystemExit(exc.code) from None
     _verify_function_commit(manifest.function_commit)
     _verify_data_commit(manifest.data_commit)
     if not args.execute:

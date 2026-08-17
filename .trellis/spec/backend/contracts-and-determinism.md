@@ -65,6 +65,13 @@ workflow 版本，同样是缺陷。
   `contracts/navigation-copilot-semantic-draft.v2.schema.json`
 - `NavigationPolicyDecisionV2` ↔
   `contracts/navigation-copilot-policy-decision.v2.schema.json`
+- 密封 Navigation Copilot v2 运行工件 ↔
+  `contracts/navigation-copilot-sealed-trace.v2.schema.json` /
+  `contracts/navigation-copilot-sealed-observation.v2.schema.json` /
+  `contracts/navigation-copilot-sealed-aggregate.v2.schema.json` /
+  `contracts/navigation-copilot-sealed-diagnostic-aggregate.v2.schema.json`。Trace 必须显式记录
+  `semantic_status`；Observation 和诊断聚合必须分别记录理解模型与 Semantic 模型退化，
+  合并退化字段只用于总体门禁，不能用于阶段归因。
 
 当前没有运行时 `jsonschema` 依赖。JSON Schema 是跨边界合同，Python 自己做
 精确字段与语义校验；现有测试只验证 Schema 可解析和必填字段与序列化对象

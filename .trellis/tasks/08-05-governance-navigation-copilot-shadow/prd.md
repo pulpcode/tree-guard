@@ -308,7 +308,7 @@ Prompt 中明确定义五类关系的互斥判定边界。v1 的字节、回放�
   Prompt 明确定义五类关系边界；
 - [x] 非密封 clean-room 开发测试覆盖唯一等价、多个等价、非等价、关系复用、上下文相关、
   证据不足、合同失败和泄漏 canary；确定性 Policy 规则不放宽；
-- [ ] 密封数据使用全新 700—1,000 节点 clean-room resource 树、0 VALUE、精确 48 条执行
+- [x] 密封数据使用全新 700—1,000 节点 clean-room resource 树、0 VALUE、精确 48 条执行
   场景和独立隐藏 Oracle，且通过来源、配额、泄漏 canary 与冻结 preflight；
 - [ ] 密封 runner 通过真实 Workbench API 执行 `BAILIAN_LIVE`，冻结功能/数据提交、模型、
   Prompt、调用上限和门槛，且不修改当前 Copilot、Provider、召回、Prompt 或 UI；
@@ -524,3 +524,12 @@ sidecar 位置、Provider 模式、D10 计数起点、停线与回滚；获准�
   live 尝试仅得到 `BAILIAN_CONNECTION_FAILED` 聚合，模型有效输出为0，因此尚未产生模型
   效果结论；明确授权后定位并修复公开 CA 信任链，重试获得11/11有效输出、10条正确突出、
   0条错误突出和1条结构冲突安全退让。该结果仅为开发 smoke，不恢复已失败的密封资格。
+- v3-C b02 密封数据已以数据提交 `5bc3802` 合入当前功能分支：700节点、0 VALUE、48条
+  冻结场景和独立隐藏 Oracle，数据合同与聚焦测试通过。runner 已通过显式构造参数把
+  Semantic v2 接入实际 Workbench HTTP 链路，默认产品入口继续使用 v1，且 v2 与生产
+  Shadow manifest 的组合在任何树读取或模型调用前失败关闭。
+- 密封 Trace/Observation/Aggregate 已升级为 v2：逐 case 记录 Semantic 阶段状态，并把
+  理解模型退化与 Semantic 模型退化分别归因；总体 `model_degraded` 仍作为资格门的合并
+  指标。runner 同次生成资格聚合与仅含固定计数的诊断聚合，后者不改变资格判定。当前只
+  完成本地模拟 Provider 的合同与端到端验证，尚未生成绑定未来功能提交的
+  execution manifest，也尚未运行本轮 `BAILIAN_LIVE`，因此资格结果仍未知。

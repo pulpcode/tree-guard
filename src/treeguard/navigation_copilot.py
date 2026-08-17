@@ -1847,7 +1847,7 @@ class NavigationOutcome:
     def from_dict(
         cls,
         payload: Any,
-        decision: NavigationPolicyDecision,
+        decision: NavigationPolicyDecision | NavigationPolicyDecisionV2,
         candidate_set: NavigationCandidateSet,
         tree: CanonicalTree,
     ) -> "NavigationOutcome":
@@ -1881,14 +1881,17 @@ class NavigationOutcome:
 
 @dataclass(frozen=True, slots=True)
 class NavigationShadowObservation:
-    decision: NavigationPolicyDecision
+    decision: NavigationPolicyDecision | NavigationPolicyDecisionV2
     outcome: NavigationOutcome
     clarification_used: bool
     model_degraded: bool
 
     def __post_init__(self) -> None:
         if (
-            not isinstance(self.decision, NavigationPolicyDecision)
+            not isinstance(
+                self.decision,
+                (NavigationPolicyDecision, NavigationPolicyDecisionV2),
+            )
             or not isinstance(self.outcome, NavigationOutcome)
             or self.outcome.source_decision_hash != self.decision.decision_hash
             or not isinstance(self.clarification_used, bool)
@@ -1898,7 +1901,7 @@ class NavigationShadowObservation:
 
 
 def build_navigation_outcome(
-    decision: NavigationPolicyDecision,
+    decision: NavigationPolicyDecision | NavigationPolicyDecisionV2,
     candidate_set: NavigationCandidateSet,
     tree: CanonicalTree,
     *,
@@ -1908,7 +1911,10 @@ def build_navigation_outcome(
     duration_ms: int,
 ) -> NavigationOutcome:
     if (
-        not isinstance(decision, NavigationPolicyDecision)
+        not isinstance(
+            decision,
+            (NavigationPolicyDecision, NavigationPolicyDecisionV2),
+        )
         or not isinstance(candidate_set, NavigationCandidateSet)
         or decision.source_candidate_set_hash != candidate_set.candidate_set_hash
         or candidate_set.source_snapshot_hash != tree.snapshot_hash

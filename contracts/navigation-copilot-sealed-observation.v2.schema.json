@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://treeguard.local/contracts/navigation-copilot-sealed-observation.v2.schema.json",
+  "title": "Navigation Copilot Sealed Observation v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "scenario_ref", "round_index", "source_oracle_hash", "source_trace_hash", "category", "wrong_context_challenge", "target_present", "r0_rank", "c1_rank", "observed_policy_status", "profile_match", "clarification_match", "understanding_model_degraded", "semantic_model_degraded", "model_degraded", "highlighted", "highlighted_correct", "absent_confident_error", "policy_match", "terminal_match", "joint_match", "no_degradation_path", "first_failure_stage", "finding_codes", "observation_hash"],
+  "properties": {
+    "schema_version": {"const": "navigation-copilot-sealed-observation.v2"},
+    "scenario_ref": {"$ref": "#/$defs/ref"},
+    "round_index": {"enum": [1, 2, 3]},
+    "source_oracle_hash": {"$ref": "#/$defs/digest"},
+    "source_trace_hash": {"$ref": "#/$defs/digest"},
+    "category": {"enum": ["LITERAL_UNIQUE", "NONLITERAL_UNIQUE", "STRUCTURAL_INTERFERENCE", "MULTI_ACCEPTABLE", "CLARIFICATION", "WEAK_EVIDENCE", "TARGET_ABSENT"]},
+    "wrong_context_challenge": {"type": "boolean"},
+    "target_present": {"type": "boolean"},
+    "r0_rank": {"type": ["integer", "null"], "minimum": 1, "maximum": 40},
+    "c1_rank": {"type": ["integer", "null"], "minimum": 1, "maximum": 40},
+    "observed_policy_status": {"enum": ["CANDIDATES_AVAILABLE", "AMBIGUOUS", "NONE", "NEED_EVIDENCE", null]},
+    "profile_match": {"type": "boolean"},
+    "clarification_match": {"type": "boolean"},
+    "understanding_model_degraded": {"type": "boolean"},
+    "semantic_model_degraded": {"type": "boolean"},
+    "model_degraded": {"type": "boolean"},
+    "highlighted": {"type": "boolean"},
+    "highlighted_correct": {"type": "boolean"},
+    "absent_confident_error": {"type": "boolean"},
+    "policy_match": {"type": "boolean"},
+    "terminal_match": {"type": "boolean"},
+    "joint_match": {"type": "boolean"},
+    "no_degradation_path": {"type": "boolean"},
+    "first_failure_stage": {"enum": ["NONE", "UNDERSTANDING", "RETRIEVAL", "SEMANTIC", "POLICY", "END_TO_END", "REPEATABILITY"]},
+    "finding_codes": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/code"}},
+    "observation_hash": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "ref": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"},
+    "code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,127}$"}
+  }
+}

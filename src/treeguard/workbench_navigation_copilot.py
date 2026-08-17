@@ -35,13 +35,18 @@ from treeguard.navigation_copilot import (
     NavigationInterpretation,
     NavigationOutcome,
     NavigationPolicyDecision,
+    NavigationPolicyDecisionV2,
     NavigationSemanticDraft,
+    NavigationSemanticDraftV2,
     NavigationSemanticProjection,
+    NavigationSemanticProjectionV2,
     NavigationShadowObservation,
     apply_navigation_policy,
+    apply_navigation_policy_v2,
     build_navigation_candidate_set,
     build_navigation_outcome,
     build_navigation_semantic_projection,
+    build_navigation_semantic_projection_v2,
     navigation_shadow_aggregate,
 )
 from treeguard.navigation_shadow_run import (
@@ -94,9 +99,9 @@ class NavigationUnderstandingProvider(Protocol):
 class NavigationSemanticProvider(Protocol):
     def compare(
         self,
-        projection: NavigationSemanticProjection,
+        projection: NavigationSemanticProjection | NavigationSemanticProjectionV2,
         tree: CanonicalTree,
-    ) -> NavigationSemanticDraft: ...
+    ) -> NavigationSemanticDraft | NavigationSemanticDraftV2: ...
 
 
 class NavigationProviderFactory(Protocol):
@@ -179,9 +184,9 @@ class _CopilotCase:
     clarification_round: NavigationClarificationRound | None = None
     interpretation: NavigationInterpretation | None = None
     candidate_set: NavigationCandidateSet | None = None
-    projection: NavigationSemanticProjection | None = None
-    semantic_draft: NavigationSemanticDraft | None = None
-    decision: NavigationPolicyDecision | None = None
+    projection: NavigationSemanticProjection | NavigationSemanticProjectionV2 | None = None
+    semantic_draft: NavigationSemanticDraft | NavigationSemanticDraftV2 | None = None
+    decision: NavigationPolicyDecision | NavigationPolicyDecisionV2 | None = None
     outcome: NavigationOutcome | None = None
     qualification: NavigationShadowQualification | None = None
     degradation_codes: list[str] = field(default_factory=list)
@@ -205,6 +210,7 @@ class WorkbenchNavigationCopilotService:
     diagnostics_enabled: bool = False
     shadow_run_manifest: NavigationShadowRunManifest | None = None
     participant_ref: str | None = None
+    semantic_contract_version: str = "v1"
     executor: OperationExecutor = field(
         default_factory=lambda: ThreadPoolExecutor(
             max_workers=2,
@@ -231,6 +237,19 @@ class WorkbenchNavigationCopilotService:
     )
 
     def __post_init__(self) -> None:
+        if self.semantic_contract_version not in {"v1", "v2"}:
+            raise WorkbenchNavigationCopilotError(
+                "COPILOT_SEMANTIC_CONTRACT_INVALID",
+                "semantic contract version is unsupported",
+            )
+        if (
+            self.semantic_contract_version == "v2"
+            and self.shadow_run_manifest is not None
+        ):
+            raise WorkbenchNavigationCopilotError(
+                "COPILOT_SEMANTIC_V2_SHADOW_FORBIDDEN",
+                "semantic v2 is isolated from the production Shadow run",
+            )
         if (self.shadow_run_manifest is None) != (self.participant_ref is None):
             raise WorkbenchNavigationCopilotError(
                 "COPILOT_SHADOW_RUN_CONFIG_INVALID",
@@ -696,13 +715,17 @@ class WorkbenchNavigationCopilotService:
         candidate_set = build_navigation_candidate_set(
             request, interpretation, tree
         )
-        projection = (
-            build_navigation_semantic_projection(
-                request, interpretation, candidate_set, tree
+        projection = None
+        if candidate_set.status == "CANDIDATES_READY":
+            projection = (
+                build_navigation_semantic_projection_v2(
+                    request, interpretation, candidate_set, tree
+                )
+                if self.semantic_contract_version == "v2"
+                else build_navigation_semantic_projection(
+                    request, interpretation, candidate_set, tree
+                )
             )
-            if candidate_set.status == "CANDIDATES_READY"
-            else None
-        )
         semantic_draft = None
         semantic_status = "NOT_APPLICABLE"
         if candidate_set.status == "CANDIDATES_READY" and skip_semantic:
@@ -722,12 +745,22 @@ class WorkbenchNavigationCopilotService:
                 semantic_status = "DEGRADED"
                 with self._lock:
                     self._require_case(case_ref).degradation_codes.append(exc.code)
-        decision = apply_navigation_policy(
-            interpretation,
-            candidate_set,
-            projection,
-            semantic_draft,
-            semantic_status=semantic_status,
+        decision = (
+            apply_navigation_policy_v2(
+                interpretation,
+                candidate_set,
+                projection,
+                semantic_draft,
+                semantic_status=semantic_status,
+            )
+            if self.semantic_contract_version == "v2"
+            else apply_navigation_policy(
+                interpretation,
+                candidate_set,
+                projection,
+                semantic_draft,
+                semantic_status=semantic_status,
+            )
         )
         with self._lock:
             case = self._require_case(case_ref)

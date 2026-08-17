@@ -29,9 +29,9 @@ if str(SRC) not in sys.path:
 from treeguard import load_tree_export  # noqa: E402
 from treeguard.ai_review import (  # noqa: E402
     BailianConfig,
-    BailianNavigationSemanticProvider,
+    BailianNavigationSemanticProviderV2,
     BailianNavigationUnderstandingProvider,
-    NAVIGATION_SEMANTIC_PROMPT_VERSION,
+    NAVIGATION_SEMANTIC_PROMPT_VERSION_V2,
     NAVIGATION_UNDERSTANDING_CLARIFICATION_PROMPT_VERSION,
     NAVIGATION_UNDERSTANDING_PROMPT_VERSION,
 )
@@ -48,6 +48,7 @@ from treeguard.navigation_copilot_sealed_validation import (  # noqa: E402
     StructuralProfile,
     TerminalExpectation,
     public_sealed_aggregate,
+    public_sealed_diagnostic_aggregate,
     score_sealed_case,
     validate_sealed_plan,
 )
@@ -70,14 +71,23 @@ UNEXPECTED_CLARIFICATION_ANSWER = "请仅依据原始需求继续，并保留不
 MAX_PUBLIC_INPUT_BYTES = 30_000_000
 MAX_PRIVATE_INPUT_BYTES = 20_000_000
 FUNCTION_PATHS = (
+    "src/treeguard/navigation_copilot.py",
+    "src/treeguard/ai_review.py",
+    "src/treeguard/workbench_navigation_copilot.py",
     "src/treeguard/navigation_copilot_sealed_validation.py",
     "scripts/run_navigation_copilot_sealed_eval.py",
+    "contracts/navigation-copilot-semantic-input.v2.schema.json",
+    "contracts/navigation-copilot-semantic-projection.v2.schema.json",
+    "contracts/navigation-copilot-semantic-output.v2.schema.json",
+    "contracts/navigation-copilot-semantic-draft.v2.schema.json",
+    "contracts/navigation-copilot-policy-decision.v2.schema.json",
     "contracts/navigation-copilot-sealed-evaluation-manifest.v2.schema.json",
     "contracts/navigation-copilot-sealed-scenario.v2.schema.json",
     "contracts/navigation-copilot-sealed-oracle.v2.schema.json",
-    "contracts/navigation-copilot-sealed-trace.v1.schema.json",
-    "contracts/navigation-copilot-sealed-observation.v1.schema.json",
-    "contracts/navigation-copilot-sealed-aggregate.v1.schema.json",
+    "contracts/navigation-copilot-sealed-trace.v2.schema.json",
+    "contracts/navigation-copilot-sealed-observation.v2.schema.json",
+    "contracts/navigation-copilot-sealed-aggregate.v2.schema.json",
+    "contracts/navigation-copilot-sealed-diagnostic-aggregate.v2.schema.json",
 )
 
 
@@ -131,7 +141,7 @@ class FrozenBailianProviderFactory:
     def semantic_provider(self, mode: str, trace_sink=None):
         if mode != "BAILIAN_LIVE":
             raise ValueError("sealed runner forbids Provider fallback")
-        return BailianNavigationSemanticProvider(
+        return BailianNavigationSemanticProviderV2(
             self._config,
             trace_sink=trace_sink,
         )
@@ -301,7 +311,7 @@ async def _await_operation(
 def _route(initially_clarified: bool, case_view: dict[str, Any]) -> str:
     if initially_clarified:
         return "CLARIFY"
-    if case_view.get("candidate_status") in {"NONE", "NEED_EVIDENCE"}:
+    if case_view.get("candidate_status") == "NEED_EVIDENCE":
         return "LIMIT"
     return "PROCEED"
 
@@ -382,6 +392,7 @@ def _sidecars_complete(
     case_ref: str,
     *,
     initially_clarified: bool,
+    semantic_status: str,
 ) -> bool:
     names = {
         "01-intent-request.json",
@@ -390,13 +401,26 @@ def _sidecars_complete(
         "08-policy-decision.json",
         "09-outcome.json",
     }
-    names |= (
-        {"03-clarification-answer.json", "04-clarification-round.json"}
-        if initially_clarified
-        else {"06-semantic-projection.json", "07-semantic-draft.json"}
-    )
     directory = sidecar_root / case_ref
-    return all((directory / name).is_file() for name in names)
+    if not all((directory / name).is_file() for name in names):
+        return False
+    projection = directory / "06-semantic-projection.json"
+    draft = directory / "07-semantic-draft.json"
+    if initially_clarified:
+        return (
+            semantic_status == "SKIPPED_CLARIFICATION_PATH"
+            and (directory / "03-clarification-answer.json").is_file()
+            and (directory / "04-clarification-round.json").is_file()
+            and projection.is_file()
+            and not draft.exists()
+        )
+    if semantic_status == "SUCCEEDED":
+        return projection.is_file() and draft.is_file()
+    if semantic_status == "DEGRADED":
+        return projection.is_file() and not draft.exists()
+    if semantic_status == "NOT_APPLICABLE":
+        return not projection.exists() and not draft.exists()
+    return False
 
 
 def _infer_failure_stage(
@@ -524,6 +548,7 @@ async def execute_case_via_workbench_api(
             r0_candidate_node_ids=r0_candidates,
             c1_candidate_node_ids=(),
             policy_status=None,
+            semantic_status=None,
             highlighted_node_id=None,
             outcome=None,
         )
@@ -541,6 +566,13 @@ async def execute_case_via_workbench_api(
     c1_candidates = tuple(
         item["node_id"] for item in candidate_payload["candidates"]
     )
+    policy_payload = read_private_json(
+        sidecar_root / case_ref / "08-policy-decision.json",
+        max_bytes=1_000_000,
+    )
+    semantic_status = policy_payload.get("semantic_status")
+    if not isinstance(semantic_status, str):
+        raise ValueError("sealed policy sidecar lacks semantic status")
     highlighted_node_id = None
     highlighted_ref = final_view.get("highlighted_candidate_ref")
     if highlighted_ref is not None:
@@ -573,6 +605,7 @@ async def execute_case_via_workbench_api(
             sidecar_root,
             case_ref,
             initially_clarified=initially_clarified,
+            semantic_status=semantic_status,
         ),
         interpretation_status=interpretation["status"],
         observed_route=_route(initially_clarified, final_view),
@@ -584,6 +617,7 @@ async def execute_case_via_workbench_api(
         r0_candidate_node_ids=r0_candidates,
         c1_candidate_node_ids=c1_candidates,
         policy_status=final_view["candidate_status"],
+        semantic_status=semantic_status,
         highlighted_node_id=highlighted_node_id,
         outcome=terminal,
     )
@@ -616,6 +650,7 @@ async def execute_frozen_run(
         sidecar_root=sidecar_root,
         provider_factory=provider_factory,
         diagnostics_enabled=True,
+        semantic_contract_version="v2",
     )
     app = create_app(
         WorkbenchService(repository),
@@ -675,6 +710,15 @@ async def execute_frozen_run(
     )
     if not write_private_json(output_root / "aggregate.json", aggregate):
         raise OSError("sealed aggregate could not be published")
+    diagnostic = public_sealed_diagnostic_aggregate(
+        manifest,
+        tuple(observations),
+    )
+    if not write_private_json(
+        output_root / "diagnostic-aggregate.json",
+        diagnostic,
+    ):
+        raise OSError("sealed diagnostic aggregate could not be published")
     return aggregate
 
 
@@ -743,7 +787,7 @@ def main() -> int:
         or manifest.clarification_prompt_version
         != NAVIGATION_UNDERSTANDING_CLARIFICATION_PROMPT_VERSION
         or manifest.semantic_prompt_version
-        != NAVIGATION_SEMANTIC_PROMPT_VERSION
+        != NAVIGATION_SEMANTIC_PROMPT_VERSION_V2
     ):
         raise SystemExit("sealed model or Prompt binding failed")
     aggregate = asyncio.run(

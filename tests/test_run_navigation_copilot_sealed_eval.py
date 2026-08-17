@@ -19,7 +19,7 @@ from scripts.run_navigation_copilot_sealed_eval import (
 from treeguard import load_tree_export
 from treeguard.ai_review import BailianProviderError
 from treeguard.change_understanding_v2 import ChangeUnderstandingV2
-from treeguard.navigation_copilot import NavigationSemanticDraft
+from treeguard.navigation_copilot import NavigationSemanticDraftV2
 from treeguard.navigation_copilot_sealed_validation import (
     SealedCaseOracle,
     SealedScenario,
@@ -34,6 +34,14 @@ from treeguard.workbench_navigation_copilot import WorkbenchNavigationCopilotSer
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / "tests" / "fixtures" / "fictional" / "tree_export.json"
+B02_FIXTURE = (
+    ROOT
+    / "tests"
+    / "fixtures"
+    / "fictional"
+    / "navigation_copilot_sealed_v3c_b02"
+    / "frozen"
+)
 
 
 class InlineExecutor:
@@ -64,14 +72,15 @@ class UnderstandingProvider:
             if self.clarify and clarification_question is None
             else None
         )
+        target_text = "Tags" if "Tags" in request.requirement_text else request.requirement_text
         return ChangeUnderstandingV2.from_model_dict(
             {
                 "schema_version": "change-understanding-model-output.v2",
-                "node_kind": "PROPERTY",
-                "value_type": "string",
-                "cardinality": "MULTIPLE",
+                "node_kind": request.node_kind_hint,
+                "value_type": request.value_type_hint,
+                "cardinality": request.cardinality_hint,
                 "clarification_question": question,
-                "spans": [{"role": "TARGET", "text": "Tags"}],
+                "spans": [{"role": "TARGET", "text": target_text}],
             },
             request,
             tree,
@@ -83,18 +92,23 @@ class UnderstandingProvider:
 
 
 class SemanticProvider:
-    def __init__(self, *, fail_hard=False, no_equivalent=False):
+    def __init__(self, *, fail_hard=False, fail_degraded=False, no_equivalent=False):
         self.fail_hard = fail_hard
+        self.fail_degraded = fail_degraded
         self.no_equivalent = no_equivalent
         self.calls = 0
+        self.model_inputs = []
 
     def compare(self, projection, tree):
         self.calls += 1
+        self.model_inputs.append(projection.to_model_dict())
         if self.fail_hard:
             raise RuntimeError("fictional contract failure")
-        return NavigationSemanticDraft.from_model_dict(
+        if self.fail_degraded:
+            raise BailianProviderError("BAILIAN_TIMEOUT", "fictional timeout")
+        return NavigationSemanticDraftV2.from_model_dict(
             {
-                "schema_version": "navigation-copilot-semantic-output.v1",
+                "schema_version": "navigation-copilot-semantic-output.v2",
                 "candidate_assessments": [
                     {
                         "candidate_ref": item.candidate_ref,
@@ -123,11 +137,13 @@ class ProviderFactory:
         clarify=False,
         fail=False,
         semantic_fail_hard=False,
+        semantic_fail_degraded=False,
         no_equivalent=False,
     ):
         self.understanding = UnderstandingProvider(clarify=clarify, fail=fail)
         self.semantic = SemanticProvider(
             fail_hard=semantic_fail_hard,
+            fail_degraded=semantic_fail_degraded,
             no_equivalent=no_equivalent,
         )
 
@@ -145,13 +161,14 @@ def _scenario(
     category=None,
     parent_ref="N000002",
     wrong_context=False,
+    requirement="Find Tags under Catalog.",
 ):
     resolved_category = category or ("CLARIFICATION" if clarify else "LITERAL_UNIQUE")
     return SealedScenario.create(
         scenario_ref="SEALED001",
         tree_digest=tree.snapshot_hash,
         category=resolved_category,
-        requirement_text="Find Tags under Catalog.",
+        requirement_text=requirement,
         proposed_parent_ref=parent_ref,
         node_kind_hint="PROPERTY",
         value_type_hint="string",
@@ -215,6 +232,66 @@ def _oracle(tree, scenario, *, clarify=False, targets=("node-004",)):
 
 
 class SealedRunnerTests(unittest.IsolatedAsyncioTestCase):
+    async def test_b02_literal_case_runs_through_v2_without_oracle_in_model_input(self):
+        result = load_tree_export(B02_FIXTURE / "tree.json")
+        self.assertTrue(result.is_valid)
+        tree = result.tree
+        assert tree is not None
+        scenario_payloads = json.loads(
+            (B02_FIXTURE / "scenarios.json").read_text(encoding="utf-8")
+        )
+        oracle_payloads = json.loads(
+            (B02_FIXTURE / "hidden-oracle.json").read_text(encoding="utf-8")
+        )
+        scenario = next(
+            SealedScenario.from_dict(item)
+            for item in scenario_payloads
+            if item["category"] == "LITERAL_UNIQUE"
+        )
+        oracle_by_ref = {
+            item["scenario_ref"]: SealedCaseOracle.from_dict(item)
+            for item in oracle_payloads
+        }
+        oracle = oracle_by_ref[scenario.scenario_ref]
+        factory = ProviderFactory()
+        with tempfile.TemporaryDirectory() as temporary:
+            sidecars = Path(temporary) / "sidecars"
+            repository = FrozenTreeRepository(result)
+            identifiers = iter(("101", "102", "103", "104"))
+            service = WorkbenchNavigationCopilotService(
+                repository=repository,
+                sidecar_root=sidecars,
+                provider_factory=factory,
+                diagnostics_enabled=True,
+                semantic_contract_version="v2",
+                executor=InlineExecutor(),
+                id_factory=lambda: next(identifiers),
+            )
+            app = create_app(
+                WorkbenchService(repository),
+                navigation_copilot_service=service,
+            )
+            async with httpx.AsyncClient(
+                transport=httpx.ASGITransport(app=app),
+                base_url="http://sealed-b02-test.invalid",
+            ) as client:
+                trace = await execute_case_via_workbench_api(
+                    client,
+                    scenario=scenario,
+                    oracle=oracle,
+                    tree=tree,
+                    sidecar_root=sidecars,
+                    round_index=1,
+                )
+        self.assertEqual(trace.run_status, "COMPLETE", trace.to_dict())
+        self.assertEqual(trace.to_dict()["schema_version"], "navigation-copilot-sealed-trace.v2")
+        self.assertEqual(factory.semantic.calls, 1)
+        self.assertEqual(len(factory.semantic.model_inputs), 1)
+        for model_input in factory.semantic.model_inputs:
+            encoded = json.dumps(model_input, ensure_ascii=False, sort_keys=True)
+            for node_id in oracle.acceptable_node_ids + oracle.forbidden_node_ids:
+                self.assertNotIn(node_id, encoded)
+
     async def _run(
         self,
         *,
@@ -224,8 +301,10 @@ class SealedRunnerTests(unittest.IsolatedAsyncioTestCase):
         targets=("node-004",),
         fail=False,
         semantic_fail_hard=False,
+        semantic_fail_degraded=False,
         no_equivalent=False,
         wrong_context=False,
+        requirement="Find Tags under Catalog.",
     ):
         result = load_tree_export(FIXTURE)
         self.assertTrue(result.is_valid)
@@ -237,12 +316,14 @@ class SealedRunnerTests(unittest.IsolatedAsyncioTestCase):
             category=category,
             parent_ref=parent_ref,
             wrong_context=wrong_context,
+            requirement=requirement,
         )
         oracle = _oracle(tree, scenario, clarify=clarify, targets=targets)
         factory = ProviderFactory(
             clarify=clarify,
             fail=fail,
             semantic_fail_hard=semantic_fail_hard,
+            semantic_fail_degraded=semantic_fail_degraded,
             no_equivalent=no_equivalent,
         )
         with tempfile.TemporaryDirectory() as temporary:
@@ -254,6 +335,7 @@ class SealedRunnerTests(unittest.IsolatedAsyncioTestCase):
                 sidecar_root=sidecars,
                 provider_factory=factory,
                 diagnostics_enabled=True,
+                semantic_contract_version="v2",
                 executor=InlineExecutor(),
                 id_factory=lambda: next(identifiers),
             )
@@ -351,6 +433,30 @@ class SealedRunnerTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(trace.provider_mode, "BAILIAN_LIVE")
         self.assertEqual(trace.interpretation_status, "MODEL_DEGRADED")
         self.assertEqual(trace.run_status, "COMPLETE")
+
+    async def test_semantic_degradation_keeps_candidates_and_is_scored(self):
+        _, _, oracle, factory, trace = await self._run(
+            semantic_fail_degraded=True
+        )
+        self.assertEqual(factory.semantic.calls, 1)
+        self.assertEqual(trace.semantic_status, "DEGRADED")
+        self.assertEqual(trace.policy_status, "NEED_EVIDENCE")
+        self.assertTrue(trace.sidecar_complete)
+        observation = score_sealed_case(oracle, trace)
+        self.assertTrue(observation.model_degraded)
+        self.assertFalse(observation.no_degradation_path)
+
+    async def test_empty_candidate_path_requires_no_semantic_sidecars(self):
+        _, _, _, factory, trace = await self._run(
+            category="TARGET_ABSENT",
+            targets=(),
+            requirement="UnfindableZebraToken",
+        )
+        self.assertEqual(factory.semantic.calls, 0)
+        self.assertEqual(trace.semantic_status, "NOT_APPLICABLE")
+        self.assertEqual(trace.policy_status, "NONE")
+        self.assertEqual(trace.observed_route, "PROCEED")
+        self.assertTrue(trace.sidecar_complete)
 
     async def test_unhandled_product_contract_failure_remains_a_scored_case(self):
         _, _, oracle, _, trace = await self._run(semantic_fail_hard=True)

@@ -18,11 +18,11 @@ from treeguard.hashing import canonical_digest
 MANIFEST_SCHEMA_VERSION = "navigation-copilot-sealed-evaluation-manifest.v2"
 SCENARIO_SCHEMA_VERSION = "navigation-copilot-sealed-scenario.v2"
 ORACLE_SCHEMA_VERSION = "navigation-copilot-sealed-oracle.v2"
-TRACE_SCHEMA_VERSION = "navigation-copilot-sealed-trace.v1"
-OBSERVATION_SCHEMA_VERSION = "navigation-copilot-sealed-observation.v1"
-AGGREGATE_SCHEMA_VERSION = "navigation-copilot-sealed-aggregate.v1"
+TRACE_SCHEMA_VERSION = "navigation-copilot-sealed-trace.v2"
+OBSERVATION_SCHEMA_VERSION = "navigation-copilot-sealed-observation.v2"
+AGGREGATE_SCHEMA_VERSION = "navigation-copilot-sealed-aggregate.v2"
 DIAGNOSTIC_AGGREGATE_SCHEMA_VERSION = (
-    "navigation-copilot-sealed-diagnostic-aggregate.v1"
+    "navigation-copilot-sealed-diagnostic-aggregate.v2"
 )
 THRESHOLD_POLICY_VERSION = "treeguard.navigation-copilot-sealed-gate.v1"
 
@@ -900,6 +900,7 @@ class SealedCaseTrace:
     r0_candidate_node_ids: tuple[str, ...]
     c1_candidate_node_ids: tuple[str, ...]
     policy_status: str | None
+    semantic_status: str | None
     highlighted_node_id: str | None
     outcome: TerminalExpectation | None
     trace_hash: str
@@ -948,6 +949,14 @@ class SealedCaseTrace:
                 raise ValueError(f"{name} is invalid")
         if self.policy_status not in POLICY_STATUSES | {None}:
             raise ValueError("trace policy status is invalid")
+        if self.semantic_status not in {
+            None,
+            "SUCCEEDED",
+            "SKIPPED_CLARIFICATION_PATH",
+            "DEGRADED",
+            "NOT_APPLICABLE",
+        }:
+            raise ValueError("trace semantic status is invalid")
         if self.highlighted_node_id is not None:
             _text(self.highlighted_node_id, "highlighted_node_id", maximum=512)
         if self.outcome is not None and not isinstance(self.outcome, TerminalExpectation):
@@ -956,6 +965,7 @@ class SealedCaseTrace:
             self.interpretation_status is not None
             and self.observed_route is not None
             and self.policy_status is not None
+            and self.semantic_status is not None
             and self.outcome is not None
             and self.sidecar_complete
         )
@@ -992,6 +1002,7 @@ class SealedCaseTrace:
             "r0_candidate_node_ids": list(self.r0_candidate_node_ids),
             "c1_candidate_node_ids": list(self.c1_candidate_node_ids),
             "policy_status": self.policy_status,
+            "semantic_status": self.semantic_status,
             "highlighted_node_id": self.highlighted_node_id,
             "outcome": self.outcome.to_dict() if self.outcome else None,
         }
@@ -1012,7 +1023,7 @@ class SealedCaseTrace:
             "logical_model_stage_count", "wire_attempt_count", "sidecar_complete",
             "interpretation_status", "observed_route", "observed_profile",
             "r0_candidate_node_ids", "c1_candidate_node_ids", "policy_status",
-            "highlighted_node_id", "outcome", "trace_hash",
+            "semantic_status", "highlighted_node_id", "outcome", "trace_hash",
         }
         if (
             not isinstance(payload, dict)
@@ -1047,6 +1058,7 @@ class SealedCaseTrace:
                 r0_candidate_node_ids=tuple(payload["r0_candidate_node_ids"]),
                 c1_candidate_node_ids=tuple(payload["c1_candidate_node_ids"]),
                 policy_status=payload["policy_status"],
+                semantic_status=payload["semantic_status"],
                 highlighted_node_id=payload["highlighted_node_id"],
                 outcome=(
                     TerminalExpectation.from_dict(payload["outcome"])
@@ -1075,6 +1087,8 @@ class SealedCaseObservation:
     observed_policy_status: str | None
     profile_match: bool
     clarification_match: bool
+    understanding_model_degraded: bool
+    semantic_model_degraded: bool
     model_degraded: bool
     highlighted: bool
     highlighted_correct: bool
@@ -1105,7 +1119,8 @@ class SealedCaseObservation:
                 raise ValueError("observation candidate rank is invalid")
         for name in (
             "wrong_context_challenge", "target_present", "profile_match",
-            "clarification_match", "model_degraded",
+            "clarification_match", "understanding_model_degraded",
+            "semantic_model_degraded", "model_degraded",
             "highlighted", "highlighted_correct", "absent_confident_error",
             "policy_match", "terminal_match", "joint_match", "no_degradation_path",
         ):
@@ -1115,6 +1130,10 @@ class SealedCaseObservation:
             raise ValueError("absent target cannot have a retrieval rank")
         if self.highlighted_correct and not self.highlighted:
             raise ValueError("correct highlight requires a highlight")
+        if self.model_degraded != (
+            self.understanding_model_degraded or self.semantic_model_degraded
+        ):
+            raise ValueError("combined model degradation does not match its stages")
         if self.first_failure_stage not in STAGES:
             raise ValueError("observation failure stage is invalid")
         _ordered_strings(self.finding_codes, "finding_codes")
@@ -1139,6 +1158,8 @@ class SealedCaseObservation:
             "observed_policy_status": self.observed_policy_status,
             "profile_match": self.profile_match,
             "clarification_match": self.clarification_match,
+            "understanding_model_degraded": self.understanding_model_degraded,
+            "semantic_model_degraded": self.semantic_model_degraded,
             "model_degraded": self.model_degraded,
             "highlighted": self.highlighted,
             "highlighted_correct": self.highlighted_correct,
@@ -1205,7 +1226,9 @@ def score_sealed_case(
     )
     policy_match = trace.policy_status in oracle.acceptable_policy_statuses
     terminal_match = trace.outcome in oracle.acceptable_terminals
-    model_degraded = trace.interpretation_status == "MODEL_DEGRADED"
+    understanding_model_degraded = trace.interpretation_status == "MODEL_DEGRADED"
+    semantic_model_degraded = trace.semantic_status == "DEGRADED"
+    model_degraded = understanding_model_degraded or semantic_model_degraded
     complete = trace.run_status == "COMPLETE"
     joint_match = complete and clarification_match and policy_match and terminal_match
     no_degradation_path = complete and not model_degraded
@@ -1248,6 +1271,8 @@ def score_sealed_case(
         "observed_policy_status": trace.policy_status,
         "profile_match": profile_match,
         "clarification_match": clarification_match,
+        "understanding_model_degraded": understanding_model_degraded,
+        "semantic_model_degraded": semantic_model_degraded,
         "model_degraded": model_degraded,
         "highlighted": highlighted,
         "highlighted_correct": highlighted_correct,
@@ -1523,7 +1548,10 @@ def public_sealed_diagnostic_aggregate(
         "source_observation_schema_version": OBSERVATION_SCHEMA_VERSION,
         "main_case_count": len(ordered),
         "understanding_model_degraded_count": sum(
-            item.model_degraded for item in ordered
+            item.understanding_model_degraded for item in ordered
+        ),
+        "semantic_model_degraded_count": sum(
+            item.semantic_model_degraded for item in ordered
         ),
         "understanding_profile_mismatch_count": sum(
             not item.profile_match for item in ordered

@@ -156,6 +156,7 @@ def _trace(
     c1_rank=1,
     r0_rank=1,
     degraded=False,
+    semantic_degraded=False,
     highlighted_node=None,
 ):
     oracle = _oracle(ref)
@@ -194,6 +195,7 @@ def _trace(
         policy_status=(
             "NONE" if absent else ("NEED_EVIDENCE" if weak_evidence else "CANDIDATES_AVAILABLE")
         ),
+        semantic_status=("DEGRADED" if semantic_degraded else "SUCCEEDED"),
         highlighted_node_id=highlighted,
         outcome=oracle.acceptable_terminals[0],
     )
@@ -310,10 +312,10 @@ class SealedContractTests(unittest.TestCase):
         _validate_schema("navigation-copilot-sealed-evaluation-manifest.v2", manifest.to_dict())
         _validate_schema("navigation-copilot-sealed-scenario.v2", scenario.to_dict())
         _validate_schema("navigation-copilot-sealed-oracle.v2", oracle.to_dict())
-        _validate_schema("navigation-copilot-sealed-trace.v1", trace.to_dict())
-        _validate_schema("navigation-copilot-sealed-observation.v1", observation.to_dict())
+        _validate_schema("navigation-copilot-sealed-trace.v2", trace.to_dict())
+        _validate_schema("navigation-copilot-sealed-observation.v2", observation.to_dict())
         _validate_schema(
-            "navigation-copilot-sealed-diagnostic-aggregate.v1",
+            "navigation-copilot-sealed-diagnostic-aggregate.v2",
             public_sealed_diagnostic_aggregate(manifest, _observations()),
         )
 
@@ -350,6 +352,16 @@ class SealedContractTests(unittest.TestCase):
 
 
 class SealedScoringTests(unittest.TestCase):
+    def test_semantic_degradation_is_not_counted_as_a_complete_model_path(self):
+        trace = _trace("N00", semantic_degraded=True)
+
+        observation = score_sealed_case(_oracle("N00"), trace)
+
+        self.assertTrue(observation.model_degraded)
+        self.assertFalse(observation.understanding_model_degraded)
+        self.assertTrue(observation.semantic_model_degraded)
+        self.assertFalse(observation.no_degradation_path)
+
     def test_scores_help_and_harm_without_changing_retrieval_denominator(self):
         oracle = _oracle("N00")
         helped = score_sealed_case(
@@ -392,6 +404,7 @@ class SealedScoringTests(unittest.TestCase):
             r0_candidate_node_ids=("node-N00",),
             c1_candidate_node_ids=(),
             policy_status=None,
+            semantic_status=None,
             highlighted_node_id=None,
             outcome=None,
         )
@@ -413,7 +426,7 @@ class SealedAggregateTests(unittest.TestCase):
         encoded = json.dumps(aggregate, sort_keys=True)
         self.assertNotIn("node-", encoded)
         self.assertNotIn("scenario_ref", encoded)
-        _validate_schema("navigation-copilot-sealed-aggregate.v1", aggregate)
+        _validate_schema("navigation-copilot-sealed-aggregate.v2", aggregate)
 
     def test_missing_repeat_round_is_inconclusive(self):
         observations = _observations()[:-1]
@@ -476,6 +489,7 @@ class SealedDiagnosticAggregateTests(unittest.TestCase):
         self.assertEqual(diagnostic["main_case_count"], 48)
         for name in (
             "understanding_model_degraded_count",
+            "semantic_model_degraded_count",
             "understanding_profile_mismatch_count",
             "product_route_mismatch_count",
             "retrieval_top8_miss_count",
@@ -524,6 +538,7 @@ class SealedDiagnosticAggregateTests(unittest.TestCase):
         )
 
         self.assertEqual(diagnostic["understanding_model_degraded_count"], 1)
+        self.assertEqual(diagnostic["semantic_model_degraded_count"], 0)
         self.assertEqual(diagnostic["understanding_profile_mismatch_count"], 1)
         self.assertEqual(diagnostic["product_route_mismatch_count"], 1)
         self.assertEqual(diagnostic["retrieval_top8_miss_count"], 1)

@@ -371,7 +371,8 @@ if draft.review_status == "NEEDS_CLARIFICATION":
 
 - 当 Navigation Copilot 需要判断候选与用户原始需求的语义关系时使用；
 - 该合同修复 v1 只携带结构意图、模型不知道用户实际需求的缺口；
-- v2 先作为隔离 feature path，不原位修改 v1，不自动切换 Workbench。
+- v2 先作为隔离 feature path，不原位修改 v1；Workbench 仅允许密封 runner 在构造服务时
+  显式选择 `semantic_contract_version="v2"`，默认产品入口仍固定为 v1。
 
 ### 2. Signatures
 
@@ -402,6 +403,9 @@ BailianNavigationSemanticProviderV2.compare(projection, tree)
 - 确定性 Policy 不因 v2 放宽：只有唯一结构兼容的 `SEMANTICALLY_EQUIVALENT` 可突出，
   其他关系只是审查证据；
 - v1 输入、草稿、Provider、回放与默认入口保持不变。
+- v2 与生产 `shadow_run_manifest` 不得共存；违反时在读取树或调用模型前以
+  `COPILOT_SEMANTIC_V2_SHADOW_FORBIDDEN` 失败关闭。密封 runner 仍复用实际 Workbench HTTP
+  流程、候选生成和 sidecar 发布，不得另写一条简化产品链路。
 
 ### 4. Validation & Error Matrix
 
@@ -430,6 +434,8 @@ BailianNavigationSemanticProviderV2.compare(projection, tree)
 - 输出必须逐项覆盖候选并能从可信来源回放；
 - canary 证明稳定 ID、hash、Oracle、动作和审批不进入模型投影；
 - v1 聚焦与完整回归保持通过。
+- b02 密封 fixture 至少有一条目标存在样本穿过实际 Workbench HTTP + Semantic v2；断言
+  隐藏 Oracle 的可接受/禁止稳定节点 ID 不进入任一模型输入。
 
 ### 7. Wrong vs Correct
 

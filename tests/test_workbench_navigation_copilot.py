@@ -20,6 +20,7 @@ from treeguard.private_io import read_private_json, write_private_json
 from treeguard.web import create_app
 from treeguard.workbench import WorkbenchService, build_tree_reference_index
 from treeguard.workbench_navigation_copilot import (
+    WorkbenchNavigationCopilotError,
     WorkbenchNavigationCopilotService,
     navigation_copilot_enabled_from_env,
     shadow_run_binding_from_env,
@@ -157,6 +158,28 @@ def _create(service):
 
 
 class WorkbenchNavigationCopilotTests(unittest.TestCase):
+    def test_semantic_v2_is_runner_only_and_rejects_production_shadow_binding(self):
+        manifest = NavigationShadowRunManifest.create(
+            run_ref="SR0001",
+            contract_commit="0" * 40,
+            provider_mode="QWEN_LIVE",
+            participant_refs=("P01", "P02", "P03"),
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            with self.assertRaises(WorkbenchNavigationCopilotError) as caught:
+                WorkbenchNavigationCopilotService(
+                    repository=FakeRepository(),
+                    sidecar_root=Path(temporary) / "sidecars",
+                    provider_factory=FakeFactory(),
+                    semantic_contract_version="v2",
+                    shadow_run_manifest=manifest,
+                    participant_ref="P01",
+                )
+        self.assertEqual(
+            caught.exception.code,
+            "COPILOT_SEMANTIC_V2_SHADOW_FORBIDDEN",
+        )
+
     def test_frozen_shadow_run_requires_disposition_and_publishes_qualification(self):
         manifest = NavigationShadowRunManifest.create(
             run_ref="SR0001",

@@ -2,7 +2,7 @@
 
 ## 状态
 
-`C2_PHASE2B_FROZEN_AWAITING_EXECUTION_MANIFEST_APPROVAL`
+`C3_PHASE2A_FROZEN_AWAITING_DATA_COMMIT_REVIEW`
 
 用户已批准并完成 C1 Phase 2A。C0 中与洗衣房节点绑定的 absence、多目标穷尽性和澄清
 收敛规则已提炼为参数化公共验证函数；C0 六份工件字节和既有结论保持不变。
@@ -320,3 +320,74 @@ Provider、Retrieval、Semantic、Policy、模型请求/响应和产品结果仍
 
 当前停止在 execution-manifest 独立批准门。未经新批准，不得生成 execution manifest、运行产品
 链路或模型实验，也不得 stage、commit、push 或 merge。
+
+## C2 执行前拒绝与 C3 规划门
+
+在提交 `cbb22e8416c10cc8de36d9ed09cc6a821b782a62` 后，按独立批准生成了权限为
+`0600` 的私有 execution manifest 和 Oracle 副本，并首次运行不带 `--execute` 的正式 runner
+preflight。preflight 在 Provider 创建和网络调用前拒绝 C2；未生成 sidecar、结果目录、模型请求、
+响应或 trace。
+
+阻塞原因为 `DATASET_PARENT_REFERENCE_CONTRACT_MISMATCH`：8/8 条错误上下文 Scenario 将树的
+稳定节点 ID（`N500xxx`）直接写入 `proposed_parent_ref`。该字段虽然满足 `N######` 形状，但运行时
+合同要求的是 `build_tree_reference_index()` 产生的临时引用（该树实际为 `N000xxx`）。因此 8 条引用
+在 `references.node_id_by_ref` 中均不存在。C2 状态固定为
+`REJECTED_PREEXECUTION_PARENT_REFERENCE_CONTRACT_MISMATCH`，不得原地修改、执行或作为资格分母；
+既有提交只保留为拒绝证据。
+
+### C3 Dataset Charter（仅规划）
+
+- dataset 继续使用完全虚构 maker-lab 语义范围；新 batch 为
+  `NAVCOP_SEALED_V3C_B03_20260817_C3`，Scenario 前缀为 `b03c3:`；
+- 精确复用未进入模型的 736 节点树原始字节；重新生成 56 条新引用候选、重新逐项 Silver 审核并
+  确定性冻结 48 条，不晋升 C2 Scenario、Oracle 或审核状态；
+- 五条弱证据继续满足唯一稳定目标与客观证据缺口；全部既有类别、42/6、8 条错误上下文和
+  16 条重复子集配额保持不变；
+- authoring 先以稳定错误父节点 ID 表达作者意图，再使用
+  `build_tree_reference_index(tree).ref_by_node_id` 生成 `proposed_parent_ref`；
+- Oracle 的 `forbidden_node_ids` 必须使用
+  `build_tree_reference_index(tree).node_id_by_ref[scenario.proposed_parent_ref]` 映射回稳定节点 ID，
+  禁止把临时引用当成 Oracle 节点身份；
+- Phase 2B 冻结前必须直接调用公开 `validate_input_collections()`，证明 48/48 Scenario、Oracle 与
+  树引用可被正式 runner 接受；data commit 后还必须运行一次无网络 CLI preflight，之后才能申请
+  模型执行批准；
+- 任一引用无法双向回放、稳定 ID 与临时 ref 混用、C1/C2 证据漂移或 Oracle 泄漏均整批停线。
+
+当前仅完成 C3 Charter。按照数据集 Skill 的回退规则，未经新的明确实施批准，不创建 C3 脚本、
+候选、Scenario、审核、Oracle、manifest 或模型请求，也不 stage、commit、push 或 merge。
+
+### C3 Phase 2A 首轮实施检查
+
+用户已批准开始 C3 Phase 2A。首轮候选正确完成了稳定节点 ID 到运行时临时引用的转换：8/8 条
+错误上下文引用均可由 `build_tree_reference_index()` 回放，0 条继续使用 `N500xxx` 作为
+`proposed_parent_ref`；736/56/48、42/6、8、16 计数及确定性测试通过，Oracle 和 execution
+manifest 仍不存在。
+
+但 check 在提交前发现首轮 builder 同时产生 Scenario 与 Silver 决定，违反 C0 已冻结的独立
+authoring → review → verification 来源合同，记录 blocking finding
+`DATASET_REVIEW_SOURCE_NOT_INDEPENDENT`。因此首轮未跟踪工件不得视为合格冻结数据、不得提交或
+进入 Phase 2B。下一轮必须拆分为三个物理模块，authoring 只产生 `PENDING` 包，review 独立绑定
+实际来源字节，verification 不导入 review 模块并负责最终选择与引用回放；完成前不调用模型。
+
+### C3 Phase 2A 三段来源修复结果
+
+不合格的单生产者工件已整体移入权限为 `0700` 的私有隔离目录，未作为新批次输入。C3 随后由
+三个物理独立模块重新生成：
+
+1. `author_phase2a.py` 只产生 blueprint、树、56 条候选和全 `PENDING` review packet；
+2. `record_phase2a_reviews.py` 不导入 authoring，绑定实际树、候选、packet 与既有 Silver 语义基础，
+   重新记录 56/56 C3 决定；
+3. `verify_phase2a.py` 不导入 review，验证来源摘要、运行时引用、审核完整性、配额和选择，冻结
+   48 条 Scenario 与聚合 preflight。
+
+冻结结果为 736 节点、0 `VALUE`、56/48、42/6、8 条错误上下文、16 条重复子集。8/8 条
+`proposed_parent_ref` 均在公开 `build_tree_reference_index()` 中可回放，0 条使用稳定 `N500xxx`
+冒充临时引用。Oracle、execution manifest、模型请求/响应与产品结果均不存在。
+
+工件摘要：blueprint `3fcb9294…366b`、tree `0d6edf17…3bd`、候选 `ec93ae38…0cff`、
+review packet `75bd760d…24c4`、Silver 决定 `8f304890…a1cf`、最终 Scenario
+`78d0955e…2e24`、preflight `a92211ec…6c46`。C0 公共合同与 C3 聚焦测试 10/10 通过，
+Trellis validate 与 `git diff --check` 通过。
+
+当前停止在 C3 data-commit 审阅门；未经新批准不得 stage、commit、进入 Phase 2B、生成 Oracle/
+execution manifest、调用模型、push 或 merge。

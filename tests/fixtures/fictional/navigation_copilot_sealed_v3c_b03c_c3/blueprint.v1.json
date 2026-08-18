@@ -1,0 +1,13 @@
+{
+  "batch_ref": "NAVCOP_SEALED_V3C_B03_20260817_C3",
+  "c2_disposition": "REJECTED_PREEXECUTION_PARENT_REFERENCE_CONTRACT_MISMATCH",
+  "dataset_ref": "navigation-copilot-sealed-v3c-b03-maker-lab-c",
+  "derived_from_real": false,
+  "fictional": true,
+  "gold_eligible": false,
+  "patch_eligible": false,
+  "schema_version": "treeguard.navigation-copilot-b03c3-blueprint.v1",
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "source_data_commit": "cbb22e8416c10cc8de36d9ed09cc6a821b782a62",
+  "source_tree_sha256": "0d6edf17accb680464343ae3e27943143049211cdb8d19df6998c9247bc7f3bd"
+}

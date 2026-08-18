@@ -1,0 +1,43 @@
+{
+  "batch_ref": "NAVCOP_SEALED_V3C_B03_20260817_C2",
+  "blocking_finding_codes": [],
+  "category_counts": {
+    "CLARIFICATION": 6,
+    "LITERAL_UNIQUE": 10,
+    "MULTI_ACCEPTABLE": 4,
+    "NONLITERAL_UNIQUE": 10,
+    "STRUCTURAL_INTERFERENCE": 8,
+    "TARGET_ABSENT": 6,
+    "WEAK_EVIDENCE": 4
+  },
+  "data_commit": "efa026d4edbb35db5fbe19a638888f481a4df6b5",
+  "dataset_ref": "navigation-copilot-sealed-v3c-b03-maker-lab-c",
+  "derived_from_real": false,
+  "execution_manifest_status": "ABSENT_NOT_APPROVED",
+  "fictional": true,
+  "freeze_report_hash": "492007043c9055ae5534a3e50f78b997dab3abbcf8eef8d4924b7ab1ba28f7a1",
+  "function_commit": "40098afe985dfc81183c928a473a2e8a3c2176dc",
+  "gold_eligible": false,
+  "model_execution_status": "NOT_RUN",
+  "oracle_count": 48,
+  "oracle_sha256": "3c3f54a7945e21f47ebff3bad3e84b8fd37b153cb749cc218cc08a7b6ab7e281",
+  "patch_eligible": false,
+  "repeat_subset": 16,
+  "scenario_count": 48,
+  "schema_version": "treeguard.navigation-copilot-b03c2-freeze-report.v1",
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "source_sha256": {
+    "blueprint.v1.json": "dabee24cf311675b0bd184f492852797c629f161242c6c32c2cec6d48ba7074a",
+    "candidate-scenarios.v2.json": "1437568f07ea6c6a01a4d25a9c103f40718e37b3a505e6404dceaabb71c1c34e",
+    "phase2a-preflight.v1.json": "adc8371d27bd6eb0d3e82c3b8fba804cfcafa40f433a27237734958f09d1ccc2",
+    "review-decisions.hidden.v1.json": "a34ca039ed74bae98dc166f6742b4cac7e3f82a212755648efd160ac09eb71d1",
+    "review-packet.v1.json": "ef1ce849444b1a9cee93c60f6a8567b15a002325ca0b79eb43a1a8f08215ac45",
+    "scenarios.v2.json": "3b52502c145e065c24418c3688e1019ee2637839279fb2ccd75d61fe9b3ef513",
+    "tree.json": "0d6edf17accb680464343ae3e27943143049211cdb8d19df6998c9247bc7f3bd"
+  },
+  "status": "C2_PHASE2B_FROZEN_AWAITING_EXECUTION_MANIFEST_APPROVAL",
+  "target_absent": 6,
+  "target_present": 42,
+  "weak_evidence": 4,
+  "wrong_context": 8
+}

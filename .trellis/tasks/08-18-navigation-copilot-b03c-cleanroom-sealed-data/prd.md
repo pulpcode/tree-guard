@@ -2,7 +2,7 @@
 
 ## 状态
 
-`C2_PHASE2A_FROZEN_AWAITING_DATA_COMMIT_REVIEW`
+`C2_PHASE2B_FROZEN_AWAITING_EXECUTION_MANIFEST_APPROVAL`
 
 用户已批准并完成 C1 Phase 2A。C0 中与洗衣房节点绑定的 absence、多目标穷尽性和澄清
 收敛规则已提炼为参数化公共验证函数；C0 六份工件字节和既有结论保持不变。
@@ -292,3 +292,31 @@ Python/JSON 语法检查和 `git diff --check`；不得运行会读取其他 sea
 
 当前停止在 data-commit 人工审阅门。未经新批准，不得 stage、commit、进入 Phase 2B、生成
 Oracle/freeze report/execution manifest、调用模型、push 或 merge。
+
+## C2 Phase 2B 实施结果
+
+用户在 Phase 2A data commit `efa026d4edbb35db5fbe19a638888f481a4df6b5` 后独立批准进入
+Phase 2B。新增独立 `verify_sealed_phase2b.py`，只读取该提交冻结的七项 Phase 2A 来源，生成：
+
+- 48 条 `navigation-copilot-sealed-oracle.v2` 隐藏 Oracle；
+- 聚合 `treeguard.navigation-copilot-b03c2-freeze-report.v1` 冻结报告；
+- 每条 `reviewed_bytes_digest` 精确绑定树原始字节、Scenario 规范字节和对应 Silver 决定规范字节。
+
+Oracle 聚合为 42 条 `TARGET_PRESENT`、6 条 `TARGET_ABSENT`、8 条错误上下文、16 条重复
+子集和 4 条弱证据。弱证据均为 `LIMIT / NEED_EVIDENCE / EXIT + null +
+PRESENT_NOT_FOUND`；澄清为 `CLARIFY / NEED_EVIDENCE`；空目标为 `PROCEED / NONE /
+REJECT_ALL + null + ABSENT`。全部结论保持 `CODEX_SILVER_REVIEWED`、`gold_eligible=false`、
+`patch_eligible=false`。
+
+工件摘要：
+
+- `hidden-oracle.v2.json`：`3c3f54a7945e21f47ebff3bad3e84b8fd37b153cb749cc218cc08a7b6ab7e281`；
+- `freeze-report.v1.json`：`c57f33c8f7144842cafcd0b7f5809e7255870bd1f4fa42e0cbe7b9fc207075dd`；
+- freeze report 自身合同摘要：`492007043c9055ae5534a3e50f78b997dab3abbcf8eef8d4924b7ab1ba28f7a1`。
+
+冻结器首次和重复运行逐字节一致；C0 公共合同与 C2 聚焦测试 18/18 通过。Phase 2A
+防 Oracle 泄漏测试保留，并改为在只含七项 Phase 2A 来源的隔离副本中回放。execution manifest、
+Provider、Retrieval、Semantic、Policy、模型请求/响应和产品结果仍不存在，也未运行完整或递归测试。
+
+当前停止在 execution-manifest 独立批准门。未经新批准，不得生成 execution manifest、运行产品
+链路或模型实验，也不得 stage、commit、push 或 merge。

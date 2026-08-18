@@ -1,0 +1,621 @@
+{
+  "background_pairing": {
+    "facet_count": 16,
+    "offsets": [
+      0,
+      3,
+      7,
+      11
+    ]
+  },
+  "batch_ref": "NAVCOP_SEALED_V3C_B03_20260817_C2",
+  "branches": [
+    {
+      "allowed_pair_count": 72,
+      "background": 50,
+      "background_pair_count": 50,
+      "background_subjects": [
+        "概念草案",
+        "协作名单",
+        "资源估算",
+        "阶段目标",
+        "成果边界",
+        "时间计划",
+        "风险备注",
+        "审核记录",
+        "联络安排",
+        "工作说明",
+        "资料附件",
+        "参与邀请",
+        "变更请求",
+        "优先顺序",
+        "依赖事项",
+        "完成条件",
+        "准备清单",
+        "归档条目"
+      ],
+      "branch_key": "project",
+      "curated": 18,
+      "curated_group_items": [
+        {
+          "group": "项目基本资料",
+          "leaves": [
+            "项目名称",
+            "项目摘要",
+            "发起目的",
+            "预计周期"
+          ]
+        },
+        {
+          "group": "项目成员安排",
+          "leaves": [
+            "发起人",
+            "协作成员",
+            "联络方式"
+          ]
+        },
+        {
+          "group": "项目资源说明",
+          "leaves": [
+            "计划工位",
+            "计划工具",
+            "材料范围"
+          ]
+        },
+        {
+          "group": "项目审核进度",
+          "leaves": [
+            "提交状态",
+            "审核意见",
+            "完成条件"
+          ]
+        }
+      ],
+      "curated_groups": [
+        "项目基本资料",
+        "项目成员安排",
+        "项目资源说明",
+        "项目审核进度"
+      ],
+      "filler": 13,
+      "label": "项目登记",
+      "total": 81
+    },
+    {
+      "allowed_pair_count": 72,
+      "background": 54,
+      "background_pair_count": 54,
+      "background_subjects": [
+        "激光台时段",
+        "打印台时段",
+        "木工台时段",
+        "焊接台时段",
+        "临时工位",
+        "共享工位",
+        "培训工位",
+        "演示工位",
+        "静音工位",
+        "组装工位",
+        "调试工位",
+        "清洁工位",
+        "摄影工位",
+        "测量工位",
+        "包装工位",
+        "备用工位",
+        "排队席位",
+        "候补时段"
+      ],
+      "branch_key": "workstation",
+      "curated": 19,
+      "curated_group_items": [
+        {
+          "group": "工位预约对象",
+          "leaves": [
+            "激光切割台预约",
+            "三维打印台预约",
+            "木工台预约",
+            "电子焊接台预约"
+          ]
+        },
+        {
+          "group": "工位预约时段",
+          "leaves": [
+            "开始时段",
+            "结束时段",
+            "预计占用时长"
+          ]
+        },
+        {
+          "group": "工位使用资格",
+          "leaves": [
+            "准入状态",
+            "培训确认",
+            "陪同要求"
+          ]
+        },
+        {
+          "group": "工位预约变更",
+          "leaves": [
+            "预约取消",
+            "预约改期",
+            "超时释放",
+            "冲突处理"
+          ]
+        }
+      ],
+      "curated_groups": [
+        "工位预约对象",
+        "工位预约时段",
+        "工位使用资格",
+        "工位预约变更"
+      ],
+      "filler": 14,
+      "label": "工位预约",
+      "total": 87
+    },
+    {
+      "allowed_pair_count": 72,
+      "background": 57,
+      "background_pair_count": 57,
+      "background_subjects": [
+        "手钻箱",
+        "热风枪盒",
+        "万用表包",
+        "雕刻刀套",
+        "扳手组",
+        "夹具架",
+        "测量尺盒",
+        "螺丝刀组",
+        "钳具盒",
+        "锉刀架",
+        "焊台附件",
+        "切割垫",
+        "压板套件",
+        "清洁刷组",
+        "备用电池",
+        "防护罩件",
+        "借用凭条",
+        "归还清单"
+      ],
+      "branch_key": "tools",
+      "curated": 20,
+      "curated_group_items": [
+        {
+          "group": "工具借用对象",
+          "leaves": [
+            "手持钻借用",
+            "热风枪借用",
+            "万用表借用",
+            "雕刻刀借用"
+          ]
+        },
+        {
+          "group": "工具借出登记",
+          "leaves": [
+            "借出时间",
+            "预计归还",
+            "领用确认",
+            "配件清单"
+          ]
+        },
+        {
+          "group": "工具归还登记",
+          "leaves": [
+            "实际归还",
+            "完好状态",
+            "缺件说明",
+            "清洁确认"
+          ]
+        },
+        {
+          "group": "工具异常处理",
+          "leaves": [
+            "逾期处理",
+            "损坏报告",
+            "遗失报告"
+          ]
+        }
+      ],
+      "curated_groups": [
+        "工具借用对象",
+        "工具借出登记",
+        "工具归还登记",
+        "工具异常处理"
+      ],
+      "filler": 15,
+      "label": "工具借还",
+      "total": 92
+    },
+    {
+      "allowed_pair_count": 72,
+      "background": 53,
+      "background_pair_count": 53,
+      "background_subjects": [
+        "薄木板",
+        "透明板",
+        "软木片",
+        "铜线卷",
+        "彩色线束",
+        "水性涂料",
+        "固定螺钉",
+        "连接螺母",
+        "泡棉片",
+        "纸板张",
+        "布料卷",
+        "胶条盒",
+        "砂纸包",
+        "扎带袋",
+        "磁片组",
+        "模型泥",
+        "清洁布",
+        "包装膜"
+      ],
+      "branch_key": "materials",
+      "curated": 19,
+      "curated_group_items": [
+        {
+          "group": "材料分类登记",
+          "leaves": [
+            "板材登记",
+            "线材登记",
+            "涂料登记",
+            "紧固件登记"
+          ]
+        },
+        {
+          "group": "材料库存管理",
+          "leaves": [
+            "当前余量",
+            "安全余量",
+            "补充申请"
+          ]
+        },
+        {
+          "group": "材料领用登记",
+          "leaves": [
+            "领用数量",
+            "用途说明",
+            "领用人"
+          ]
+        },
+        {
+          "group": "剩余材料处理",
+          "leaves": [
+            "剩余材料",
+            "回收分类",
+            "存放位置",
+            "处置状态"
+          ]
+        }
+      ],
+      "curated_groups": [
+        "材料分类登记",
+        "材料库存管理",
+        "材料领用登记",
+        "剩余材料处理"
+      ],
+      "filler": 14,
+      "label": "材料管理",
+      "total": 86
+    },
+    {
+      "allowed_pair_count": 72,
+      "background": 59,
+      "background_pair_count": 59,
+      "background_subjects": [
+        "激光镜片",
+        "打印喷头",
+        "排风滤网",
+        "焊台烙铁",
+        "运动导轨",
+        "平台底板",
+        "急停按钮",
+        "电源模块",
+        "温控探头",
+        "冷却回路",
+        "照明组件",
+        "控制面板",
+        "门锁开关",
+        "接地线路",
+        "传动皮带",
+        "除尘管路",
+        "校准治具",
+        "维修工单"
+      ],
+      "branch_key": "maintenance",
+      "curated": 21,
+      "curated_group_items": [
+        {
+          "group": "设备维护对象",
+          "leaves": [
+            "激光切割机维护",
+            "三维打印机维护",
+            "排风设备维护",
+            "焊接设备维护"
+          ]
+        },
+        {
+          "group": "设备维护计划",
+          "leaves": [
+            "维护周期",
+            "下次维护",
+            "责任人员",
+            "停机窗口"
+          ]
+        },
+        {
+          "group": "设备维护执行",
+          "leaves": [
+            "检查清单",
+            "更换部件",
+            "校准记录",
+            "完成时间"
+          ]
+        },
+        {
+          "group": "设备故障处置",
+          "leaves": [
+            "故障现象",
+            "影响范围",
+            "临时措施",
+            "恢复状态"
+          ]
+        }
+      ],
+      "curated_groups": [
+        "设备维护对象",
+        "设备维护计划",
+        "设备维护执行",
+        "设备故障处置"
+      ],
+      "filler": 16,
+      "label": "设备维护",
+      "total": 96
+    },
+    {
+      "allowed_pair_count": 72,
+      "background": 55,
+      "background_pair_count": 55,
+      "background_subjects": [
+        "结构样件",
+        "外观样件",
+        "装配样件",
+        "测试样件",
+        "展示样件",
+        "尺寸样件",
+        "材料试片",
+        "连接试件",
+        "功能模型",
+        "纸面模型",
+        "打印模型",
+        "切割模型",
+        "焊接试件",
+        "涂装试片",
+        "包装样稿",
+        "返工样件",
+        "待领样件",
+        "留存样件"
+      ],
+      "branch_key": "sample",
+      "curated": 19,
+      "curated_group_items": [
+        {
+          "group": "样件身份登记",
+          "leaves": [
+            "样件名称",
+            "关联项目",
+            "制作批次"
+          ]
+        },
+        {
+          "group": "样件加工状态",
+          "leaves": [
+            "待加工",
+            "加工中",
+            "待检验",
+            "已完成"
+          ]
+        },
+        {
+          "group": "样件存放管理",
+          "leaves": [
+            "临时存放位",
+            "保留期限",
+            "认领方式"
+          ]
+        },
+        {
+          "group": "样件后续处置",
+          "leaves": [
+            "返工要求",
+            "报废申请",
+            "移交准备",
+            "照片记录"
+          ]
+        }
+      ],
+      "curated_groups": [
+        "样件身份登记",
+        "样件加工状态",
+        "样件存放管理",
+        "样件后续处置"
+      ],
+      "filler": 14,
+      "label": "样件处理",
+      "total": 88
+    },
+    {
+      "allowed_pair_count": 72,
+      "background": 62,
+      "background_pair_count": 62,
+      "background_subjects": [
+        "入口通道",
+        "疏散出口",
+        "设备护罩",
+        "主电源箱",
+        "局部排风",
+        "急停回路",
+        "护目镜架",
+        "防护手套",
+        "听力护具",
+        "防尘口罩",
+        "高温区域",
+        "粉尘区域",
+        "锐器存放",
+        "用电区域",
+        "漏液点位",
+        "异响点位",
+        "冒烟点位",
+        "停机记录"
+      ],
+      "branch_key": "safety",
+      "curated": 22,
+      "curated_group_items": [
+        {
+          "group": "安全检查范围",
+          "leaves": [
+            "消防通道检查",
+            "护罩检查",
+            "电源检查",
+            "通风检查",
+            "急停检查"
+          ]
+        },
+        {
+          "group": "个人防护确认",
+          "leaves": [
+            "护目镜确认",
+            "手套确认",
+            "耳罩确认",
+            "口罩确认"
+          ]
+        },
+        {
+          "group": "作业风险识别",
+          "leaves": [
+            "高温风险",
+            "粉尘风险",
+            "锐器风险",
+            "用电风险"
+          ]
+        },
+        {
+          "group": "安全事件报告",
+          "leaves": [
+            "漏液报告",
+            "异响报告",
+            "冒烟报告",
+            "紧急停机"
+          ]
+        }
+      ],
+      "curated_groups": [
+        "安全检查范围",
+        "个人防护确认",
+        "作业风险识别",
+        "安全事件报告"
+      ],
+      "filler": 17,
+      "label": "安全检查",
+      "total": 101
+    },
+    {
+      "allowed_pair_count": 72,
+      "background": 66,
+      "background_pair_count": 66,
+      "background_subjects": [
+        "结构成果",
+        "电子成果",
+        "打印成果",
+        "切割成果",
+        "装配成果",
+        "展示成果",
+        "测试成果",
+        "图纸附件",
+        "参数附件",
+        "检验附件",
+        "使用附件",
+        "包装附件",
+        "接收清单",
+        "交接凭条",
+        "版本记录",
+        "完成记录",
+        "收尾清单",
+        "遗留说明"
+      ],
+      "branch_key": "handoff",
+      "curated": 21,
+      "curated_group_items": [
+        {
+          "group": "成果基本资料",
+          "leaves": [
+            "成果名称",
+            "关联成果项目",
+            "版本说明",
+            "完成摘要"
+          ]
+        },
+        {
+          "group": "成果接收安排",
+          "leaves": [
+            "接收人员",
+            "接收方式",
+            "约定时间",
+            "确认状态"
+          ]
+        },
+        {
+          "group": "成果附件说明",
+          "leaves": [
+            "图纸清单",
+            "参数说明",
+            "检验记录",
+            "使用说明"
+          ]
+        },
+        {
+          "group": "成果收尾事项",
+          "leaves": [
+            "工位归还",
+            "工具归还",
+            "余料交接",
+            "未结事项"
+          ]
+        }
+      ],
+      "curated_groups": [
+        "成果基本资料",
+        "成果接收安排",
+        "成果附件说明",
+        "成果收尾事项"
+      ],
+      "filler": 17,
+      "label": "成果交接",
+      "total": 104
+    }
+  ],
+  "c1_disposition": "REJECTED_PREEXECUTION_ORACLE_CONTRACT_MISMATCH",
+  "dataset_ref": "navigation-copilot-sealed-v3c-b03-maker-lab-c",
+  "derived_from_real": false,
+  "domain_ref": "FICTIONAL_MAKER_LAB_OPERATIONS",
+  "fictional": true,
+  "filler_policy": "STRESS_ONLY_NOT_TARGETABLE",
+  "function_commit": "40098afe985dfc81183c928a473a2e8a3c2176dc",
+  "gold_eligible": false,
+  "namespace": "urn:treeguard:fictional:navigation-copilot:b03:maker-lab:v1",
+  "patch_eligible": false,
+  "schema_version": "treeguard.navigation-copilot-b03c2-blueprint.v1",
+  "selection_algorithm": "treeguard.navigation-copilot-b03c2-slot-selection.v1",
+  "selection_seed": 2026081791,
+  "source_class": "CLEANROOM_SYNTHETIC",
+  "source_data_commit": "70675601e3d53649bee440935199f4cf9fbf3ff0",
+  "source_tree_sha256": "0d6edf17accb680464343ae3e27943143049211cdb8d19df6998c9247bc7f3bd",
+  "target": {
+    "background": 456,
+    "curated": 160,
+    "filler": 120,
+    "nodes": 736,
+    "value_envelope_count": 0
+  },
+  "tree_seed": 2026081743
+}

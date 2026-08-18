@@ -1,0 +1,2052 @@
+[
+  {
+    "acceptable_node_ids": [
+      "N500004"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500004"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "LITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [
+      "N500549"
+    ],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "ae68713a7bba17bfd74bc030789a031b69840d240b8c5f4554d415b6fbc3b902",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "ea64c5f8e52d87c5d699213fcf56bf4682a49381da419b8e6ff5d26c990bcce0",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "53b30d5d5d7ba60d9d9ea5453234b873f7b7a4bf199f3b00acc4f85c92bd16bf",
+    "scenario_ref": "b03c3:001",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": true
+  },
+  {
+    "acceptable_node_ids": [
+      "N500098"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500098"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "LITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "ab14603e169245f6668cfa1960f2266e6d554f783b082a69ea0a8d8a8ca9d242",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "f26af6e6c61c165d396081924e7779a3a014dfac70209c720e1d57f95a775549",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "cc227a81c4297f679ed67aeb521262ad03615c55b8cb9da4329324d7d3024d5b",
+    "scenario_ref": "b03c3:002",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500182"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500182"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "LITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [
+      "N500003"
+    ],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "55f797627c89747f834161d6709c758af3f3eb7b4de58c342153a5ebd8ea806a",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "3bb3eae8e672399ac9f0cfe79828205010b2fa17bf977679987080254871c1e9",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "4c9615cae07b04e3fa9a327092259250f63041b9be1b882c5f09245b5b8b0a10",
+    "scenario_ref": "b03c3:003",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": true
+  },
+  {
+    "acceptable_node_ids": [
+      "N500269"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500269"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "LITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "d2cadade779d5b31cceb703f05616972d53b58e10da41e6f79dc5d863f7ab7bc",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "b9598c93f19fd840dbfbd1337d7713eafc9dfb8ea4d73f36a4ae4ab8b44da5de",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "29bb2bcece457714b868ee82c9bd1bacf3a2d8a3d92e224da68d01cbf44cc9b7",
+    "scenario_ref": "b03c3:004",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500363"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500363"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "LITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "a6dba6e86fe6206aba35010dc43309dc39ba9ff62187e57858a8765bb104f404",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "70a815266a0b0cfcdd959eabbc6fbffbe5c9615e6de869c4028253bc33c790de",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "17474c5feea9af2fc83918e83795d3f0620a00cce33e0a5df2c141a28823d0dd",
+    "scenario_ref": "b03c3:005",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500456"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500456"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "LITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "c4958d09cafa8265050f38494e66384ce6fe8039af3d9d5d91a57fc33b89410d",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "2e74f4828d1de9866072cdb09e2888db81530b73490a769899319957cb4e6050",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "064190553c7148fc225687f4ec4af86bc16e3e04f8ecaaa99bef3bbaeb7cec4a",
+    "scenario_ref": "b03c3:006",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500534"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500534"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "LITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "364f1bb61d51ac7654333652812f55ee9ffefe83647b9aaf6776c2e752ec97ba",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "7f9ef32c87dcb361fa0162ef5223d0aadc257cdc5731c0408207d6af25e21a25",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "5ce467c9511c8962c7e9e03fb41da4054133467636683aff01c4231af555650f",
+    "scenario_ref": "b03c3:007",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500637"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500637"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "LITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "8fc9ae157c4f2917e5ac1489045cd147f6633ccf9adf7ccee7cfc4f16aafc0f9",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "8a70161796104ddb32b6fe3e5c555d28e95856a2acc0773934db28376a8f767d",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "51a3183668a1c564754a49d873095f380e9b73fd203d8715956244b39b65efca",
+    "scenario_ref": "b03c3:008",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500174"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500174"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "LITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "1ccec4ad75522360ea85f6ad6448183347eee0a668b41e208b8ea57832ad2cbe",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "8afa926449ab674194f0bbb60ae53a74588b440fd9d9e5a2c9f8db3a5ccd775e",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "debe2272db6cbf87be166fddfb2792c5094daaaf3193e5bc09559e29f2366564",
+    "scenario_ref": "b03c3:009",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500018"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500018"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "LITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "8edf82c6a2e9f5bfc127ce8810619e82d11d3aadf3f837eb600028687cc4588a",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "7e6b1ef6925573fda0eae47367b49994bef06f4a718359fc56504bf2f2428806",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "095339bec4dab1dd897955c7efc6bdc5a9365ebc51f0be1d0df0e86db4ece937",
+    "scenario_ref": "b03c3:010",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500086"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500086"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "NONLITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [
+      "N500263"
+    ],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "03b86e9b214bef57add77a9a77407c60561e6de66d7426be279de6edde54b76f",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "0fb0c7e9bfea6821a71f6b8738428d15b2af43024e5e19348b9869fb58e3c438",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "df88b8697604007ac46d1cd6d9f3abfb3fc085f0ad41a2155bd29c3d8b97255c",
+    "scenario_ref": "b03c3:012",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": true
+  },
+  {
+    "acceptable_node_ids": [
+      "N500350"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500350"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "NONLITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "3c8db06cacf43180d207e9ecbe3916dfa284d8aed560d2b10cfc6d0aeb52aa97",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "690bac6d056549807b372669f19b5ef747ffea4642a27380986af4989cef4982",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "0168c9a5d66def1fd1f1933b7a05398b29f9796f65a675ac1000fb7c8ae37b62",
+    "scenario_ref": "b03c3:013",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500098"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500098"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "NONLITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "9cdb60b7c74c8d75b15f26ba798044a4801f4a98adba1e922b79eca001949882",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "506c3d9b1b7f95e36aa10d07118f881d79dbcb5485b0d785b04522c3a65fea7a",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "680ded0e983050817838347d8a81ae44e12e5fe5330e8c81e86e866101af777c",
+    "scenario_ref": "b03c3:014",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500182"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500182"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "NONLITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [
+      "N500644"
+    ],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "8e83659ac4f52680a522416dda0effc31e006840f02e68dcb34f32b85d25accc",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "84c5c45bc6044ae110c23bbe7c9afd8d68ecb12c690dda7cf4c0fb9e0acae930",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "1a2ed43fccbac31ef72c3c9f1af4cb038c192aa41b1186e124a5ff4722fc829b",
+    "scenario_ref": "b03c3:015",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": true
+  },
+  {
+    "acceptable_node_ids": [
+      "N500355"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500355"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "NONLITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "1c5a7eb8b1fda4a16da389f07ce68e5f8a7482629da0f9fad48661bd406a70fc",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "5726898adbecbf8a4f389419f3c2e08f606ebef0cc0e5db8809c54227988740d",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "3782aec35ec0458d7e9a04601376cb7c4ee1e3d4a59071123a2df8d52b584c01",
+    "scenario_ref": "b03c3:016",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500356"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500356"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "NONLITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "09ce354297829d75b7ef944492ddcc297b72ae354f4a3178960c0eab995037da",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "4cd601bcbeb755adf1f2e65412b11895881a930315e0482fbd56a7f7d232aeba",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "6b2e3fa6b6410c2c440dd7fe6358ad96426640faeb6cab3616b5f25028318653",
+    "scenario_ref": "b03c3:017",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500015"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500015"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "NONLITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "fd48668bac3fd4b61075797e75b8bd951d98f0a72a00573ace0952370b2e1190",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "31091cb8324757385e4975e52c669d6a40536c37b2abdeab2dc66c48b506bb0c",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "f27623d4da65127d9e88c9d2ea1acee8aea58bac673b584a4bb56807e1cc1298",
+    "scenario_ref": "b03c3:018",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500640"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500640"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "NONLITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "7938474002b6b13c7541b80c9ae84a77ab2ddf29ef088a20ac25f718a1df75b6",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "d86e939578674e7e8c8eb0f8112de2a6a750c9b567c5430a21dee04d439284af",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "0b1ad1f12302fa6ccc7526df5f8e096a85ed855a8fa81f3e5b86c5d1d0d5c239",
+    "scenario_ref": "b03c3:019",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500174"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500174"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "NONLITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "03058d1d933831fb0271de4d595be5d75b1cfce619c9272876f67cd2b2859c89",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "7fadfa6fb1e3f83d5103f7cad56b5bc62095a3f62535392ae1fa54965a690dec",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "a690dc7dae8fa62155e29cf565943f817c5b2cba5690332d184c9e0924553842",
+    "scenario_ref": "b03c3:020",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500540"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500540"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "NONLITERAL_UNIQUE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "957c68e355d7d18a0b3a186c39923b2646ae6f358f3da64da02a4cd97c0a3ae4",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "a99b3a00f52af7114002edc86fb9a501b4a73126541dbe80b64df29c07bf6061",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "93e4682ab54ad34d37728458f1155b491b641cadf73601f8ad0706df732a4942",
+    "scenario_ref": "b03c3:021",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500019"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500019"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "STRUCTURAL_INTERFERENCE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [
+      "N500539"
+    ],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "d394ec9b46f023949fc82ffc3b31e7b42839897a334f03b70f510d3750cba619",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "eb909d68e954596014c904e88dafd59266a8d1430b4382f850725775610082fd",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "12906c757224010268da62b18cde02746834ea5ac331c0e5cf07bfc04569deb4",
+    "scenario_ref": "b03c3:024",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": true
+  },
+  {
+    "acceptable_node_ids": [
+      "N500368"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500368"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "STRUCTURAL_INTERFERENCE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "642494841b83b513a8073d37ef8965fe3a752a9b200a57267eb36d3c7fa7a5a2",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "48e2f76cd72c5c91d493ff2286eb0164e0f25e03a4a5555a65b8ae8a3c2a76dd",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "2aba851bef66d74d1ba350ed68d85926024d3179414891d917fb7c64e26785d9",
+    "scenario_ref": "b03c3:025",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500447"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500447"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "STRUCTURAL_INTERFERENCE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [
+      "N500089"
+    ],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "10a5d5bc4f3f6475c67d36dedb5f2bcdaf785da3b64ff6577842866657305b1b",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "1b5425107dcb7470dadbfd0b6323e091cc466f6abc1bbd6e4e742973c7fc2e94",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "cc375cb33a57683f59645761b50b6864cf5794236a2b5a1f06727825b3efc909",
+    "scenario_ref": "b03c3:026",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": true
+  },
+  {
+    "acceptable_node_ids": [
+      "N500274"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500274"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "STRUCTURAL_INTERFERENCE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "dae5a7eaeb02f19c9bbe342dace3a955b18653b73055e6cd22fef5639c023025",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "0d4b40601b1f28cd782d3290c4297a9bc868c5cd3380a1a094bbf05b77576c9a",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "8f4917707f0f2bdfb7421ed886fce6cd72afe9cd84fcda19032f0b35d86501ae",
+    "scenario_ref": "b03c3:027",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500357"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500357"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "STRUCTURAL_INTERFERENCE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "dc19d303bdd071ae16a1f4b23e9e388ec4154d7b78f7cb8adb3511dad2eb5c97",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "71721aaf680889456754e22bf884cc3ca4b15a9b5013f53f6fb8f6ed0a75f7d7",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "8b6be6e2a3ca3f5ef2bb37083e55e4a858d9b9c646d7fafc79e24a108e4eec6d",
+    "scenario_ref": "b03c3:028",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500643"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500643"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "STRUCTURAL_INTERFERENCE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "9730eb9b213296c8d08a2b7cdabc03b042011c3380fc5dec44a69d9eeb75cd8c",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "cc593e7bbe5588b2dbefe80df28c6386c974aa0024f6b6fd7a4ff080aaf583da",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "a4d070c4e27d4b88f96cb22098ea0dc9372237bebf31c18c861d1763157bda0f",
+    "scenario_ref": "b03c3:029",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500551"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500551"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "STRUCTURAL_INTERFERENCE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "f791a09ee431cb6c991e7576027b32383689a9deba5afae3121fe8711dfccc29",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "35496b55edfe722b013fc96fd79aa929105ed0ead5344ebeb24e53b741a062a7",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "80d1e2cf553ebaeb406f537e8d6783bf72c2c42512517e3febd1d0ce3b2f9144",
+    "scenario_ref": "b03c3:030",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500183"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500183"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "STRUCTURAL_INTERFERENCE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "93956428d0a80b57167c80ef8860993f08097f0b3736e0790e1ce923fa61cfa4",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "c75e108370759e91e70283729fd040b3c2127f7cae53ae0eba96830f5176373a",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "82d7aa9fcbde7ce05d617e50e4d85050f1ce10a093a655172b81bf04ab9c2f02",
+    "scenario_ref": "b03c3:031",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500085",
+      "N500086",
+      "N500087",
+      "N500088"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "MULTIPLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500085"
+      },
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500086"
+      },
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500087"
+      },
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500088"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "MULTI_ACCEPTABLE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "01c19c5d518993f3149996ce3e61cefe44d6f9fea3966cb44d678e89ecc394a7",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "a57cf416e8485ce7fbfd9012f5c94c7b182765ce21364e35461d18b63a454334",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "f4d893c6fdf9ab3ada351aa6dc9c2018570396b4edbde0ea95097d373bc22af6",
+    "scenario_ref": "b03c3:034",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500350",
+      "N500351",
+      "N500352",
+      "N500353"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "MULTIPLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500351"
+      },
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500352"
+      },
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500350"
+      },
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500353"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "MULTI_ACCEPTABLE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "3a537d1200814f544f08574daa42289450cb767ff3e2869eea18b18b2210b760",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "594506cba2c19d9a39bddc3d7e2b366da70bf33992b57d92f305f6399aa3b419",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "871c09155dca872a0d100a69f4e807dae66b03fc489c2a4df46bb877ce3cefe2",
+    "scenario_ref": "b03c3:035",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500534",
+      "N500535",
+      "N500536",
+      "N500537",
+      "N500538"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "MULTIPLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500536"
+      },
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500535"
+      },
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500537"
+      },
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500534"
+      },
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500538"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "MULTI_ACCEPTABLE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "f6371adc90d36f2da0061781352394c0bc6bada7d11cc58f581648a4c7e390bc",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "dafee5da7c98fb392541327bff29f0b2d664738901406e0580ebb653e3c6139a",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "68c865fe15dbbe3834dc79603e96d5c23305ca6184f728109985a011f764f53f",
+    "scenario_ref": "b03c3:036",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500645",
+      "N500646",
+      "N500647",
+      "N500648"
+    ],
+    "acceptable_policy_statuses": [
+      "CANDIDATES_AVAILABLE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "MULTIPLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500648"
+      },
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500647"
+      },
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500645"
+      },
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500646"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "MULTI_ACCEPTABLE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "9d7a1f92285852a2645c4f260030a8445bda55ef8132f132fda38677abdafdea",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "b430b9a8d5a97f595414f437384022143861afb6aa4112600cdbb61f5d5bc748",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "f56ad59b8d23ea45d2f0e4c2458ed63175e282b10f9734ce13c6f10bda93903c",
+    "scenario_ref": "b03c3:037",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500086"
+    ],
+    "acceptable_policy_statuses": [
+      "NEED_EVIDENCE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "UNKNOWN",
+        "node_kind": "UNKNOWN",
+        "value_type": null
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500086"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "CLARIFICATION",
+    "clarification_policy": "CLARIFICATION_REQUIRED",
+    "execution_eligible": true,
+    "expected_route": "CLARIFY",
+    "forbidden_node_ids": [
+      "N500549"
+    ],
+    "frozen_clarification_answer": "我要预约三维打印台。",
+    "gold_eligible": false,
+    "oracle_hash": "15aa6a251f4b98c772aa49657b63362d139a99f6f79b0178ed77f5781f1ec8f5",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "2ed56d4536da94e5ef1f127b17cec90621bf4da06071ef8a3ddd274392611d93",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "c1f4ab1d290b6a01412387c7339f90c30cc475c491170870d3d33f74e9a8337b",
+    "scenario_ref": "b03c3:038",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": true
+  },
+  {
+    "acceptable_node_ids": [
+      "N500174"
+    ],
+    "acceptable_policy_statuses": [
+      "NEED_EVIDENCE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "UNKNOWN",
+        "node_kind": "UNKNOWN",
+        "value_type": null
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500174"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "CLARIFICATION",
+    "clarification_policy": "CLARIFICATION_REQUIRED",
+    "execution_eligible": true,
+    "expected_route": "CLARIFY",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": "我要借万用表。",
+    "gold_eligible": false,
+    "oracle_hash": "1295c915637e4b561d6fcc39d7fc3ffcd8ff8f5484a4b9bd7497e1ace06aed6b",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "a5b8c2503bab2d578eeb3653bb00463693a586ac79cf7b88fced77a3638810f7",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "22ce8c1f11a1dd3bd2ce59ff1ee6c8334f128f89eef2bfe9bbaf95da3e5109a8",
+    "scenario_ref": "b03c3:039",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500266"
+    ],
+    "acceptable_policy_statuses": [
+      "NEED_EVIDENCE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "UNKNOWN",
+        "node_kind": "UNKNOWN",
+        "value_type": null
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500266"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "CLARIFICATION",
+    "clarification_policy": "CLARIFICATION_REQUIRED",
+    "execution_eligible": true,
+    "expected_route": "CLARIFY",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": "我要登记涂料。",
+    "gold_eligible": false,
+    "oracle_hash": "551e637431d0eec282c283416bc3be9d67e214afa54be887afba4ab6e0a753c9",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "fcb25ad6b07de610b9be34fe8c23a688007efbfa6fc67599d7be11e61958b789",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "b69a5c62051fdd8fb4797ebecdef837b27ed882159f8eac13412a44a2cb8b5d2",
+    "scenario_ref": "b03c3:040",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500552"
+    ],
+    "acceptable_policy_statuses": [
+      "NEED_EVIDENCE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "UNKNOWN",
+        "node_kind": "UNKNOWN",
+        "value_type": null
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500552"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "CLARIFICATION",
+    "clarification_policy": "CLARIFICATION_REQUIRED",
+    "execution_eligible": true,
+    "expected_route": "CLARIFY",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": "设备正在冒烟。",
+    "gold_eligible": false,
+    "oracle_hash": "83e3a2f9d1718e4732f8a4e8cc6dcb4a50f53b3561a962203313df2eb77b9258",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "a44471b55bbb91755e2ed77e5d9bd77ca96c1cf717d62b1ae77541a86b72a05b",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "517bfad52e2b4704dd1f9e66e51ff1c61b35e5afcb1e2dfe45fcdb32acf5c0bb",
+    "scenario_ref": "b03c3:041",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500460"
+    ],
+    "acceptable_policy_statuses": [
+      "NEED_EVIDENCE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "UNKNOWN",
+        "node_kind": "UNKNOWN",
+        "value_type": null
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500460"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "CLARIFICATION",
+    "clarification_policy": "CLARIFICATION_REQUIRED",
+    "execution_eligible": true,
+    "expected_route": "CLARIFY",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": "这个样件需要报废。",
+    "gold_eligible": false,
+    "oracle_hash": "6109da88f60a0a1bf6da6c41315b69bf5c2518753bdfc56acf000d777112f73c",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "221bf0a8cf6b45c436dcc558c870ba5abd99d24054f28adc25f281b778d3012f",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "e9d2ac25e72d1db0de1e9791ec23340d542a716388ed834bfd2cdca96bb6065a",
+    "scenario_ref": "b03c3:042",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500182"
+    ],
+    "acceptable_policy_statuses": [
+      "NEED_EVIDENCE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "UNKNOWN",
+        "node_kind": "UNKNOWN",
+        "value_type": null
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "SELECT_CANDIDATE",
+        "target_disposition": "FOUND_TOP8",
+        "target_node_id": "N500182"
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "CLARIFICATION",
+    "clarification_policy": "CLARIFICATION_REQUIRED",
+    "execution_eligible": true,
+    "expected_route": "CLARIFY",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": "借来的工具已经归还。",
+    "gold_eligible": false,
+    "oracle_hash": "adf0d1548701d5bc471bcaa8ea400374058936a2aba1ddd1e50ba284c3ab9891",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "6747683d63f179dfd307dc820c18b356ef5a4cc2eb186e858da5417fa7e5c59c",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "af7901ebcc6b993f7e67423c749b8ff796a97947c741c91e59b8cea77ac26d31",
+    "scenario_ref": "b03c3:043",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500086"
+    ],
+    "acceptable_policy_statuses": [
+      "NEED_EVIDENCE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "UNKNOWN",
+        "node_kind": "UNKNOWN",
+        "value_type": null
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "EXIT",
+        "target_disposition": "PRESENT_NOT_FOUND",
+        "target_node_id": null
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "WEAK_EVIDENCE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "LIMIT",
+    "forbidden_node_ids": [
+      "N500171"
+    ],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "2618d5c035ba8d115fac93ecd292fa67ad3b973e227e9466a0f7ef771a09f5e4",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "ad7439a51819a5949116a1a69ab4670acf86d36210106cc07b276de3da2687ff",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "7d7f13f93db5a835b4c7cd464542d42381f1637296a53e8fec336cca921e6343",
+    "scenario_ref": "b03c3:045",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": true
+  },
+  {
+    "acceptable_node_ids": [
+      "N500350"
+    ],
+    "acceptable_policy_statuses": [
+      "NEED_EVIDENCE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "UNKNOWN",
+        "node_kind": "UNKNOWN",
+        "value_type": null
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "EXIT",
+        "target_disposition": "PRESENT_NOT_FOUND",
+        "target_node_id": null
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "WEAK_EVIDENCE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "LIMIT",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "f8c9a1d8c882f2001481c6037debf1770fa1fecfe0de9051a4361c3a7675c4ce",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "6f0ff7cff28c6a96f7a586ba359c953df285d96cae07643a250363915b79ee13",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "eb14633262485e073b188c27995144eeb958a148a3eb0e66c92a2bede9e55108",
+    "scenario_ref": "b03c3:046",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500266"
+    ],
+    "acceptable_policy_statuses": [
+      "NEED_EVIDENCE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "UNKNOWN",
+        "node_kind": "UNKNOWN",
+        "value_type": null
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "EXIT",
+        "target_disposition": "PRESENT_NOT_FOUND",
+        "target_node_id": null
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "WEAK_EVIDENCE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "LIMIT",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "a188cbfa67bb44421aca0925da032b670b0c47d9261073d069a434a6adb8197e",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "86aa54ad3b712f319d1623e67fc6eb6e02f674ac24aa6ea8b685077ccb7c4d4f",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "a868419d1e174fa2f4af161faf55eb054b5948148524bbc71743cc9f0091467c",
+    "scenario_ref": "b03c3:047",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [
+      "N500456"
+    ],
+    "acceptable_policy_statuses": [
+      "NEED_EVIDENCE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "UNKNOWN",
+        "node_kind": "UNKNOWN",
+        "value_type": null
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "EXIT",
+        "target_disposition": "PRESENT_NOT_FOUND",
+        "target_node_id": null
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "WEAK_EVIDENCE",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "LIMIT",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "3aabb84022231b07448ca32d672f7d1e497fb79a28ec431c18fe755cfaf0ec3c",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "7ae3737198c3fdb152b60b29b6b5fc24fddd55029ee0d7f1f4a4a953107c3b58",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "126f87f4baef653661fe755f6efa92c129a4c23072ab53232ab9a5bdcdb1bccf",
+    "scenario_ref": "b03c3:048",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_PRESENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [],
+    "acceptable_policy_statuses": [
+      "NONE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "REJECT_ALL",
+        "target_disposition": "ABSENT",
+        "target_node_id": null
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "TARGET_ABSENT",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "d24a1961e8c00bca8695fd6504f73d68d45e3f122f1781dbd4909140508279f1",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "23cca9ea609e426cd10c66f9da10d1cc3657ac3f727065e3665483cb7de59976",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "5d25001104b363f667ba7c9a4ff59a73c386ed438349306e31a97d21bbd3b29e",
+    "scenario_ref": "b03c3:050",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_ABSENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [],
+    "acceptable_policy_statuses": [
+      "NONE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "REJECT_ALL",
+        "target_disposition": "ABSENT",
+        "target_node_id": null
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "TARGET_ABSENT",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "1e1faa00499a8a66b8f4721e71fff0fbc1c992ee502e4aa8c9f5171b82548110",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "af67a44e3b2bd25806965f0b173ae78eede5295fc7ac3d0c1ca4b2c9d57f1bcc",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "2c0aebc362114dc7794fa9289b626f3ea6a18900ddb213dc304cd623653d9ea2",
+    "scenario_ref": "b03c3:051",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_ABSENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [],
+    "acceptable_policy_statuses": [
+      "NONE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "REJECT_ALL",
+        "target_disposition": "ABSENT",
+        "target_node_id": null
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "TARGET_ABSENT",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "268befc0dd1b31c730999d5355000be49e1da2143d9093b1350ded08b53814c5",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "718d9743a4aed04c1a4971926b26cc7e86dea30dde06f6568a7c8701c9a97e3f",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "e78a4e21e576ac9861af9f15ae38872d1f941d7741b751968b72716f7ab9e8a0",
+    "scenario_ref": "b03c3:052",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_ABSENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [],
+    "acceptable_policy_statuses": [
+      "NONE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "REJECT_ALL",
+        "target_disposition": "ABSENT",
+        "target_node_id": null
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "TARGET_ABSENT",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "5b088f0ef64f856fe42d6761a071a08781dd371db614dd71cd940c6cf255ee12",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "a4bff00ddd8a5431b6e52772116dd837c27a4ba3611f071bceb871bffd93c40f",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "84faec2b8a50469b82ef86ca466f318268f2687f914302eb5b3ba8cba0626fa5",
+    "scenario_ref": "b03c3:053",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_ABSENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [],
+    "acceptable_policy_statuses": [
+      "NONE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "REJECT_ALL",
+        "target_disposition": "ABSENT",
+        "target_node_id": null
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "TARGET_ABSENT",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "48131aba892c12974e6266f60f177be1778414e1f30ea98598b87955e8700f5b",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "37a3141a2747f86287cd0fa6f5b11fcbdb497f7bf1ec1250663fd91adf9f916e",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "76064b93d595c2d11fa5d3bb8e42b94143e6ed4117635024753588399e115933",
+    "scenario_ref": "b03c3:054",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_ABSENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  },
+  {
+    "acceptable_node_ids": [],
+    "acceptable_policy_statuses": [
+      "NONE"
+    ],
+    "acceptable_profiles": [
+      {
+        "cardinality": "SINGLE",
+        "node_kind": "PROPERTY",
+        "value_type": "string"
+      }
+    ],
+    "acceptable_terminals": [
+      {
+        "action": "REJECT_ALL",
+        "target_disposition": "ABSENT",
+        "target_node_id": null
+      }
+    ],
+    "assessment_authority": "CODEX_ASSISTED",
+    "category": "TARGET_ABSENT",
+    "clarification_policy": "NOT_APPLICABLE",
+    "execution_eligible": true,
+    "expected_route": "PROCEED",
+    "forbidden_node_ids": [],
+    "frozen_clarification_answer": null,
+    "gold_eligible": false,
+    "oracle_hash": "abbbcccb15727ca2ba4c1c89831d247846879cbfe7559000d2a8178f585f0cca",
+    "patch_eligible": false,
+    "quality_tier": "SILVER",
+    "request_digest": "c326b0a987255a67e464ebde0b3faf3f0bf9cc8170bccbf079d6dc01e0610a59",
+    "review_status": "CODEX_SILVER_REVIEWED",
+    "reviewed_bytes_digest": "44319fd05afa0440165be70001e2568015887c34a8ead3f6e992cb63235f6bfa",
+    "scenario_ref": "b03c3:055",
+    "schema_version": "navigation-copilot-sealed-oracle.v2",
+    "target_status": "TARGET_ABSENT",
+    "tree_digest": "348b752d84deeb65b12bfb6dd9eb07f28dd77ede45b45802829b383ecf111e3a",
+    "wrong_context_challenge": false
+  }
+]

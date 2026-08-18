@@ -2,7 +2,7 @@
 
 ## 状态
 
-`C3_PHASE2A_FROZEN_AWAITING_DATA_COMMIT_REVIEW`
+`C3_PHASE2B_FROZEN_AWAITING_EXECUTION_MANIFEST_APPROVAL`
 
 用户已批准并完成 C1 Phase 2A。C0 中与洗衣房节点绑定的 absence、多目标穷尽性和澄清
 收敛规则已提炼为参数化公共验证函数；C0 六份工件字节和既有结论保持不变。
@@ -391,3 +391,42 @@ Trellis validate 与 `git diff --check` 通过。
 
 当前停止在 C3 data-commit 审阅门；未经新批准不得 stage、commit、进入 Phase 2B、生成 Oracle/
 execution manifest、调用模型、push 或 merge。
+
+### C3 Phase 2B 冻结与正式 runner 预检
+
+用户在 C3 Phase 2A data commit `6693e5581bcb69e59ca09a26388816c84f816ad1` 后独立批准
+Phase 2B。新增独立 `verify_phase2b.py`，严格绑定该提交中的七项 Phase 2A 来源，生成 48 条
+隐藏 Oracle 与聚合 freeze report；未生成仓库内 execution manifest、模型请求、响应、sidecar
+或产品结果。
+
+本轮针对 C2 的阻塞原因进行了精确修复：Scenario 的 8 条错误父节点继续使用正式 runner 的
+临时引用，而 Oracle 的 8 条 `forbidden_node_ids` 全部通过
+`build_tree_reference_index(tree).node_id_by_ref` 反向映射为稳定 `N500xxx` 节点身份。
+不存在临时引用直接写入 Oracle、稳定 ID 冒充 `proposed_parent_ref` 或允许/禁止目标重叠。
+
+Oracle 聚合为 42 条 `TARGET_PRESENT`、6 条 `TARGET_ABSENT`、8 条错误上下文、16 条重复
+子集和 4 条弱证据。弱证据精确为 `LIMIT / NEED_EVIDENCE / EXIT + null +
+PRESENT_NOT_FOUND`；澄清为 `CLARIFY / NEED_EVIDENCE`；空目标为 `PROCEED / NONE /
+REJECT_ALL + null + ABSENT`。每条 `reviewed_bytes_digest` 绑定树原始字节、Scenario 规范字节
+和对应 Silver 决定规范字节。
+
+冻结摘要：
+
+- `hidden-oracle.v2.json` SHA-256：`090719d1241cb8ec4929f18998b0e5e72b922d868eed20d9dc3f034b4c58f99b`；
+- `freeze-report.v1.json` SHA-256：`e54cfb5957dd472f98d31d300df6cb6104e7b927ef00474fde98db321dbd334b`；
+- `validate_input_collections()`：48/48 Scenario 与 48/48 Oracle 通过；
+- C0 公共合同与 C3 聚焦测试：15/15 通过；
+- 冻结器首次与重复运行逐字节一致。
+
+随后仅在 `/private/tmp` 生成一次性 `0700` 目录及 `0600` 预检清单/Oracle 副本，调用正式
+`run_navigation_copilot_sealed_eval.py` 且不带 `--execute`，返回
+`SEALED_EVALUATION_PREFLIGHT_READY`。该步骤验证了函数提交、数据提交、文件摘要、树引用、
+Scenario/Oracle 联合合同和正式入口可接受性；没有创建 Provider、访问网络或调用模型。
+
+当前停止在 execution-manifest 独立批准门。未经新批准不得生成正式 execution manifest、运行
+产品链路或外部模型，也不得 stage、commit、push 或 merge。
+
+提交前 Codex Silver 复核逐条检查了 48 条需求、目标、澄清答案、弱证据缺口和错误上下文，
+48/48 通过，未发现新的语义 blocking finding。工程复核补强了七项 Phase 2A 来源逐项漂移、
+输入/输出符号链接、双输出预冲突和部分发布门禁；冲突必须在写入前拒绝，发布失败只清理本轮
+新建工件，不覆盖既有冻结字节。补强后 Oracle 与 freeze report 原始字节及上述 SHA-256 均未变化。

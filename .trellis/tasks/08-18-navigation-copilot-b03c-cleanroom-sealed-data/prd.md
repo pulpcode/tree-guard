@@ -2,7 +2,7 @@
 
 ## 状态
 
-`C3_PHASE2B_FROZEN_AWAITING_EXECUTION_MANIFEST_APPROVAL`
+`C3_EXECUTION_MANIFEST_PREFLIGHT_READY_AWAITING_MODEL_APPROVAL`
 
 用户已批准并完成 C1 Phase 2A。C0 中与洗衣房节点绑定的 absence、多目标穷尽性和澄清
 收敛规则已提炼为参数化公共验证函数；C0 六份工件字节和既有结论保持不变。
@@ -430,3 +430,21 @@ Scenario/Oracle 联合合同和正式入口可接受性；没有创建 Provider�
 48/48 通过，未发现新的语义 blocking finding。工程复核补强了七项 Phase 2A 来源逐项漂移、
 输入/输出符号链接、双输出预冲突和部分发布门禁；冲突必须在写入前拒绝，发布失败只清理本轮
 新建工件，不覆盖既有冻结字节。补强后 Oracle 与 freeze report 原始字节及上述 SHA-256 均未变化。
+
+### C3 私有 execution manifest 与执行前门禁
+
+用户独立批准进入 execution manifest 阶段后，在 `/private/tmp` 生成正式私有执行包；目录权限
+为 `0700`，execution manifest 与 Oracle 副本权限均为 `0600`，未写入 Git。执行清单继续绑定
+可重建 Phase 2B Oracle 的 Phase 2A data commit `6693e5581bcb69e59ca09a26388816c84f816ad1`，
+并绑定功能提交 `40098afe985dfc81183c928a473a2e8a3c2176dc`、48 条主案例、16 条重复案例、
+42 条目标存在、8 条错误上下文、固定百炼模型与三个 Prompt 版本、`wire_attempt_limit=320`。
+生产写入、Gold 和 Patch 资格均为 false。
+
+- 私有 execution manifest SHA-256：`0d48987305491e36fc5edb2d8d29d9479df13c7cc5abc07dcdb5a92a2012a433`；
+- 私有 Oracle 副本 SHA-256：`090719d1241cb8ec4929f18998b0e5e72b922d868eed20d9dc3f034b4c58f99b`，
+  与已提交冻结 Oracle 一致；
+- 正式 runner 不带 `--execute` 再次返回 `SEALED_EVALUATION_PREFLIGHT_READY`；
+- sidecar、结果目录、Provider、模型请求、响应和 trace 均未生成。
+
+当前停止在真实模型实验独立批准门。未经新批准不得添加 `--execute`、访问网络或调用模型；
+也不得 stage、commit、push 或 merge本次状态记录。

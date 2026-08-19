@@ -1,17 +1,17 @@
 {
-  "id": "m5-assisted-shadow-qualification-data",
-  "name": "m5-assisted-shadow-qualification-data",
-  "title": "brainstorm: M5 人工在环 Shadow 未见资格数据",
+  "id": "m49-sealed-validation-data",
+  "name": "m49-sealed-validation-data",
+  "title": "brainstorm: M4.9 新密封验证数据",
   "description": "",
-  "status": "in_progress",
+  "status": "completed",
   "dev_type": null,
   "scope": null,
   "package": null,
-  "priority": "P1",
+  "priority": "P2",
   "creator": "bobot",
   "assignee": "bobot",
-  "createdAt": "2026-08-04",
-  "completedAt": null,
+  "createdAt": "2026-08-03",
+  "completedAt": "2026-08-19",
   "branch": null,
   "base_branch": "codex/build-m49-sealed-validation-data",
   "worktree_path": null,
@@ -19,7 +19,7 @@
   "pr_url": null,
   "subtasks": [],
   "children": [
-    "08-04-governance-architecture-convergence"
+    "08-04-m5-assisted-shadow-qualification-data"
   ],
   "parent": null,
   "relatedFiles": [],
